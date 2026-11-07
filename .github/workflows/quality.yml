@@ -94,6 +94,7 @@ jobs:
           ln -s "$GITHUB_WORKSPACE" "$WP_ANTISPAM_WP_ROOT/wp-content/plugins/wp-antispam"
           wp plugin activate wp-antispam --path="$WP_ANTISPAM_WP_ROOT"
           wp config set WP_HTTP_BLOCK_EXTERNAL true --raw --path="$WP_ANTISPAM_WP_ROOT"
+          printf '%s\n' '<?php add_filter( "pre_wp_mail", "__return_false", PHP_INT_MAX ); add_filter( "pre_http_request", static function () { return new WP_Error( "test_http_blocked", "Disposable fixture." ); }, PHP_INT_MAX );' > "$WP_ANTISPAM_WP_ROOT/wp-content/mu-plugins/fixture-mail.php"
       - run: php tests/native.php
       - run: php tests/registration.php
       - run: php tests/theme-registry.php
