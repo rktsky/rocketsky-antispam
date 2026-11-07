@@ -167,7 +167,7 @@ final class Feedback {
 	 * @return bool Whether the classification is present on the active observation.
 	 */
 	public function report_delivered( string $provider, string $reference, bool $actual_spam ): bool {
-		if ( ! current_user_can( 'manage_options' ) || ! in_array( $provider, array( 'comments', 'cf7', 'gravityforms', 'wpforms' ), true ) || '' === $reference || strlen( $reference ) > 128 || wp_check_invalid_utf8( $reference ) !== $reference ) {
+		if ( ! current_user_can( 'manage_options' ) || ! in_array( $provider, Providers::ids(), true ) || '' === $reference || strlen( $reference ) > 128 || wp_check_invalid_utf8( $reference ) !== $reference ) {
 			return false;
 		}
 		if ( null !== $this->row( $provider, $reference ) ) {
@@ -190,7 +190,7 @@ final class Feedback {
 	 * @return bool Whether an active matching reference was found and removed.
 	 */
 	public function forget_manual( string $provider, string $reference ): bool {
-		if ( ! current_user_can( 'manage_options' ) || ! in_array( $provider, array( 'comments', 'cf7', 'gravityforms', 'wpforms' ), true ) || '' === $reference || strlen( $reference ) > 128 || wp_check_invalid_utf8( $reference ) !== $reference ) {
+		if ( ! current_user_can( 'manage_options' ) || ! in_array( $provider, Providers::ids(), true ) || '' === $reference || strlen( $reference ) > 128 || wp_check_invalid_utf8( $reference ) !== $reference ) {
 			return false;
 		}
 		$source = null !== $this->row( $provider, $reference ) ? $provider : 'manual_' . $provider;
@@ -783,8 +783,8 @@ final class Feedback {
 	 * @return string Hex HMAC, or empty when source/reference shape is invalid.
 	 */
 	private function reference( string $source, $id ): string {
-		$native = in_array( $source, array( 'comments', 'quarantine', 'cf7', 'gravityforms', 'wpforms' ), true );
-		$manual = in_array( $source, array( 'manual_comments', 'manual_cf7', 'manual_gravityforms', 'manual_wpforms' ), true );
+		$native = in_array( $source, array_merge( Providers::ids(), array( 'quarantine' ) ), true );
+		$manual = in_array( $source, array_map( static fn( $provider ) => 'manual_' . $provider, Providers::ids() ), true );
 		if ( ( ! $native && ! $manual ) || ( ! is_int( $id ) && ! is_string( $id ) ) ) {
 			return '';
 		}

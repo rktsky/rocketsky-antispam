@@ -192,12 +192,7 @@ final class Admin {
 			$entry           = $entry_id > 0 ? $this->quarantine->read( $entry_id ) : null;
 			$review_status   = $entry && $this->feedback ? $this->feedback->status( 'quarantine', (string) $entry_id ) : null;
 			$listing         = $entry_id > 0 ? array() : $this->quarantine->listing( max( 1, $this->query_id( 'paged' ) ) );
-			$provider_labels = array(
-				'comments'     => __( 'WordPress comments', 'wp-antispam' ),
-				'cf7'          => 'Contact Form 7',
-				'gravityforms' => 'Gravity Forms',
-				'wpforms'      => 'WPForms',
-			);
+			$provider_labels = Providers::labels();
 			$quarantine_url  = add_query_arg( 'tab', 'quarantine', $base_url );
 			$delete_url      = admin_url( 'admin-post.php' );
 			require dirname( RKTSKY_ANTISPAM_FILE ) . '/templates/quarantine.php';
@@ -217,27 +212,30 @@ final class Admin {
 			'period_days' => 90,
 		);
 		$detected     = Integrations::detected();
+		$labels = Providers::labels();
 		$integrations = array(
-			'comments'     => array(
-				'name'   => __( 'WordPress comments', 'wp-antispam' ),
-				'detail' => __( 'Protects the native comment form and rejects trackbacks and pingbacks.', 'wp-antispam' ),
-				'mark'   => 'W',
-			),
-			'cf7'          => array(
-				'name'   => 'Contact Form 7',
-				'detail' => __( 'Adds protection through the native form and spam hooks.', 'wp-antispam' ),
-				'mark'   => 'C7',
-			),
-			'gravityforms' => array(
-				'name'   => 'Gravity Forms',
-				'detail' => __( 'Validates submissions before entries, drafts and notifications are created.', 'wp-antispam' ),
-				'mark'   => 'G',
-			),
-			'wpforms'      => array(
-				'name'   => 'WPForms',
-				'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ),
-				'mark'   => 'WP',
-			),
+			'comments' => array( 'detail' => __( 'Protects the native comment form and rejects trackbacks and pingbacks.', 'wp-antispam' ), 'mark' => 'W' ),
+			'registration' => array( 'detail' => __( 'Checks native account registration before accounts or activation emails are created. No account fields are retained.', 'wp-antispam' ), 'mark' => 'W' ),
+			'cf7' => array( 'detail' => __( 'Adds protection through the native form and spam hooks.', 'wp-antispam' ), 'mark' => 'C7' ),
+			'gravityforms' => array( 'detail' => __( 'Validates submissions before entries, drafts and notifications are created.', 'wp-antispam' ), 'mark' => 'G' ),
+			'wpforms' => array( 'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ), 'mark' => 'WP' ),
+			'formidable' => array( 'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ), 'mark' => 'F' ),
+			'fluentforms' => array( 'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ), 'mark' => 'FF' ),
+			'wsform' => array( 'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ), 'mark' => 'WS' ),
+			'elementor' => array( 'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ), 'mark' => 'E' ),
+			'divi' => array( 'detail' => __( 'Uses technical checks for Divi 4 and 5 contact forms. Content rules and quarantine are excluded.', 'wp-antispam' ), 'mark' => 'D' ),
+			'wc_checkout' => array( 'detail' => __( 'Checks classic and block checkout before final processing or payment. Content rules and quarantine are excluded.', 'wp-antispam' ), 'mark' => 'WC' ),
+			'wc_registration' => array( 'detail' => __( 'Protects registration on My Account. Account creation during checkout uses checkout protection. No account fields are retained.', 'wp-antispam' ), 'mark' => 'WC' ),
+		);
+		foreach ( $integrations as $provider => &$integration ) {
+			$integration['name'] = $labels[ $provider ];
+		}
+		unset( $integration );
+		$integration_groups = array(
+			array( 'label' => 'WordPress', 'providers' => array( 'comments', 'registration' ) ),
+			array( 'label' => __( 'Form plugins', 'wp-antispam' ), 'providers' => array( 'cf7', 'gravityforms', 'wpforms', 'formidable', 'fluentforms', 'wsform' ) ),
+			array( 'label' => __( 'Page builders', 'wp-antispam' ), 'providers' => array( 'elementor', 'divi' ) ),
+			array( 'label' => 'WooCommerce', 'providers' => array( 'wc_checkout', 'wc_registration' ) ),
 		);
 		$active_count = 0;
 		foreach ( $integrations as $provider => $integration ) {
@@ -388,7 +386,7 @@ final class Admin {
 		$provider   = isset( $_POST['provider'] ) && is_string( $_POST['provider'] ) ? sanitize_key( wp_unslash( $_POST['provider'] ) ) : '';
 		$reference  = isset( $_POST['reference'] ) && is_string( $_POST['reference'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['reference'] ) ) ) : '';
 		$assessment = isset( $_POST['assessment'] ) && is_string( $_POST['assessment'] ) ? sanitize_key( wp_unslash( $_POST['assessment'] ) ) : '';
-		$valid      = in_array( $provider, array( 'comments', 'cf7', 'gravityforms', 'wpforms' ), true ) && '' !== $reference && strlen( $reference ) <= 128 && in_array( $assessment, array( 'spam', 'normal', 'forget' ), true );
+		$valid      = in_array( $provider, Providers::ids(), true ) && '' !== $reference && strlen( $reference ) <= 128 && in_array( $assessment, array( 'spam', 'normal', 'forget' ), true );
 		$recorded   = false;
 		if ( $valid && $this->feedback ) {
 			$recorded = 'forget' === $assessment ? $this->feedback->forget_manual( $provider, $reference ) : $this->feedback->report_delivered( $provider, $reference, 'spam' === $assessment );

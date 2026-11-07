@@ -81,9 +81,11 @@ final class Guard {
 	 * @param string               $form_id Expected native form ID.
 	 * @param array                $posted Unslashed submitted controls; never an authorization source.
 	 * @param array<string,string> $fields Whitelisted native text fields for local rules.
+	 * @param bool $technical_only Whether to exclude all content and country policies.
+	 * @since 0.3.0 Supports technical-only checks for account and payment workflows.
 	 * @return string Empty for a pass, otherwise a fixed internal reason code.
 	 */
-	public function check( string $provider, string $form_id, array $posted, array $fields = array() ): string {
+	public function check( string $provider, string $form_id, array $posted, array $fields = array(), bool $technical_only = false ): string {
 		if ( ! $this->settings->enabled( $provider ) ) {
 			return '';
 		}
@@ -100,7 +102,7 @@ final class Guard {
 		} elseif ( time() - $proof['issued'] < $this->settings->all()['minimum_seconds'] ) {
 			$reason = 'too_fast';
 		}
-		if ( '' === $reason && $this->rules ) {
+		if ( '' === $reason && ! $technical_only && $this->rules ) {
 			$reason = $this->rules->check( $provider, $fields );
 		}
 		if ( '' === $reason && ! $this->store->claim( $proof['digest'], $proof['expires'] ) ) {

@@ -1,10 +1,9 @@
 === WP Antispam ===
-Contributors: rktsky
 Tags: antispam, spam, contact form 7, gravity forms, wpforms
 Requires at least: 6.6
 Requires PHP: 8.2
 Tested up to: 7.1
-Stable tag: 0.2.0
+Stable tag: 0.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,11 +11,11 @@ Local spam protection for comments and forms. No external spam service, tracking
 
 == Description ==
 
-WP Antispam adds local checks to WordPress comments, Contact Form 7, Gravity Forms and WPForms. Enable integrations under Settings → WP Antispam; existing forms receive protection automatically.
+WP Antispam adds local checks to WordPress comments and registration, Contact Form 7, Gravity Forms, WPForms, Formidable Forms, Fluent Forms, WS Form, Elementor Forms, Divi contact forms and WooCommerce checkout and registration. Choose integrations under Settings → WP Antispam. New integrations require explicit activation; no form edits are needed.
 
 Signed tokens, a dynamically named honeypot and atomic one-use checks protect submissions. An optional minimum completion time is disabled by default to accommodate autofill and fast users. Provider validation and existing spam decisions remain in place.
 
-All functionality is included. No account, API key, paid plan or external spam service is required. The plugin is independently developed by rktsky and licensed GPLv2 or later.
+All functionality is included. No account, API key, paid plan or external spam service is required. The plugin is developed by Rocketsky and licensed GPLv2 or later.
 
 = Privacy =
 
@@ -34,9 +33,9 @@ A suggested privacy-policy paragraph is available through WordPress's privacy-po
 
 = Scope =
 
-Protected forms require JavaScript and a working local REST API. REST comment creation requires protection tokens too. Trackbacks and pingbacks are rejected while comment protection is enabled. Activate separately per site on Multisite; network activation is unsupported.
+Protected forms require JavaScript and a working local REST API. REST comment creation requires protection tokens too. Native pingbacks and trackbacks are off by default and can be explicitly allowed outside privacy-conscious mode. WordPress may request the remote source and forward the sender IP for pingback verification. Multisite supports individual and network activation with separate site settings and storage.
 
-This is a 0.2.0 development candidate. Browser-capable bots can obtain valid tokens; this plugin cannot guarantee human submissions or prevent volumetric attacks. See the source repository's verification and integration documentation before production use.
+This is a 0.3.0 development candidate. Browser-capable bots can obtain valid tokens; this plugin cannot guarantee human submissions or prevent volumetric attacks. See the source repository's verification and integration documentation before production use.
 
 Source and verification: https://github.com/rktsky/wp-antispam
 
@@ -65,6 +64,11 @@ No. Used tokens remain protected until expiry.
 Own tables and options are removed by default. You can opt to keep plugin data before uninstalling.
 
 == Changelog ==
+
+= 0.3.0 =
+* Separates provider modules and adds native registration, Formidable, Fluent Forms, WS Form, Elementor Forms, Divi contact forms and WooCommerce integration.
+* Adds retry-safe native checkout transports with technical checks only; account and payment fields are excluded from content retention.
+* Groups integration settings and extends translated labels and provider statistics.
 
 = 0.2.0 =
 * Adds local content rules, privacy-conscious mode, encrypted opt-in quarantine, country/language policy, daily dashboard counts and optional maintenance/email digests.

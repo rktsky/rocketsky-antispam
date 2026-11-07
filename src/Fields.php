@@ -62,7 +62,7 @@ final class Fields {
 					'provider' => array(
 						'required' => true,
 						'type'     => 'string',
-						'enum'     => array( 'comments', 'cf7', 'gravityforms', 'wpforms' ),
+						'enum'     => Providers::ids(),
 					),
 					'form'     => array(
 						'required'  => true,
@@ -113,23 +113,45 @@ final class Fields {
 	 * @return string Escaped controls; empty for unsupported or disabled scopes.
 	 */
 	public function markup( string $provider, string $form_id ): string {
+		$attributes = $this->attributes( $provider, $form_id );
+		if ( ! $attributes ) {
+			return '';
+		}
+		$intent = $attributes['data-rk-antispam-intent'];
+		$endpoint = $attributes['data-rk-antispam-endpoint'];
+		ob_start();
+		include dirname( __DIR__ ) . '/templates/fields.php';
+		return (string) ob_get_clean();
+	}
+
+	/**
+	 * Supplies a signed descriptor for forms whose native renderer replaces children.
+	 *
+	 * Values remain unescaped until their adapter writes HTML attributes. The
+	 * browser restores only our controls and never alters provider fields.
+	 *
+	 * @since 0.3.0
+	 * @param string $provider Known provider identifier.
+	 * @param string $form_id Native form identifier.
+	 * @return array<string,string> Descriptor attributes, or empty for disabled scopes.
+	 */
+	public function attributes( string $provider, string $form_id ): array {
 		$intent = $this->token->intent( $provider, $form_id );
 		if ( ! $this->settings->enabled( $provider ) || '' === $intent ) {
-			return '';
+			return array();
 		}
 		wp_enqueue_script(
 			'rktsky-antispam',
 			plugins_url( 'assets/protection.js', RKTSKY_ANTISPAM_FILE ),
 			array(),
 			RKTSKY_ANTISPAM_VERSION,
-			array(
-				'in_footer' => true,
-				'strategy'  => 'defer',
-			)
+			array( 'in_footer' => true, 'strategy' => 'defer' )
 		);
-		$endpoint = rest_url( 'rktsky-antispam/v1/challenge' );
-		ob_start();
-		include dirname( __DIR__ ) . '/templates/fields.php';
-		return (string) ob_get_clean();
+		return array(
+			'data-rk-antispam-provider' => $provider,
+			'data-rk-antispam-form' => $form_id,
+			'data-rk-antispam-intent' => $intent,
+			'data-rk-antispam-endpoint' => rest_url( 'rktsky-antispam/v1/challenge' ),
+		);
 	}
 }

@@ -33,9 +33,18 @@ final class Settings {
 	public function defaults(): array {
 		return array(
 			'comments'                 => true,
+			'allow_pingbacks'          => false,
 			'cf7'                      => true,
 			'gravityforms'             => true,
 			'wpforms'                  => true,
+			'registration' => false,
+			'formidable' => false,
+			'fluentforms' => false,
+			'wsform' => false,
+			'elementor' => false,
+			'divi' => false,
+			'wc_checkout' => false,
+			'wc_registration' => false,
 			'minimum_seconds'          => 0,
 			'token_ttl'                => 7200,
 			'retention_days'           => 30,
@@ -78,7 +87,7 @@ final class Settings {
 	 * @return bool Whether the provider is enabled.
 	 */
 	public function enabled( string $provider ): bool {
-		return in_array( $provider, array( 'comments', 'cf7', 'gravityforms', 'wpforms' ), true ) && ! empty( $this->all()[ $provider ] );
+		return in_array( $provider, Providers::ids(), true ) && ! empty( $this->all()[ $provider ] );
 	}
 
 	/**
@@ -137,7 +146,7 @@ final class Settings {
 	 */
 	private function normalize( array $input, bool $submitted ): array {
 		$result = $this->defaults();
-		foreach ( array( 'comments', 'cf7', 'gravityforms', 'wpforms', 'delete_on_uninstall', 'privacy_mode', 'quarantine_enabled', 'bbcode_filter', 'unknown_language_allowed', 'country_unknown_allowed', 'notify_admin' ) as $key ) {
+		foreach ( array_merge( Providers::ids(), array( 'allow_pingbacks', 'delete_on_uninstall', 'privacy_mode', 'quarantine_enabled', 'bbcode_filter', 'unknown_language_allowed', 'country_unknown_allowed', 'notify_admin' ) ) as $key ) {
 			if ( array_key_exists( $key, $input ) ) {
 				$result[ $key ] = in_array( $input[ $key ] ?? false, array( true, 1, '1' ), true );
 			}
@@ -198,6 +207,7 @@ final class Settings {
 			$result[ $key ] = implode( "\n", array_unique( $clean ) );
 		}
 		if ( $result['privacy_mode'] ) {
+			$result['allow_pingbacks']    = false;
 			$result['quarantine_enabled'] = false;
 			$result['notify_admin']       = false;
 			$result['country_mode']       = 'off';

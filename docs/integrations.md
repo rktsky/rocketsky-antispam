@@ -77,3 +77,52 @@ Optional quarantine exposes explicit Spam/Not spam review. CF7 and WPForms Lite 
 When a source is removed or erased, reviewed references are replaced with random identifiers and event times reduced to UTC-day buckets without extending expiry. Outcomes remain in the bounded metrics until expiry. This is removal of the direct lookup, not a claim that linkage from other locally retained information is mathematically impossible. No transaction is started or committed in the host/provider database.
 
 Sources: [GF entry creation](https://docs.gravityforms.com/gform_entry_created/), [native status changes](https://docs.gravityforms.com/gform_update_status/), [field-save contract](https://docs.gravityforms.com/gform_save_field_value/), [full entry update](https://docs.gravityforms.com/gform_post_update_entry/), [detail update](https://docs.gravityforms.com/gform_after_update_entry/), [pre-deletion event](https://docs.gravityforms.com/gform_delete_entry/), [paginated GFAPI IDs](https://docs.gravityforms.com/searching-and-getting-entries-with-the-gfapi/). Contracts were cross-checked against the unchanged original GF 3.2.2 fixture.
+
+
+## Modular providers since 0.3.0
+
+`Providers` is the shared allowlist for settings, signed scopes, counters, labels and quality feedback. IDs remain within the existing database widths. `Integrations` loads an owned provider file only when its native contract is available and its setting is enabled. Existing public callbacks forward through an explicit compatibility map; arbitrary helper dispatch and request-derived paths are rejected. Existing four provider settings retain their defaults. Newly added providers default to disabled, including on upgrades.
+
+### WordPress registration
+
+`register_form` supplies inside-form proof. `login_form_register` identifies the actual Core wp-login lifecycle. Its `registration_errors` gate runs before account insertion and activation/notification work. Original field validation errors remain intact. Other providers may call generic `register_new_user` or `wp_insert_user` APIs; those flows retain their own adapter and account-authorization contract, avoiding incompatible double checks. No broad administrator or logged-in bypass is added to public registration.
+
+Anonymous native Multisite signup is identified by `before_signup_header`. `signup_hidden_fields` adds fresh proof to both account and account-with-site stages, and `wpmu_validate_user_signup` rejects before signup rows or activation mail. Generic use of that validator outside the actual `wp-signup.php` lifecycle is preserved; logged-in site creation is not anonymous account registration. Individual and network activation retain isolated per-site storage and settings. The network lifecycle is covered by the dedicated multisite fixture; full network signup browser flows remain a separate acceptance check.
+
+Registration uses technical proof only. No account values enter content rules or quarantine. Core's `login_footer` prints the enqueued protection script. Sources: [register_form](https://developer.wordpress.org/reference/hooks/register_form/), [registration_errors](https://developer.wordpress.org/reference/hooks/registration_errors/), [original wp-signup.php](https://github.com/WordPress/WordPress/blob/master/wp-signup.php), [Core registration implementation](https://developer.wordpress.org/reference/functions/register_new_user/).
+
+### Formidable Forms
+
+The reviewed public contracts exist in unchanged originals 6.2 and 7.0. `frm_entry_form` renders proof inside the form. `frm_entries_before_create` applies the final guard after native validation and before native entry creation/actions. Preliminary AJAX and multipage validation do not consume proof. Native errors stay intact. Selected declared text types, flat name parts and choice values feed local content rules and optional quarantine; hidden, password, payment, file, embedded and administrative fields are excluded. Direct authorized `FrmEntry::create` calls are a separate server API. Commercial draft, conversational and Pro multipage paths need their own native acceptance checks.
+
+Sources: [inside-form action](https://formidableforms.com/knowledgebase/frm_entry_form/), [pre-creation filter](https://formidableforms.com/knowledgebase/frm_entries_before_create/), [original public source](https://plugins.svn.wordpress.org/formidable/trunk/).
+
+### Fluent Forms
+
+The reviewed modern slash hooks exist in unchanged originals 6.0.0 and 6.2.17; older legacy-only hooks are not silently assumed compatible. `fluentform/form_element_start` renders proof, and `fluentform/validation_errors` rejects before insertion and submission actions. The native browser serializes controls into `POST[data]`, then its whitelist removes unknown technical keys before validation hooks. The adapter therefore selects only bounded own proof keys from the original serialized request. Native sanitized field data and stored definitions determine content selection. Passwords, payment inputs, hidden values, files and arbitrary nested values do not enter quarantine.
+
+Sources: [developer hooks](https://developers.fluentforms.com/hooks/), [original public source](https://plugins.svn.wordpress.org/fluentform/trunk/).
+
+### WS Form
+
+The current reviewed original is Lite 1.12.19. `wsf_shortcode` adds a signed descriptor to the actual native form element. The shared browser bridge restores its own hidden controls after native child replacement; it changes no native fields. `wsf_submit_validate` appends a native visible error before persistence and configured actions. Native FormData carries proof as technical top-level controls, separate from native entry metadata. Stored field definitions govern bounded text selection and optional encrypted capture; excluded sensitive types remain excluded.
+
+Sources: [shortcode filter](https://wsform.com/knowledgebase/wsf_shortcode/), [submission validation](https://wsform.com/knowledgebase/wsf_submit_validate/), [original public source](https://plugins.svn.wordpress.org/ws-form/trunk/).
+
+### Elementor Pro Forms
+
+The native Form widget is distinct from Elementor Atomic Form and third-party widgets. The adapter supplies inside-form controls and uses `elementor_pro/forms/validation` before processing/actions. A record- and token-bound one-use permit carries successful validation to its process hook; a second process call must pass the atomic replay check again. A trusted native `validation/skip_all` filter still reaches a protection fallback before submit actions. Native required-field errors remain visible and leave unused proof available for correction.
+
+`elementor/frontend/the_content` adds persistent descriptors to actual native forms even when Elementor's element cache skips individual widget rendering. The original native FormData transports proof; Form_Record selects declared form fields, preventing technical controls from entering mail or saved entries. Only matching declared and processed text types enter local rules or quarantine. Sources: [Forms hooks](https://developers.elementor.com/docs/hooks/forms/), [native Forms overview](https://developers.elementor.com/docs/forms/), unchanged local Elementor Free 4.3.2 and Elementor Pro 4.3.0 originals.
+
+### WooCommerce checkout and registration
+
+WooCommerce 9.9 or newer is required for the documented public checkout extension action. Checkout and My Account registration are separate settings. Classic checkout renders fields in the native payment section, including AJAX replacements. `woocommerce_after_checkout_validation` rejects before customer/order/payment processing; update-totals requests are not final attempts. Existing-order payment has an order-specific proof and stops at `woocommerce_before_pay_action` after native payment authorization and before processing. Gateway callbacks are separate authenticated native flows and are not incoming checkout forms.
+
+For checkout blocks, the adapter adds its descriptor automatically. A narrowly scoped native `wp.apiFetch` middleware supplies fresh proof immediately before each final Store API POST; `setExtensionData` keeps the documented checkout extension data consistent. The extension schema contains technical proof only. The WordPress `rest_dispatch_request` gate runs after endpoint permissions but before the final Checkout endpoint callback, covering internal and batch dispatch. GET, PUT and cart/shipping requests remain native. Missing proof has no gateway or express-payment exemption. External wallets and gateway-specific transports still need their own end-to-end verification; a rejected unsupported transport must not be described as supported.
+
+A rejected guard does not create an account/order or invoke a gateway. Existing native drafts can predate that request. After a guard pass, WooCommerce owns all later native validation and may create/update a draft or account even when a later WooCommerce field check fails. The plugin neither deletes nor rewrites those native objects.
+
+My Account uses `woocommerce_process_registration_errors` before `wc_create_new_customer`, preserving native field and nonce errors. Accounts requested during checkout use checkout proof, avoiding a second consumption. Both account adapters and checkout skip all content/country/language policies and retain no fields. Quarantine independently excludes these scopes at its persistence boundary.
+
+Sources: [checkout extension data](https://developer.woocommerce.com/docs/apis/store-api/extending-store-api/extend-store-api-add-data/), [checkout flow and events](https://developer.woocommerce.com/docs/block-development/extensible-blocks/cart-and-checkout-blocks/checkout-payment-methods/checkout-flow-and-events/), [original Checkout implementation](https://github.com/woocommerce/woocommerce/blob/trunk/plugins/woocommerce/includes/class-wc-checkout.php), [original Store API](https://github.com/woocommerce/woocommerce/tree/trunk/plugins/woocommerce/src/StoreApi), [WordPress dispatch boundary](https://developer.wordpress.org/reference/hooks/rest_dispatch_request/).

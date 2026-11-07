@@ -1,8 +1,8 @@
 # WP Antispam
 
-Eigenständiges Open-Source-Plugin von **rktsky**, GPL-2.0-or-later. Lokaler Spamschutz für WordPress-Kommentare, Contact Form 7, Gravity Forms und WPForms. Keine kostenpflichtigen Funktionen, externen Captchas oder Spamdienste.
+Eigenständiges Open-Source-Plugin von **Rocketsky**, GPL-2.0-or-later. Lokaler Spamschutz für WordPress-Kommentare und Registrierung, Contact Form 7, Gravity Forms, WPForms, Formidable Forms, Fluent Forms, WS Form, Elementor Forms, Divi-Kontaktformulare sowie WooCommerce-Checkout und Registrierung. Keine kostenpflichtigen Funktionen, externen Captchas oder Spamdienste.
 
-**Stand: 0.2.0, Entwicklungskandidat.** Die tatsächlichen Prüfungen und offenen Freigabepunkte stehen in [docs/verification.md](docs/verification.md). Eine Freigabe durch WordPress.org ist damit nicht verbunden.
+**Stand: 0.3.0, Entwicklungskandidat.** Die tatsächlichen Prüfungen und offenen Freigabepunkte stehen in [docs/verification.md](docs/verification.md). Eine Freigabe durch WordPress.org ist damit nicht verbunden.
 
 ## Installation und Bedienung
 
@@ -10,7 +10,7 @@ Eigenständiges Open-Source-Plugin von **rktsky**, GPL-2.0-or-later. Lokaler Spa
 2. Unter **Einstellungen → WP Antispam** die gewünschten Integrationen aktivieren. Vorhandene Formulare erhalten die Schutzfelder automatisch. Keine Snippets oder Änderungen im Formular-Editor nötig.
 3. Eine gültige Einsendung und einen Fehlerfall auf der eigenen Website prüfen. Formulare benötigen JavaScript und Zugriff auf den lokalen REST-Endpunkt. Bestehende Captchas und andere Dienste der Formularplugins werden durch WP Antispam nicht umkonfiguriert.
 
-Die Integrationen sind standardmässig aktiviert und wirken, sobald der jeweilige Anbieter geladen ist. Kommentare über REST benötigen ebenfalls gültige Schutzfelder; externe Kommentar-Apps und eigene Integrationen müssen berücksichtigt werden. Trackbacks/Pingbacks werden bei aktivierter Kommentar-Integration abgewiesen. Netzwerkweite Aktivierung ist nicht unterstützt; auf Multisite pro Website aktivieren.
+Die bisherigen Integrationen für Kommentare, Contact Form 7, Gravity Forms und WPForms sind standardmässig aktiviert. Die zusätzlichen Integrationen sind einzeln einschaltbar und wirken, sobald der passende Anbieter verfügbar ist. Kommentare über REST benötigen ebenfalls gültige Schutzfelder; externe Kommentar-Apps und eigene Integrationen müssen berücksichtigt werden. Trackbacks/Pingbacks werden standardmässig früh abgewiesen. Ihre ausdrückliche Freigabe ist bei ausgeschaltetem datensparsamen Modus möglich: WordPress ruft bei Pingbacks die Quellseite ab und kann die Absender-IP weiterleiten. Multisite unterstützt einzelne Aktivierung und Netzwerkaktivierung mit getrennten Einstellungen und Daten je Website.
 
 ## Schutzverfahren und Grenzen
 
@@ -46,3 +46,11 @@ Unter `docs/` stehen [Architektur und Bedrohungsmodell](docs/security.md), [Inte
 Keine Build-Abhängigkeiten zur Laufzeit. PHP-Klassen in `src/`, escaped Templates in `templates/`, lesbare eigene Assets in `assets/`. Funktionale Änderungen und Gestaltung werden getrennt committed. Drittcode und installierte Originalpakete bleiben unverändert. Entwicklungswerkzeuge und Testinstallationen gehören nicht in das auszuliefernde Plugin.
 
 Offizielle Referenzen: [Plugin Handbook](https://developer.wordpress.org/plugins/), [Security](https://developer.wordpress.org/plugins/security/), [PHPDoc](https://developer.wordpress.org/coding-standards/inline-documentation-standards/php/), [Directory Guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/). Die Quellen dienen den API- und Standardverträgen; der Plugin-Code wurde eigenständig entwickelt.
+
+## Erweiterte Integrationen ab 0.3.0
+
+Die Adapter liegen getrennt unter `src/Integrations/`. Nur aktivierte und verfügbare Integrationen werden geladen. Bestehende Kommentare-, CF7-, Gravity- und WPForms-Einstellungen bleiben erhalten. Registrierung, weitere Formularanbieter und WooCommerce sind nach dem Update zunächst ausgeschaltet und lassen sich einzeln aktivieren.
+
+WordPress-Registrierung sowie WooCommerce-Konten und Checkout verwenden ausschliesslich technische Prüfungen. Passwörter, Konto-, Zahlungs- und Adressfelder gelangen nicht in Inhaltsregeln oder Quarantäne. Der klassische WooCommerce-Checkout und die abschliessenden Checkout-Aufrufe der Store API werden vor ihrer Verarbeitung geprüft. Bereits vorhandene Bestellungen und native Entwürfe unterliegen dem WooCommerce-Lebenszyklus; das Plugin löscht sie nicht. Unverifizierte externe Gateway-Transporte sind kein nachgewiesener Teil der Abdeckung.
+
+Formidable Forms, Fluent Forms, WS Form und Elementor Forms erhalten automatisch Schutzfelder. Die optionale lokale Inhaltsprüfung und verschlüsselte Aufbewahrung verwenden ausschliesslich ausgewählte native Feldtypen. Spezielle kommerzielle Zusatzmodule, Zahlungsformulare und abweichende eigene Transportwege benötigen eine eigene Abnahme; die geprüften Verträge und Versionen stehen in `docs/integrations.md` und `docs/verification.md`.

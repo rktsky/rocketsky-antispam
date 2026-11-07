@@ -20,6 +20,17 @@ namespace Rktsky\Antispam {
 	final class Settings {
 		/** @var array Disabled providers. @since 0.1.0 */
 		public array $disabled = array();
+		/** @var array Effective synthetic policy options. @since 0.3.0 */
+		public array $options = array( 'privacy_mode' => true, 'allow_pingbacks' => false );
+		/**
+		 * Returns the fixture's explicit native-protocol policy.
+		 *
+		 * @since 0.3.0
+		 * @return array Effective synthetic options.
+		 */
+		public function all(): array {
+			return $this->options;
+		}
 		/**
 		 * Returns the fixture's configured enablement.
 		 *
@@ -426,10 +437,11 @@ namespace {
 
 	require dirname( __DIR__ ) . '/src/Integrations.php';
 
-	integration_expect( \Rktsky\Antispam\Integrations::detected() === array( 'comments' => true, 'cf7' => false, 'gravityforms' => false, 'wpforms' => false ), 'Absent providers must not be detected.' );
+	integration_expect( array_intersect_key( \Rktsky\Antispam\Integrations::detected(), array_flip( array( 'comments', 'cf7', 'gravityforms', 'wpforms' ) ) ) === array( 'comments' => true, 'cf7' => false, 'gravityforms' => false, 'wpforms' => false ), 'Absent providers must not be detected.' );
 	list( $settings, $guard, $fields, $adapter ) = integration_fixture();
 	$adapter->register();
 	integration_expect( isset( $GLOBALS['integration_hooks']['preprocess_comment'] ) && ! isset( $GLOBALS['integration_hooks']['wpcf7_spam'] ), 'Absent providers must not register hooks.' );
+	integration_expect( class_exists( '\\Rktsky\\Antispam\\Integrations\\Comments', false ) && ! class_exists( '\\Rktsky\\Antispam\\Integrations\\ContactForm7', false ) && ! class_exists( '\\Rktsky\\Antispam\\Integrations\\WooCommerceCheckout', false ), 'Unavailable integration modules must remain unloaded.' );
 
 	// Conditional declarations make provider availability change at runtime.
 	if ( true ) {
@@ -542,7 +554,7 @@ namespace {
 		function wpforms(): object { return $GLOBALS['integration_wpforms']; }
 	}
 	$GLOBALS['integration_wpforms'] = (object) array( 'process' => (object) array( 'errors' => array() ) );
-	integration_expect( ! in_array( false, \Rktsky\Antispam\Integrations::detected(), true ), 'Loaded supported providers must be detected.' );
+	integration_expect( ! in_array( false, array_intersect_key( \Rktsky\Antispam\Integrations::detected(), array_flip( array( 'comments', 'cf7', 'gravityforms', 'wpforms' ) ) ), true ), 'Loaded supported providers must be detected.' );
 	GFForms::$version = '2.6.9';
 	integration_expect( false === \Rktsky\Antispam\Integrations::detected()['gravityforms'], 'GF without the before-persistence abort hook must not be supported.' );
 	GFForms::$version = '3.2.2';

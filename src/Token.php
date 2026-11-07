@@ -135,6 +135,6 @@ final class Token {
 	 * @return bool Whether both identifiers use the supported bounded alphabet.
 	 */
 	private function scope_valid( string $provider, string $form_id ): bool {
-		return in_array( $provider, array( 'comments', 'cf7', 'gravityforms', 'wpforms' ), true ) && 1 === preg_match( '/^[a-zA-Z0-9_-]{1,64}$/D', $form_id );
+		return in_array( $provider, Providers::ids(), true ) && 1 === preg_match( '/^[a-zA-Z0-9_-]{1,64}$/D', $form_id );
 	}
 }

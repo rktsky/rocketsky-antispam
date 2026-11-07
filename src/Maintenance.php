@@ -64,7 +64,6 @@ final class Maintenance {
 	 * @return void
 	 */
 	public static function digest(): void {
-		global $wpdb;
 		$options = ( new Settings() )->all();
 		if ( ! $options['notify_admin'] || $options['privacy_mode'] ) {
 			return;
@@ -80,17 +79,16 @@ final class Maintenance {
 		if ( 0 === $blocked || ! is_email( get_option( 'admin_email' ) ) ) {
 			return;
 		}
-		$name     = 'rktsky_antispam_digest_claim';
-		$previous = $wpdb->get_var( $wpdb->prepare( 'SELECT option_value FROM %i WHERE option_name=%s', $wpdb->options, $name ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- Fresh database state is required for the cross-process mail claim.
+		$name = 'rktsky_antispam_digest_claim';
+		$previous = get_option( $name, '' );
 		if ( is_string( $previous ) && $previous >= $day ) {
 			return;
 		}
-		$claimed = null === $previous ? 1 === $wpdb->query( $wpdb->prepare( "INSERT IGNORE INTO %i (option_name,option_value,autoload) VALUES (%s,%s,'no')", $wpdb->options, $name, $day ) ) : 1 === $wpdb->query( $wpdb->prepare( 'UPDATE %i SET option_value=%s WHERE option_name=%s AND option_value=%s', $wpdb->options, $day, $name, $previous ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- Unique insert or compare-and-swap proves a single cross-process winner; add_option upserts cannot prove ownership.
-		if ( ! $claimed ) {
+		if ( ! ( new Store() )->claim_job( 'digest_' . $day, time() + 2 * DAY_IN_SECONDS ) ) {
 			return;
 		}
-		wp_cache_delete( $name, 'options' );
-		wp_cache_delete( 'notoptions', 'options' );
+		// Options use Core's API; task ownership is independently atomic above.
+		update_option( $name, $day, false );
 		$sent = wp_mail(
 			get_option( 'admin_email' ),
 			__( 'WP Antispam: daily rejection summary', 'wp-antispam' ),

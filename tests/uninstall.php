@@ -27,7 +27,7 @@ $settings = new \Rktsky\Antispam\Settings();
 $original = $settings->all();
 \Rktsky\Antispam\Plugin::activate();
 $before_tables = $wpdb->get_col( 'SHOW TABLES' );
-$owned_tables = array( $wpdb->prefix . 'rktsky_antispam_tokens', $wpdb->prefix . 'rktsky_antispam_stats', $wpdb->prefix . 'rktsky_antispam_totals', $wpdb->prefix . 'rktsky_antispam_quarantine', $wpdb->prefix . 'rktsky_antispam_feedback' );
+$owned_tables = array( $wpdb->prefix . 'rktsky_antispam_tokens', $wpdb->prefix . 'rktsky_antispam_stats', $wpdb->prefix . 'rktsky_antispam_totals', $wpdb->prefix . 'rktsky_antispam_quarantine', $wpdb->prefix . 'rktsky_antispam_feedback', $wpdb->prefix . 'rktsky_antispam_jobs' );
 $foreign_before = array_values( array_diff( $before_tables, $owned_tables ) );
 sort( $foreign_before );
 try {

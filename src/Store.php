@@ -60,7 +60,36 @@ final class Store {
 			PRIMARY KEY  (day,provider,reason)
 		) $collation;"
 		);
+		$jobs = $wpdb->prefix . 'rktsky_antispam_jobs';
+		dbDelta(
+			"CREATE TABLE $jobs (
+			job varchar(64) NOT NULL,
+			expires bigint(20) unsigned NOT NULL,
+			PRIMARY KEY  (job),
+			KEY expires (expires)
+		) $collation;"
+		);
 		update_option( 'rktsky_antispam_schema', '1', false );
+	}
+
+	/**
+	 * Claims a bounded internal task without querying WordPress's options table.
+	 *
+	 * The unique owned-table key provides one winner across concurrent workers.
+	 * Job names contain fixed task/date metadata, never submission identifiers.
+	 * Claims survive mail failure; cleanup cannot cause a retry on the same day.
+	 *
+	 * @since 0.3.0
+	 * @param string $job Fixed internal task identifier.
+	 * @param int $expires Expiry at most two days in the future.
+	 * @return bool Whether this process inserted the unique task claim.
+	 */
+	public function claim_job( string $job, int $expires ): bool {
+		if ( 1 !== preg_match( '/^[a-z0-9_-]{1,64}$/D', $job ) || $expires <= time() || $expires > time() + 2 * DAY_IN_SECONDS ) {
+			return false;
+		}
+		global $wpdb;
+		return 1 === $wpdb->query( $wpdb->prepare( 'INSERT IGNORE INTO %i (job,expires) VALUES (%s,%d)', $wpdb->prefix . 'rktsky_antispam_jobs', $job, $expires ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- Only the owned task ledger is changed; a unique key arbitrates parallel workers through the official WordPress database API.
 	}
 
 	/**
@@ -103,7 +132,7 @@ final class Store {
 	 */
 	public function record( string $provider, string $reason, string $day = '' ): void {
 		global $wpdb;
-		if ( ! in_array( $provider, array( 'comments', 'cf7', 'gravityforms', 'wpforms' ), true ) || ! in_array( $reason, array( '', 'missing', 'invalid', 'honeypot', 'too_fast', 'replay', 'pingback', 'storage', 'keyword', 'bbcode', 'pattern', 'pattern_limit', 'language', 'country', 'native_spam' ), true ) ) {
+		if ( ! in_array( $provider, Providers::ids(), true ) || ! in_array( $reason, array( '', 'missing', 'invalid', 'honeypot', 'too_fast', 'replay', 'pingback', 'storage', 'keyword', 'bbcode', 'pattern', 'pattern_limit', 'language', 'country', 'native_spam' ), true ) ) {
 			return;
 		}
 		$day = preg_match( '/^\d{4}-\d{2}-\d{2}$/D', $day ) ? $day : gmdate( 'Y-m-d' );
@@ -201,6 +230,7 @@ final class Store {
 	public function cleanup(): void {
 		global $wpdb;
 		$retention = ( new Settings() )->all()['retention_days'];
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE expires < %d LIMIT 1000', $wpdb->prefix . 'rktsky_antispam_jobs', time() ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- Expiry affects only fixed internal task metadata, never visitor data.
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE expires < %d LIMIT 10000', $wpdb->prefix . 'rktsky_antispam_tokens', time() ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Bounded expiry deletion over an owned indexed ledger.
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE day < %s', $wpdb->prefix . 'rktsky_antispam_stats', gmdate( 'Y-m-d', time() - ( $retention - 1 ) * DAY_IN_SECONDS ) ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Native SQL removes only expired owned aggregate rows.
 	}

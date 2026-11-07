@@ -10,3 +10,7 @@
 - Public challenge endpoints are deliberately public and have no authority to change settings or submit forms.
 - Document attack limits honestly: a browser-capable bot can request valid challenges. Preserve native provider validation and anti-spam decisions.
 - Isolated tests only; suppress all mail. Commercial-provider and real-browser gaps remain explicit release gates.
+
+- Visible publisher/sponsor branding is Rocketsky. `rktsky` remains the GitHub handle and the stable internal prefix, not a public brand abbreviation.
+- Use official documented WordPress/provider APIs. Direct database operations, including custom `$wpdb` SQL, schema changes and own-table access, need the user's prior explicit approval of a concretely justified exception when no suitable API meets the requirement. A general development task is not approval. Approved exceptions still use only the native global `$wpdb`, prepared values/identifiers and `dbDelta`; never open separate SQL connections or directly query Core/provider tables.
+- Project-specific permission granted by the user on 2026-11-07: prepared `$wpdb` reads/writes, schema setup and cleanup for exactly the six per-site `rktsky_antispam_tokens`, `rktsky_antispam_stats`, `rktsky_antispam_totals`, `rktsky_antispam_quarantine`, `rktsky_antispam_feedback` and `rktsky_antispam_jobs` tables. Core/provider records still require their documented APIs. New tables or other direct accesses need a separate approval.

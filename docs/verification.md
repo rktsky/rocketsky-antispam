@@ -78,3 +78,30 @@ Der frühere Lauf auf dem Baseline-Commit scheiterte nur beim Versuch, das aktue
 - Es wurde kein externer Penetrationstest und keine rechtliche Zertifizierung durchgeführt. Das dokumentierte technische Datenmodell ermöglicht keine pauschale Zusage zur gesamten Website.
 
 Quellen für die Prüfmethode: [WordPress Plugin Check](https://wordpress.org/plugins/plugin-check/), [offizielle Plugin-Check-Action](https://github.com/WordPress/plugin-check-action), [WordPress Coding Standards](https://github.com/WordPress/WordPress-Coding-Standards), [GFAPI-Formulareinsendung](https://docs.gravityforms.com/submitting-forms-with-the-gfapi/).
+
+
+## Erweiterung 0.3.0
+
+Die Anbieter sind jetzt intern getrennte Module. Die Auslieferung enthält keinen kommerziellen Anbieter und keine Testlaufzeit. Neue Integrationen sind nach einem Update zunächst ausgeschaltet. WordPress, Originalplugins und deren Abhängigkeiten bleiben unverändert.
+
+Zusätzliche isolierte Prüfungen gegen WordPress 7.1.4/PHP 8.3.26:
+
+| Prüfung | Nachweis |
+| --- | --- |
+| WordPress-Registrierung | 38 Assertions gegen `register_new_user`, native Fehler, Honeypot, Scopewechsel, Replay, technische Prüfungen ohne Kontofeldaufbewahrung, API-Abgrenzung und Anbietergrenzen. |
+| Formidable 7.0, Fluent Forms 6.2.17, WS Form Lite 1.12.19 | 30 Fälle über die echten Originalengines: Persistenzgrenzen, Ablehnung, Replay/frischer Retry, native Fehler und ausgewählte verschlüsselte Felder. Zusätzlich 25 Adapterverträge. |
+| Elementor Free 4.3.2/Pro 4.3.0 | 23 native Assertions, sieben echte Browserabläufe und gezielte Ausfall-/Retry-Prüfungen nach der gemeinsamen Scriptkorrektur. Warmcache und entfernte Schutzfelder sind enthalten. |
+| Divi 4.27.9/5.4.0 | 50 Adapterverträge und sechs lokal abgefangene Browserfälle mit unveränderten Original-Frontendengines. Die kommerziellen PHP-Pakete fehlen: native Serververarbeitung/Mailunterdrückung bleibt ausdrücklich ungeprüft. |
+| WooCommerce 11.2.2 | 33 native Fälle, 16 echte Browser-Retryfälle, zusätzlich Order-Pay und My-Account-Registrierung. Konten, Bestellungen und Gatewayaufrufe bleiben bei eigener Ablehnung aus. Native Fehler nach bestandener Prüfung können dem WooCommerce-Lebenszyklus entsprechend bereits angelegte Entwürfe/Konten betreffen. |
+| Gemeinsames Browserprotokoll | Zehn Firefox-Prüfungen mit vollständig abgefangenem synthetischem Transport: erste Einsendung, frischer Retry, unveränderte Trapwerte, Host-Rebuild, unsichere Origin, Ausfall und gezielte Wiederholung ohne automatische Endlosschleife. |
+| Pingbacks/Trackbacks | 22 echte Core-Protokollfälle: frühe Sperre ohne Quellabruf, ausdrückliche Freigabe, Moderation, native Umgebungsgrenzen, Query-URLs, Methodenwechsel, einmalige Quell-/Zielbindung und Schutz gegen Typ-Spoofing. |
+| Multisite | 94 native Assertions über 28 tatsächlich erzeugte Websites: Netzwerkaktivierung, begrenzte Wartung, neue/gelöschte Sites, anonyme Schema-Migration, getrennte Daten/Schlüssel/Einstellungen/Berechtigungen sowie Deaktivierung und Aufbewahrungs-/Löschpfade. Site-Auswahl und Fortschritt verwenden ausschliesslich `get_sites`, Site-Metadaten und dokumentierte Core-APIs. |
+| Verspätet geladene Themes | Vier native Hookprüfungen: kein Modul bei fehlendem Theme, spätere Erkennung und genau eine Registrierung trotz mehrfacher Lifecycle-Hooks. |
+
+WS Form wurde mit echtem `form_reload()` geprüft: der native Canvas ersetzt die Formularinhalte, danach stehen genau ein Schutzcontainer und ein frischer Token bereit. Eine native Fehlermeldung und anschliessende erfolgreiche Wiederholung wurden tatsächlich übermittelt. `form_hide` muss ein boolesches `false` sein; der String `off` versteckt im Originalclient das Formular. Fluent Forms besitzt eine native Submitdrossel, deren Ablauf beim Wiederholungstest abgewartet wurde.
+
+Für WooCommerce wurden Browserabläufe mit Mindestzeit 0 und 2 Sekunden, ausgefülltem/entferntem Honeypot sowie Challenge-503/Netzabbruch geprüft. Die Wiederholung verwendete jeweils einen neuen Nachweis. Externe proprietäre Wallet-/Gatewaytransporte bleiben gesonderte Abnahmefälle. Die lokale Datenbank war SQLite mit originalem Integration-Drop-in; MySQL-Kompatibilitätsangaben des Drop-ins sind kein MySQL-Nachweis.
+
+Die Oberfläche wurde nach der Erweiterung gesamthaft geprüft: fünf Sprachen, Übersicht/Regeln/Quarantäne, jeweils 320/390/768/1440 CSS-Pixel, Tastaturfokus, reduzierte Bewegung, erzwungene Farben und beschriftete Felder. Rocketsky- und Speo-Ziele, neue Tabs und `rel`-Werte sind geprüft; sämtliche Grafiken laden lokal. Diese Desktop-Browseremulation ersetzt keine physische Geräte-/Safari-Abnahme.
+
+Weitere Details: [Formularverträge](integrations-extra-forms.md), [Elementor-/Divi-Nachweis](../tests/provider-elementor-divi.md) und [Sicherheitsmodell](security.md). Die CI enthält separate Originalanbieter-/WooCommerce-/Multisite-Jobs mit MySQL sowie das isolierte Browserprotokoll. Ein neuer Workflowlauf ist erst nach dem Push ein Nachweis für den endgültigen Commit.

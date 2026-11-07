@@ -590,7 +590,7 @@ final class Quarantine {
 	 * @return bool Whether metadata is safe and meaningful for this quarantine.
 	 */
 	private function valid_scope( string $provider, string $form_id, string $reason ): bool {
-		return in_array( $provider, array( 'comments', 'cf7', 'gravityforms', 'wpforms' ), true ) && 1 === preg_match( '/^[a-zA-Z0-9_-]{1,64}$/D', $form_id ) && in_array( $reason, array( 'missing', 'invalid', 'honeypot', 'too_fast', 'replay', 'pingback', 'storage', 'native_spam', 'keyword', 'bbcode', 'pattern', 'pattern_limit', 'language', 'country' ), true );
+		return in_array( $provider, Providers::content_ids(), true ) && 1 === preg_match( '/^[a-zA-Z0-9_-]{1,64}$/D', $form_id ) && in_array( $reason, array( 'missing', 'invalid', 'honeypot', 'too_fast', 'replay', 'pingback', 'storage', 'native_spam', 'keyword', 'bbcode', 'pattern', 'pattern_limit', 'language', 'country' ), true );
 	}
 
 	/**

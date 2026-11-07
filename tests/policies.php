@@ -69,6 +69,9 @@ $server = $_SERVER;
 $store = new Store();
 $store->install();
 $store->clear();
+$job_key = 'digest_' . gmdate( 'Y-m-d', time() - DAY_IN_SECONDS );
+$job_before = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE job=%s', $wpdb->prefix . 'rktsky_antispam_jobs', $job_key ), ARRAY_A );
+$wpdb->delete( $wpdb->prefix . 'rktsky_antispam_jobs', array( 'job' => $job_key ) );
 $option_names = array( 'rktsky_antispam_digest_claim', 'rktsky_antispam_digest_status' );
 $original_digest_options = array();
 foreach ( $option_names as $name ) {
@@ -217,6 +220,7 @@ try {
 	Maintenance::digest();
 	rktsky_antispam_policy_expect( 1 === count( $rktsky_policy_mail ), 'Failed mail must not be automatically resent by another digest invocation.' );
 	delete_option( 'rktsky_antispam_digest_claim' );
+	$wpdb->delete( $wpdb->prefix . 'rktsky_antispam_jobs', array( 'job' => $job_key ) );
 	$strict_digest = $digest_settings;
 	$strict_digest['privacy_mode'] = true;
 	update_option( Settings::OPTION, $strict_digest, false );
@@ -251,6 +255,10 @@ try {
 	rktsky_antispam_policy_expect( 1 === $mail_attempts, 'Four simultaneous native workers must claim exactly one daily mail attempt; observed ' . $mail_attempts . '.' );
 	echo 'PASS: ' . $rktsky_policy_assertions . " native policy, maintenance, and dashboard assertions.\n";
 } finally {
+	$wpdb->delete( $wpdb->prefix . 'rktsky_antispam_jobs', array( 'job' => $job_key ) );
+	if ( $job_before ) {
+		$wpdb->insert( $wpdb->prefix . 'rktsky_antispam_jobs', $job_before );
+	}
 	remove_filter( 'pre_wp_mail', 'rktsky_antispam_policy_mail', PHP_INT_MAX );
 	remove_filter( 'pre_http_request', 'rktsky_antispam_policy_http', PHP_INT_MAX );
 	foreach ( $comments as $id ) {
