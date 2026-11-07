@@ -83,7 +83,7 @@ $fluent               = \FluentForm\App\Models\Form::create(
 				'submitButton' => array(
 					'element'    => 'button',
 					'attributes' => array( 'type' => 'submit' ),
-					'settings'   => array( 'button_ui' => array( 'text' => 'Send' ) ),
+					'settings'   => array( 'button_ui' => array( 'type' => 'default', 'text' => 'Send', 'img_url' => '' ) ),
 				),
 			)
 		),

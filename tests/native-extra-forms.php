@@ -108,7 +108,10 @@ if ( '' === $provider ) {
 rktsky_extra_native_expect( in_array( $provider, array( 'formidable', 'fluentforms', 'wsform' ), true ), 'Unknown synthetic provider.' );
 $id = 'fluentforms' === $provider && isset( $argv[5] ) ? (int) $argv[5] : (int) $forms[ $provider ];
 wp_set_current_user( 0 );
-$_SERVER['REMOTE_ADDR']        = '192.0.2.90';
+// Fluent's default visitor budget counts stored submissions across all forms.
+// The independent feedback suite has its own fixed TEST-NET visitor; both
+// suites retain the provider's unchanged limit, including repeated cases.
+$_SERVER['REMOTE_ADDR']        = 'fluentforms' === $provider && 'observe-id' === ( $argv[3] ?? '' ) ? '198.51.100.90' : '192.0.2.90';
 $_SERVER['HTTP_USER_AGENT']    = 'Synthetic native extra-form browser';
 $_SERVER['REQUEST_METHOD']     = 'GET';
 $settings                      = new \Rktsky\Antispam\Settings();
@@ -265,7 +268,7 @@ if ( 'fluentforms' === $provider ) {
 $verify = static function ( array $result ) use ( &$actions, &$mails, &$native_ids, $provider, $case, $pass, $native_spam, $before, $id, $qbefore, $qtable, $settings ): void {
 	global $wpdb;
 	$after = rktsky_extra_native_count( $provider, $id );
-	rktsky_extra_native_expect( $after === $before + ( $pass || $native_spam ? 1 : 0 ), 'Only accepted submissions and supported native content-spam decisions may create a provider record.' );
+	rktsky_extra_native_expect( $after === $before + ( $pass || $native_spam ? 1 : 0 ), sprintf( 'Only accepted submissions and supported native content-spam decisions may create a provider record (%s/%s, before=%d, after=%d, native_status=%d).', $provider, $case, $before, $after, (int) ( $result['_fixture_native_status'] ?? 0 ) ) );
 	rktsky_extra_native_expect( $pass ? $actions > 0 : ( ( 'fluentforms' !== $provider && $native_spam ) || 0 === $actions ) && 0 === $mails, 'Rejected native forms must not send mail or run ordinary submission actions.' );
 	if ( $pass || $native_spam ) {
 		wp_set_current_user( 1 );
@@ -331,9 +334,12 @@ if ( 'formidable' === $provider ) {
 	$verify( (array) ( $frm_vars['created_entries'][ $id ] ?? array() ) );
 } elseif ( 'fluentforms' === $provider ) {
 	try {
-		$result = ( new \FluentForm\App\Services\Form\SubmissionHandlerService() )->handleSubmission( $raw, $id ); } catch ( \FluentForm\Framework\Validator\ValidationException $error ) {
-		$result = $error->errors(); }
-		$verify( (array) $result );
+		$result = ( new \FluentForm\App\Services\Form\SubmissionHandlerService() )->handleSubmission( $raw, $id );
+	} catch ( \FluentForm\Framework\Validator\ValidationException $error ) {
+		$result                          = $error->errors();
+		$result['_fixture_native_status'] = (int) $error->getCode();
+	}
+	$verify( (array) $result );
 } else {
 	if ( ! class_exists( 'WS_Form_API_Submit' ) ) {
 		do_action( 'rest_api_init' ); }
