@@ -24,7 +24,18 @@ $_SERVER['REQUEST_METHOD'] = 'GET';
 $_SERVER['REMOTE_ADDR']    = '127.0.0.1';
 $_SERVER['REQUEST_URI']    = '/';
 define( 'WP_DISABLE_FATAL_ERROR_HANDLER', true );
+// A native redirect/exit before wp-load returns must fail instead of passing CI.
+$rktsky_multisite_booted = false;
+register_shutdown_function(
+	static function () use ( &$rktsky_multisite_booted ): void {
+		if ( ! $rktsky_multisite_booted ) {
+			fwrite( STDERR, "Disposable WordPress bootstrap terminated before the native tests could run.\n" );
+			exit( 1 );
+		}
+	}
+);
 require $root . '/wp-load.php';
+$rktsky_multisite_booted = true;
 if ( ! is_multisite() || ! defined( 'WP_ANTISPAM_TEST_FIXTURE' ) || true !== WP_ANTISPAM_TEST_FIXTURE || 'local' !== wp_get_environment_type() || false !== apply_filters( 'pre_wp_mail', null, array() ) || ! defined( 'WP_HTTP_BLOCK_EXTERNAL' ) || ! WP_HTTP_BLOCK_EXTERNAL ) {
 	throw new RuntimeException( 'A local disposable network with mail/HTTP disabled is required.' );
 }
