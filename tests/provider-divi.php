@@ -144,9 +144,10 @@ namespace {
 
 	/**
 	 * Validates fixture UTF-8 without modifying caller input.
+	 *
 	 * @since 0.3.1
 	 * @param string $value Candidate text.
-	 * @param bool $strip Whether invalid input should be removed.
+	 * @param bool   $strip Whether invalid input should be removed.
 	 * @return string Original valid text or empty.
 	 */
 	function wp_check_invalid_utf8( $value, $strip = false ): string {
@@ -154,6 +155,7 @@ namespace {
 	}
 	/**
 	 * Supplies the synthetic current public page identity.
+	 *
 	 * @since 0.3.1
 	 * @return int Current page ID.
 	 */
@@ -162,6 +164,7 @@ namespace {
 	}
 	/**
 	 * Restricts presentation metadata to the synthetic public page.
+	 *
 	 * @since 0.3.1
 	 * @param int $id Candidate page.
 	 * @return bool Whether it is public.
@@ -171,6 +174,7 @@ namespace {
 	}
 	/**
 	 * Normalizes a validated numeric display reference.
+	 *
 	 * @since 0.3.1
 	 * @param mixed $value Candidate numeric value.
 	 * @return int Positive integer.
@@ -180,6 +184,7 @@ namespace {
 	}
 	/**
 	 * Supplies basic fixture text sanitization for presentation references.
+	 *
 	 * @since 0.3.1
 	 * @param string $value Candidate text.
 	 * @return string Plain text.
@@ -357,7 +362,7 @@ namespace {
 		rktsky_antispam_divi_expect( count( $guard->checks ) === $before + 1, 'Removing one or two known envelope markers cannot avoid the technical gate.' );
 	}
 	foreach ( array( 'et_pb_contactform_submit_', 'et_pb_contactform_submit_' . str_repeat( 'x', 65 ), 'et_pb_contactform_submit_native/identifier', 'et_pb_contactform_submit_<script>' ) as $name ) {
-		$_POST = array( $name => 'synthetic' );
+		$_POST  = array( $name => 'synthetic' );
 		$before = count( $guard->rejected );
 		try {
 			$adapter->validate();
@@ -366,7 +371,7 @@ namespace {
 		}
 		rktsky_antispam_divi_expect( count( $guard->rejected ) === $before + 1, 'Every reserved native prefix must fail closed when its suffix is unsupported.' );
 	}
-	$_POST = array( 'other_provider' => 'unrelated' );
+	$_POST  = array( 'other_provider' => 'unrelated' );
 	$before = count( $guard->checks );
 	$adapter->validate();
 	rktsky_antispam_divi_expect( count( $guard->checks ) === $before, 'Unrelated provider fields must preserve native processing.' );
@@ -386,9 +391,9 @@ namespace {
 		foreach ( array( false, true ) as $ajax ) {
 			$_POST                            = array(
 				'et_pb_contactform_submit_c024e92d-c0b5-4052-86b2-0b27af7c40ac' => 'et_contact_process',
-				'unsafe'           => '<script>DO-NOT-REFLECT</script>',
+				'unsafe'               => '<script>DO-NOT-REFLECT</script>',
 				'rktsky_antispam_page' => '22',
-				'_wp_http_referer' => 'https://external.invalid/DO-NOT-REFLECT',
+				'_wp_http_referer'     => 'https://external.invalid/DO-NOT-REFLECT',
 			);
 			$_SERVER['HTTP_X_REQUESTED_WITH'] = $ajax ? 'XMLHttpRequest' : '';
 			try {
@@ -412,20 +417,24 @@ namespace {
 		$adapter->validate();
 		rktsky_antispam_divi_expect( count( $guard->checks ) === $before, 'Disabled protection and native GET requests must preserve ordinary processing.' );
 	}
-	$settings->active = true;
+	$settings->active          = true;
 	$_SERVER['REQUEST_METHOD'] = 'POST';
 	foreach ( array( 'admin', 'admin_ajax' ) as $context ) {
 		$GLOBALS['rktsky_divi_admin'] = 'admin' === $context;
-		$GLOBALS['rktsky_divi_ajax'] = 'admin_ajax' === $context;
-		$before = count( $guard->checks );
+		$GLOBALS['rktsky_divi_ajax']  = 'admin_ajax' === $context;
+		$before                       = count( $guard->checks );
 		$adapter->validate();
 		rktsky_antispam_divi_expect( count( $guard->checks ) === $before + 1, 'Backend context flags cannot bypass the early native contact gate.' );
 	}
 	$GLOBALS['rktsky_divi_admin'] = false;
-	$GLOBALS['rktsky_divi_ajax'] = false;
-	$guard->reason = 'missing';
+	$GLOBALS['rktsky_divi_ajax']  = false;
+	$guard->reason                = 'missing';
 	foreach ( array( '22', '23' ) as $page ) {
-		$_POST = array( 'et_pb_contactform_submit_0' => 'et_contact_proccess', 'rktsky_antispam_target' => 'rk-fixture-sales', 'rktsky_antispam_page' => $page );
+		$_POST = array(
+			'et_pb_contactform_submit_0' => 'et_contact_proccess',
+			'rktsky_antispam_target'     => 'rk-fixture-sales',
+			'rktsky_antispam_page'       => $page,
+		);
 		try {
 			$adapter->validate();
 		} catch ( RuntimeException $failure ) {

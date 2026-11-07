@@ -104,10 +104,22 @@ try {
 	const metadata = await page.evaluate(() => {
 		const form = document.querySelector('#host');
 		const values = new FormData(form);
-		return { target: values.get('rktsky_antispam_target'), page: values.get('rktsky_antispam_page'), proof: window.rktskyAntispamBridge.serialized(form) };
+		return {
+			target: values.get('rktsky_antispam_target'),
+			page: values.get('rktsky_antispam_page'),
+			proof: window.rktskyAntispamBridge.serialized(form)
+		};
 	});
-	expect(metadata.target === 'rk-fixture-sales' && metadata.page === '22', 'Native child replacement restores display-only container and public-page metadata');
-	expect(!Object.keys(metadata.proof).some(key => key === 'rktsky_antispam_target' || key === 'rktsky_antispam_page'), 'Display metadata cannot become token authority in the structured proof transport');
+	expect(
+		metadata.target === 'rk-fixture-sales' && metadata.page === '22',
+		'Native child replacement restores display-only container and public-page metadata'
+	);
+	expect(
+		!Object.keys(metadata.proof).some(
+			(key) => key === 'rktsky_antispam_target' || key === 'rktsky_antispam_page'
+		),
+		'Display metadata cannot become token authority in the structured proof transport'
+	);
 	await page.locator('#external button').click();
 	await page.waitForFunction(() => window.delivered.length === 4, {}, { timeout: 5000 });
 	expect(
