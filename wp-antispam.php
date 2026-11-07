@@ -3,7 +3,7 @@
  * Plugin Name: WP Antispam
  * Plugin URI: https://github.com/rktsky/wp-antispam
  * Description: Local spam protection for comments, registrations and forms. No external services.
- * Version: 0.3.1
+ * Version: 0.4.0
  * Requires at least: 6.6
  * Requires PHP: 8.2
  * Author: Rocketsky
@@ -21,7 +21,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'RKTSKY_ANTISPAM_VERSION', '0.3.1' );
+define( 'RKTSKY_ANTISPAM_VERSION', '0.4.0' );
 define( 'RKTSKY_ANTISPAM_FILE', __FILE__ );
 
 // Explicit local includes avoid filesystem discovery and third-party autoloaders.

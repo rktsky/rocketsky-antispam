@@ -3,7 +3,7 @@ Tags: antispam, spam, contact form 7, gravity forms, wpforms
 Requires at least: 6.6
 Requires PHP: 8.2
 Tested up to: 7.1
-Stable tag: 0.3.1
+Stable tag: 0.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,14 +35,14 @@ A suggested privacy-policy paragraph is available through WordPress's privacy-po
 
 Protected forms require JavaScript and a working local REST API. REST comment creation requires protection tokens too. Native pingbacks and trackbacks are off by default and can be explicitly allowed outside privacy-conscious mode. WordPress may request the remote source and forward the sender IP for pingback verification. Multisite supports individual and network activation with separate site settings and storage.
 
-This is a 0.3.1 development candidate. Browser-capable bots can obtain valid tokens; this plugin cannot guarantee human submissions or prevent volumetric attacks. See the source repository's verification and integration documentation before production use.
+This is a 0.4.0 development candidate. Browser-capable bots can obtain valid tokens; this plugin cannot guarantee human submissions or prevent volumetric attacks. See the source repository's verification and integration documentation before production use.
 
 Source and verification: https://github.com/rktsky/wp-antispam
 
 == Installation ==
 
 1. Install the wp-antispam directory in wp-content/plugins and activate WP Antispam.
-2. Open Settings → WP Antispam and choose integrations.
+2. Open Settings → WP Antispam → Integrations and choose the providers you use.
 3. Save and test a normal submission and an error/retry case on your website.
 
 == Frequently Asked Questions ==
@@ -64,6 +64,13 @@ No. Used tokens remain protected until expiry.
 Own tables and options are removed by default. You can opt to keep plugin data before uninstalling.
 
 == Changelog ==
+
+= 0.4.0 =
+* Separates the administration into Overview, Integrations, Filter rules, Review spam and Settings.
+* Centralizes privacy and retention settings and brings review queues directly into view.
+* Keeps unrelated settings when saving a section and warns before leaving unsaved configuration.
+* Simplifies the administration layout and sponsor links.
+
 
 = 0.3.1 =
 * Verifies Divi 4, standalone Divi Builder and Divi 5 against unchanged original packages.

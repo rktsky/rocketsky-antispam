@@ -139,14 +139,19 @@ final class Admin {
 	 * @return string[] Existing links with the local settings link prepended.
 	 */
 	public function action_links( array $links ): array {
-		array_unshift( $links, '<a href="' . esc_url( admin_url( 'options-general.php?page=wp-antispam' ) ) . '">' . esc_html__( 'Settings', 'wp-antispam' ) . '</a>' );
+		array_unshift( $links, '<a href="' . esc_url( admin_url( 'options-general.php?page=wp-antispam&tab=settings' ) ) . '">' . esc_html__( 'Settings', 'wp-antispam' ) . '</a>' );
 		return $links;
 	}
 
 	/**
-	 * Builds the bounded view model after checking administrator access.
+	 * Renders one task-specific screen after checking administrator access.
+	 *
+	 * Configuration screens do not query activity or retained submissions. Only
+	 * fixed template names are selected; query input never becomes an include path.
+	 * The shared Settings API merges omitted fields, keeping each form independent.
 	 *
 	 * @since 0.1.0
+	 * @since 0.4.0 Separates monitoring, integrations, rules, review and site settings.
 	 * @return void
 	 */
 	public function render(): void {
@@ -154,23 +159,35 @@ final class Admin {
 			return;
 		}
 		$options       = $this->settings->all();
-		$requested_tab = isset( $_GET['tab'] ) && is_string( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only, fixed allowlisted view selection.
-		$tab           = in_array( $requested_tab, array( 'rules', 'quarantine' ), true ) ? $requested_tab : 'overview';
-		$base_url      = admin_url( 'options-general.php?page=wp-antispam' );
 		$tabs          = array(
-			'overview'   => __( 'Overview', 'wp-antispam' ),
-			'rules'      => __( 'Rules', 'wp-antispam' ),
-			'quarantine' => __( 'Quarantine', 'wp-antispam' ),
+			'overview'     => __( 'Overview', 'wp-antispam' ),
+			'integrations' => __( 'Integrations', 'wp-antispam' ),
+			'rules'        => __( 'Filter rules', 'wp-antispam' ),
+			'quarantine'   => __( 'Review spam', 'wp-antispam' ),
+			'settings'     => __( 'Settings', 'wp-antispam' ),
 		);
-		$reason_labels = $this->reason_labels();
-		$privacy_mode  = ! array_key_exists( 'privacy_mode', $options ) || ! empty( $options['privacy_mode'] );
+		$requested_tab = isset( $_GET['tab'] ) && is_string( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only allowlisted navigation.
+		$tab           = isset( $tabs[ $requested_tab ] ) ? $requested_tab : 'overview';
+		$base_url      = admin_url( 'options-general.php?page=wp-antispam' );
+		$view_urls     = array();
+		foreach ( array_keys( $tabs ) as $view ) {
+			$view_urls[ $view ] = add_query_arg( 'tab', $view, $base_url );
+		}
+		$privacy_mode = ! empty( $options['privacy_mode'] );
+		$privacy_url  = admin_url( 'options-privacy.php' );
+		$clear_url    = admin_url( 'admin-post.php' );
+		if ( 'settings' === $tab ) {
+			$notification_address = get_option( 'admin_email', '' );
+			require dirname( RKTSKY_ANTISPAM_FILE ) . '/templates/settings.php';
+			return;
+		}
 		if ( 'rules' === $tab ) {
 			$rule_lists = array();
 			foreach ( array( 'spam_keywords', 'spam_patterns', 'countries', 'trusted_proxies' ) as $key ) {
 				$value              = $options[ $key ] ?? '';
 				$rule_lists[ $key ] = is_array( $value ) ? implode( 'countries' === $key ? ', ' : "\n", $value ) : (string) $value;
 			}
-			$languages            = array(
+			$languages         = array(
 				'de' => __( 'German', 'wp-antispam' ),
 				'en' => __( 'English', 'wp-antispam' ),
 				'fr' => __( 'French', 'wp-antispam' ),
@@ -179,11 +196,11 @@ final class Admin {
 				'nl' => __( 'Dutch', 'wp-antispam' ),
 				'pt' => __( 'Portuguese', 'wp-antispam' ),
 			);
-			$notification_address = get_option( 'admin_email', '' );
-			$country_available    = class_exists( Country::class ) && ( new Country( $this->settings ) )->available();
+			$country_available = class_exists( Country::class ) && ( new Country( $this->settings ) )->available();
 			require dirname( RKTSKY_ANTISPAM_FILE ) . '/templates/rules.php';
 			return;
 		}
+		$reason_labels = $this->reason_labels();
 		if ( 'quarantine' === $tab ) {
 			if ( null === $this->quarantine ) {
 				wp_die( esc_html__( 'Quarantine storage is unavailable.', 'wp-antispam' ), '', array( 'response' => 503 ) );
@@ -193,13 +210,35 @@ final class Admin {
 			$review_status   = $entry && $this->feedback ? $this->feedback->status( 'quarantine', (string) $entry_id ) : null;
 			$listing         = $entry_id > 0 ? array() : $this->quarantine->listing( max( 1, $this->query_id( 'paged' ) ) );
 			$provider_labels = Providers::labels();
-			$quarantine_url  = add_query_arg( 'tab', 'quarantine', $base_url );
-			$delete_url      = admin_url( 'admin-post.php' );
+			$quarantine_url  = $view_urls['quarantine'];
+			$delete_url      = $clear_url;
 			require dirname( RKTSKY_ANTISPAM_FILE ) . '/templates/quarantine.php';
 			return;
 		}
-		$summary      = $this->store->summary( 7 );
-		$quality      = $this->feedback ? $this->feedback->metrics() : array(
+		$model             = $this->integration_model( $options );
+		$integrations      = $model['integrations'];
+		$available_groups  = $model['available_groups'];
+		$missing_providers = $model['missing_providers'];
+		$active_count      = $model['active_count'];
+		if ( 'integrations' === $tab ) {
+			require dirname( RKTSKY_ANTISPAM_FILE ) . '/templates/integrations.php';
+			return;
+		}
+		$summary          = $this->store->summary( 7 );
+		$checked_count    = (int) $summary['accepted'] + (int) $summary['blocked'];
+		$rejection_rate   = $checked_count > 0 ? (int) $summary['blocked'] / $checked_count : null;
+		$blocked_comments = $this->store->blocked_comments();
+		$indexed          = array_column( $summary['daily'], null, 'day' );
+		$days             = array();
+		for ( $offset = 6; $offset >= 0; --$offset ) {
+			$day    = gmdate( 'Y-m-d', time() - $offset * DAY_IN_SECONDS );
+			$days[] = $indexed[ $day ] ?? array(
+				'day'      => $day,
+				'accepted' => 0,
+				'blocked'  => 0,
+			);
+		}
+		$quality = $this->feedback ? $this->feedback->metrics() : array(
 			'tp'          => 0,
 			'fp'          => 0,
 			'fn'          => 0,
@@ -211,11 +250,25 @@ final class Admin {
 			'accuracy'    => null,
 			'period_days' => 90,
 		);
+		require dirname( RKTSKY_ANTISPAM_FILE ) . '/templates/overview.php';
+	}
+
+	/**
+	 * Prepares provider states without inspecting form contents or counting forms.
+	 *
+	 * Missing providers keep their saved choice but cannot appear active. Their
+	 * controls remain inside a native disclosure on the integrations screen.
+	 *
+	 * @since 0.4.0
+	 * @param array<string,mixed> $options Validated per-site configuration.
+	 * @return array{integrations:array,available_groups:array,missing_providers:array,active_count:int} Presentation-only provider states.
+	 */
+	private function integration_model( array $options ): array {
 		$detected     = Integrations::detected();
 		$labels       = Providers::labels();
 		$integrations = array(
 			'comments'        => array(
-				'detail' => __( 'Protects the native comment form and rejects trackbacks and pingbacks.', 'wp-antispam' ),
+				'detail' => __( 'Protects native WordPress comments. Pingbacks and trackbacks have separate settings.', 'wp-antispam' ),
 				'mark'   => 'W',
 			),
 			'registration'    => array(
@@ -291,9 +344,32 @@ final class Admin {
 				++$active_count;
 			}
 		}
-		$privacy_url = admin_url( 'options-privacy.php' );
-		$clear_url   = admin_url( 'admin-post.php' );
-		require dirname( RKTSKY_ANTISPAM_FILE ) . '/templates/settings.php';
+		$available_groups  = array();
+		$missing_providers = array();
+		foreach ( $integration_groups as $group ) {
+			$available = array();
+			foreach ( $group['providers'] as $provider ) {
+				if ( ! empty( $detected[ $provider ] ) ) {
+					$available[] = $provider;
+				} else {
+					$missing_providers[] = $provider;
+				}
+				$integrations[ $provider ]['available']  = ! empty( $detected[ $provider ] );
+				$integrations[ $provider ]['configured'] = ! empty( $options[ $provider ] );
+			}
+			if ( ! empty( $available ) ) {
+				$available_groups[] = array(
+					'label'     => $group['label'],
+					'providers' => $available,
+				);
+			}
+		}
+		return array(
+			'integrations'      => $integrations,
+			'available_groups'  => $available_groups,
+			'missing_providers' => $missing_providers,
+			'active_count'      => $active_count,
+		);
 	}
 
 	/**
@@ -444,6 +520,7 @@ final class Admin {
 			add_query_arg(
 				array(
 					'page'  => 'wp-antispam',
+					'tab'   => 'quarantine',
 					$notice => $recorded ? '1' : '0',
 				),
 				admin_url( 'options-general.php' )
@@ -470,7 +547,7 @@ final class Admin {
 		}
 		check_admin_referer( 'rktsky_antispam_clear' );
 		$this->store->clear();
-		wp_safe_redirect( admin_url( 'options-general.php?page=wp-antispam&statistics-cleared=1' ) );
+		wp_safe_redirect( admin_url( 'options-general.php?page=wp-antispam&tab=settings&statistics-cleared=1' ) );
 		exit;
 	}
 }

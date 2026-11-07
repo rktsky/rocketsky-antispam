@@ -2,7 +2,7 @@
 
 Eigenständiges Open-Source-Plugin von **Rocketsky**, GPL-2.0-or-later. Lokaler Spamschutz für WordPress-Kommentare und Registrierung, Contact Form 7, Gravity Forms, WPForms, Formidable Forms, Fluent Forms, WS Form, Elementor Forms, Divi-Kontaktformulare sowie WooCommerce-Checkout und Registrierung. Keine kostenpflichtigen Funktionen, externen Captchas oder Spamdienste.
 
-**Stand: 0.3.1, Entwicklungskandidat.** Die tatsächlichen Prüfungen und offenen Freigabepunkte stehen in [docs/verification.md](docs/verification.md). Eine Freigabe durch WordPress.org ist damit nicht verbunden.
+**Stand: 0.4.0, Entwicklungskandidat.** Die tatsächlichen Prüfungen und offenen Freigabepunkte stehen in [docs/verification.md](docs/verification.md). Eine Freigabe durch WordPress.org ist damit nicht verbunden.
 
 ## Installation und Bedienung
 
@@ -14,10 +14,23 @@ ist sein Schalter ausgegraut und ohne Häkchen; die gespeicherte Auswahl bleibt 
 eine spätere Reaktivierung erhalten.
 
 1. Den Plugin-Ordner als `wp-antispam` nach `wp-content/plugins/` installieren und in WordPress aktivieren. PHP 8.2 und WordPress 6.6 sind die technischen Mindestanforderungen; die tatsächlich geprüften Versionen stehen im Prüfnachweis.
-2. Unter **Einstellungen → WP Antispam** die gewünschten Integrationen aktivieren. Vorhandene Formulare erhalten die Schutzfelder automatisch. Keine Snippets oder Änderungen im Formular-Editor nötig.
+2. Unter **Einstellungen → WP Antispam → Integrationen** die gewünschten Anbieter aktivieren. Vorhandene Formulare erhalten die Schutzfelder automatisch. Keine Snippets oder Änderungen im Formular-Editor nötig.
 3. Eine gültige Einsendung und einen Fehlerfall auf der eigenen Website prüfen. Formulare benötigen JavaScript und Zugriff auf den lokalen REST-Endpunkt. Bestehende Captchas und andere Dienste der Formularplugins werden durch WP Antispam nicht umkonfiguriert.
 
 Der Kommentarschutz ist standardmässig aktiviert. Kommentare über REST benötigen ebenfalls gültige Schutzfelder; externe Kommentar-Apps und eigene Integrationen müssen berücksichtigt werden. Trackbacks/Pingbacks werden standardmässig früh abgewiesen. Ihre ausdrückliche Freigabe ist bei ausgeschaltetem datensparsamen Modus möglich: WordPress ruft bei Pingbacks die Quellseite ab und kann die Absender-IP weiterleiten. Multisite unterstützt einzelne Aktivierung und Netzwerkaktivierung mit getrennten Einstellungen und Daten je Website.
+
+## Verwaltung
+
+Die Verwaltung ist nach Aufgaben aufgeteilt:
+
+- **Übersicht:** Schutzstatus, Aktivität und bewertete Erkennungsergebnisse.
+- **Integrationen:** verfügbare Anbieter aktivieren und technische Prüfungen einstellen.
+- **Filterregeln:** Inhalte und Kommentare nach den eigenen Regeln filtern.
+- **Spam prüfen:** Kommentar-Moderation öffnen, Quarantäne prüfen und zugestellte Einsendungen bewerten.
+- **Einstellungen:** Datenschutzmodus, Aufbewahrung, Benachrichtigungen und Deinstallation.
+
+Jede Einstellungsseite speichert ihre eigenen Felder. Andere gespeicherte Bereiche
+bleiben erhalten. Der Datenschutzmodus wird zentral unter Einstellungen geändert.
 
 ## Schutzverfahren und Grenzen
 

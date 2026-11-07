@@ -149,3 +149,24 @@ Die fünf nativen Basisjobs verwenden PHP 8.2.35, 8.3.36, 8.4.27 und 8.5.12 mit 
 Die Syntaxprüfung besteht für 75 eigene PHP-Dateien; WordPress Coding Standards melden keine Befunde im produktiven Quellcode. Plugin Check 2.2.0 mit Laufzeitinitialisierung meldet keine Fehler und vier bekannte sichtbare Warnungen: drei zum gewünschten Namen beziehungsweise Slug mit `wp`, eine zur lokalen Sprachdateiladung. Die Verzeichnisfreigabe wird daraus nicht abgeleitet.
 
 Das separat erstellte Installationspaket `wp-antispam-0.3.1.zip` enthält 60 Produktionsdateien und stimmt dateiweise mit diesem Quellstand überein. SHA-256: `b02ecaa44f6f78fcd23e147ac7994dccaf953de21b8544bee801ed9620813ff8`. Originalanbieter, Tests und Entwicklungsabhängigkeiten sind nicht Teil der Auslieferung. Die anschliessende Aktualisierung dieses Prüfnachweises ändert keinen produktiven Code.
+
+
+## Verwaltungsstruktur 0.4.0
+
+Die Verwaltung ist nach Übersicht, Integrationen, Filterregeln, Spam prüfen und
+Einstellungen aufgeteilt. Die globale Datenschutzwahl erscheint nur in den
+Einstellungen. Andere Ansichten verlinken den aktuellen Status. Die Prüfwarteschlange
+enthält keine vorgelagerte Konfiguration mehr; nachträgliche Bewertungen und die
+Entfernung einer Referenz sind getrennte Aktionen. Bestehende Quarantäne-Detail-URLs
+bleiben gültig.
+
+`tests/native-admin.php` prüft die tatsächliche Ausgabe des Controllers, die
+Formgrenzen und Feldzuständigkeiten, Rechte, Nonces, Aktionsrückwege und das
+Zusammenführen von Teilspeicherungen durch die native Settings API. Konfigurationsseiten
+laden keine Aktivitäts-, Bewertungs- oder Quarantänedaten. Der lokale Lauf besteht 227 native Assertions. `tests/browser-admin.mjs` ergänzt
+neun echte Firefox-Abläufe mit fünf authentifizierten Speichervorgängen über
+`options.php`, sichtbaren Settings-Notices, Datenschutzsperren ohne JavaScript und
+vier erwarteten Warnungen vor dem Verlassen ungespeicherter Änderungen. Das
+Zurücknehmen einer Änderung und ein gewöhnliches Speichern erzeugen keine Warnung.
+Die Originaloptionen wurden exakt wiederhergestellt. Die Gestaltungsnachweise
+werden gegen den abgeschlossenen Stand separat erfasst.

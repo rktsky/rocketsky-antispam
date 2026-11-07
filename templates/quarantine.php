@@ -1,9 +1,10 @@
 <?php
 /**
- * Displays optional quarantine settings, metadata and escaped submission details.
+ * Displays the review queue and escaped submissions without storage configuration.
  *
  * @package RktskyAntispam
  * @since 0.2.0
+ * @since 0.4.0 Moved configuration to Settings and delivered-case review here.
  * @var array<string,mixed> $options Validated settings.
  * @var array<string,mixed> $listing Bounded metadata page; no submitted fields.
  * @var array<string,mixed>|null $entry Authorized selected record, or null.
@@ -35,6 +36,15 @@ require __DIR__ . '/admin-header.php';
 	elseif ( isset( $_GET['review-updated'] ) && '0' === $_GET['review-updated'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only fixed failure notice.
 		?>
 		<div class="notice notice-error inline"><p><?php esc_html_e( 'This record could not be reviewed. It may have expired or have no tracked prediction.', 'wp-antispam' ); ?></p></div>
+	<?php endif; ?>
+	<?php
+	if ( isset( $_GET['classification-saved'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Fixed read-only action result; query input is never reflected.
+		$rktsky_antispam_classification_saved = '1' === $_GET['classification-saved']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Strict comparison selects static read-only text only.
+		?>
+		<div class="notice <?php echo $rktsky_antispam_classification_saved ? 'notice-success' : 'notice-error'; ?> inline"><p><?php echo esc_html( $rktsky_antispam_classification_saved ? __( 'Classification saved. Reusing the same reference updates the existing case.', 'wp-antispam' ) : __( 'The case action could not be completed. Check the reference and try again.', 'wp-antispam' ) ); ?></p></div>
+	<?php endif; ?>
+	<?php if ( isset( $_GET['reference-forgotten'] ) && '1' === $_GET['reference-forgotten'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Static read-only success notice. ?>
+		<div class="notice notice-success inline"><p><?php esc_html_e( 'Case reference forgotten. Reviewed counts retain their evaluation window.', 'wp-antispam' ); ?></p></div>
 	<?php endif; ?>
 	<?php if ( $entry_id > 0 ) : ?>
 		<a href="<?php echo esc_url( $quarantine_url ); ?>" class="rktsky-antispam__back-link">← <?php esc_html_e( 'Back to rejected submissions', 'wp-antispam' ); ?></a>
@@ -86,37 +96,15 @@ require __DIR__ . '/admin-header.php';
 		<?php endif; ?>
 	<?php else : ?>
 		<header class="rktsky-antispam__page-heading">
-			<p class="rktsky-antispam__eyebrow"><?php esc_html_e( 'Optional local storage', 'wp-antispam' ); ?></p>
-			<h2><?php esc_html_e( 'Review rejected submissions', 'wp-antispam' ); ?></h2>
-			<p><?php esc_html_e( 'Quarantine is off by default. Enable it to review selected fields from future rejected comments and forms.', 'wp-antispam' ); ?></p>
+			<h2><?php esc_html_e( 'Review spam', 'wp-antispam' ); ?></h2>
+			<p><?php esc_html_e( 'Review WordPress comments in their native queue and rejected form submissions here.', 'wp-antispam' ); ?></p>
 		</header>
-		<p class="rktsky-antispam__queue-note"><?php esc_html_e( 'WordPress spam comments stay in Comments → Spam. Review them there; the separate native-comment deletion period applies.', 'wp-antispam' ); ?> <a href="<?php echo esc_url( admin_url( 'edit-comments.php?comment_status=spam' ) ); ?>"><?php esc_html_e( 'WordPress comments', 'wp-antispam' ); ?> →</a></p>
-		<form action="<?php echo esc_url( admin_url( 'options.php' ) ); ?>" method="post" class="rktsky-antispam__card rktsky-antispam__quarantine-settings">
-			<?php settings_fields( 'rktsky_antispam' ); ?>
-			<?php require __DIR__ . '/privacy-mode.php'; ?>
-			<p class="rktsky-antispam__mode-hint" data-rk-mode-hint
-			<?php
-			if ( ! $privacy_mode ) :
-				?>
-				hidden<?php endif; ?>><?php esc_html_e( 'Turn off privacy-conscious mode to enable quarantine.', 'wp-antispam' ); ?></p>
-			<input type="hidden" name="<?php echo esc_attr( \Rktsky\Antispam\Settings::OPTION ); ?>[quarantine_enabled]" value="0" />
-			<fieldset data-rk-optional-processing <?php disabled( $privacy_mode ); ?>>
-			<legend class="screen-reader-text"><?php esc_html_e( 'Quarantine storage configuration', 'wp-antispam' ); ?></legend>
-			<div class="rktsky-antispam__quarantine-controls">
-				<div>
-					<label class="rktsky-antispam__inline-check" for="rktsky-quarantine-enabled"><input type="checkbox" id="rktsky-quarantine-enabled" name="<?php echo esc_attr( \Rktsky\Antispam\Settings::OPTION ); ?>[quarantine_enabled]" value="1" aria-describedby="rktsky-quarantine-privacy" <?php checked( ! empty( $options['quarantine_enabled'] ) ); ?> /><span><?php esc_html_e( 'Store rejected submissions in quarantine', 'wp-antispam' ); ?></span></label>
-					<p class="description" id="rktsky-quarantine-privacy"><?php esc_html_e( 'Stored fields may include names, email addresses and messages. Update your privacy information before enabling this option. No data leaves your website.', 'wp-antispam' ); ?></p>
-				</div>
-				<div class="rktsky-antispam__field"><label for="rktsky-quarantine-days"><?php esc_html_e( 'Delete quarantined records after', 'wp-antispam' ); ?></label><div class="rktsky-antispam__number"><input type="number" id="rktsky-quarantine-days" name="<?php echo esc_attr( \Rktsky\Antispam\Settings::OPTION ); ?>[quarantine_days]" value="<?php echo esc_attr( (string) ( $options['quarantine_days'] ?? 7 ) ); ?>" min="1" max="30" step="1" aria-describedby="rktsky-quarantine-retention" /><span><?php esc_html_e( 'days', 'wp-antispam' ); ?></span></div></div>
-			</div>
-			</fieldset>
-			<p class="rktsky-antispam__quarantine-disclosure" id="rktsky-quarantine-retention"><?php esc_html_e( 'Expired records are hidden immediately and removed by scheduled cleanup, which can run late. Disabling quarantine stops new storage; existing records remain until expiry. The local storage limit is 500 records.', 'wp-antispam' ); ?></p>
-			<div class="rktsky-antispam__quarantine-save"><a href="<?php echo esc_url( admin_url( 'options-privacy.php' ) ); ?>"><?php esc_html_e( 'Review the suggested privacy policy text', 'wp-antispam' ); ?></a><button type="submit" class="button button-primary rktsky-antispam__save-button"><?php esc_html_e( 'Save quarantine settings', 'wp-antispam' ); ?></button></div>
-		</form>
+		<div class="rktsky-antispam__quick-actions"><a class="button" href="<?php echo esc_url( admin_url( 'edit-comments.php?comment_status=spam' ) ); ?>"><?php esc_html_e( 'Review spam comments', 'wp-antispam' ); ?></a></div>
+
 		<section class="rktsky-antispam__quarantine-list" aria-labelledby="rktsky-quarantine-list-heading">
 			<div class="rktsky-antispam__section-title"><h2 id="rktsky-quarantine-list-heading"><?php esc_html_e( 'Rejected submissions', 'wp-antispam' ); ?></h2><span><?php echo esc_html( ! empty( $options['quarantine_enabled'] ) ? __( 'Quarantine enabled', 'wp-antispam' ) : __( 'New storage is off', 'wp-antispam' ) ); ?></span></div>
 			<?php if ( empty( $listing['items'] ) ) : ?>
-				<div class="rktsky-antispam__card rktsky-antispam__quarantine-empty"><h3><?php esc_html_e( 'No stored submissions', 'wp-antispam' ); ?></h3><p><?php esc_html_e( 'Records appear here when quarantine is enabled and WP Antispam rejects a new submission. Earlier rejections are not recovered.', 'wp-antispam' ); ?></p></div>
+				<div class="rktsky-antispam__card rktsky-antispam__quarantine-empty"><h3><?php esc_html_e( 'No stored submissions', 'wp-antispam' ); ?></h3><p><?php esc_html_e( 'Records appear here when quarantine is enabled and WP Antispam rejects a new submission. Earlier rejections are not recovered.', 'wp-antispam' ); ?></p><a class="button" href="<?php echo esc_url( $view_urls['settings'] . '#retention' ); ?>"><?php esc_html_e( 'Storage settings', 'wp-antispam' ); ?></a></div>
 			<?php else : ?>
 				<div class="rktsky-antispam__quarantine-table-wrap"><table class="rktsky-antispam__quarantine-table" role="table"><caption class="screen-reader-text"><?php esc_html_e( 'Rejected submission metadata. Open a record to view its stored fields.', 'wp-antispam' ); ?></caption><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader"><?php esc_html_e( 'Received', 'wp-antispam' ); ?></th><th scope="col" role="columnheader"><?php esc_html_e( 'Integration', 'wp-antispam' ); ?></th><th scope="col" role="columnheader"><?php esc_html_e( 'Form ID', 'wp-antispam' ); ?></th><th scope="col" role="columnheader"><?php esc_html_e( 'Protection check', 'wp-antispam' ); ?></th><th scope="col" role="columnheader"><span class="screen-reader-text"><?php esc_html_e( 'Actions', 'wp-antispam' ); ?></span></th></tr></thead><tbody role="rowgroup">
 					<?php foreach ( $listing['items'] as $rktsky_antispam_row ) : ?>
@@ -138,6 +126,7 @@ require __DIR__ . '/admin-header.php';
 				<?php endif; ?>
 			<?php endif; ?>
 		</section>
+		<?php require __DIR__ . '/delivered-review.php'; ?>
 	<?php endif; ?>
 	<?php require __DIR__ . '/sponsors.php'; ?>
 </div>
