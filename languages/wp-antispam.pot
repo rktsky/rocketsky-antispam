@@ -27,7 +27,7 @@ msgid_plural "%s integrations enabled"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/settings.php:101
+#: templates/settings.php:105
 msgid "0 disables the timing check. A delay can reject fast submissions made with autofill."
 msgstr ""
 
@@ -39,7 +39,7 @@ msgstr ""
 msgid "Accuracy"
 msgstr ""
 
-#: templates/quality.php:22 templates/quarantine.php:121
+#: templates/quality.php:26 templates/quarantine.php:121
 msgid "Actions"
 msgstr ""
 
@@ -51,7 +51,7 @@ msgstr ""
 msgid "Activity statistics deleted. Used tokens remain protected against reuse."
 msgstr ""
 
-#: src/Admin.php:219
+#: src/Admin.php:226
 msgid "Adds protection through the native form and spam hooks."
 msgstr ""
 
@@ -83,7 +83,7 @@ msgstr ""
 msgid "Allow native pingbacks and trackbacks"
 msgstr ""
 
-#: templates/settings.php:96
+#: templates/settings.php:100
 msgid "An enabled integration starts protecting forms when its plugin is active. Test an ordinary submission after changing settings."
 msgstr ""
 
@@ -91,15 +91,15 @@ msgstr ""
 msgid "An invalid or oversized regular expression was omitted. Enter pattern bodies without delimiters, one per line."
 msgstr ""
 
-#: templates/settings.php:106
+#: templates/settings.php:110
 msgid "Anonymous daily counts"
 msgstr ""
 
-#: templates/settings.php:107
+#: templates/settings.php:111
 msgid "Applies to WP Antispam counts. Your form plugin and server may keep their own records."
 msgstr ""
 
-#: templates/quality.php:22
+#: templates/quality.php:26
 msgid "Apply case action"
 msgstr ""
 
@@ -107,7 +107,7 @@ msgstr ""
 msgid "Available"
 msgstr ""
 
-#: src/Admin.php:271
+#: src/Admin.php:319
 msgid "BBCode link markup"
 msgstr ""
 
@@ -119,7 +119,7 @@ msgstr ""
 msgid "Block listed countries"
 msgstr ""
 
-#: src/Admin.php:270
+#: src/Admin.php:318
 msgid "Blocked keyword"
 msgstr ""
 
@@ -131,23 +131,23 @@ msgstr ""
 msgid "Case reference forgotten. Reviewed counts retain their evaluation window."
 msgstr ""
 
-#: templates/rules.php:65 templates/settings.php:114
+#: templates/rules.php:65 templates/settings.php:118
 msgid "Changes apply after saving."
 msgstr ""
 
-#: src/Admin.php:227
+#: src/Admin.php:258
 msgid "Checks classic and block checkout before final processing or payment. Content rules and quarantine are excluded."
 msgstr ""
 
-#: src/Admin.php:218
+#: src/Admin.php:222
 msgid "Checks native account registration before accounts or activation emails are created. No account fields are retained."
 msgstr ""
 
-#: src/Admin.php:221 src/Admin.php:222 src/Admin.php:223 src/Admin.php:224 src/Admin.php:225
+#: src/Admin.php:234 src/Admin.php:238 src/Admin.php:242 src/Admin.php:246 src/Admin.php:250
 msgid "Checks submissions before the form is processed."
 msgstr ""
 
-#: templates/quality.php:22
+#: templates/quality.php:26
 msgid "Choose an action"
 msgstr ""
 
@@ -171,11 +171,11 @@ msgstr ""
 msgid "Comment countries"
 msgstr ""
 
-#: src/Admin.php:276
+#: src/Admin.php:324
 msgid "Comment country rule"
 msgstr ""
 
-#: src/Admin.php:275
+#: src/Admin.php:323
 msgid "Comment language rule"
 msgstr ""
 
@@ -219,7 +219,7 @@ msgstr ""
 msgid "Content filters"
 msgstr ""
 
-#: src/Admin.php:273
+#: src/Admin.php:321
 msgid "Content rule processing limit"
 msgstr ""
 
@@ -263,7 +263,7 @@ msgstr ""
 msgid "Daily administrator digest"
 msgstr ""
 
-#: templates/settings.php:105
+#: templates/settings.php:109
 msgid "Data handling"
 msgstr ""
 
@@ -275,11 +275,11 @@ msgstr ""
 msgid "Day"
 msgstr ""
 
-#: templates/settings.php:117
+#: templates/settings.php:121
 msgid "Delete activity statistics"
 msgstr ""
 
-#: templates/settings.php:108
+#: templates/settings.php:112
 msgid "Delete plugin data when uninstalling"
 msgstr ""
 
@@ -291,7 +291,7 @@ msgstr ""
 msgid "Delete this record"
 msgstr ""
 
-#: templates/settings.php:117
+#: templates/settings.php:121
 msgid "Deletes daily activity counts and the lifetime rejected-comment total. Reviewed detection results remain available for their 90-day window. This cannot be undone."
 msgstr ""
 
@@ -339,11 +339,11 @@ msgstr ""
 msgid "Existing spam comments"
 msgstr ""
 
-#: templates/settings.php:106
+#: templates/settings.php:110
 msgid "Expire within 2 hours; removed by scheduled cleanup"
 msgstr ""
 
-#: src/Admin.php:262
+#: src/Admin.php:310
 msgid "Expired protection token"
 msgstr ""
 
@@ -367,7 +367,7 @@ msgstr ""
 msgid "Feedback uses local, linkable HMAC case references for up to 90 days, also in privacy-conscious mode. Scheduled cleanup may run late."
 msgstr ""
 
-#: templates/quality.php:22
+#: templates/quality.php:26
 msgid "Forget case reference"
 msgstr ""
 
@@ -383,7 +383,7 @@ msgstr ""
 msgid "Form checks run on your website. No external captcha, tracking service or visitor profile."
 msgstr ""
 
-#: src/Admin.php:268
+#: src/Admin.php:316
 msgid "Form does not match token"
 msgstr ""
 
@@ -391,7 +391,7 @@ msgstr ""
 msgid "Form integration"
 msgstr ""
 
-#: src/Admin.php:236
+#: src/Admin.php:276
 msgid "Form plugins"
 msgstr ""
 
@@ -407,7 +407,7 @@ msgstr ""
 msgid "German"
 msgstr ""
 
-#: src/Admin.php:259
+#: src/Admin.php:307
 msgid "Honeypot filled"
 msgstr ""
 
@@ -427,7 +427,7 @@ msgstr ""
 msgid "Integration"
 msgstr ""
 
-#: src/Admin.php:261
+#: src/Admin.php:309
 msgid "Invalid protection token"
 msgstr ""
 
@@ -439,7 +439,7 @@ msgstr ""
 msgid "Italian"
 msgstr ""
 
-#: templates/settings.php:107
+#: templates/settings.php:111
 msgid "Keep statistics for"
 msgstr ""
 
@@ -459,7 +459,7 @@ msgstr ""
 msgid "Local content rules"
 msgstr ""
 
-#: templates/settings.php:105
+#: templates/settings.php:109
 msgid "Local data handling"
 msgstr ""
 
@@ -475,23 +475,23 @@ msgstr ""
 msgid "Make sure your website privacy information describes the options you enable."
 msgstr ""
 
-#: src/Admin.php:267
+#: src/Admin.php:315
 msgid "Malformed protection fields"
 msgstr ""
 
-#: templates/settings.php:117
+#: templates/settings.php:121
 msgid "Manage activity statistics"
 msgstr ""
 
-#: templates/settings.php:110
+#: templates/settings.php:114
 msgid "Manage optional quarantine"
 msgstr ""
 
-#: src/Admin.php:272
+#: src/Admin.php:320
 msgid "Matched content pattern"
 msgstr ""
 
-#: templates/settings.php:101
+#: templates/settings.php:105
 msgid "Minimum completion time"
 msgstr ""
 
@@ -499,11 +499,11 @@ msgstr ""
 msgid "Missed spam"
 msgstr ""
 
-#: src/Admin.php:260
+#: src/Admin.php:308
 msgid "Missing protection token"
 msgstr ""
 
-#: src/Admin.php:274
+#: src/Admin.php:322
 msgid "Native provider spam check"
 msgstr ""
 
@@ -539,7 +539,7 @@ msgstr ""
 msgid "Not reviewed"
 msgstr ""
 
-#: templates/quality.php:22 templates/quarantine.php:73
+#: templates/quality.php:26 templates/quarantine.php:73
 msgid "Not spam"
 msgstr ""
 
@@ -584,7 +584,7 @@ msgstr ""
 msgid "Open WP Antispam"
 msgstr ""
 
-#: templates/settings.php:117
+#: templates/settings.php:121
 msgid "Open source. All protection included."
 msgstr ""
 
@@ -617,7 +617,7 @@ msgstr ""
 msgid "Page %1$d of %2$d"
 msgstr ""
 
-#: src/Admin.php:237
+#: src/Admin.php:280
 msgid "Page builders"
 msgstr ""
 
@@ -669,7 +669,7 @@ msgstr ""
 msgid "Project sponsorship"
 msgstr ""
 
-#: templates/settings.php:102
+#: templates/settings.php:106
 msgid "Protected forms need JavaScript to obtain a fresh token. Visitors are shown an error when verification is unavailable."
 msgstr ""
 
@@ -677,19 +677,19 @@ msgstr ""
 msgid "Protection check"
 msgstr ""
 
-#: templates/settings.php:100
+#: templates/settings.php:104
 msgid "Protection checks"
 msgstr ""
 
-#: src/Admin.php:266
+#: src/Admin.php:314
 msgid "Protection storage unavailable"
 msgstr ""
 
-#: src/Admin.php:228
+#: src/Admin.php:262
 msgid "Protects registration on My Account. Account creation during checkout uses checkout protection. No account fields are retained."
 msgstr ""
 
-#: src/Admin.php:217
+#: src/Admin.php:218
 msgid "Protects the native comment form and rejects trackbacks and pingbacks."
 msgstr ""
 
@@ -717,7 +717,7 @@ msgstr ""
 msgid "Quarantine storage configuration"
 msgstr ""
 
-#: src/Admin.php:189 src/Admin.php:314
+#: src/Admin.php:189 src/Admin.php:362
 msgid "Quarantine storage is unavailable."
 msgstr ""
 
@@ -786,7 +786,7 @@ msgstr ""
 msgid "Review saved. The submission remains in quarantine."
 msgstr ""
 
-#: templates/quarantine.php:114 templates/settings.php:109
+#: templates/quarantine.php:114 templates/settings.php:113
 msgid "Review the suggested privacy policy text"
 msgstr ""
 
@@ -807,7 +807,7 @@ msgstr ""
 msgid "Rules"
 msgstr ""
 
-#: templates/settings.php:114
+#: templates/settings.php:118
 msgid "Save protection settings"
 msgstr ""
 
@@ -819,7 +819,7 @@ msgstr ""
 msgid "Save rules"
 msgstr ""
 
-#: templates/settings.php:106
+#: templates/settings.php:110
 msgid "Scheduled deletion after the period below"
 msgstr ""
 
@@ -843,7 +843,7 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: templates/settings.php:100
+#: templates/settings.php:104
 msgid "Signed form tokens, a hidden honeypot and one-use verification work without a puzzle."
 msgstr ""
 
@@ -851,7 +851,7 @@ msgstr ""
 msgid "Some quarantine data could not be erased automatically. An administrator must review unreadable or unavailable records."
 msgstr ""
 
-#: templates/quality.php:22
+#: templates/quality.php:26
 msgid "Spam"
 msgstr ""
 
@@ -867,11 +867,11 @@ msgstr ""
 msgid "Sponsored product"
 msgstr ""
 
-#: templates/quality.php:22
+#: templates/quality.php:26
 msgid "Stable case reference"
 msgstr ""
 
-#: templates/settings.php:105
+#: templates/settings.php:109
 msgid "Standard checks store no IP addresses, email addresses or message contents. Optional quarantine keeps selected rejected fields locally. Country rules process IP metadata. Digest emails use your mail provider. WP Antispam sets no cookies and calls no external spam service."
 msgstr ""
 
@@ -899,7 +899,7 @@ msgstr ""
 msgid "Stored with each count"
 msgstr ""
 
-#: src/Admin.php:264
+#: src/Admin.php:312
 msgid "Submitted too quickly"
 msgstr ""
 
@@ -919,7 +919,7 @@ msgstr ""
 msgid "The form protection is unavailable. Please reload the page."
 msgstr ""
 
-#: src/Admin.php:310 src/Admin.php:349
+#: src/Admin.php:358 src/Admin.php:397
 msgid "The quarantine record is unavailable."
 msgstr ""
 
@@ -931,7 +931,7 @@ msgstr ""
 msgid "The spam protection could not verify this submission. Please wait a moment and try again. If it still fails, reload the page. JavaScript must be enabled."
 msgstr ""
 
-#: src/Admin.php:306 src/Admin.php:344 src/Admin.php:383 src/Admin.php:421
+#: src/Admin.php:354 src/Admin.php:392 src/Admin.php:431 src/Admin.php:469
 msgid "This action requires a form submission."
 msgstr ""
 
@@ -951,11 +951,11 @@ msgstr ""
 msgid "This submission was stopped by a local protection check. A failed check does not confirm that its contents are spam."
 msgstr ""
 
-#: src/Admin.php:263
+#: src/Admin.php:311
 msgid "Token already used"
 msgstr ""
 
-#: src/Admin.php:265
+#: src/Admin.php:313
 msgid "Trackback or pingback"
 msgstr ""
 
@@ -971,7 +971,7 @@ msgstr ""
 msgid "Trusted proxy networks"
 msgstr ""
 
-#: templates/settings.php:89
+#: templates/settings.php:93
 msgid "Turn off privacy-conscious mode to allow pingbacks and trackbacks."
 msgstr ""
 
@@ -987,11 +987,11 @@ msgstr ""
 msgid "Turn off privacy-conscious mode to enable quarantine."
 msgstr ""
 
-#: src/Admin.php:269
+#: src/Admin.php:317
 msgid "Unprotected comment request"
 msgstr ""
 
-#: templates/quality.php:22
+#: templates/quality.php:26
 msgid "Use an existing native entry ID or a stable internal case reference without personal content. Forgetting removes the link; reviewed counts keep their evaluation window. Provider entries remain in place."
 msgstr ""
 
@@ -1003,7 +1003,7 @@ msgstr ""
 msgid "Use this for submissions that reached your inbox or entries list. Review quarantined submissions in Quarantine."
 msgstr ""
 
-#: templates/settings.php:106
+#: templates/settings.php:110
 msgid "Used token digests"
 msgstr ""
 
@@ -1011,15 +1011,15 @@ msgstr ""
 msgid "Uses a local GeoIP extension or an explicitly trusted proxy header. No external country lookup is made. Network country does not establish where a person lives."
 msgstr ""
 
-#: src/Admin.php:226
+#: src/Admin.php:254
 msgid "Uses technical checks for Divi 4 and 5 contact forms. Content rules and quarantine are excluded."
 msgstr ""
 
-#: src/Admin.php:220
+#: src/Admin.php:230
 msgid "Validates submissions before entries, drafts and notifications are created."
 msgstr ""
 
-#: templates/settings.php:100
+#: templates/settings.php:104
 msgid "Verify each submission"
 msgstr ""
 
@@ -1108,7 +1108,7 @@ msgstr ""
 msgid "You cannot export this personal data."
 msgstr ""
 
-#: src/Admin.php:303 src/Admin.php:341 src/Admin.php:380 src/Admin.php:418
+#: src/Admin.php:351 src/Admin.php:389 src/Admin.php:428 src/Admin.php:466
 msgid "You do not have permission to change these settings."
 msgstr ""
 
@@ -1124,10 +1124,10 @@ msgstr ""
 msgid "comments rejected since installation or the last statistics reset."
 msgstr ""
 
-#: templates/quarantine.php:110 templates/rules.php:57 templates/settings.php:107
+#: templates/quarantine.php:110 templates/rules.php:57 templates/settings.php:111
 msgid "days"
 msgstr ""
 
-#: templates/settings.php:101
+#: templates/settings.php:105
 msgid "seconds"
 msgstr ""
