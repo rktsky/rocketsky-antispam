@@ -68,8 +68,8 @@ final class Guard {
 		if ( ! $this->settings->enabled( $provider ) ) {
 			return '';
 		}
-		$value = $posted['rktsky_antispam_token'] ?? '';
-		$value = is_string( $value ) && strlen( $value ) <= 400 ? $value : '';
+		$value  = $posted['rktsky_antispam_token'] ?? '';
+		$value  = is_string( $value ) && strlen( $value ) <= 400 ? $value : '';
 		$reason = '';
 		$proof  = '' !== $value ? $this->token->verify( $value, $provider, $form_id ) : false;
 		if ( '' === $value ) {

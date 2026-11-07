@@ -43,7 +43,11 @@ defined( 'ABSPATH' ) || exit;
 		<?php if ( 0 === (int) $summary['accepted'] && 0 === (int) $summary['blocked'] ) : ?>
 			<p class="rktsky-antispam__empty"><?php esc_html_e( 'No submissions checked in this period. Counts appear when a protected form is submitted.', 'wp-antispam' ); ?></p>
 		<?php elseif ( ! empty( $summary['reasons'] ) ) : ?>
-			<details class="rktsky-antispam__details"><summary><?php esc_html_e( 'View stopped submissions by check', 'wp-antispam' ); ?></summary><dl class="rktsky-antispam__reasons"><?php foreach ( $summary['reasons'] as $rktsky_antispam_reason => $rktsky_antispam_count ) : ?><div><dt><?php echo esc_html( $reason_labels[ $rktsky_antispam_reason ] ?? __( 'Protection check', 'wp-antispam' ) ); ?></dt><dd><?php echo esc_html( number_format_i18n( (int) $rktsky_antispam_count ) ); ?></dd></div><?php endforeach; ?></dl></details>
+			<details class="rktsky-antispam__details"><summary><?php esc_html_e( 'View stopped submissions by check', 'wp-antispam' ); ?></summary><dl class="rktsky-antispam__reasons">
+			<?php
+			foreach ( $summary['reasons'] as $rktsky_antispam_reason => $rktsky_antispam_count ) :
+				?>
+				<div><dt><?php echo esc_html( $reason_labels[ $rktsky_antispam_reason ] ?? __( 'Protection check', 'wp-antispam' ) ); ?></dt><dd><?php echo esc_html( number_format_i18n( (int) $rktsky_antispam_count ) ); ?></dd></div><?php endforeach; ?></dl></details>
 		<?php endif; ?>
 	</section>
 	<form action="<?php echo esc_url( admin_url( 'options.php' ) ); ?>" method="post" class="rktsky-antispam__settings">

@@ -35,19 +35,23 @@ final class Store {
 		$collation = $wpdb->get_charset_collate();
 		$tokens    = $wpdb->prefix . 'rktsky_antispam_tokens';
 		$stats     = $wpdb->prefix . 'rktsky_antispam_stats';
-		dbDelta( "CREATE TABLE $tokens (
+		dbDelta(
+			"CREATE TABLE $tokens (
 			digest char(64) NOT NULL,
 			expires bigint(20) unsigned NOT NULL,
 			PRIMARY KEY  (digest),
 			KEY expires (expires)
-		) $collation;" );
-		dbDelta( "CREATE TABLE $stats (
+		) $collation;"
+		);
+		dbDelta(
+			"CREATE TABLE $stats (
 			day date NOT NULL,
 			provider varchar(20) NOT NULL,
 			reason varchar(32) NOT NULL,
 			total bigint(20) unsigned NOT NULL DEFAULT 0,
 			PRIMARY KEY  (day,provider,reason)
-		) $collation;" );
+		) $collation;"
+		);
 		update_option( 'rktsky_antispam_schema', '1', false );
 	}
 
@@ -65,7 +69,7 @@ final class Store {
 		if ( ! preg_match( '/^[a-f0-9]{64}$/D', $digest ) || $expires < time() || $expires > time() + 7200 ) {
 			return false;
 		}
-		$inserted = $wpdb->query( $wpdb->prepare( 'INSERT IGNORE INTO %i (digest, expires) VALUES (%s, %d)', $wpdb->prefix . 'rktsky_antispam_tokens', $digest, $expires ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Dedicated security ledger needs an atomic unique-key write; object cache cannot replace it.
+		$inserted            = $wpdb->query( $wpdb->prepare( 'INSERT IGNORE INTO %i (digest, expires) VALUES (%s, %d)', $wpdb->prefix . 'rktsky_antispam_tokens', $digest, $expires ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Dedicated security ledger needs an atomic unique-key write; object cache cannot replace it.
 		$this->claim_failure = false === $inserted ? 'storage' : 'replay';
 		return 1 === $inserted;
 	}
@@ -108,13 +112,22 @@ final class Store {
 		$days   = max( 1, min( 90, $days ) );
 		$since  = gmdate( 'Y-m-d', time() - ( $days - 1 ) * DAY_IN_SECONDS );
 		$rows   = $wpdb->get_results( $wpdb->prepare( 'SELECT day, reason, SUM(total) AS total FROM %i WHERE day >= %s GROUP BY day, reason ORDER BY day ASC', $wpdb->prefix . 'rktsky_antispam_stats', $since ), ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Bounded administrator-only live aggregate over an owned table.
-		$result = array( 'accepted' => 0, 'blocked' => 0, 'reasons' => array(), 'daily' => array() );
+		$result = array(
+			'accepted' => 0,
+			'blocked'  => 0,
+			'reasons'  => array(),
+			'daily'    => array(),
+		);
 		$daily  = array();
 		foreach ( (array) $rows as $row ) {
-			$kind = 'accepted' === $row['reason'] ? 'accepted' : 'blocked';
+			$kind             = 'accepted' === $row['reason'] ? 'accepted' : 'blocked';
 			$result[ $kind ] += (int) $row['total'];
 			if ( ! isset( $daily[ $row['day'] ] ) ) {
-				$daily[ $row['day'] ] = array( 'day' => $row['day'], 'accepted' => 0, 'blocked' => 0 );
+				$daily[ $row['day'] ] = array(
+					'day'      => $row['day'],
+					'accepted' => 0,
+					'blocked'  => 0,
+				);
 			}
 			$daily[ $row['day'] ][ $kind ] += (int) $row['total'];
 			if ( 'blocked' === $kind ) {

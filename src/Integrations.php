@@ -175,7 +175,10 @@ final class Integrations {
 			wp_die(
 				esc_html( $this->guard->message() ),
 				esc_html__( 'Comment not submitted', 'wp-antispam' ),
-				array( 'response' => 403, 'back_link' => true )
+				array(
+					'response'  => 403,
+					'back_link' => true,
+				)
 			);
 		}
 
@@ -189,7 +192,7 @@ final class Integrations {
 	 * Request parameters are already unslashed by the REST server.
 	 *
 	 * @since 0.1.0
-	 * @param array|\WP_Error $comment Prepared comment or an earlier rejection.
+	 * @param array|\WP_Error  $comment Prepared comment or an earlier rejection.
 	 * @param \WP_REST_Request $request REST request being processed.
 	 * @return array|\WP_Error Accepted data or a neutral creation error.
 	 */
@@ -257,7 +260,7 @@ final class Integrations {
 	 * its processed posted_data, making that collection unsuitable for this check.
 	 *
 	 * @since 0.1.0
-	 * @param bool                    $spam       Existing provider spam decision.
+	 * @param bool                   $spam       Existing provider spam decision.
 	 * @param \WPCF7_Submission|null $submission Native submission object.
 	 * @return bool Combined spam decision.
 	 */
@@ -269,9 +272,9 @@ final class Integrations {
 		if ( ! $submission ) {
 			$submission = \WPCF7_Submission::get_instance();
 		}
-		$form       = $submission ? $submission->get_contact_form() : null;
-		$form_id    = $form ? (string) $form->id() : '0';
-		$reason     = $this->guard->check( 'cf7', $form_id, $this->posted() );
+		$form    = $submission ? $submission->get_contact_form() : null;
+		$form_id = $form ? (string) $form->id() : '0';
+		$reason  = $this->guard->check( 'cf7', $form_id, $this->posted() );
 
 		if ( '' === $reason ) {
 			return false;

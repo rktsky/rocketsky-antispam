@@ -54,11 +54,17 @@ final class Token {
 	 */
 	public function issue( string $provider, string $form_id ): array {
 		if ( ! $this->scope_valid( $provider, $form_id ) ) {
-			return array( 'token' => '', 'trap' => '' );
+			return array(
+				'token' => '',
+				'trap'  => '',
+			);
 		}
 		$payload = implode( '|', array( '1', $provider, $form_id, (string) time(), bin2hex( random_bytes( 16 ) ) ) );
 		$token   = base64_encode( $payload ) . '.' . $this->mac( 'token|' . $payload ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Readable signed protocol data, never executable code.
-		return array( 'token' => $token, 'trap' => $this->trap( $token ) );
+		return array(
+			'token' => $token,
+			'trap'  => $this->trap( $token ),
+		);
 	}
 
 	/**
@@ -90,7 +96,12 @@ final class Token {
 		if ( $issued > time() || $issued + 7200 < time() ) {
 			return false;
 		}
-		return array( 'issued' => $issued, 'expires' => $issued + 7200, 'trap' => $this->trap( $token ), 'digest' => $this->mac( 'used|' . $token ) );
+		return array(
+			'issued'  => $issued,
+			'expires' => $issued + 7200,
+			'trap'    => $this->trap( $token ),
+			'digest'  => $this->mac( 'used|' . $token ),
+		);
 	}
 
 	/**

@@ -30,7 +30,13 @@ function rktsky_antispam_uninstall_site(): void {
 if ( is_multisite() ) {
 	$rktsky_antispam_offset = 0;
 	do {
-		$rktsky_antispam_sites = get_sites( array( 'fields' => 'ids', 'number' => 100, 'offset' => $rktsky_antispam_offset ) );
+		$rktsky_antispam_sites = get_sites(
+			array(
+				'fields' => 'ids',
+				'number' => 100,
+				'offset' => $rktsky_antispam_offset,
+			)
+		);
 		$rktsky_antispam_count = count( $rktsky_antispam_sites );
 		foreach ( $rktsky_antispam_sites as $rktsky_antispam_site ) {
 			switch_to_blog( (int) $rktsky_antispam_site );

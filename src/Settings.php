@@ -31,7 +31,16 @@ final class Settings {
 	 * @return array<string,bool|int> Settings defaults.
 	 */
 	public function defaults(): array {
-		return array( 'comments' => true, 'cf7' => true, 'gravityforms' => true, 'wpforms' => true, 'minimum_seconds' => 0, 'token_ttl' => 7200, 'retention_days' => 30, 'delete_on_uninstall' => true );
+		return array(
+			'comments'            => true,
+			'cf7'                 => true,
+			'gravityforms'        => true,
+			'wpforms'             => true,
+			'minimum_seconds'     => 0,
+			'token_ttl'           => 7200,
+			'retention_days'      => 30,
+			'delete_on_uninstall' => true,
+		);
 	}
 
 	/**
@@ -63,7 +72,16 @@ final class Settings {
 	 * @return void
 	 */
 	public function register(): void {
-		register_setting( 'rktsky_antispam', self::OPTION, array( 'type' => 'array', 'sanitize_callback' => array( $this, 'sanitize' ), 'show_in_rest' => false, 'default' => $this->defaults() ) );
+		register_setting(
+			'rktsky_antispam',
+			self::OPTION,
+			array(
+				'type'              => 'array',
+				'sanitize_callback' => array( $this, 'sanitize' ),
+				'show_in_rest'      => false,
+				'default'           => $this->defaults(),
+			)
+		);
 	}
 
 	/**
@@ -92,7 +110,10 @@ final class Settings {
 				$result[ $key ] = in_array( $input[ $key ] ?? false, array( true, 1, '1' ), true );
 			}
 		}
-		foreach ( array( 'minimum_seconds' => array( 0, 10 ), 'retention_days' => array( 1, 90 ) ) as $key => $bounds ) {
+		foreach ( array(
+			'minimum_seconds' => array( 0, 10 ),
+			'retention_days'  => array( 1, 90 ),
+		) as $key => $bounds ) {
 			if ( isset( $input[ $key ] ) && is_scalar( $input[ $key ] ) && preg_match( '/^\d{1,3}$/D', (string) $input[ $key ] ) ) {
 				$result[ $key ] = max( $bounds[0], min( $bounds[1], (int) $input[ $key ] ) );
 			}

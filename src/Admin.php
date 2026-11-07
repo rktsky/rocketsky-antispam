@@ -123,10 +123,26 @@ final class Admin {
 		$summary      = $this->store->summary( 7 );
 		$detected     = Integrations::detected();
 		$integrations = array(
-			'comments'     => array( 'name' => __( 'WordPress comments', 'wp-antispam' ), 'detail' => __( 'Protects the native comment form and rejects trackbacks and pingbacks.', 'wp-antispam' ), 'mark' => 'W' ),
-			'cf7'          => array( 'name' => 'Contact Form 7', 'detail' => __( 'Adds protection through the native form and spam hooks.', 'wp-antispam' ), 'mark' => 'C7' ),
-			'gravityforms' => array( 'name' => 'Gravity Forms', 'detail' => __( 'Validates submissions before entries, drafts and notifications are created.', 'wp-antispam' ), 'mark' => 'G' ),
-			'wpforms'      => array( 'name' => 'WPForms', 'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ), 'mark' => 'WP' ),
+			'comments'     => array(
+				'name'   => __( 'WordPress comments', 'wp-antispam' ),
+				'detail' => __( 'Protects the native comment form and rejects trackbacks and pingbacks.', 'wp-antispam' ),
+				'mark'   => 'W',
+			),
+			'cf7'          => array(
+				'name'   => 'Contact Form 7',
+				'detail' => __( 'Adds protection through the native form and spam hooks.', 'wp-antispam' ),
+				'mark'   => 'C7',
+			),
+			'gravityforms' => array(
+				'name'   => 'Gravity Forms',
+				'detail' => __( 'Validates submissions before entries, drafts and notifications are created.', 'wp-antispam' ),
+				'mark'   => 'G',
+			),
+			'wpforms'      => array(
+				'name'   => 'WPForms',
+				'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ),
+				'mark'   => 'WP',
+			),
 		);
 		$active_count = 0;
 		foreach ( $integrations as $provider => $integration ) {
@@ -135,17 +151,17 @@ final class Admin {
 			}
 		}
 		$reason_labels = array(
-			'honeypot'       => __( 'Honeypot filled', 'wp-antispam' ),
-			'missing'        => __( 'Missing protection token', 'wp-antispam' ),
-			'invalid'        => __( 'Invalid protection token', 'wp-antispam' ),
-			'expired'        => __( 'Expired protection token', 'wp-antispam' ),
-			'replay'         => __( 'Token already used', 'wp-antispam' ),
-			'too_fast'       => __( 'Submitted too quickly', 'wp-antispam' ),
-			'pingback'       => __( 'Trackback or pingback', 'wp-antispam' ),
-			'storage'        => __( 'Protection storage unavailable', 'wp-antispam' ),
-			'malformed'      => __( 'Malformed protection fields', 'wp-antispam' ),
-			'context'        => __( 'Form does not match token', 'wp-antispam' ),
-			'rest'           => __( 'Unprotected comment request', 'wp-antispam' ),
+			'honeypot'  => __( 'Honeypot filled', 'wp-antispam' ),
+			'missing'   => __( 'Missing protection token', 'wp-antispam' ),
+			'invalid'   => __( 'Invalid protection token', 'wp-antispam' ),
+			'expired'   => __( 'Expired protection token', 'wp-antispam' ),
+			'replay'    => __( 'Token already used', 'wp-antispam' ),
+			'too_fast'  => __( 'Submitted too quickly', 'wp-antispam' ),
+			'pingback'  => __( 'Trackback or pingback', 'wp-antispam' ),
+			'storage'   => __( 'Protection storage unavailable', 'wp-antispam' ),
+			'malformed' => __( 'Malformed protection fields', 'wp-antispam' ),
+			'context'   => __( 'Form does not match token', 'wp-antispam' ),
+			'rest'      => __( 'Unprotected comment request', 'wp-antispam' ),
 		);
 		$privacy_url   = admin_url( 'options-privacy.php' );
 		$clear_url     = admin_url( 'admin-post.php' );
