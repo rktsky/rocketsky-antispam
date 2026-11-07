@@ -62,9 +62,16 @@ Die GitHub-Workflowdatei wurde als YAML gelesen; die siebzehn enthaltenen Shells
 
 Der Workflow läuft bei Push, Pull Request, manuell und montags um 05:23 UTC. Er lädt die aktuellen originalen CF7- und WPForms-Lite-Pakete. WPCS und offizielles Plugin Check prüfen zusätzlich den Quell- beziehungsweise Distributionstand. Warnungen bleiben beim Plugin Check als Annotationen sichtbar; Fehler lassen den Schritt scheitern. Ein zeitgesteuerter Test ist kein automatisches Update einer Website.
 
+## Ausgeführter GitHub-Abschlusslauf
+
+[GitHub Actions, Lauf 42387775511](https://github.com/rktsky/wp-antispam/actions/runs/42387775511) prüfte Commit `6fb2ebec167256f3f0936aa44811d692f6c7188c`. Alle sieben Jobs bestanden: WordPress Coding Standards und JavaScript-Syntax, offizielles Plugin Check sowie fünf native MySQL-Jobs. Getestet wurden PHP 8.2, 8.3, 8.4 und 8.5 mit WordPress 7.1.4 und zusätzlich PHP 8.2 mit WordPress 6.6. Der 8.5-Job bestätigt PHP 8.5.12 und echten MySQL 8.0.46 ohne SQLite-Drop-in.
+
+Die verfügbaren nativen Programme für Token, Quarantäne, Maintenance, Feedback, Datenschutz, Parallelität und Deinstallation bestanden auf der Matrix. Contact Form 7 wurde mit PHP 8.3–8.5, WPForms Lite auch mit PHP 8.2 nativ geprüft. Der lizenzpflichtige Gravity-Forms-Test meldet in der öffentlichen CI ausdrücklich SKIP; seine 130 nativen Assertions wurden separat lokal mit dem unveränderten Originalpaket bestanden. Plugin Check bestand mit den vier oben dokumentierten Hinweisen. Eine Bestätigung durch das WordPress-Pluginteam wird daraus nicht abgeleitet.
+
+Der frühere Lauf auf dem Baseline-Commit scheiterte nur beim Versuch, das aktuelle CF7 unter PHP 8.2 zu installieren. Der getrennte aktuelle Lauf bestätigt die korrigierte Provider-Matrix und sämtliche Erweiterungen. Nachfolgende reine Dokumentationsänderungen wiederholen die Prüfungen nicht; Produkt- und Laufzeitdateien bleiben identisch zum bestandenen Commit.
+
 ## Offene Abnahmen
 
-- Die abschliessende GitHub-Matrix auf dem finalen 0.2.0-Commit ergänzen. Der erste [GitHub-Lauf](https://github.com/rktsky/wp-antispam/actions/runs/42381850571) bestand Standards und Plugin Check sowie native MySQL-8.0.46-Jobs für PHP 8.3/8.4 mit aktuellem WordPress und PHP 8.2 mit WordPress 6.6. Sein PHP-8.2-/aktuelles-WordPress-Setup scheiterte an der höheren PHP-Mindestversion des aktuellen CF7; die Matrix wurde entsprechend getrennt. Diese Baseline ist kein Abschlussnachweis der späteren Erweiterungen.
 - WPForms Pro, weitere Provider-Versionen und Add-ons sind nicht geprüft. Die Integrationen müssen nach relevanten Anbieterupdates erneut ausgeführt werden.
 - Safari/iOS, Chrome/Android, Windows/Edge, echte Touchgeräte und assistive Technologien wurden nicht praktisch geprüft. Eine Desktop-Emulation ist kein entsprechender Gerätenachweis.
 - Verfügbarkeit des endgültigen Verzeichnis-Slugs und den gewöhnlichen Verzeichnisreview vor Einreichung abschliessen. Die WP-Warnung ist kein festgestelltes Namensverbot. Ein fehlerfreier automatisierter Check ist keine zugesagte Annahme im WordPress-Verzeichnis.
