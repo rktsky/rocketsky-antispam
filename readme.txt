@@ -1,0 +1,64 @@
+=== WP Antispam ===
+Contributors: rktsky
+Tags: antispam, spam, contact form 7, gravity forms, wpforms
+Requires at least: 6.6
+Requires PHP: 8.2
+Tested up to: 7.1
+Stable tag: 0.1.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
+Local spam protection for comments and forms. No external spam service, tracking or captcha.
+
+== Description ==
+
+WP Antispam adds local checks to WordPress comments, Contact Form 7, Gravity Forms and WPForms. Enable integrations under Settings → WP Antispam; existing forms receive protection automatically.
+
+Signed tokens, a dynamically named honeypot and atomic one-use checks protect submissions. An optional minimum completion time is disabled by default to accommodate autofill and fast users. Provider validation and existing spam decisions remain in place.
+
+All functionality is included. No account, API key, paid plan or external spam service is required. The plugin is independently developed by rktsky and licensed GPLv2 or later.
+
+= Privacy =
+
+WP Antispam does not store IP addresses, email addresses, form content, user agents or fingerprints. It sets no cookies and uses no browser storage or telemetry. Its challenge request goes only to the same website and contains a provider ID, form ID and signed public form descriptor.
+
+The plugin stores digests of used random tokens and their expiry timestamps. Tokens expire after two hours. Expired digests are removed by hourly WordPress cron in bounded batches; delayed cron execution can extend physical storage. Aggregate UTC-day counters store day, integration, result reason and count. Default counter retention is 30 days, configurable from 1 to 90 days. Scheduled deletion depends on cron execution. WordPress, hosting, backups and form providers have their own independent data handling.
+
+A suggested privacy-policy paragraph is available through WordPress's privacy-policy guide. Site operators must adapt their notice and evaluate their actual setup.
+
+= Scope =
+
+Protected forms require JavaScript and a working local REST API. REST comment creation requires protection tokens too. Trackbacks and pingbacks are rejected while comment protection is enabled. Activate separately per site on Multisite; network activation is unsupported.
+
+This is a 0.1.0 development candidate. Browser-capable bots can obtain valid tokens; this plugin cannot guarantee human submissions or prevent volumetric attacks. See the source repository's verification and integration documentation before production use.
+
+Source and verification: https://github.com/rktsky/wp-antispam
+
+== Installation ==
+
+1. Install the wp-antispam directory in wp-content/plugins and activate WP Antispam.
+2. Open Settings → WP Antispam and choose integrations.
+3. Save and test a normal submission and an error/retry case on your website.
+
+== Frequently Asked Questions ==
+
+= Do I need to edit forms or insert code? =
+
+No. Supported native forms receive protection through their provider's hooks.
+
+= Are other plugins' external services disabled? =
+
+No. Review your form provider, captcha and hosting settings separately.
+
+= Does deleting statistics reset replay protection? =
+
+No. Used tokens remain protected until expiry.
+
+= What happens on uninstall? =
+
+Own tables and options are removed by default. You can opt to keep plugin data before uninstalling.
+
+== Changelog ==
+
+= 0.1.0 =
+* Initial development candidate with local token protection, native integrations, settings and aggregate statistics.

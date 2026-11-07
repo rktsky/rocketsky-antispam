@@ -1,0 +1,24 @@
+{
+	"name": "rktsky/wp-antispam",
+	"description": "Local WordPress form protection without remote services.",
+	"type": "wordpress-plugin",
+	"license": "GPL-2.0-or-later",
+	"require": {
+		"php": ">=8.2"
+	},
+	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.2",
+		"wp-coding-standards/wpcs": "^3.3"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		},
+		"sort-packages": true
+	},
+	"scripts": {
+		"lint": "@php tests/lint.php",
+		"standards": "phpcs --standard=phpcs.xml.dist",
+		"test:native": "@php tests/native.php"
+	}
+}

@@ -1,0 +1,327 @@
+# WP Antispam translation catalog.
+# Copyright (C) 2026 rktsky
+# This file is distributed under the GPL-2.0-or-later license.
+msgid ""
+msgstr ""
+"Project-Id-Version: WP Antispam 0.1.0\n"
+"POT-Creation-Date: 2026-11-07 15:00+0100\n"
+"PO-Revision-Date: 2026-11-07 15:00+0100\n"
+"Last-Translator: rktsky\n"
+"Language-Team: rktsky\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: wp-antispam\n"
+"Language: \n"
+
+#: templates/settings.php:32
+#, php-format
+msgid "%s integration enabled"
+msgid_plural "%s integrations enabled"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/settings.php:68
+msgid "0 disables the timing check. A delay can reject fast submissions made with autofill."
+msgstr ""
+
+#: templates/settings.php:37
+msgid "Activity"
+msgstr ""
+
+#: src/Admin.php:127
+msgid "Adds protection through the native form and spam hooks."
+msgstr ""
+
+#: templates/settings.php:63
+msgid "An enabled integration starts protecting forms when its plugin is active. Test an ordinary submission after changing settings."
+msgstr ""
+
+#: templates/settings.php:73
+msgid "Anonymous daily counts"
+msgstr ""
+
+#: templates/settings.php:74
+msgid "Applies to WP Antispam counts. Your form plugin and server may keep their own records."
+msgstr ""
+
+#: templates/settings.php:58
+msgid "Available"
+msgstr ""
+
+#: templates/settings.php:80
+msgid "Changes apply after saving."
+msgstr ""
+
+#: src/Admin.php:129
+msgid "Checks submissions before the form is processed."
+msgstr ""
+
+#: templates/settings.php:53
+msgid "Choose what to protect"
+msgstr ""
+
+#: src/Integrations.php:163
+msgid "Comment not submitted"
+msgstr ""
+
+#: templates/settings.php:53
+msgid "Connected forms"
+msgstr ""
+
+#: templates/settings.php:72
+msgid "Data stays here"
+msgstr ""
+
+#: templates/settings.php:82
+msgid "Delete all WP Antispam counts. This cannot be undone. Used tokens remain protected until expiry."
+msgstr ""
+
+#: templates/settings.php:75
+msgid "Delete plugin data when uninstalling"
+msgstr ""
+
+#: templates/settings.php:82
+msgid "Delete statistics"
+msgstr ""
+
+#: templates/settings.php:59
+msgid "Enable"
+msgstr ""
+
+#: templates/settings.php:53
+msgid "Enable an integration for all its forms. No snippets or form edits required."
+msgstr ""
+
+#: templates/settings.php:73
+msgid "Expire within 2 hours; removed by scheduled cleanup"
+msgstr ""
+
+#: src/Admin.php:141
+msgid "Expired protection token"
+msgstr ""
+
+#: templates/settings.php:31
+msgid "Form checks run on your website. No external captcha, tracking service or visitor profile."
+msgstr ""
+
+#: src/Admin.php:147
+msgid "Form does not match token"
+msgstr ""
+
+#: src/Admin.php:138
+msgid "Honeypot filled"
+msgstr ""
+
+#: templates/settings.php:40
+msgid "Includes expired tokens and technical failures."
+msgstr ""
+
+#: src/Admin.php:140
+msgid "Invalid protection token"
+msgstr ""
+
+#: templates/settings.php:74
+msgid "Keep statistics for"
+msgstr ""
+
+#: templates/settings.php:37
+msgid "Last 7 days · UTC"
+msgstr ""
+
+#: templates/settings.php:72
+msgid "Local data handling"
+msgstr ""
+
+#: templates/settings.php:29
+msgid "Local protection"
+msgstr ""
+
+#: src/Admin.php:146
+msgid "Malformed protection fields"
+msgstr ""
+
+#: templates/settings.php:82
+msgid "Manage statistics"
+msgstr ""
+
+#: templates/settings.php:68
+msgid "Minimum completion time"
+msgstr ""
+
+#: src/Admin.php:139
+msgid "Missing protection token"
+msgstr ""
+
+#: templates/settings.php:32
+msgid "No integrations enabled"
+msgstr ""
+
+#: templates/settings.php:41
+msgid "No personal data"
+msgstr ""
+
+#: templates/settings.php:44
+msgid "No submissions checked in this period. Counts appear when a protected form is submitted."
+msgstr ""
+
+#: templates/settings.php:41
+msgid "Only the day, integration, result and check."
+msgstr ""
+
+#: templates/settings.php:82
+msgid "Open source. All protection included."
+msgstr ""
+
+#: templates/settings.php:39
+msgid "Other plugins may run additional checks."
+msgstr ""
+
+#: src/Plugin.php:86
+msgid "Our forms use WP Antispam for local spam protection. It checks random signed form tokens and an empty hidden field. No data is sent to an external spam service. WP Antispam does not store IP addresses, email addresses, form content, user agents, cookies or browser fingerprints. One-time token digests remain until expiry (two hours) and scheduled cleanup; cleanup can be delayed by site traffic or cron configuration. Anonymous daily counters are retained for the period configured by the site administrator (30 days by default). Form providers, WordPress and hosting may process submission data independently. Adapt this notice to your actual settings and privacy policy."
+msgstr ""
+
+#: templates/settings.php:39
+msgid "Passed local checks"
+msgstr ""
+
+#: src/Plugin.php:49
+msgid "Please activate WP Antispam separately on each site. Network activation is not supported."
+msgstr ""
+
+#: templates/settings.php:58
+msgid "Plugin not active"
+msgstr ""
+
+#: templates/settings.php:69
+msgid "Protected forms need JavaScript to obtain a fresh token. Visitors are shown an error when verification is unavailable."
+msgstr ""
+
+#: templates/settings.php:46
+msgid "Protection check"
+msgstr ""
+
+#: templates/settings.php:67
+msgid "Protection checks"
+msgstr ""
+
+#: src/Admin.php:145
+msgid "Protection storage unavailable"
+msgstr ""
+
+#: src/Admin.php:126
+msgid "Protects the native comment form and rejects trackbacks and pingbacks."
+msgstr ""
+
+#: templates/settings.php:76
+msgid "Review the suggested privacy policy text"
+msgstr ""
+
+#: templates/settings.php:80
+msgid "Save protection settings"
+msgstr ""
+
+#: templates/settings.php:73
+msgid "Scheduled deletion after the period below"
+msgstr ""
+
+#: src/Admin.php:108
+msgid "Settings"
+msgstr ""
+
+#: templates/settings.php:67
+msgid "Signed form tokens, a hidden honeypot and one-use verification work without a puzzle."
+msgstr ""
+
+#: templates/settings.php:30
+msgid "Spam protection on your own server."
+msgstr ""
+
+#: templates/settings.php:25
+msgid "Statistics deleted. Active replay protection remains in place."
+msgstr ""
+
+#: templates/settings.php:40
+msgid "Stopped by WP Antispam"
+msgstr ""
+
+#: templates/settings.php:41
+msgid "Stored with each count"
+msgstr ""
+
+#: src/Admin.php:143
+msgid "Submitted too quickly"
+msgstr ""
+
+#: src/Fields.php:80
+msgid "The form protection is unavailable. Please reload the page."
+msgstr ""
+
+#: src/Guard.php:121
+msgid "The spam protection could not verify this submission. Please wait a moment and try again. If it still fails, reload the page. JavaScript must be enabled."
+msgstr ""
+
+#: src/Admin.php:169
+msgid "This action requires a form submission."
+msgstr ""
+
+#: templates/fields.php:18
+msgid "This form uses local spam protection. Please enable JavaScript to submit it."
+msgstr ""
+
+#: src/Admin.php:142
+msgid "Token already used"
+msgstr ""
+
+#: src/Admin.php:144
+msgid "Trackback or pingback"
+msgstr ""
+
+#: src/Admin.php:148
+msgid "Unprotected comment request"
+msgstr ""
+
+#: templates/settings.php:73
+msgid "Used token digests"
+msgstr ""
+
+#: src/Admin.php:128
+msgid "Validates submissions before entries, drafts and notifications are created."
+msgstr ""
+
+#: templates/settings.php:67
+msgid "Verify each submission"
+msgstr ""
+
+#: templates/settings.php:46
+msgid "View stopped submissions by check"
+msgstr ""
+
+#: src/Admin.php:78 src/Admin.php:79
+msgid "WP Antispam"
+msgstr ""
+
+#: templates/settings.php:72
+msgid "WP Antispam stores no IP addresses, email addresses or message contents. It sets no cookies and makes no third-party requests."
+msgstr ""
+
+#: src/Admin.php:126
+msgid "WordPress comments"
+msgstr ""
+
+#: src/Admin.php:166
+msgid "You do not have permission to change these settings."
+msgstr ""
+
+#: templates/settings.php:21
+msgid "by rktsky"
+msgstr ""
+
+#: templates/settings.php:74
+msgid "days"
+msgstr ""
+
+#: templates/settings.php:68
+msgid "seconds"
+msgstr ""
