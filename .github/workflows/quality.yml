@@ -1,0 +1,104 @@
+name: Quality and native regression
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 5 * * 1'
+
+permissions:
+  contents: read
+
+jobs:
+  standards:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: shivammathur/setup-php@d52fc211a0436f8839a587b3b5b8efddab4744ea # v2
+        with:
+          php-version: '8.3'
+          extensions: dom, xml, xmlreader, tokenizer, mbstring
+          tools: composer:v2
+          coverage: none
+      - run: composer install --no-interaction --no-progress
+      - run: composer lint
+      - run: composer standards
+      - name: Check JavaScript syntax
+        run: node --check assets/protection.js
+
+  native:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.3', '8.4']
+        wordpress: ['latest']
+        include:
+          - php: '8.2'
+            wordpress: '6.6'
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: disposable-test-password
+          MYSQL_DATABASE: wp_antispam_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      WP_ANTISPAM_ALLOW_TESTS: '1'
+      WP_ANTISPAM_WP_ROOT: /tmp/wp-antispam-wordpress
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: shivammathur/setup-php@d52fc211a0436f8839a587b3b5b8efddab4744ea # v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mysqli, dom, curl, mbstring
+          tools: wp-cli
+          coverage: none
+      - name: Install a disposable native WordPress site
+        env:
+          WP_VERSION: ${{ matrix.wordpress }}
+        run: |
+          wp core download --path="$WP_ANTISPAM_WP_ROOT" --version="$WP_VERSION"
+          wp config create --path="$WP_ANTISPAM_WP_ROOT" --dbname=wp_antispam_test --dbuser=root --dbpass=disposable-test-password --dbhost=127.0.0.1:3306
+          wp config set WP_ENVIRONMENT_TYPE local --path="$WP_ANTISPAM_WP_ROOT"
+          wp config set WP_ANTISPAM_TEST_FIXTURE true --raw --path="$WP_ANTISPAM_WP_ROOT"
+          wp config set DISABLE_WP_CRON true --raw --path="$WP_ANTISPAM_WP_ROOT"
+          printf '%s\n' rktsky-antispam-disposable > "$WP_ANTISPAM_WP_ROOT/.rktsky-antispam-fixture"
+          mkdir -p "$WP_ANTISPAM_WP_ROOT/wp-content/mu-plugins"
+          printf '%s\n' '<?php add_filter( "pre_wp_mail", "__return_false", PHP_INT_MAX );' > "$WP_ANTISPAM_WP_ROOT/wp-content/mu-plugins/fixture-mail.php"
+          wp core install --path="$WP_ANTISPAM_WP_ROOT" --url=http://127.0.0.1:8877 --title='Synthetic WP Antispam tests' --admin_user=antispam-fixture --admin_password=disposable-test-password --admin_email=fixture@example.invalid --skip-email
+          if [ "$WP_VERSION" = latest ]; then
+            wp plugin install contact-form-7 wpforms-lite --activate --path="$WP_ANTISPAM_WP_ROOT"
+          fi
+          ln -s "$GITHUB_WORKSPACE" "$WP_ANTISPAM_WP_ROOT/wp-content/plugins/wp-antispam"
+          wp plugin activate wp-antispam --path="$WP_ANTISPAM_WP_ROOT"
+          wp config set WP_HTTP_BLOCK_EXTERNAL true --raw --path="$WP_ANTISPAM_WP_ROOT"
+      - run: php tests/native.php
+      - run: php tests/uninstall.php
+      - if: matrix.wordpress == 'latest'
+        run: php tests/prepare-providers.php
+      - if: matrix.wordpress == 'latest'
+        run: php tests/native-providers.php
+      - run: php tests/integrations.php
+
+  plugin-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Prepare the distribution tree
+        run: |
+          mkdir -p /tmp/wp-antispam-distribution/wp-antispam
+          rsync -a --exclude-from=.distignore ./ /tmp/wp-antispam-distribution/wp-antispam/
+      - uses: WordPress/plugin-check-action@10857da14b6c2246d15402b3e69f777edcf8c12e # v1
+        with:
+          build-dir: /tmp/wp-antispam-distribution/wp-antispam
+          slug: wp-antispam
+          # Expected name and bundled-translation warnings remain visible annotations.
+          strict: false
