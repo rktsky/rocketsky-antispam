@@ -3,7 +3,7 @@
 # This file is distributed under the GPL-2.0-or-later license.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Antispam 0.3.0\n"
+"Project-Id-Version: WP Antispam 0.3.1\n"
 "POT-Creation-Date: 2026-11-07 15:00+0100\n"
 "PO-Revision-Date: 2026-11-07 15:00+0100\n"
 "Last-Translator: Rocketsky\n"
@@ -27,7 +27,7 @@ msgid_plural "%s integrations enabled"
 msgstr[0] "%s integrazione attivata"
 msgstr[1] "%s integrazioni attivate"
 
-#: templates/settings.php:105
+#: templates/settings.php:109
 msgid "0 disables the timing check. A delay can reject fast submissions made with autofill."
 msgstr "0 disattiva il controllo del tempo. Un ritardo può rifiutare invii rapidi effettuati con la compilazione automatica."
 
@@ -79,23 +79,19 @@ msgstr "Consenti commenti con lingua sconosciuta"
 msgid "Allow listed countries"
 msgstr "Consenti i paesi elencati"
 
-#: templates/settings.php:86
+#: templates/settings.php:90
 msgid "Allow native pingbacks and trackbacks"
 msgstr "Consenti pingback e trackback nativi"
 
-#: templates/settings.php:100
-msgid "An enabled integration starts protecting forms when its plugin is active. Test an ordinary submission after changing settings."
-msgstr "Un’integrazione attivata protegge i moduli quando il relativo plugin è attivo. Prova un invio normale dopo aver modificato le impostazioni."
-
-#: src/Settings.php:198
+#: src/Settings.php:200
 msgid "An invalid or oversized regular expression was omitted. Enter pattern bodies without delimiters, one per line."
 msgstr "È stata esclusa un’espressione regolare non valida o troppo lunga. Inserisci un modello senza delimitatori per riga."
 
-#: templates/settings.php:110
+#: templates/settings.php:114
 msgid "Anonymous daily counts"
 msgstr "Contatori giornalieri anonimi"
 
-#: templates/settings.php:111
+#: templates/settings.php:115
 msgid "Applies to WP Antispam counts. Your form plugin and server may keep their own records."
 msgstr "Si applica ai contatori di WP Antispam. Il plugin dei moduli e il server possono conservare dati propri."
 
@@ -103,7 +99,7 @@ msgstr "Si applica ai contatori di WP Antispam. Il plugin dei moduli e il server
 msgid "Apply case action"
 msgstr "Applica l’azione al caso"
 
-#: templates/settings.php:78
+#: templates/settings.php:82
 msgid "Available"
 msgstr "Disponibile"
 
@@ -131,7 +127,7 @@ msgstr "Termini bloccati"
 msgid "Case reference forgotten. Reviewed counts retain their evaluation window."
 msgstr "Riferimento al caso rimosso. I conteggi valutati mantengono il loro periodo di valutazione."
 
-#: templates/rules.php:65 templates/settings.php:118
+#: templates/rules.php:65 templates/settings.php:122
 msgid "Changes apply after saving."
 msgstr "Le modifiche si applicano dopo il salvataggio."
 
@@ -191,7 +187,7 @@ msgstr "Commento non inviato"
 msgid "Comments and forms"
 msgstr "Commenti e moduli"
 
-#: templates/settings.php:78
+#: templates/settings.php:82
 msgid "Compatible plugin not available"
 msgstr "Plugin compatibile non disponibile"
 
@@ -263,7 +259,7 @@ msgstr "Attività giornaliera · tutte le integrazioni · UTC"
 msgid "Daily administrator digest"
 msgstr "Riepilogo giornaliero via e-mail"
 
-#: templates/settings.php:109
+#: templates/settings.php:113
 msgid "Data handling"
 msgstr "Trattamento dei dati"
 
@@ -275,11 +271,11 @@ msgstr "Data"
 msgid "Day"
 msgstr "Giorno"
 
-#: templates/settings.php:121
+#: templates/settings.php:125
 msgid "Delete activity statistics"
 msgstr "Elimina le statistiche di attività"
 
-#: templates/settings.php:112
+#: templates/settings.php:116
 msgid "Delete plugin data when uninstalling"
 msgstr "Elimina i dati del plugin alla disinstallazione"
 
@@ -291,7 +287,7 @@ msgstr "Elimina le voci in quarantena dopo"
 msgid "Delete this record"
 msgstr "Elimina questa voce"
 
-#: templates/settings.php:121
+#: templates/settings.php:125
 msgid "Deletes daily activity counts and the lifetime rejected-comment total. Reviewed detection results remain available for their 90-day window. This cannot be undone."
 msgstr "Elimina i contatori giornalieri di attività e il totale dei commenti rifiutati. I risultati di rilevamento valutati restano disponibili per il loro periodo di valutazione di 90 giorni. La cancellazione è irreversibile."
 
@@ -323,7 +319,7 @@ msgstr "Neerlandese"
 msgid "Email address"
 msgstr "Indirizzo e-mail"
 
-#: templates/settings.php:79
+#: templates/settings.php:83
 msgid "Enable"
 msgstr "Attiva"
 
@@ -339,7 +335,7 @@ msgstr "Inglese"
 msgid "Existing spam comments"
 msgstr "Commenti spam esistenti"
 
-#: templates/settings.php:110
+#: templates/settings.php:114
 msgid "Expire within 2 hours; removed by scheduled cleanup"
 msgstr "Scadono entro 2 ore; eliminati dalla pulizia pianificata"
 
@@ -391,6 +387,10 @@ msgstr "Il modulo non corrisponde al token"
 msgid "Form integration"
 msgstr "Integrazione del modulo"
 
+#: templates/settings.php:104
+msgid "Form integrations are off by default. Enable the providers you use; protection then applies to all their forms. Existing saved choices are kept."
+msgstr "Le integrazioni dei moduli sono disattivate per impostazione predefinita. Attiva i plugin che utilizzi: la protezione si applicherà a tutti i loro moduli. Le scelte già salvate vengono mantenute."
+
 #: src/Admin.php:276
 msgid "Form plugins"
 msgstr "Plugin per moduli"
@@ -439,7 +439,7 @@ msgstr "Potrebbe essere scaduta o essere già stata eliminata."
 msgid "Italian"
 msgstr "Italiano"
 
-#: templates/settings.php:111
+#: templates/settings.php:115
 msgid "Keep statistics for"
 msgstr "Conserva le statistiche per"
 
@@ -459,7 +459,7 @@ msgstr "Estensione PHP GeoIP locale"
 msgid "Local content rules"
 msgstr "Regole locali sui contenuti"
 
-#: templates/settings.php:109
+#: templates/settings.php:113
 msgid "Local data handling"
 msgstr "Trattamento locale dei dati"
 
@@ -479,11 +479,11 @@ msgstr "Assicurati che l’informativa sulla privacy del sito descriva le opzion
 msgid "Malformed protection fields"
 msgstr "Campi di protezione non corretti"
 
-#: templates/settings.php:121
+#: templates/settings.php:125
 msgid "Manage activity statistics"
 msgstr "Gestisci le statistiche di attività"
 
-#: templates/settings.php:114
+#: templates/settings.php:118
 msgid "Manage optional quarantine"
 msgstr "Gestisci la quarantena facoltativa"
 
@@ -491,7 +491,7 @@ msgstr "Gestisci la quarantena facoltativa"
 msgid "Matched content pattern"
 msgstr "Modello di contenuto rilevato"
 
-#: templates/settings.php:105
+#: templates/settings.php:109
 msgid "Minimum completion time"
 msgstr "Tempo minimo prima dell’invio"
 
@@ -584,7 +584,7 @@ msgstr "Solo giorno, integrazione, risultato e controllo."
 msgid "Open WP Antispam"
 msgstr "Apri WP Antispam"
 
-#: templates/settings.php:121
+#: templates/settings.php:125
 msgid "Open source. All protection included."
 msgstr "Open source. Tutte le protezioni incluse."
 
@@ -637,9 +637,13 @@ msgstr "Pagamento non inviato"
 msgid "Permanently delete spam comments after"
 msgstr "Elimina definitivamente i commenti spam dopo"
 
-#: templates/settings.php:85
+#: templates/settings.php:89
 msgid "Pingbacks and trackbacks"
 msgstr "Pingback e trackback"
+
+#: templates/settings.php:82
+msgid "Plugin available"
+msgstr "Plugin disponibile"
 
 #: src/Admin.php:180
 msgid "Portuguese"
@@ -657,7 +661,7 @@ msgstr "Previsto come spam"
 msgid "Previous"
 msgstr "Indietro"
 
-#: templates/settings.php:87
+#: templates/settings.php:91
 msgid "Privacy relevant: WordPress verifies pingbacks by requesting the remote source page and may forward the sender IP address. Native WordPress moderation still applies. These protocol requests do not use JavaScript tokens."
 msgstr "Privacy: WordPress verifica i pingback richiedendo la pagina di origine remota e può trasmettere l’indirizzo IP del mittente. La moderazione nativa di WordPress rimane attiva. Queste richieste di protocollo non usano token JavaScript."
 
@@ -669,7 +673,7 @@ msgstr "Modalità di minimizzazione dei dati"
 msgid "Project sponsorship"
 msgstr "Sostegno al progetto"
 
-#: templates/settings.php:106
+#: templates/settings.php:110
 msgid "Protected forms need JavaScript to obtain a fresh token. Visitors are shown an error when verification is unavailable."
 msgstr "I moduli protetti richiedono JavaScript per ottenere un token aggiornato. Se la verifica non è disponibile, viene mostrato un errore."
 
@@ -677,7 +681,7 @@ msgstr "I moduli protetti richiedono JavaScript per ottenere un token aggiornato
 msgid "Protection check"
 msgstr "Controllo di protezione"
 
-#: templates/settings.php:104
+#: templates/settings.php:108
 msgid "Protection checks"
 msgstr "Controlli antispam"
 
@@ -770,7 +774,7 @@ msgstr "Invii rifiutati"
 msgid "Rejection rate"
 msgstr "Tasso di rifiuto"
 
-#: src/Integrations/Divi.php:145
+#: src/Integrations/Divi.php:221
 msgid "Reload the form"
 msgstr "Ricarica il modulo"
 
@@ -786,7 +790,7 @@ msgstr "Esamina gli invii rifiutati"
 msgid "Review saved. The submission remains in quarantine."
 msgstr "Valutazione salvata. L’invio resta in quarantena."
 
-#: templates/quarantine.php:114 templates/settings.php:113
+#: templates/quarantine.php:114 templates/settings.php:117
 msgid "Review the suggested privacy policy text"
 msgstr "Consulta il testo suggerito per l’informativa privacy"
 
@@ -807,7 +811,7 @@ msgstr "Voci valutate negli ultimi %d giorni."
 msgid "Rules"
 msgstr "Regole"
 
-#: templates/settings.php:118
+#: templates/settings.php:122
 msgid "Save protection settings"
 msgstr "Salva la protezione"
 
@@ -819,7 +823,7 @@ msgstr "Salva la quarantena"
 msgid "Save rules"
 msgstr "Salva le regole"
 
-#: templates/settings.php:110
+#: templates/settings.php:114
 msgid "Scheduled deletion after the period below"
 msgstr "Cancellazione pianificata dopo il periodo seguente"
 
@@ -843,7 +847,7 @@ msgstr "Invia contatori aggregati tramite la posta di WordPress. I contenuti dei
 msgid "Settings"
 msgstr "Impostazioni"
 
-#: templates/settings.php:104
+#: templates/settings.php:108
 msgid "Signed form tokens, a hidden honeypot and one-use verification work without a puzzle."
 msgstr "Token firmati, un campo esca nascosto e la verifica monouso funzionano senza rompicapi."
 
@@ -871,7 +875,7 @@ msgstr "Prodotto sponsorizzato"
 msgid "Stable case reference"
 msgstr "Riferimento stabile del caso"
 
-#: templates/settings.php:109
+#: templates/settings.php:113
 msgid "Standard checks store no IP addresses, email addresses or message contents. Optional quarantine keeps selected rejected fields locally. Country rules process IP metadata. Digest emails use your mail provider. WP Antispam sets no cookies and calls no external spam service."
 msgstr "I controlli standard non conservano indirizzi IP, indirizzi e-mail o messaggi. La quarantena facoltativa conserva localmente alcuni campi rifiutati. Le regole dei paesi trattano metadati IP. I riepiloghi via e-mail usano il tuo fornitore di posta. WP Antispam non imposta cookie e non contatta servizi antispam esterni."
 
@@ -971,7 +975,7 @@ msgstr "Intestazione di proxy attendibile"
 msgid "Trusted proxy networks"
 msgstr "Reti di proxy attendibili"
 
-#: templates/settings.php:93
+#: templates/settings.php:97
 msgid "Turn off privacy-conscious mode to allow pingbacks and trackbacks."
 msgstr "Disattiva la modalità attenta alla privacy per consentire pingback e trackback."
 
@@ -1003,7 +1007,7 @@ msgstr "Usa regole adatte ai tuoi moduli. Regole mirate riducono il rischio di r
 msgid "Use this for submissions that reached your inbox or entries list. Review quarantined submissions in Quarantine."
 msgstr "Usalo per gli invii arrivati nella tua casella o nell’elenco delle voci. Valuta gli invii in quarantena nella sezione Quarantena."
 
-#: templates/settings.php:110
+#: templates/settings.php:114
 msgid "Used token digests"
 msgstr "Impronte dei token utilizzati"
 
@@ -1019,7 +1023,7 @@ msgstr "Usa verifiche tecniche per i moduli di contatto Divi 4 e 5. Regole sui c
 msgid "Validates submissions before entries, drafts and notifications are created."
 msgstr "Controlla gli invii prima della creazione di voci, bozze e notifiche."
 
-#: templates/settings.php:104
+#: templates/settings.php:108
 msgid "Verify each submission"
 msgstr "Verifica ogni invio"
 
@@ -1124,10 +1128,10 @@ msgstr "di Rocketsky"
 msgid "comments rejected since installation or the last statistics reset."
 msgstr "commenti rifiutati dall’installazione o dall’ultimo azzeramento delle statistiche."
 
-#: templates/quarantine.php:110 templates/rules.php:57 templates/settings.php:111
+#: templates/quarantine.php:110 templates/rules.php:57 templates/settings.php:115
 msgid "days"
 msgstr "giorni"
 
-#: templates/settings.php:105
+#: templates/settings.php:109
 msgid "seconds"
 msgstr "secondi"

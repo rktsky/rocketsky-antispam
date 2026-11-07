@@ -72,11 +72,15 @@ defined( 'ABSPATH' ) || exit;
 					<?php foreach ( $integration_groups as $rktsky_antispam_group ) : ?>
 					<fieldset class="rktsky-antispam__integration-group"><legend><?php echo esc_html( $rktsky_antispam_group['label'] ); ?></legend>
 						<?php foreach ( $rktsky_antispam_group['providers'] as $rktsky_antispam_provider ) : ?>
-							<?php $rktsky_antispam_integration = $integrations[ $rktsky_antispam_provider ]; ?>
+							<?php
+							$rktsky_antispam_integration = $integrations[ $rktsky_antispam_provider ];
+							$rktsky_antispam_available   = ! empty( $detected[ $rktsky_antispam_provider ] );
+							$rktsky_antispam_configured  = ! empty( $options[ $rktsky_antispam_provider ] );
+							?>
 						<div class="rktsky-antispam__integration">
 							<span class="rktsky-antispam__provider-mark" aria-hidden="true"><?php echo esc_html( $rktsky_antispam_integration['mark'] ); ?></span>
-							<div class="rktsky-antispam__provider-copy"><label for="rktsky-<?php echo esc_attr( $rktsky_antispam_provider ); ?>"><?php echo esc_html( $rktsky_antispam_integration['name'] ); ?></label><span class="rktsky-antispam__availability"><?php echo esc_html( ! empty( $detected[ $rktsky_antispam_provider ] ) ? __( 'Available', 'wp-antispam' ) : __( 'Compatible plugin not available', 'wp-antispam' ) ); ?></span><p id="rktsky-<?php echo esc_attr( $rktsky_antispam_provider ); ?>-help"><?php echo esc_html( $rktsky_antispam_integration['detail'] ); ?></p></div>
-							<div class="rktsky-antispam__check"><input type="hidden" name="<?php echo esc_attr( \Rktsky\Antispam\Settings::OPTION ); ?>[<?php echo esc_attr( $rktsky_antispam_provider ); ?>]" value="0" /><input type="checkbox" name="<?php echo esc_attr( \Rktsky\Antispam\Settings::OPTION ); ?>[<?php echo esc_attr( $rktsky_antispam_provider ); ?>]" id="rktsky-<?php echo esc_attr( $rktsky_antispam_provider ); ?>" value="1" aria-describedby="rktsky-<?php echo esc_attr( $rktsky_antispam_provider ); ?>-help" <?php checked( ! empty( $options[ $rktsky_antispam_provider ] ) ); ?> /><span aria-hidden="true"><?php esc_html_e( 'Enable', 'wp-antispam' ); ?></span></div>
+							<div class="rktsky-antispam__provider-copy"><label for="rktsky-<?php echo esc_attr( $rktsky_antispam_provider ); ?>"><?php echo esc_html( $rktsky_antispam_integration['name'] ); ?></label><span class="rktsky-antispam__availability"><?php echo esc_html( $rktsky_antispam_available ? ( in_array( $rktsky_antispam_provider, array( 'comments', 'registration' ), true ) ? __( 'Available', 'wp-antispam' ) : __( 'Plugin available', 'wp-antispam' ) ) : __( 'Compatible plugin not available', 'wp-antispam' ) ); ?></span><p id="rktsky-<?php echo esc_attr( $rktsky_antispam_provider ); ?>-help"><?php echo esc_html( $rktsky_antispam_integration['detail'] ); ?></p></div>
+							<div class="rktsky-antispam__check"><input type="hidden" name="<?php echo esc_attr( \Rktsky\Antispam\Settings::OPTION ); ?>[<?php echo esc_attr( $rktsky_antispam_provider ); ?>]" value="<?php echo esc_attr( ! $rktsky_antispam_available && $rktsky_antispam_configured ? '1' : '0' ); ?>" /><input type="checkbox" name="<?php echo esc_attr( \Rktsky\Antispam\Settings::OPTION ); ?>[<?php echo esc_attr( $rktsky_antispam_provider ); ?>]" id="rktsky-<?php echo esc_attr( $rktsky_antispam_provider ); ?>" value="1" aria-describedby="rktsky-<?php echo esc_attr( $rktsky_antispam_provider ); ?>-help" <?php checked( $rktsky_antispam_available && $rktsky_antispam_configured ); ?> <?php disabled( ! $rktsky_antispam_available ); ?> /><span aria-hidden="true"><?php esc_html_e( 'Enable', 'wp-antispam' ); ?></span></div>
 						</div>
 							<?php if ( 'comments' === $rktsky_antispam_provider ) : ?>
 							<div class="rktsky-antispam__field">
@@ -97,7 +101,7 @@ defined( 'ABSPATH' ) || exit;
 					</fieldset>
 					<?php endforeach; ?>
 				</div>
-				<p class="rktsky-antispam__card-note"><?php esc_html_e( 'An enabled integration starts protecting forms when its plugin is active. Test an ordinary submission after changing settings.', 'wp-antispam' ); ?></p>
+				<p class="rktsky-antispam__card-note"><?php esc_html_e( 'Form integrations are off by default. Enable the providers you use; protection then applies to all their forms. Existing saved choices are kept.', 'wp-antispam' ); ?></p>
 			</section>
 			<div class="rktsky-antispam__side">
 				<section class="rktsky-antispam__card" aria-labelledby="rktsky-checks-heading">

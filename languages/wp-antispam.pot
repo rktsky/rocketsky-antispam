@@ -3,7 +3,7 @@
 # This file is distributed under the GPL-2.0-or-later license.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Antispam 0.3.0\n"
+"Project-Id-Version: WP Antispam 0.3.1\n"
 "POT-Creation-Date: 2026-11-07 15:00+0100\n"
 "PO-Revision-Date: 2026-11-07 15:00+0100\n"
 "Last-Translator: Rocketsky\n"
@@ -27,7 +27,7 @@ msgid_plural "%s integrations enabled"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/settings.php:105
+#: templates/settings.php:109
 msgid "0 disables the timing check. A delay can reject fast submissions made with autofill."
 msgstr ""
 
@@ -79,23 +79,19 @@ msgstr ""
 msgid "Allow listed countries"
 msgstr ""
 
-#: templates/settings.php:86
+#: templates/settings.php:90
 msgid "Allow native pingbacks and trackbacks"
 msgstr ""
 
-#: templates/settings.php:100
-msgid "An enabled integration starts protecting forms when its plugin is active. Test an ordinary submission after changing settings."
-msgstr ""
-
-#: src/Settings.php:198
+#: src/Settings.php:200
 msgid "An invalid or oversized regular expression was omitted. Enter pattern bodies without delimiters, one per line."
 msgstr ""
 
-#: templates/settings.php:110
+#: templates/settings.php:114
 msgid "Anonymous daily counts"
 msgstr ""
 
-#: templates/settings.php:111
+#: templates/settings.php:115
 msgid "Applies to WP Antispam counts. Your form plugin and server may keep their own records."
 msgstr ""
 
@@ -103,7 +99,7 @@ msgstr ""
 msgid "Apply case action"
 msgstr ""
 
-#: templates/settings.php:78
+#: templates/settings.php:82
 msgid "Available"
 msgstr ""
 
@@ -131,7 +127,7 @@ msgstr ""
 msgid "Case reference forgotten. Reviewed counts retain their evaluation window."
 msgstr ""
 
-#: templates/rules.php:65 templates/settings.php:118
+#: templates/rules.php:65 templates/settings.php:122
 msgid "Changes apply after saving."
 msgstr ""
 
@@ -191,7 +187,7 @@ msgstr ""
 msgid "Comments and forms"
 msgstr ""
 
-#: templates/settings.php:78
+#: templates/settings.php:82
 msgid "Compatible plugin not available"
 msgstr ""
 
@@ -263,7 +259,7 @@ msgstr ""
 msgid "Daily administrator digest"
 msgstr ""
 
-#: templates/settings.php:109
+#: templates/settings.php:113
 msgid "Data handling"
 msgstr ""
 
@@ -275,11 +271,11 @@ msgstr ""
 msgid "Day"
 msgstr ""
 
-#: templates/settings.php:121
+#: templates/settings.php:125
 msgid "Delete activity statistics"
 msgstr ""
 
-#: templates/settings.php:112
+#: templates/settings.php:116
 msgid "Delete plugin data when uninstalling"
 msgstr ""
 
@@ -291,7 +287,7 @@ msgstr ""
 msgid "Delete this record"
 msgstr ""
 
-#: templates/settings.php:121
+#: templates/settings.php:125
 msgid "Deletes daily activity counts and the lifetime rejected-comment total. Reviewed detection results remain available for their 90-day window. This cannot be undone."
 msgstr ""
 
@@ -323,7 +319,7 @@ msgstr ""
 msgid "Email address"
 msgstr ""
 
-#: templates/settings.php:79
+#: templates/settings.php:83
 msgid "Enable"
 msgstr ""
 
@@ -339,7 +335,7 @@ msgstr ""
 msgid "Existing spam comments"
 msgstr ""
 
-#: templates/settings.php:110
+#: templates/settings.php:114
 msgid "Expire within 2 hours; removed by scheduled cleanup"
 msgstr ""
 
@@ -391,6 +387,10 @@ msgstr ""
 msgid "Form integration"
 msgstr ""
 
+#: templates/settings.php:104
+msgid "Form integrations are off by default. Enable the providers you use; protection then applies to all their forms. Existing saved choices are kept."
+msgstr ""
+
 #: src/Admin.php:276
 msgid "Form plugins"
 msgstr ""
@@ -439,7 +439,7 @@ msgstr ""
 msgid "Italian"
 msgstr ""
 
-#: templates/settings.php:111
+#: templates/settings.php:115
 msgid "Keep statistics for"
 msgstr ""
 
@@ -459,7 +459,7 @@ msgstr ""
 msgid "Local content rules"
 msgstr ""
 
-#: templates/settings.php:109
+#: templates/settings.php:113
 msgid "Local data handling"
 msgstr ""
 
@@ -479,11 +479,11 @@ msgstr ""
 msgid "Malformed protection fields"
 msgstr ""
 
-#: templates/settings.php:121
+#: templates/settings.php:125
 msgid "Manage activity statistics"
 msgstr ""
 
-#: templates/settings.php:114
+#: templates/settings.php:118
 msgid "Manage optional quarantine"
 msgstr ""
 
@@ -491,7 +491,7 @@ msgstr ""
 msgid "Matched content pattern"
 msgstr ""
 
-#: templates/settings.php:105
+#: templates/settings.php:109
 msgid "Minimum completion time"
 msgstr ""
 
@@ -584,7 +584,7 @@ msgstr ""
 msgid "Open WP Antispam"
 msgstr ""
 
-#: templates/settings.php:121
+#: templates/settings.php:125
 msgid "Open source. All protection included."
 msgstr ""
 
@@ -637,8 +637,12 @@ msgstr ""
 msgid "Permanently delete spam comments after"
 msgstr ""
 
-#: templates/settings.php:85
+#: templates/settings.php:89
 msgid "Pingbacks and trackbacks"
+msgstr ""
+
+#: templates/settings.php:82
+msgid "Plugin available"
 msgstr ""
 
 #: src/Admin.php:180
@@ -657,7 +661,7 @@ msgstr ""
 msgid "Previous"
 msgstr ""
 
-#: templates/settings.php:87
+#: templates/settings.php:91
 msgid "Privacy relevant: WordPress verifies pingbacks by requesting the remote source page and may forward the sender IP address. Native WordPress moderation still applies. These protocol requests do not use JavaScript tokens."
 msgstr ""
 
@@ -669,7 +673,7 @@ msgstr ""
 msgid "Project sponsorship"
 msgstr ""
 
-#: templates/settings.php:106
+#: templates/settings.php:110
 msgid "Protected forms need JavaScript to obtain a fresh token. Visitors are shown an error when verification is unavailable."
 msgstr ""
 
@@ -677,7 +681,7 @@ msgstr ""
 msgid "Protection check"
 msgstr ""
 
-#: templates/settings.php:104
+#: templates/settings.php:108
 msgid "Protection checks"
 msgstr ""
 
@@ -770,7 +774,7 @@ msgstr ""
 msgid "Rejection rate"
 msgstr ""
 
-#: src/Integrations/Divi.php:145
+#: src/Integrations/Divi.php:221
 msgid "Reload the form"
 msgstr ""
 
@@ -786,7 +790,7 @@ msgstr ""
 msgid "Review saved. The submission remains in quarantine."
 msgstr ""
 
-#: templates/quarantine.php:114 templates/settings.php:113
+#: templates/quarantine.php:114 templates/settings.php:117
 msgid "Review the suggested privacy policy text"
 msgstr ""
 
@@ -807,7 +811,7 @@ msgstr ""
 msgid "Rules"
 msgstr ""
 
-#: templates/settings.php:118
+#: templates/settings.php:122
 msgid "Save protection settings"
 msgstr ""
 
@@ -819,7 +823,7 @@ msgstr ""
 msgid "Save rules"
 msgstr ""
 
-#: templates/settings.php:110
+#: templates/settings.php:114
 msgid "Scheduled deletion after the period below"
 msgstr ""
 
@@ -843,7 +847,7 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: templates/settings.php:104
+#: templates/settings.php:108
 msgid "Signed form tokens, a hidden honeypot and one-use verification work without a puzzle."
 msgstr ""
 
@@ -871,7 +875,7 @@ msgstr ""
 msgid "Stable case reference"
 msgstr ""
 
-#: templates/settings.php:109
+#: templates/settings.php:113
 msgid "Standard checks store no IP addresses, email addresses or message contents. Optional quarantine keeps selected rejected fields locally. Country rules process IP metadata. Digest emails use your mail provider. WP Antispam sets no cookies and calls no external spam service."
 msgstr ""
 
@@ -971,7 +975,7 @@ msgstr ""
 msgid "Trusted proxy networks"
 msgstr ""
 
-#: templates/settings.php:93
+#: templates/settings.php:97
 msgid "Turn off privacy-conscious mode to allow pingbacks and trackbacks."
 msgstr ""
 
@@ -1003,7 +1007,7 @@ msgstr ""
 msgid "Use this for submissions that reached your inbox or entries list. Review quarantined submissions in Quarantine."
 msgstr ""
 
-#: templates/settings.php:110
+#: templates/settings.php:114
 msgid "Used token digests"
 msgstr ""
 
@@ -1019,7 +1023,7 @@ msgstr ""
 msgid "Validates submissions before entries, drafts and notifications are created."
 msgstr ""
 
-#: templates/settings.php:104
+#: templates/settings.php:108
 msgid "Verify each submission"
 msgstr ""
 
@@ -1124,10 +1128,10 @@ msgstr ""
 msgid "comments rejected since installation or the last statistics reset."
 msgstr ""
 
-#: templates/quarantine.php:110 templates/rules.php:57 templates/settings.php:111
+#: templates/quarantine.php:110 templates/rules.php:57 templates/settings.php:115
 msgid "days"
 msgstr ""
 
-#: templates/settings.php:105
+#: templates/settings.php:109
 msgid "seconds"
 msgstr ""

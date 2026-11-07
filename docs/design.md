@@ -7,9 +7,12 @@ shield is an original SVG path authored for this plugin.
 
 The overview distinguishes checks passed from submissions stopped. A stopped
 submission is not automatically confirmed spam: expiry and technical failures
-are counted too. Empty statistics explain when counts appear. Available and
-enabled integrations are separate states, so settings can be prepared before a
-form plugin is activated.
+are counted too. Empty statistics explain when counts appear. Only WordPress
+comment protection starts enabled on a fresh installation. Form integrations
+require an explicit choice. Plugin availability does not claim that a form was
+found on the site. Unavailable providers appear unchecked and disabled, without
+an active highlight. A previously saved choice survives temporary provider
+deactivation and settings saves through the same form.
 
 The form uses the native Settings API, plain checkboxes, labelled number inputs
 and one explicit save button. Statistics deletion is a separate authenticated
@@ -82,3 +85,15 @@ browser runs and do not establish real mobile-device or screen-reader coverage.
 Die bisherige Oberfläche war ein eigener Entwurf. Die Überarbeitung verwendet nun die vorhandenen Speo-Markenfarben des eigenen Websiteprojekts: Ink `#17142d`, Paper `#f6f5ef`, Lime `#d4ff52`. Der Kontrast zwischen Titelbereich, Ergebniszählern und Karten ist stärker; Integrationen sind nach WordPress, Formularplugins, Page Buildern und WooCommerce gegliedert. Die optionale Pingback-Freigabe bleibt bei den Kommentaren.
 
 Rocketsky erscheint ausgeschrieben als Hersteller und Sponsor. Eine abgegrenzte, als Produktwerbung bezeichnete Speo-Kachel verlinkt auf `https://www.speo.ch`. Beide Ziele öffnen in einem neuen Tab mit `noopener noreferrer`. Die Grafik stammt aus dem eigenen Speo-Projekt, wird lokal ausgeliefert und behält ihre BSD-3-Clause-Lizenz. Es werden keine externen Schriften, Werbescripts oder Abrufe ergänzt. Sponsoring steht ausschliesslich auf den eigenen Verwaltungsseiten.
+
+## Formular- und Schriftpolitur, 0.3.1
+
+Sichtbare Beschreibungen, Statusangaben und Nebenhinweise sind mindestens 14 CSS-Pixel gross; Anbieterbezeichnungen verwenden 16 Pixel. Textfelder, Zahlenfelder und Dropdowns sind 46 Pixel hoch. Native Dropdowns behalten einen 46 Pixel breiten rechten Innenabstand, damit Text und Pfeil getrennt bleiben. Das Bewertungsformular verwendet gleich breite Spalten und wechselt bei schmaleren Ansichten in eine Spalte.
+
+Checkboxen verwenden die native Browserdarstellung mit 22 Pixeln Kantenlänge und dem lokalen Purple-Akzent. Die zusätzliche WordPress-Häkchengrafik wird nur innerhalb dieses Plugins entfernt. Damit bleiben Häkchen auch unter dem WordPress-Farbschema Coffee mittig. Mehrzeilige Beschriftungen beginnen neben dem Häkchen; erklärende Texte gesperrter Datenschutzoptionen bleiben lesbar. Sekundäre Buttons verwenden ebenfalls den Pluginakzent, während Speicher- und Löschaktionen ihre eigene Gestaltung behalten. Der Fokusrahmen bleibt drei Pixel breit.
+
+Die echte WordPress-7.1.4-Verwaltung wurde in Firefox 153.0 auf macOS mit dem Farbschema Coffee geprüft: Englisch, Schweizer Hochdeutsch, Französisch, Italienisch und Spanisch; jeweils Übersicht, Regeln und Quarantäne bei 320, 390, 768 und 1440 CSS-Pixeln. In diesen 60 Ansichten waren keine sichtbaren eigenen Texte kleiner als 14 Pixel, alle geprüften Felder mindestens 46 Pixel hoch und keine Dokumentüberläufe vorhanden. Die ausgewählten Dropdowntexte hatten ausreichend Platz vor dem Pfeil. Tastaturbedienung, Fokus und die Vorschau der Datenschutzsperren funktionierten in allen Ansichten. Der zusätzliche 320-Pixel-Lauf mit erzwungenen Kontrastfarben und reduzierter Bewegung zeigte keine laufende Animation und einen sichtbaren Fokus. Es gab keine JavaScript-Ausnahmen; sämtliche Anfragen an andere Browser-Origins wurden blockiert.
+
+Zwei echte, authentifizierte Speicherungen über `options.php` bestätigten das Ein- und Ausschalten von Contact Form 7. Ein gespeichertes `true` für das nicht verfügbare Formidable blieb bei beiden Speicherungen erhalten; die Checkbox blieb ungecheckt und deaktiviert und die Zeile erhielt keine aktive Hervorhebung. Auch eine andere Aufbewahrungsoption wurde dabei gespeichert. Die ursprünglichen Pluginoptionen sowie Sprache und Farbschema des synthetischen Administrators wurden anschliessend wiederhergestellt. Die Prüfergebnisse und echten Desktop-/Mobilaufnahmen liegen ausserhalb des Repositorys unter `outputs/wp-antispam/`.
+
+Dies sind automatisierte Desktop-Browserläufe mit schmalen CSS-Ansichten. Physische Mobilgeräte, reale Safari-/Edge-Browser, Screenreader und Nutzertests werden damit weiterhin nicht als geprüft ausgewiesen.
