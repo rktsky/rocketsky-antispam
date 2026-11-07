@@ -64,4 +64,5 @@ require __DIR__ . '/admin-header.php';
 		</div>
 		<div class="rktsky-antispam__save"><p><?php esc_html_e( 'Changes apply after saving.', 'wp-antispam' ); ?></p><button type="submit" class="button button-primary rktsky-antispam__save-button"><?php esc_html_e( 'Save rules', 'wp-antispam' ); ?></button></div>
 	</form>
+	<?php require __DIR__ . '/sponsors.php'; ?>
 </div>

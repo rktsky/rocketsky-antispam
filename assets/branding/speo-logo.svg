@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 100" role="img" aria-labelledby="speo-title speo-desc" color="#17142D">
+<title id="speo-title">Speo Websiteanalyse</title>
+<desc id="speo-desc">Speo Wortmarke mit offenem Blickfenster. Die Wortmarke besteht aus eigenen Vektorpfaden.</desc>
+<g class="speo__lens" fill="none" stroke="currentColor" stroke-width="11.5" stroke-linecap="round">
+  <path d="M15 47C27 26 47 20 68 30"/>
+  <path d="M81 49C69 70 49 76 28 66"/>
+</g>
+<circle class="speo__signal" cx="48" cy="48" r="7.5" fill="#D4FF52" style="fill:var(--speo-accent,#D4FF52)" stroke="currentColor" stroke-width="2.5"/>
+<g class="speo__wordmark" fill="none" stroke="currentColor" stroke-width="10.5" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M151 34C144 28 137 26 128 27C117 28 111 33 112 40C113 47 122 49 134 51C147 53 154 58 151 65C149 72 139 76 128 74C119 73 113 70 108 65"/>
+  <path d="M174 89V30M174 51C174 36 182 27 195 27C208 27 217 37 217 51C217 65 208 75 195 75C182 75 174 66 174 51"/>
+  <path d="M279 64C273 72 267 75 257 75C243 75 235 65 235 51C235 37 244 27 258 27C272 27 281 36 281 49H237"/>
+  <path d="M344 51C344 36 335 27 322 27C309 27 300 36 300 51C300 66 309 75 322 75C335 75 344 66 344 51Z"/>
+</g>
+</svg>

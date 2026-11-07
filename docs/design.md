@@ -75,3 +75,10 @@ Italian and Spanish using native WordPress in Firefox at 320, 390, 768 and 1440
 CSS pixels. Labels, expanded explanations, privacy locks, review corrections,
 POST/nonce failures and narrow-layout overflow were included. These are desktop
 browser runs and do not establish real mobile-device or screen-reader coverage.
+
+
+## Gestaltung ab 0.3.0
+
+Die bisherige Oberfläche war ein eigener Entwurf. Die Überarbeitung verwendet nun die vorhandenen Speo-Markenfarben des eigenen Websiteprojekts: Ink `#17142d`, Paper `#f6f5ef`, Lime `#d4ff52`. Der Kontrast zwischen Titelbereich, Ergebniszählern und Karten ist stärker; Integrationen sind nach WordPress, Formularplugins, Page Buildern und WooCommerce gegliedert. Die optionale Pingback-Freigabe bleibt bei den Kommentaren.
+
+Rocketsky erscheint ausgeschrieben als Hersteller und Sponsor. Eine abgegrenzte, als Produktwerbung bezeichnete Speo-Kachel verlinkt auf `https://www.speo.ch`. Beide Ziele öffnen in einem neuen Tab mit `noopener noreferrer`. Die Grafik stammt aus dem eigenen Speo-Projekt, wird lokal ausgeliefert und behält ihre BSD-3-Clause-Lizenz. Es werden keine externen Schriften, Werbescripts oder Abrufe ergänzt. Sponsoring steht ausschliesslich auf den eigenen Verwaltungsseiten.

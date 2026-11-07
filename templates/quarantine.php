@@ -139,4 +139,5 @@ require __DIR__ . '/admin-header.php';
 			<?php endif; ?>
 		</section>
 	<?php endif; ?>
+	<?php require __DIR__ . '/sponsors.php'; ?>
 </div>
