@@ -43,6 +43,12 @@ final class Store {
 			KEY expires (expires)
 		) $collation;"
 		);
+		$totals = $wpdb->prefix . 'rktsky_antispam_totals';
+		dbDelta( "CREATE TABLE $totals (
+			provider varchar(20) NOT NULL,
+			total bigint(20) unsigned NOT NULL DEFAULT 0,
+			PRIMARY KEY  (provider)
+		) $collation;" );
 		dbDelta(
 			"CREATE TABLE $stats (
 			day date NOT NULL,
@@ -90,14 +96,44 @@ final class Store {
 	 * @since 0.1.0
 	 * @param string $provider Known provider identifier.
 	 * @param string $reason Empty for accepted, otherwise a known rejection reason.
+	 * @param string $day Internal UTC event day; empty defaults to today.
 	 * @return void
 	 */
-	public function record( string $provider, string $reason ): void {
+	public function record( string $provider, string $reason, string $day = '' ): void {
 		global $wpdb;
-		if ( ! in_array( $provider, array( 'comments', 'cf7', 'gravityforms', 'wpforms' ), true ) || ! in_array( $reason, array( '', 'missing', 'invalid', 'honeypot', 'too_fast', 'replay', 'pingback', 'storage' ), true ) ) {
+		if ( ! in_array( $provider, array( 'comments', 'cf7', 'gravityforms', 'wpforms' ), true ) || ! in_array( $reason, array( '', 'missing', 'invalid', 'honeypot', 'too_fast', 'replay', 'pingback', 'storage', 'keyword', 'bbcode', 'pattern', 'pattern_limit', 'language', 'country', 'native_spam' ), true ) ) {
 			return;
 		}
-		$wpdb->query( $wpdb->prepare( 'INSERT INTO %i (day, provider, reason, total) VALUES (%s, %s, %s, 1) ON DUPLICATE KEY UPDATE total = total + 1', $wpdb->prefix . 'rktsky_antispam_stats', gmdate( 'Y-m-d' ), $provider, '' === $reason ? 'accepted' : $reason ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Atomic aggregate update in an owned table; no matching Core storage API.
+		$day = preg_match( '/^\d{4}-\d{2}-\d{2}$/D', $day ) ? $day : gmdate( 'Y-m-d' );
+		$wpdb->query( $wpdb->prepare( 'INSERT INTO %i (day, provider, reason, total) VALUES (%s, %s, %s, 1) ON DUPLICATE KEY UPDATE total = total + 1', $wpdb->prefix . 'rktsky_antispam_stats', $day, $provider, '' === $reason ? 'accepted' : $reason ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- Atomic owned aggregate, no matching Core API or cacheable result.
+		if ( 'comments' === $provider && '' !== $reason ) {
+			$wpdb->query( $wpdb->prepare( 'INSERT INTO %i (provider,total) VALUES (%s,1) ON DUPLICATE KEY UPDATE total=total+1', $wpdb->prefix . 'rktsky_antispam_totals', $provider ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- Permanent anonymous counter, not subject to daily-row retention.
+		}
+	}
+
+	/**
+	 * Replaces a prior pass with native spam for the same observed processing event.
+	 *
+	 * @since 0.2.0
+	 * @param string $provider Known native provider.
+	 * @param string $day UTC day of the earlier pass, including midnight crossings.
+	 * @return void
+	 */
+	public function reclassify( string $provider, string $day ): void {
+		global $wpdb;
+		$wpdb->query( $wpdb->prepare( "UPDATE %i SET total = CASE WHEN total > 0 THEN total - 1 ELSE 0 END WHERE day=%s AND provider=%s AND reason='accepted'", $wpdb->prefix . 'rktsky_antispam_stats', $day, $provider ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- Reclassifies only an already recorded native event in an owned table.
+		$this->record( $provider, 'native_spam', $day );
+	}
+
+	/**
+	 * Returns the anonymous blocked-comment count since installation or manual reset.
+	 *
+	 * @since 0.2.0
+	 * @return int All-time rejection count, including technical failures.
+	 */
+	public function blocked_comments(): int {
+		global $wpdb;
+		return (int) $wpdb->get_var( $wpdb->prepare( 'SELECT total FROM %i WHERE provider=%s', $wpdb->prefix . 'rktsky_antispam_totals', 'comments' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- One administrator-only live read of a bounded owned counter.
 	}
 
 	/**
@@ -149,6 +185,7 @@ final class Store {
 	public function clear(): void {
 		global $wpdb;
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM %i', $wpdb->prefix . 'rktsky_antispam_stats' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Explicit authenticated deletion of an owned aggregate table.
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM %i', $wpdb->prefix . 'rktsky_antispam_totals' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- Explicit reset also clears the anonymous lifetime counter.
 	}
 
 	/**

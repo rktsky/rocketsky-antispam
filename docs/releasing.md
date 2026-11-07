@@ -2,7 +2,7 @@
 
 WP Antispam ist ein Entwicklungskandidat. Eine Einreichung im WordPress-Pluginverzeichnis ist nicht Teil der bisherigen Veröffentlichung und benötigt den tatsächlichen WordPress.org-Account, einen bestätigten verfügbaren Slug und den Reviewprozess.
 
-Der offizielle Plugin-Check meldet für den ausdrücklich gewünschten Namen `WP Antispam` und den vorläufigen Slug `wp-antispam` eine `trademarked_term`-Warnung zum Begriff `wp`. Name und Slug werden deshalb nicht als vom Verzeichnis akzeptiert dargestellt und nicht eigenmächtig geändert. Diesen konkreten Befund vor Einreichung klären; die [offiziellen Namensregeln](https://developer.wordpress.org/plugins/wordpress-org/plugin-developer-faq/) sind massgeblich.
+Der offizielle Plugin-Check meldet für `WP Antispam` und `wp-antispam` eine `trademarked_term`-Warnung zum Begriff `wp`. Der Quellcode des Checkers kennzeichnet `wp` ausdrücklich als erlaubt und warnt trotzdem. Daraus wird kein Umbenennungsbedarf abgeleitet; der gewünschte Name bleibt erhalten. Diese Warnung bleibt sichtbar. Die tatsächliche Slugverfügbarkeit und der gewöhnliche Verzeichnisreview bleiben vor der Einreichung zu prüfen. Quelle: [offizieller Trademarks_Check](https://github.com/WordPress/plugin-check/blob/trunk/includes/Checker/Checks/Plugin_Repo/Trademarks_Check.php#L141).
 
 `load_plugin_textdomain` registriert derzeit die mitgelieferten Übersetzungen für die GitHub-Installation. Plugin Check weist auf die automatische Sprachversorgung für auf WordPress.org gehostete Plugins hin. Beim Übergang auf das Verzeichnis diesen Vertrag erneut prüfen; die gegenwärtige lokale Sprachversorgung nicht für einen kosmetisch leeren Report entfernen.
 

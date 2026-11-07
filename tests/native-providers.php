@@ -38,7 +38,7 @@ if ( '' === $case ) {
 		$cases = array_merge( $cases, array( 'gf_multi_next', 'gf_multi_missing' ) );
 	}
 	if ( ! empty( $forms['wpforms'] ) && function_exists( 'wpforms' ) ) {
-		$cases = array_merge( $cases, array( 'wpforms_valid', 'wpforms_missing', 'wpforms_honeypot' ) );
+		$cases = array_merge( $cases, array( 'wpforms_valid', 'wpforms_missing', 'wpforms_honeypot', 'wpforms_native_spam' ) );
 	}
 	rktsky_antispam_provider_expect( count( $cases ) >= 3, 'An original provider fixture is required.' );
 	foreach ( $cases as $name ) {
@@ -170,10 +170,55 @@ if ( str_starts_with( $case, 'cf7_' ) ) {
 		$_POST['rktsky_antispam_token'] = $proof['token'];
 		$_POST[ $proof['trap'] ] = 'wpforms_honeypot' === $case ? 'synthetic-bot' : '';
 	}
+	$native_early = 'wpforms_native_spam' === $case;
+	$original_options = null;
+	$original_form_content = null;
+	$quarantine_id = 0;
+	if ( $native_early ) {
+		$original_options = ( new \Rktsky\Antispam\Settings() )->all();
+		$enabled_options = $original_options;
+		$enabled_options['privacy_mode'] = false;
+		$enabled_options['quarantine_enabled'] = true;
+		update_option( \Rktsky\Antispam\Settings::OPTION, $enabled_options, false );
+		$original_form_content = get_post_field( 'post_content', $id );
+		$definition = wpforms_decode( $original_form_content );
+		foreach ( array( 10 => 'hidden', 11 => 'password', 12 => 'credit-card', 13 => 'file-upload', 14 => 'email', 15 => 'textarea' ) as $field_id => $type ) {
+			$definition['fields'][ $field_id ] = array( 'id' => (string) $field_id, 'type' => $type, 'label' => 'Synthetic ' . $type );
+			$entry['fields'][ $field_id ] = 14 === $field_id ? 'fixture@example.invalid' : ( 15 === $field_id ? 'Allowed synthetic review message.' : 'DO-NOT-RETAIN-' . $type );
+		}
+		wp_set_current_user( 1 );
+		wpforms()->obj( 'form' )->update( $id, $definition );
+		wp_set_current_user( 0 );
+		// A nonempty undeclared field triggers the original modern honeypot before field processing.
+		$entry['fields'][9999] = 'DO-NOT-RETAIN-undeclared-honeypot';
+	}
 	$_POST['wpforms'] = $entry;
-	wpforms()->process->process( $entry );
+	try {
+		// listen() owns the original wpforms_process_after lifecycle, including modern early returns.
+		wpforms()->process->listen();
+		if ( $native_early ) {
+			rktsky_antispam_provider_expect( ! empty( wpforms()->process->spam_errors[ $id ] ) && empty( wpforms()->process->fields ), 'Original WPForms modern protection must reject before sanitized fields exist.' );
+			global $wpdb;
+			$quarantine_id = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT id FROM %i WHERE provider=%s AND form_id=%s AND reason=%s ORDER BY id DESC LIMIT 1', $wpdb->prefix . 'rktsky_antispam_quarantine', 'wpforms', (string) $id, 'native_spam' ) );
+			wp_set_current_user( 1 );
+			$record = ( new \Rktsky\Antispam\Quarantine( new \Rktsky\Antispam\Settings() ) )->read( $quarantine_id );
+			$serialized = is_array( $record ) ? wp_json_encode( $record['fields'] ) : '';
+			rktsky_antispam_provider_expect( str_contains( $serialized, 'Allowed synthetic review message.' ) && str_contains( $serialized, 'Synthetic native test' ) && ! str_contains( $serialized, 'DO-NOT-RETAIN' ) && 'fixture@example.invalid' === $record['email'], 'Modern early-spam quarantine must retain declared safe text/email fields and exclude password, hidden, payment, upload, and undeclared controls.' );
+		}
+	} finally {
+		if ( null !== $original_form_content ) {
+			wp_set_current_user( 1 );
+			wpforms()->obj( 'form' )->update( $id, wpforms_decode( $original_form_content ) );
+			if ( $quarantine_id ) {
+				( new \Rktsky\Antispam\Quarantine( new \Rktsky\Antispam\Settings() ) )->delete( $quarantine_id );
+			}
+			update_option( \Rktsky\Antispam\Settings::OPTION, $original_options, false );
+		}
+	}
 	$errors = wpforms()->process->errors[ $id ] ?? array();
-	if ( 'wpforms_valid' === $case ) {
+	if ( $native_early ) {
+		// The native early-spam assertion and encrypted readback were checked above.
+	} elseif ( 'wpforms_valid' === $case ) {
 		rktsky_antispam_provider_expect( empty( $errors ) && empty( wpforms()->process->spam_errors[ $id ] ), 'WPForms rejected valid native controls with a local challenge.' );
 	} else {
 		rktsky_antispam_provider_expect( str_contains( $errors['header'] ?? '', 'spam protection' ), 'WPForms did not expose the guard failure in its native header.' );

@@ -40,6 +40,8 @@ namespace Rktsky\Antispam {
 		public array $checks = array();
 		/** @var array Fixed policy rejections. @since 0.1.0 */
 		public array $rejects = array();
+		/** @var array Native spam observations. @since 0.1.0 */
+		public array $observed = array();
 		/**
 		 * Records adapter arguments without implementing production security.
 		 *
@@ -47,11 +49,24 @@ namespace Rktsky\Antispam {
 		 * @param string $provider Provider ID.
 		 * @param string $form_id Native form ID.
 		 * @param array  $posted Synthetic submitted controls.
+		 * @param array  $fields Selected native content fields.
 		 * @return string Configured synthetic verdict.
 		 */
-		public function check( string $provider, string $form_id, array $posted ): string {
-			$this->checks[] = array( $provider, $form_id, $posted );
+		public function check( string $provider, string $form_id, array $posted, array $fields = array() ): string {
+			$this->checks[] = array( $provider, $form_id, $posted, $fields );
 			return $this->reason;
+		}
+		/**
+		 * Records native classification metadata without simulating statistics.
+		 *
+		 * @since 0.1.0
+		 * @param string $provider Provider ID.
+		 * @param string $form_id Native form ID.
+		 * @param array  $posted Synthetic protection controls.
+		 * @return void
+		 */
+		public function observe_spam( string $provider, string $form_id, array $posted ): void {
+			$this->observed[] = array( $provider, $form_id, $posted );
 		}
 		/**
 		 * Records fixed policy rejections without simulating security checks.
@@ -87,6 +102,53 @@ namespace Rktsky\Antispam {
 		 */
 		public function markup( string $provider, string $form_id ): string {
 			return '<input data-provider="' . $provider . '" value="' . $form_id . '">';
+		}
+	}
+
+	/** Opt-in quarantine stub; cryptography is tested by the native service suite. @since 0.1.0 */
+	final class Quarantine {
+		/** @var bool Synthetic retention permission. @since 0.1.0 */
+		public bool $active = true;
+		/** @var array Captured synthetic records. @since 0.1.0 */
+		public array $captured = array();
+		/**
+		 * Returns synthetic retention permission.
+		 *
+		 * @since 0.1.0
+		 * @return bool Whether the stub permits capture.
+		 */
+		public function enabled(): bool { return $this->active; }
+		/**
+		 * Records the adapter's selected data contract.
+		 *
+		 * @since 0.1.0
+		 * @param string $provider Provider ID.
+		 * @param string $form_id Native form ID.
+		 * @param string $reason Fixed reason.
+		 * @param array  $fields Selected native string fields.
+		 * @param string $email Declared email value.
+		 * @return void
+		 */
+		public function capture( string $provider, string $form_id, string $reason, array $fields, string $email = '' ): void {
+			$this->captured[] = array( $provider, $form_id, $reason, $fields, $email );
+		}
+	}
+
+	/** Metadata-only tracking stub; actual ledger SQL has native tests. @since 0.2.0 */
+	final class Feedback {
+		/** @var array Observed native prediction records. @since 0.2.0 */
+		public array $tracked = array();
+		/**
+		 * Records one synthetic native prediction.
+		 *
+		 * @since 0.2.0
+		 * @param string $source Native source category.
+		 * @param int|string $id Native object ID.
+		 * @param bool $predicted_spam Original prediction.
+		 * @return void
+		 */
+		public function track( string $source, $id, bool $predicted_spam ): void {
+			$this->tracked[] = array( $source, $id, $predicted_spam );
 		}
 	}
 }
@@ -215,6 +277,112 @@ namespace {
 	}
 
 	/**
+	 * Provides plain labels for the extraction contract tests.
+	 *
+	 * @since 0.1.0
+	 * @param string $value Candidate label.
+	 * @return string Label without HTML.
+	 */
+	function wp_strip_all_tags( string $value ): string { return strip_tags( $value ); }
+
+	/**
+	 * Repairs only synthetic UTF-8 fixture data.
+	 *
+	 * @since 0.1.0
+	 * @param string $value Candidate text.
+	 * @param bool   $strip Whether invalid sequences may be removed.
+	 * @return string Valid UTF-8 fixture data.
+	 */
+	function wp_check_invalid_utf8( string $value, bool $strip = false ): string {
+		return 1 === preg_match( '//u', $value ) ? $value : '';
+	}
+
+	/**
+	 * Normalizes synthetic email values without changing the address.
+	 *
+	 * @since 0.1.0
+	 * @param string $value Candidate address.
+	 * @return string Trimmed candidate.
+	 */
+	function sanitize_email( string $value ): string { return trim( $value ); }
+
+	/**
+	 * Sanitizes the synthetic early-rejection text fixtures.
+	 *
+	 * @since 0.2.0
+	 * @param string $value Raw synthetic value.
+	 * @return string Plain synthetic text.
+	 */
+	function sanitize_text_field( string $value ): string { return trim( strip_tags( $value ) ); }
+
+	/**
+	 * Preserves line breaks in the synthetic textarea fixtures.
+	 *
+	 * @since 0.2.0
+	 * @param string $value Raw synthetic value.
+	 * @return string Plain multiline synthetic text.
+	 */
+	function sanitize_textarea_field( string $value ): string { return trim( strip_tags( $value ) ); }
+
+	/**
+	 * Returns the synthetic native actor.
+	 *
+	 * @since 0.2.0
+	 * @return int Synthetic actor ID.
+	 */
+	function get_current_user_id(): int { return $GLOBALS['integration_actor'] ?? 0; }
+
+	/**
+	 * Reports the synthetic native AJAX context.
+	 *
+	 * @since 0.2.0
+	 * @return bool Whether AJAX is active.
+	 */
+	function wp_doing_ajax(): bool { return $GLOBALS['integration_ajax'] ?? false; }
+
+	/**
+	 * Reports only the exact synthetic native reply hook.
+	 *
+	 * @since 0.2.0
+	 * @param string $hook Native hook name.
+	 * @return bool Whether the exact synthetic hook is active.
+	 */
+	function doing_action( string $hook ): bool { return ( $GLOBALS['integration_action'] ?? '' ) === $hook; }
+
+	/**
+	 * Provides a deliberately narrow synthetic target capability.
+	 *
+	 * @since 0.2.0
+	 * @param string $capability Native capability.
+	 * @param int $post_id Target post.
+	 * @return bool Fixture authorization.
+	 */
+	function current_user_can( string $capability, int $post_id ): bool {
+		return 'edit_post' === $capability && 91 === $post_id && ( $GLOBALS['integration_can_reply'] ?? false );
+	}
+
+	/**
+	 * Verifies the synthetic native reply intent without implementing WordPress nonces.
+	 *
+	 * @since 0.2.0
+	 * @param string $nonce Synthetic nonce.
+	 * @param string $action Native action.
+	 * @return int|false Synthetic match or failure.
+	 */
+	function wp_verify_nonce( string $nonce, string $action ) {
+		return 'native-reply-proof' === $nonce && 'replyto-comment' === $action ? 1 : false;
+	}
+
+	/**
+	 * Recognizes valid synthetic addresses for the email-index contract.
+	 *
+	 * @since 0.1.0
+	 * @param string $value Candidate address.
+	 * @return string|false Address or rejection.
+	 */
+	function is_email( string $value ) { return filter_var( $value, FILTER_VALIDATE_EMAIL ); }
+
+	/**
 	 * Makes a wp_die rejection testable without terminating the test process.
 	 *
 	 * @since 0.1.0
@@ -271,6 +439,8 @@ namespace {
 			public static $current = null;
 			/** @var int Form ID. @since 0.1.0 */
 			public int $form_id = 51;
+			/** @var array Declared native form tags. @since 0.1.0 */
+			public array $tags = array();
 			/**
 			 * Returns the fixture's active form.
 			 *
@@ -285,11 +455,20 @@ namespace {
 			 * @return int Native ID.
 			 */
 			public function id(): int { return $this->form_id; }
+			/**
+			 * Returns synthetic declared form tags.
+			 *
+			 * @since 0.1.0
+			 * @return array Tag objects.
+			 */
+			public function scan_form_tags(): array { return $this->tags; }
 		}
 		/** Native submission stub that records fixed spam diagnostics. @since 0.1.0 */
 		final class WPCF7_Submission {
 			/** @var array Synthetic diagnostic logs. @since 0.1.0 */
 			public array $logs = array();
+			/** @var array Synthetic processed content. @since 0.1.0 */
+			public array $posted = array();
 			/**
 			 * Returns the fixture's active form.
 			 *
@@ -305,6 +484,13 @@ namespace {
 			 * @return void
 			 */
 			public function add_spam_log( array $log ): void { $this->logs[] = $log; }
+			/**
+			 * Returns processed fixture values, never raw POST.
+			 *
+			 * @since 0.1.0
+			 * @return array Processed content.
+			 */
+			public function get_posted_data(): array { return $this->posted; }
 		}
 		/** GF availability stub, not a form-processing simulation. @since 0.1.0 */
 		final class GFForms {
@@ -313,6 +499,40 @@ namespace {
 		}
 		/** GF display availability stub. @since 0.1.0 */
 		final class GFFormDisplay {}
+		/** Declared GF field stub used to exercise allowlisted native input IDs. @since 0.1.0 */
+		final class GF_Field_Contract_Stub {
+			/** @var int Native field ID. @since 0.1.0 */
+			public int $id = 1;
+			/** @var string Native field type. @since 0.1.0 */
+			public string $type = 'text';
+			/** @var string Field label. @since 0.1.0 */
+			public string $label = 'Message';
+			/** @var bool Administrative field flag. @since 0.1.0 */
+			public bool $administrative = false;
+			/** @var array|null Compound input definitions. @since 0.1.0 */
+			public ?array $inputs = null;
+			/**
+			 * Returns the declared native input type.
+			 *
+			 * @since 0.1.0
+			 * @return string Field type.
+			 */
+			public function get_input_type(): string { return $this->type; }
+			/**
+			 * Returns the administrative-only flag.
+			 *
+			 * @since 0.1.0
+			 * @return bool Administrative-only state.
+			 */
+			public function is_administrative(): bool { return $this->administrative; }
+			/**
+			 * Returns declared compound inputs.
+			 *
+			 * @since 0.1.0
+			 * @return array|null Declared compound inputs.
+			 */
+			public function get_entry_inputs(): ?array { return $this->inputs; }
+		}
 		/**
 		 * Returns a WPForms process-container fixture.
 		 *
@@ -441,6 +661,124 @@ namespace {
 	ob_start();
 	$adapter->wpforms_fields( array( 'id' => 63 ) );
 	integration_expect( strpos( ob_get_clean(), 'value="63"' ) !== false, 'WPForms rendering must use the native form scope.' );
+
+	// Quarantine contracts exercise only selected native fields, never a raw entry dump.
+	$quarantine = new \Rktsky\Antispam\Quarantine();
+	$feedback = new \Rktsky\Antispam\Feedback();
+	$guard = new \Rktsky\Antispam\Guard();
+	$guard->reason = 'keyword';
+	$adapter = new \Rktsky\Antispam\Integrations( $settings, $guard, $fields, $quarantine, $feedback );
+	$comment = array( 'comment_type' => 'comment', 'comment_post_ID' => 91, 'comment_author' => 'Synthetic author', 'comment_author_email' => 'fixture@example.invalid', 'comment_author_url' => 'https://example.invalid/', 'comment_content' => 'Synthetic message', 'comment_author_IP' => '192.0.2.1', 'comment_agent' => 'private-agent' );
+	try {
+		$adapter->check_comment( $comment );
+	} catch ( \RuntimeException $error ) {
+		integration_expect( 403 === $error->getCode(), 'Retaining a rejected comment must not authorize insertion.' );
+	}
+	$capture = end( $quarantine->captured );
+	integration_expect( $capture[3] === array( 'content' => 'Synthetic message', 'name' => 'Synthetic author', 'email' => 'fixture@example.invalid', 'url' => 'https://example.invalid/' ) && $capture[4] === 'fixture@example.invalid', 'Comment capture must exclude IP, user agent and technical controls.' );
+	integration_expect( end( $guard->checks )[3] === $capture[3], 'Comment content rules and retention must use the same selected field contract.' );
+	$count = count( $quarantine->captured );
+	try {
+		$adapter->check_comment( array( 'comment_type' => 'trackback', 'comment_post_ID' => 91, 'comment_content' => 'Must not be retained' ) );
+	} catch ( \RuntimeException $error ) {
+		integration_expect( count( $quarantine->captured ) === $count, 'Ping and trackback content must never enter quarantine.' );
+	}
+	$quarantine->active = false;
+	$adapter->check_rest_comment( $comment, new WP_REST_Request() );
+	integration_expect( count( $quarantine->captured ) === $count, 'The quarantine service opt-out must prevent capture.' );
+	$quarantine->active = true;
+	$guard->reason = '';
+	$_POST = array( 'rktsky_antispam_token' => 'native-comment-proof' );
+	$adapter->check_comment( $comment );
+	$inserted = (object) ( $comment + array( 'comment_approved' => 'spam' ) );
+	$count = count( $quarantine->captured );
+	$adapter->observe_comment_spam( 123, $inserted );
+	integration_expect( end( $guard->observed )[2] === array( 'rktsky_antispam_token' => 'native-comment-proof' ) && count( $quarantine->captured ) === $count, 'Native comment spam must use its exact proof receipt and avoid duplicate quarantine copies.' );
+
+	WPCF7_ContactForm::$current = new WPCF7_ContactForm();
+	WPCF7_ContactForm::$current->tags = array( (object) array( 'basetype' => 'textarea', 'name' => 'message' ), (object) array( 'basetype' => 'email', 'name' => 'email' ), (object) array( 'basetype' => 'hidden', 'name' => 'private-hidden' ), (object) array( 'basetype' => 'file', 'name' => 'upload' ), (object) array( 'basetype' => 'text', 'name' => 'rktsky_antispam_token' ) );
+	$submission->posted = array( 'message' => 'Synthetic CF7 message', 'email' => 'fixture@example.invalid', 'private-hidden' => 'hidden-secret', 'upload' => '/private/path', 'rktsky_antispam_token' => 'secret-token', 'undeclared' => 'secret' );
+	$guard->reason = 'pattern';
+	$adapter->check_cf7( false, $submission );
+	integration_expect( end( $quarantine->captured )[3] === array( 'message' => 'Synthetic CF7 message', 'email' => 'fixture@example.invalid' ), 'CF7 must capture declared allowed tags only, excluding hidden/file/technical/unknown fields.' );
+	$count = count( $guard->checks );
+	$adapter->check_cf7( true, $submission );
+	integration_expect( count( $guard->checks ) === $count && end( $quarantine->captured )[2] === 'native_spam', 'Earlier CF7 spam must be observed without evaluating or reversing it.' );
+
+	$text_field = new GF_Field_Contract_Stub();
+	$email_field = clone $text_field;
+	$email_field->id = 2;
+	$email_field->type = 'email';
+	$name_field = clone $text_field;
+	$name_field->id = 3;
+	$name_field->type = 'name';
+	$name_field->inputs = array( array( 'id' => '3.3' ), array( 'id' => '3.6' ) );
+	$hidden_field = clone $text_field;
+	$hidden_field->id = 4;
+	$hidden_field->type = 'hidden';
+	$payment_field = clone $text_field;
+	$payment_field->id = 5;
+	$payment_field->type = 'creditcard';
+	$admin_field = clone $text_field;
+	$admin_field->id = 6;
+	$admin_field->administrative = true;
+	$gf_form = array( 'id' => 17, 'fields' => array( $text_field, $email_field, $name_field, $hidden_field, $payment_field, $admin_field ) );
+	$_POST = array( 'input_1' => 'Visible message', 'input_2' => 'fixture@example.invalid', 'input_3_3' => 'First', 'input_3_6' => 'Last', 'input_4' => 'hidden-secret', 'input_5' => 'payment-secret', 'input_6' => 'admin-secret', 'input_999' => 'unknown-secret' );
+	$adapter->check_gravity( array( 'is_valid' => true, 'form' => $gf_form ), 'form-submit' );
+	$selected = end( $quarantine->captured )[3];
+	integration_expect( count( $selected ) === 4 && in_array( 'First', $selected, true ) && ! in_array( 'hidden-secret', $selected, true ) && ! in_array( 'payment-secret', $selected, true ) && ! in_array( 'admin-secret', $selected, true ), 'GF must use declared scalar/compound input IDs and exclude hidden/payment/admin/unknown fields.' );
+	$adapter->check_gravity( array( 'is_valid' => false, 'form' => $gf_form ), 'form-submit' );
+	$count = count( $quarantine->captured );
+	integration_expect( true === $adapter->observe_gravity_spam( true, $gf_form, array( '1' => 'Native GF message', '2' => 'fixture@example.invalid', '4' => 'hidden-secret' ) ), 'Native GF spam must remain true.' );
+	integration_expect( count( $quarantine->captured ) === $count, 'Persisted native GF spam must not create a duplicate quarantine payload.' );
+	$adapter->observe_gravity_spam( true, $gf_form, array() );
+	$adapter->abort_gravity( true, $gf_form );
+	integration_expect( count( $quarantine->captured ) === $count + 1, 'A native abort before persistence may retain one optional selected-data quarantine object.' );
+	$guard->reason = '';
+	$_POST['rktsky_antispam_token'] = 'new-gf-proof';
+	$adapter->check_gravity( array( 'is_valid' => true, 'form' => $gf_form ), 'form-submit' );
+	$adapter->abort_gravity( false, $gf_form );
+	$adapter->track_gravity_entry( array( 'id' => 731, 'status' => 'spam' ), $gf_form );
+	integration_expect( end( $feedback->tracked ) === array( 'gravityforms', 731, true ), 'Native GF feedback must use final persisted spam status for its observed token-bound lifecycle.' );
+	$count = count( $feedback->tracked );
+	$adapter->track_gravity_entry( array( 'id' => 732, 'status' => 'active' ), $gf_form );
+	integration_expect( count( $feedback->tracked ) === $count, 'Unknown or repeated native GF creation events must not invent quality predictions.' );
+	$adapter->check_gravity( array( 'is_valid' => true, 'form' => $gf_form ), 'api-validate' );
+	$adapter->track_gravity_entry( array( 'id' => 733, 'status' => 'active' ), $gf_form );
+	integration_expect( count( $feedback->tracked ) === $count, 'GF validation-only contexts must not invent a persisted quality observation.' );
+	$guard->reason = 'keyword';
+
+	$wp_form = array( 'id' => 21, 'fields' => array( 1 => array( 'type' => 'textarea', 'label' => 'Message' ), 2 => array( 'type' => 'email', 'label' => 'Email' ), 3 => array( 'type' => 'hidden', 'label' => 'Internal' ), 4 => array( 'type' => 'password', 'label' => 'Password' ), 5 => array( 'type' => 'name', 'label' => 'Name' ) ) );
+	$wp_fields = array( 1 => array( 'type' => 'textarea', 'value' => 'Formatted message', 'raw' => 'raw-secret' ), 2 => array( 'type' => 'email', 'value' => 'fixture@example.invalid' ), 3 => array( 'type' => 'hidden', 'value' => 'hidden-secret' ), 4 => array( 'type' => 'password', 'value' => 'password-secret' ) );
+	$adapter->check_wpforms( $wp_fields, array( 'raw' => 'secret' ), $wp_form );
+	integration_expect( end( $quarantine->captured )[3] === array( '1: Message' => 'Formatted message', '2: Email' => 'fixture@example.invalid' ), 'WPForms capture must use safe matching native types and the formatted value property only.' );
+	$adapter->begin_wpforms( $wp_form, array() );
+	integration_expect( 'native rejection' === $adapter->observe_wpforms_honeypot( 'native rejection', $wp_fields, array(), $wp_form ), 'WPForms original honeypot verdict must remain unchanged.' );
+	$count = count( $quarantine->captured );
+	$adapter->observe_wpforms_antispam( false, $wp_fields, array(), $wp_form );
+	integration_expect( count( $quarantine->captured ) === $count, 'WPForms native observers must deduplicate the same lifecycle.' );
+	$adapter->begin_wpforms( $wp_form, array() );
+	$_POST['wpforms']['fields'] = array( 1 => '<b>Early</b> message', 2 => 'fixture@example.invalid', 3 => 'hidden-secret', 4 => 'password-secret', 5 => array( 'first' => 'Synthetic', 'last' => 'Author', 'private' => 'nested-secret', 'middle' => array( 'must' => 'skip' ) ), 999 => 'unknown-secret' );
+	wpforms()->process->spam_errors[21] = array( 'header' => 'Native V3 early rejection' );
+	$adapter->observe_wpforms_spam( array(), 0, $wp_form );
+	integration_expect( end( $quarantine->captured )[3] === array( '1: Message' => 'Early message', '2: Email' => 'fixture@example.invalid', '5: Name' => 'Synthetic, Author' ), 'Early native WPForms rejection must sanitize only declared text IDs and known flat compound parts.' );
+
+	$GLOBALS['integration_actor'] = 7;
+	$GLOBALS['integration_ajax'] = true;
+	$GLOBALS['integration_action'] = 'wp_ajax_replyto-comment';
+	$GLOBALS['integration_can_reply'] = true;
+	$_POST = array( '_ajax_nonce-replyto-comment' => 'native-reply-proof' );
+	$reply = $comment + array( 'user_id' => 7 );
+	$count = count( $guard->checks );
+	integration_expect( $adapter->check_comment( $reply ) === $reply && count( $guard->checks ) === $count, 'The exact authorized native backend reply must retain Core processing without a protection-field requirement.' );
+	$GLOBALS['integration_action'] = '';
+	$guard->reason = '';
+	$adapter->check_comment( $reply );
+	integration_expect( count( $guard->checks ) === $count + 1, 'A logged-in frontend actor with a reply nonce must still require the guard.' );
+	$GLOBALS['integration_action'] = 'wp_ajax_replyto-comment';
+	$_POST['_ajax_nonce-replyto-comment'] = 'forged';
+	$adapter->check_comment( $reply );
+	integration_expect( count( $guard->checks ) === $count + 2, 'A forged backend reply nonce must not gain the exception.' );
 
 	echo 'Integration adapter stub tests: ' . $GLOBALS['integration_assertions'] . " assertions passed.\n";
 }

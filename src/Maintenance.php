@@ -1,0 +1,94 @@
+<?php
+/**
+ * Runs bounded retention work and optional aggregate-only administrator digests.
+ *
+ * @package RktskyAntispam
+ * @since 0.2.0
+ */
+
+namespace Rktsky\Antispam;
+
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * Uses native WordPress deletion/mail APIs without resending visitor submissions.
+ *
+ * @since 0.2.0
+ */
+final class Maintenance {
+	/**
+	 * Runs the scheduled per-site work; disabled settings cause no corresponding action.
+	 *
+	 * @since 0.2.0
+	 * @return void
+	 */
+	public static function run(): void {
+		$settings = new Settings();
+		$options = $settings->all();
+		( new Quarantine( $settings ) )->cleanup();
+		if ( $options['comment_spam_days'] > 0 ) {
+			$comments = get_comments( array(
+				'status' => 'spam',
+				'type__in' => array( '', 'comment', 'review' ),
+				'number' => 100,
+				'fields' => 'ids',
+				'orderby' => 'comment_ID',
+				'order' => 'ASC',
+				'date_query' => array( array( 'column' => 'comment_date_gmt', 'before' => gmdate( 'Y-m-d H:i:s', time() - $options['comment_spam_days'] * DAY_IN_SECONDS ) ) ),
+			) );
+			foreach ( $comments as $id ) {
+				clean_comment_cache( $id );
+				if ( 'spam' === wp_get_comment_status( $id ) ) {
+					wp_delete_comment( $id, true );
+				}
+			}
+		}
+		if ( $options['notify_admin'] && ! $options['privacy_mode'] ) {
+			self::digest();
+		}
+	}
+
+	/**
+	 * Claims at most one daily digest before calling wp_mail; failures are not retried blindly.
+	 *
+	 * Only yesterday's aggregate counts are mailed to WordPress's configured admin address.
+	 *
+	 * @since 0.2.0
+	 * @return void
+	 */
+	public static function digest(): void {
+		global $wpdb;
+		$options = ( new Settings() )->all();
+		if ( ! $options['notify_admin'] || $options['privacy_mode'] ) {
+			return;
+		}
+		$day = gmdate( 'Y-m-d', time() - DAY_IN_SECONDS );
+		$activity = ( new Store() )->summary( 2 );
+		$blocked = 0;
+		foreach ( $activity['daily'] as $row ) {
+			if ( $day === $row['day'] ) {
+				$blocked = (int) $row['blocked'];
+			}
+		}
+		if ( 0 === $blocked || ! is_email( get_option( 'admin_email' ) ) ) {
+			return;
+		}
+		$name = 'rktsky_antispam_digest_claim';
+		$previous = $wpdb->get_var( $wpdb->prepare( 'SELECT option_value FROM %i WHERE option_name=%s', $wpdb->options, $name ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- Fresh database state is required for the cross-process mail claim.
+		if ( is_string( $previous ) && $previous >= $day ) {
+			return;
+		}
+		$claimed = null === $previous ? 1 === $wpdb->query( $wpdb->prepare( "INSERT IGNORE INTO %i (option_name,option_value,autoload) VALUES (%s,%s,'no')", $wpdb->options, $name, $day ) ) : 1 === $wpdb->query( $wpdb->prepare( 'UPDATE %i SET option_value=%s WHERE option_name=%s AND option_value=%s', $wpdb->options, $day, $name, $previous ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- Unique insert or compare-and-swap proves a single cross-process winner; add_option upserts cannot prove ownership.
+		if ( ! $claimed ) {
+			return;
+		}
+		wp_cache_delete( $name, 'options' );
+		wp_cache_delete( 'notoptions', 'options' );
+		$sent = wp_mail(
+			get_option( 'admin_email' ),
+			__( 'WP Antispam: daily rejection summary', 'wp-antispam' ),
+			sprintf( /* translators: 1: UTC date, 2: rejected submission count, 3: local settings URL. */ __( 'On %1$s (UTC), WP Antispam recorded %2$d rejected submissions. This includes technical verification failures and is not a measured spam detection accuracy. No visitor content is included in this email. Review the counts on your website: %3$s', 'wp-antispam' ), $day, $blocked, admin_url( 'options-general.php?page=wp-antispam' ) )
+		);
+		update_option( 'rktsky_antispam_digest_status', array( 'day' => $day, 'accepted_by_mailer' => true === $sent ), false );
+	}
+}

@@ -25,8 +25,9 @@ function rktsky_antispam_uninstall_expect( bool $condition, string $message ): v
 global $wpdb;
 $settings = new \Rktsky\Antispam\Settings();
 $original = $settings->all();
+\Rktsky\Antispam\Plugin::activate();
 $before_tables = $wpdb->get_col( 'SHOW TABLES' );
-$owned_tables = array( $wpdb->prefix . 'rktsky_antispam_tokens', $wpdb->prefix . 'rktsky_antispam_stats' );
+$owned_tables = array( $wpdb->prefix . 'rktsky_antispam_tokens', $wpdb->prefix . 'rktsky_antispam_stats', $wpdb->prefix . 'rktsky_antispam_totals', $wpdb->prefix . 'rktsky_antispam_quarantine', $wpdb->prefix . 'rktsky_antispam_feedback' );
 $foreign_before = array_values( array_diff( $before_tables, $owned_tables ) );
 sort( $foreign_before );
 try {
@@ -36,7 +37,7 @@ try {
 	define( 'WP_UNINSTALL_PLUGIN', 'wp-antispam/wp-antispam.php' );
 	require dirname( __DIR__ ) . '/uninstall.php';
 	$after_retain = $wpdb->get_col( 'SHOW TABLES' );
-	rktsky_antispam_uninstall_expect( count( array_intersect( $owned_tables, $after_retain ) ) === 2, 'Retain mode must preserve both owned tables.' );
+	rktsky_antispam_uninstall_expect( count( array_intersect( $owned_tables, $after_retain ) ) === count( $owned_tables ), 'Retain mode must preserve every owned table.' );
 	rktsky_antispam_uninstall_expect( false !== get_option( \Rktsky\Antispam\Settings::OPTION ), 'Retain mode must preserve settings.' );
 	rktsky_antispam_uninstall_expect( false === wp_next_scheduled( 'rktsky_antispam_cleanup' ), 'Uninstall must remove its own scheduled task.' );
 
@@ -45,7 +46,7 @@ try {
 	update_option( \Rktsky\Antispam\Settings::OPTION, $delete, false );
 	rktsky_antispam_uninstall_site();
 	$after_delete = $wpdb->get_col( 'SHOW TABLES' );
-	rktsky_antispam_uninstall_expect( array() === array_values( array_intersect( $owned_tables, $after_delete ) ), 'Delete mode must drop both owned tables.' );
+	rktsky_antispam_uninstall_expect( array() === array_values( array_intersect( $owned_tables, $after_delete ) ), 'Delete mode must drop every owned table.' );
 	rktsky_antispam_uninstall_expect( false === get_option( \Rktsky\Antispam\Settings::OPTION ) && false === get_option( 'rktsky_antispam_schema' ), 'Delete mode must remove only owned settings and schema state.' );
 	$foreign_after = array_values( array_diff( $after_delete, $owned_tables ) );
 	sort( $foreign_after );

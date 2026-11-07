@@ -92,7 +92,7 @@ try {
 	rktsky_antispam_expect( 'too_fast' === ( new Guard( $settings, $token, $store ) )->check( 'comments', '42', array( 'rktsky_antispam_token' => $fresh['token'], $fresh['trap'] => '' ) ), 'Explicit minimum completion time must be enforced on the server.' );
 	update_option( Settings::OPTION, $settings->defaults(), false );
 
-	$normalized = $settings->sanitize( array( 'comments' => array( 1 ), 'cf7' => '1', 'minimum_seconds' => '999', 'retention_days' => '0', 'token_ttl' => 999999, 'injected' => true ) );
+	$normalized = $settings->sanitize( array( 'comments' => array( 1 ), 'cf7' => '1', 'wpforms' => '0', 'minimum_seconds' => '999', 'retention_days' => '0', 'token_ttl' => 999999, 'injected' => true ) );
 	rktsky_antispam_expect( false === $normalized['comments'] && true === $normalized['cf7'] && false === $normalized['wpforms'], 'Settings must reject malformed booleans and preserve native checkbox semantics.' );
 	rktsky_antispam_expect( 10 === $normalized['minimum_seconds'] && 1 === $normalized['retention_days'] && 7200 === $normalized['token_ttl'] && ! isset( $normalized['injected'] ), 'Numeric settings must be bounded and protocol lifetime immutable.' );
 
@@ -145,6 +145,17 @@ try {
 	$store->cleanup();
 	rktsky_antispam_expect( null === $wpdb->get_var( $wpdb->prepare( 'SELECT digest FROM %i WHERE digest = %s', $wpdb->prefix . 'rktsky_antispam_tokens', $old_digest ) ), 'Scheduled cleanup must remove expired security state.' );
 	rktsky_antispam_expect( 0 === (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i WHERE day < %s', $wpdb->prefix . 'rktsky_antispam_stats', gmdate( 'Y-m-d', time() - 29 * DAY_IN_SECONDS ) ) ), 'Scheduled cleanup must enforce the configured retention window.' );
+
+	// A missing owned ledger models a real storage failure without touching provider tables.
+	$previous_errors = $wpdb->suppress_errors( true );
+	try {
+		$wpdb->query( $wpdb->prepare( 'DROP TABLE %i', $wpdb->prefix . 'rktsky_antispam_tokens' ) );
+		$unavailable = $token->issue( 'comments', '42' );
+		rktsky_antispam_expect( 'storage' === ( new Guard( $settings, $token, $store ) )->check( 'comments', '42', array( 'rktsky_antispam_token' => $unavailable['token'], $unavailable['trap'] => '' ) ), 'A failed database write must reject the submission as unavailable storage.' );
+	} finally {
+		$store->install();
+		$wpdb->suppress_errors( $previous_errors );
+	}
 
 	$database_engine = defined( 'DB_ENGINE' ) && 'sqlite' === DB_ENGINE ? 'SQLite integration (MySQL compatibility ' . $wpdb->db_version() . ')' : 'MySQL/MariaDB ' . $wpdb->db_version();
 	echo 'PASS: ' . $rktsky_test_count . ' native assertions on WordPress ' . get_bloginfo( 'version' ) . ', PHP ' . PHP_VERSION . ', ' . $database_engine . ".\n";

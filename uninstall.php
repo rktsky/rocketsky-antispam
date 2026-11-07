@@ -23,8 +23,13 @@ function rktsky_antispam_uninstall_site(): void {
 	}
 	$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $wpdb->prefix . 'rktsky_antispam_tokens' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- Uninstall removes only an owned table after the administrator's configured deletion choice.
 	$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $wpdb->prefix . 'rktsky_antispam_stats' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- Uninstall removes only an owned table after the administrator's configured deletion choice.
+	$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $wpdb->prefix . 'rktsky_antispam_totals' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- Removes only the owned anonymous lifetime counter.
+	$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $wpdb->prefix . 'rktsky_antispam_quarantine' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- Removes only explicitly opted-in owned quarantine data on uninstall.
+	$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $wpdb->prefix . 'rktsky_antispam_feedback' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- Removes only owned feedback references and classifications.
 	delete_option( 'rktsky_antispam_settings' );
 	delete_option( 'rktsky_antispam_schema' );
+	delete_option( 'rktsky_antispam_digest_claim' );
+	delete_option( 'rktsky_antispam_digest_status' );
 }
 
 if ( is_multisite() ) {

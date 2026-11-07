@@ -3,7 +3,7 @@
  * Plugin Name: WP Antispam
  * Plugin URI: https://github.com/rktsky/wp-antispam
  * Description: Local spam protection for comments, Contact Form 7, Gravity Forms and WPForms. No external services.
- * Version: 0.1.0
+ * Version: 0.2.0
  * Requires at least: 6.6
  * Requires PHP: 8.2
  * Author: rktsky
@@ -21,11 +21,11 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'RKTSKY_ANTISPAM_VERSION', '0.1.0' );
+define( 'RKTSKY_ANTISPAM_VERSION', '0.2.0' );
 define( 'RKTSKY_ANTISPAM_FILE', __FILE__ );
 
 // Explicit local includes avoid filesystem discovery and third-party autoloaders.
-foreach ( array( 'Settings', 'Token', 'Store', 'Guard', 'Fields', 'Integrations', 'Admin', 'Plugin' ) as $rktsky_antispam_class ) {
+foreach ( array( 'Settings', 'Country', 'Language', 'ContentRules', 'Token', 'Store', 'Quarantine', 'Feedback', 'Guard', 'Fields', 'Integrations', 'Admin', 'Dashboard', 'Maintenance', 'Plugin' ) as $rktsky_antispam_class ) {
 	require_once __DIR__ . '/src/' . $rktsky_antispam_class . '.php';
 }
 unset( $rktsky_antispam_class );
