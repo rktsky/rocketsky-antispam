@@ -1,0 +1,13 @@
+/**
+ * Keeps only our native contextual notice readable within provider screens.
+ * The surrounding provider layout, fonts, colours and notices remain native.
+ * @since 0.5.0
+ */
+.notice.rktsky-antispam-context-notice p {
+	font-size: 14px;
+	line-height: 1.6;
+}
+.notice.rktsky-antispam-context-notice a:focus-visible {
+	outline: 3px solid currentColor;
+	outline-offset: 3px;
+}

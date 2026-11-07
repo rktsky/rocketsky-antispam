@@ -92,7 +92,7 @@
 .rktsky-antispam__disclosure { min-width: 0; border: 1px solid var(--rktsky-line); border-radius: 12px; background: var(--rktsky-paper); }
 .rktsky-antispam__card { padding: 24px; }
 .rktsky-antispam__card > h2 { font-size: 18px; line-height: 1.4; }
-.rktsky-antispam :is(section, details)[id] { scroll-margin-top: 80px; }
+.rktsky-antispam :is(section, details, h2, h3)[id] { scroll-margin-top: 80px; }
 .rktsky-antispam section[id]:target { border-color: var(--rktsky-purple); }
 .rktsky-antispam__settings-stack { display: grid; gap: 20px; max-width: 1040px; margin: 0; }
 .rktsky-antispam__section-title { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 16px; margin-bottom: 20px; }
@@ -273,6 +273,18 @@
 .rktsky-antispam__provider-unavailable .rktsky-antispam__help-note { padding: 0 20px 16px; }
 .rktsky-antispam__provider-unavailable .rktsky-antispam__provider-row { background: #faf9fc; }
 
+/* Read-only destinations share the same compact treatment across both views. */
+.rktsky-antispam .rktsky-antispam__handling { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--rktsky-line); color: var(--rktsky-muted); font-size: 14px; }
+.rktsky-antispam__handling > a:first-child { font-weight: 600; }
+.rktsky-antispam__handling > span { display: block; margin-top: 4px; }
+.rktsky-antispam__spam-directory { margin-bottom: 24px; }
+.rktsky-antispam__spam-directory dl { margin: 16px 0; }
+.rktsky-antispam__spam-directory dl > div { display: grid; grid-template-columns: minmax(150px, 0.7fr) minmax(0, 2fr); gap: 12px 24px; padding: 12px 0; }
+.rktsky-antispam__spam-directory dl > div + div { border-top: 1px solid var(--rktsky-line); }
+.rktsky-antispam__spam-directory dt { font-size: 14px; font-weight: 600; }
+.rktsky-antispam__spam-directory dd { min-width: 0; margin: 0; font-size: 14px; overflow-wrap: anywhere; }
+.rktsky-antispam .rktsky-antispam__spam-directory dd p { margin-top: 4px; color: var(--rktsky-muted); font-size: 14px; }
+
 /* Review uses a native table and labelled metadata cards on narrow screens. */
 .rktsky-antispam .rktsky-antispam__queue-note { max-width: 80ch; margin: 0 0 20px; color: var(--rktsky-muted); font-size: 14px; }
 .rktsky-antispam__quarantine-empty h3 { margin-bottom: 8px; }
@@ -363,10 +375,17 @@
 	.rktsky-antispam__metric strong { margin: 0; font-size: 28px; }
 	.rktsky-antispam__metric p { grid-column: 1 / -1; }
 	.rktsky-antispam__provider-row { grid-template-columns: 32px minmax(0, 1fr) 22px; gap: 10px; padding: 16px; }
-	.rktsky-antispam__provider-mark { width: 32px; height: 32px; }
+	.rktsky-antispam__provider-mark { grid-column: 1; grid-row: 1 / 3; align-self: start; width: 32px; height: 32px; }
+	/* Keep controls in the heading; let explanatory text use the full mobile row. */
+	.rktsky-antispam__provider-copy { display: contents; }
+	.rktsky-antispam__provider-copy > label { grid-column: 2; grid-row: 1; }
+	.rktsky-antispam__provider-copy > .rktsky-antispam__provider-state { grid-column: 2 / -1; grid-row: 2; margin-top: 0; }
+	.rktsky-antispam__provider-copy > p { grid-column: 1 / -1; margin-top: 0; }
+	.rktsky-antispam__provider-row > .rktsky-antispam__check { grid-column: 3; grid-row: 1; align-self: start; }
 	.rktsky-antispam__check > span { display: none; }
 	.rktsky-antispam__provider-group > legend { padding: 16px; }
 	.rktsky-antispam__provider-group > .rktsky-antispam__disclosure { margin-right: 16px; margin-left: 16px; }
+	.rktsky-antispam__spam-directory dl > div { grid-template-columns: minmax(0, 1fr); gap: 4px; }
 	.rktsky-antispam__daily-list > div { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4px 12px; }
 	.rktsky-antispam__daily-list strong { grid-column: 1 / -1; }
 	.rktsky-antispam__record-meta,
