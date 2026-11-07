@@ -11,19 +11,17 @@
 
 defined( 'ABSPATH' ) || exit;
 ?>
-<aside class="rktsky-antispam__sponsors" aria-label="<?php esc_attr_e( 'Project sponsorship', 'wp-antispam' ); ?>">
+<footer class="rktsky-antispam__sponsors" aria-label="<?php esc_attr_e( 'Project sponsorship', 'wp-antispam' ); ?>">
 	<div class="rktsky-antispam__sponsor rktsky-antispam__sponsor--rocketsky">
-		<div class="rktsky-antispam__sponsor-copy">
-			<p class="rktsky-antispam__eyebrow"><?php esc_html_e( 'Developed and sponsored by', 'wp-antispam' ); ?></p>
-			<a href="https://www.rocketsky.ch/" target="_blank" rel="noopener noreferrer" class="rktsky-antispam__sponsor-brand">Rocketsky<span aria-hidden="true">↗</span></a>
-			<p><?php esc_html_e( 'WP Antispam is open source. Rocketsky supports its development.', 'wp-antispam' ); ?></p>
-		</div>
-		<span class="rktsky-antispam__sponsor-orbit" aria-hidden="true"><span></span></span>
+		<p class="rktsky-antispam__eyebrow"><?php esc_html_e( 'Developed and sponsored by', 'wp-antispam' ); ?></p>
+		<a href="https://www.rocketsky.ch/" target="_blank" rel="noopener noreferrer" class="rktsky-antispam__sponsor-brand">Rocketsky<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10" /></svg></a>
 	</div>
 	<div class="rktsky-antispam__sponsor rktsky-antispam__sponsor--speo">
-		<p class="rktsky-antispam__eyebrow"><?php esc_html_e( 'Sponsored product', 'wp-antispam' ); ?></p>
-		<img src="<?php echo esc_url( plugins_url( 'assets/branding/speo-logo.svg', RKTSKY_ANTISPAM_FILE ) ); ?>" width="144" height="40" alt="Speo" />
-		<p><?php esc_html_e( 'Website analytics by Rocketsky.', 'wp-antispam' ); ?></p>
-		<a href="https://www.speo.ch" target="_blank" rel="noopener noreferrer" class="rktsky-antispam__sponsor-link"><?php esc_html_e( 'Explore Speo', 'wp-antispam' ); ?><span aria-hidden="true"> ↗</span></a>
+		<div>
+			<p class="rktsky-antispam__eyebrow"><?php esc_html_e( 'Sponsored product', 'wp-antispam' ); ?></p>
+			<img src="<?php echo esc_url( plugins_url( 'assets/branding/speo-logo.svg', RKTSKY_ANTISPAM_FILE ) ); ?>" width="108" height="30" alt="Speo" />
+			<p><?php esc_html_e( 'Website analytics by Rocketsky.', 'wp-antispam' ); ?></p>
+		</div>
+		<a href="https://www.speo.ch" target="_blank" rel="noopener noreferrer" class="rktsky-antispam__sponsor-link"><span><?php esc_html_e( 'Explore Speo', 'wp-antispam' ); ?></span><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10" /></svg></a>
 	</div>
-</aside>
+</footer>
