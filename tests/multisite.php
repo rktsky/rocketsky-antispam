@@ -239,7 +239,7 @@ try {
 			update_option( Settings::OPTION, $options );
 			( new Store() )->record( 'cf7', 'missing' );
 			( new Quarantine( new Settings() ) )->capture( 'cf7', 'network', 'honeypot', array( 'Message' => 'Synthetic private site-A message' ), 'synthetic-network@example.invalid' );
-			return $wpdb->get_row( "SELECT * FROM {$wpdb->prefix}rktsky_antispam_quarantine LIMIT 1", ARRAY_A );
+			return $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i LIMIT 1', $wpdb->prefix . 'rktsky_antispam_quarantine' ), ARRAY_A );
 		}
 	);
 	rktsky_antispam_network_expect( is_array( $payload ), 'Site-A native encrypted capture failed.' );
@@ -247,7 +247,7 @@ try {
 		$site_b,
 		static function () use ( $payload ) {
 			global $wpdb;
-			rktsky_antispam_network_expect( 0 === (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}rktsky_antispam_stats" ), 'A site read another site\'s aggregate records.' );
+			rktsky_antispam_network_expect( 0 === (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i', $wpdb->prefix . 'rktsky_antispam_stats' ) ), 'A site read another site\'s aggregate records.' );
 			rktsky_antispam_network_expect( null === ( new Quarantine( new Settings() ) )->read( (int) $payload['id'] ), 'A site read another site\'s quarantined object.' );
 			$copy = $payload;
 			unset( $copy['id'] );

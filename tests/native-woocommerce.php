@@ -248,8 +248,8 @@ add_filter(
 );
 $before_orders     = rktsky_antispam_woo_orders();
 $before_users      = get_users( array( 'fields' => 'ID' ) );
-$before_tokens     = (int) $GLOBALS['wpdb']->get_var( "SELECT COUNT(*) FROM {$GLOBALS['wpdb']->prefix}rktsky_antispam_tokens" );
-$before_quarantine = (int) $GLOBALS['wpdb']->get_var( "SELECT COUNT(*) FROM {$GLOBALS['wpdb']->prefix}rktsky_antispam_quarantine" );
+$before_tokens     = (int) $GLOBALS['wpdb']->get_var( $GLOBALS['wpdb']->prepare( 'SELECT COUNT(*) FROM %i', $GLOBALS['wpdb']->prefix . 'rktsky_antispam_tokens' ) );
+$before_quarantine = (int) $GLOBALS['wpdb']->get_var( $GLOBALS['wpdb']->prepare( 'SELECT COUNT(*) FROM %i', $GLOBALS['wpdb']->prefix . 'rktsky_antispam_quarantine' ) );
 $email             = 'synthetic-woo-' . strtolower( $rktsky_case ) . '-' . wp_generate_password( 8, false, false ) . '@example.invalid';
 
 try {
@@ -461,9 +461,9 @@ try {
 		if ( 0 === $GLOBALS['rktsky_woo_payments'] ) {
 			rktsky_antispam_woo_expect( $before_orders === rktsky_antispam_woo_orders(), 'Rejected/maintenance Store API request created an order.' ); }
 	}
-	rktsky_antispam_woo_expect( $before_quarantine === (int) $GLOBALS['wpdb']->get_var( "SELECT COUNT(*) FROM {$GLOBALS['wpdb']->prefix}rktsky_antispam_quarantine" ), 'WooCommerce copied registration/checkout data into quarantine.' );
+	rktsky_antispam_woo_expect( $before_quarantine === (int) $GLOBALS['wpdb']->get_var( $GLOBALS['wpdb']->prepare( 'SELECT COUNT(*) FROM %i', $GLOBALS['wpdb']->prefix . 'rktsky_antispam_quarantine' ) ), 'WooCommerce copied registration/checkout data into quarantine.' );
 	if ( in_array( $rktsky_case, array( 'classic_update', 'classic_bad_nonce', 'register_bad_nonce', 'pay_bad_nonce', 'store_updates', 'store_pay_bad_key' ), true ) ) {
-		rktsky_antispam_woo_expect( $before_tokens === (int) $GLOBALS['wpdb']->get_var( "SELECT COUNT(*) FROM {$GLOBALS['wpdb']->prefix}rktsky_antispam_tokens" ), 'A non-final/unauthorized native request consumed a local proof.' );
+		rktsky_antispam_woo_expect( $before_tokens === (int) $GLOBALS['wpdb']->get_var( $GLOBALS['wpdb']->prepare( 'SELECT COUNT(*) FROM %i', $GLOBALS['wpdb']->prefix . 'rktsky_antispam_tokens' ) ), 'A non-final/unauthorized native request consumed a local proof.' );
 	}
 	echo 'PASS: ' . $rktsky_case . "\n";
 } finally {
