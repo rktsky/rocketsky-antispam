@@ -146,3 +146,114 @@
 	.rktsky-antispam :is(a, button, input, summary):focus-visible { outline-color: Highlight; }
 	.rktsky-antispam__shield { display: none; }
 }
+/** Ordinary links preserve deep linking and browser navigation without JavaScript. */
+.rktsky-antispam__tabs { display: flex; gap: 24px; margin-bottom: 26px; border-bottom: 1px solid var(--rktsky-line); }
+.rktsky-antispam__tabs a { position: relative; padding: 0 0 12px; color: var(--rktsky-muted); font-size: 13px; font-weight: 600; text-decoration: none; }
+.rktsky-antispam__tabs a[aria-current="page"] { color: var(--rktsky-ink); }
+.rktsky-antispam__tabs a[aria-current="page"]::after { position: absolute; bottom: -1px; right: 0; left: 0; height: 3px; background: var(--rktsky-purple); content: ""; }
+.rktsky-antispam__page-heading { max-width: 720px; margin: 32px 0 24px; }
+.rktsky-antispam__page-heading h2 { font-size: 30px; }
+.rktsky-antispam__page-heading > p:last-child { margin-top: 14px; color: var(--rktsky-muted); font-size: 13px; }
+.rktsky-antispam__quarantine-settings { margin-bottom: 32px; }
+.rktsky-antispam__quarantine-controls { display: grid; grid-template-columns: minmax(0, 1fr) 240px; gap: 32px; align-items: start; }
+.rktsky-antispam__quarantine-controls .rktsky-antispam__inline-check, .rktsky-antispam__quarantine-controls .rktsky-antispam__field { margin-top: 0; }
+.rktsky-antispam__quarantine-controls .rktsky-antispam__inline-check { font-size: 14px; font-weight: 650; }
+.rktsky-antispam__quarantine-controls .description { max-width: 700px; margin-top: 12px; }
+.rktsky-antispam .rktsky-antispam__quarantine-disclosure { margin-top: 22px; border-left: 3px solid #c7bce0; background: #f7f5fb; padding: 13px 16px; color: #5b5266; font-size: 12px; }
+.rktsky-antispam__quarantine-save { display: flex; justify-content: space-between; align-items: center; gap: 24px; margin-top: 24px; }
+.rktsky-antispam__quarantine-save > a { font-size: 12px; }
+.rktsky-antispam__quarantine-empty { padding: 32px; }
+.rktsky-antispam__quarantine-empty h3 { margin: 0 0 10px; font-size: 18px; }
+.rktsky-antispam__quarantine-empty p { color: var(--rktsky-muted); font-size: 13px; }
+.rktsky-antispam__quarantine-table-wrap { max-width: 100%; border: 1px solid var(--rktsky-line); border-radius: 12px; background: var(--rktsky-paper); overflow: auto; }
+.rktsky-antispam__quarantine-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; }
+.rktsky-antispam__quarantine-table th { padding: 13px 18px; background: #faf9fb; color: var(--rktsky-muted); font-size: 11px; font-weight: 600; }
+.rktsky-antispam__quarantine-table td { padding: 16px 18px; border-top: 1px solid #eeedf0; vertical-align: top; overflow-wrap: anywhere; }
+.rktsky-antispam__quarantine-table .button { font-size: 12px; }
+.rktsky-antispam__mobile-label { display: none; }
+.rktsky-antispam__pagination { display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin: 20px 0 36px; font-size: 12px; }
+.rktsky-antispam__back-link { display: inline-block; margin: 4px 0 24px; font-size: 12px; }
+.rktsky-antispam__record { margin-bottom: 32px; }
+.rktsky-antispam__record > h2 + p { max-width: 790px; }
+.rktsky-antispam__record-meta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin: 26px 0 32px; padding: 20px 0; border-top: 1px solid var(--rktsky-line); border-bottom: 1px solid var(--rktsky-line); font-size: 12px; }
+.rktsky-antispam__record-meta dt { margin-bottom: 5px; color: var(--rktsky-muted); font-size: 11px; }
+.rktsky-antispam__record-meta dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+.rktsky-antispam__record h3 { font-size: 16px; margin: 0 0 8px; }
+.rktsky-antispam .rktsky-antispam__record-note { color: var(--rktsky-muted); font-size: 12px; }
+.rktsky-antispam__record-fields { margin: 24px 0 32px; }
+.rktsky-antispam__record-fields > div { padding: 18px 0; border-top: 1px solid #eeedf0; }
+.rktsky-antispam__record-fields dt { margin-bottom: 8px; font-size: 12px; font-weight: 650; overflow-wrap: anywhere; }
+.rktsky-antispam__record-fields dd { margin: 0; padding: 15px; border: 1px solid #e6e2eb; border-radius: 7px; background: #faf9fb; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13px; }
+.rktsky-antispam__record-actions { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-top: 20px; border-top: 1px solid var(--rktsky-line); }
+.rktsky-antispam__record-actions p { max-width: 650px; font-size: 12px; color: var(--rktsky-muted); }
+.rktsky-antispam .rktsky-antispam__danger-button { color: #a32937; border-color: #bc8e95; background: #fff; white-space: normal; }
+.rktsky-antispam__privacy .rktsky-antispam__text-link + .rktsky-antispam__text-link { display: block; margin-top: 12px; }
+@media (max-width: 782px) {
+	.rktsky-antispam__quarantine-controls { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+	.rktsky-antispam__quarantine-save, .rktsky-antispam__record-actions { align-items: stretch; flex-direction: column; gap: 16px; }
+	.rktsky-antispam__record-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+	.rktsky-antispam__quarantine-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+	.rktsky-antispam__quarantine-table, .rktsky-antispam__quarantine-table tbody { display: block; }
+	.rktsky-antispam__quarantine-table tr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px 20px; padding: 18px; }
+	.rktsky-antispam__quarantine-table tr + tr { border-top: 1px solid var(--rktsky-line); }
+	.rktsky-antispam__quarantine-table td { display: block; padding: 0; border: 0; }
+	.rktsky-antispam__mobile-label { display: block; margin-bottom: 3px; color: var(--rktsky-muted); font-size: 10px; }
+	.rktsky-antispam__record-actions .button { width: 100%; }
+}
+@media (max-width: 390px) {
+	.rktsky-antispam__record-meta { grid-template-columns: minmax(0, 1fr); }
+	.rktsky-antispam__quarantine-table tr { grid-template-columns: minmax(0, 1fr); }
+	.rktsky-antispam__page-heading h2 { font-size: 25px; }
+}
+/** Keep optional processing decisions visible beside their actual controls. */
+.rktsky-antispam__mode { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 32px; align-items: center; padding: 21px 24px; margin-bottom: 24px; border: 1px solid #d5cce6; background: #f8f6fc; border-radius: 12px; }
+.rktsky-antispam__mode .rktsky-antispam__inline-check { margin: 0; color: var(--rktsky-ink); font-size: 14px; font-weight: 650; }
+.rktsky-antispam__mode p { color: #655a73; font-size: 11px; }
+.rktsky-antispam__mode div > p { margin: 10px 0 0 30px; }
+.rktsky-antispam__mode > p { max-width: 330px; }
+.rktsky-antispam__rule-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+.rktsky-antispam__rule-side { display: grid; gap: 24px; }
+.rktsky-antispam__field textarea, .rktsky-antispam__field > input[type="text"], .rktsky-antispam__field select { width: 100%; max-width: 100%; border-color: #a29ba9; border-radius: 6px; padding: 7px 9px; color: var(--rktsky-ink); font-size: 13px; }
+.rktsky-antispam__field textarea { min-height: 100px; resize: vertical; line-height: 1.55; }
+.rktsky-antispam__field select { min-height: 38px; }
+.rktsky-antispam__advanced { margin-top: 24px; padding-top: 18px; border-top: 1px solid #eeedf0; font-size: 12px; }
+.rktsky-antispam__advanced .rktsky-antispam__field { margin-top: 16px; }
+.rktsky-antispam__language-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; padding: 0; }
+.rktsky-antispam__language-choices legend { margin-bottom: 14px; font-weight: 600; font-size: 12px; }
+.rktsky-antispam__language-choices label { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+.rktsky-antispam [data-rk-optional-processing] { min-width: 0; margin: 0; padding: 0; border: 0; }
+.rktsky-antispam [data-rk-optional-processing]:disabled { opacity: .55; }
+.rktsky-antispam .rktsky-antispam__mode-hint { margin-top: 18px; margin-bottom: 14px; color: #675476; font-size: 11px; }
+.rktsky-antispam .rktsky-antispam__rules-form { margin-bottom: 36px; }
+@media (max-width: 900px) {
+	.rktsky-antispam__mode, .rktsky-antispam__rule-grid { grid-template-columns: minmax(0, 1fr); }
+	.rktsky-antispam__mode { gap: 12px; }
+	.rktsky-antispam__mode > p { max-width: none; padding-left: 30px; }
+}
+@media (max-width: 390px) {
+	.rktsky-antispam__mode { padding: 18px; }
+	.rktsky-antispam__language-choices { grid-template-columns: minmax(0, 1fr); }
+}
+/** Reviewed accuracy is separate from the count of operational rejections. */
+.rktsky-antispam__quality { margin-top: 28px; }
+.rktsky-antispam__quality-basis { margin-top: 12px; padding: 18px; border: 1px solid var(--rktsky-line); border-radius: 10px; background: var(--rktsky-paper); }
+.rktsky-antispam__quality-basis > p { color: var(--rktsky-muted); font-size: 12px; }
+.rktsky-antispam__quality-basis .rktsky-antispam__reasons { padding: 0; }
+.rktsky-antispam__review { margin: 24px 0; padding: 22px; border: 1px solid #d5cce6; border-radius: 10px; background: #f8f6fc; }
+.rktsky-antispam__review p { color: #655a73; font-size: 12px; }
+.rktsky-antispam .rktsky-antispam__review-status { margin-top: 12px; font-weight: 650; color: var(--rktsky-ink); }
+.rktsky-antispam__review-buttons { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+@media (max-width: 580px) {
+	.rktsky-antispam__quality .rktsky-antispam__metric { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 2px 12px; }
+	.rktsky-antispam__quality .rktsky-antispam__metric strong { margin: 0; font-size: 25px; }
+	.rktsky-antispam__quality .rktsky-antispam__metric p { grid-column: 1 / -1; }
+	.rktsky-antispam__review { padding: 18px; }
+}
+.rktsky-antispam .rktsky-antispam__quality-period { margin: -4px 0 12px; color: var(--rktsky-muted); font-size: 11px; }
+.rktsky-antispam__report-fields { display: grid; grid-template-columns: 180px minmax(0, 1fr) 210px; gap: 24px; max-width: 100%; }
+.rktsky-antispam__delivered-report .button { margin-top: 18px; }
+@media (max-width: 580px) {
+	.rktsky-antispam__report-fields { grid-template-columns: minmax(0, 1fr); gap: 0; }
+}
+.rktsky-antispam .rktsky-antispam__queue-note { margin: -6px 0 22px; max-width: 850px; color: var(--rktsky-muted); font-size: 12px; }
+.rktsky-antispam .rktsky-antispam__quality-privacy { margin: 0 0 15px; padding: 10px 13px; border-left: 3px solid #c7bce0; background: #f8f6fc; color: #655a73; font-size: 11px; }

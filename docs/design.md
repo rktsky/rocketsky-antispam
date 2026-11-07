@@ -53,3 +53,25 @@ Desktop and narrow screenshots of the actual administration screen were visually
 reviewed. The native fixture used a synthetic administrator and no production
 data. This is desktop browser automation; touch devices, real Safari/Edge,
 screen readers and user testing remain unverified.
+
+## Extended experience, 0.2.0
+
+The product now uses linked Overview, Rules and Quarantine views under the same
+Settings entry. Native forms work without the optional administration script;
+JavaScript only updates the visual availability of privacy-locked options.
+Server-side settings normalization enforces those locks independently.
+
+Quality results are separate from operational rejection counts. They show their
+ninety-day reviewed dataset, pending cases and missing denominators explicitly.
+Quarantine details offer classification and deletion through separate POST
+controls, with no automatic publishing or mail resend. Existing native spam
+comments stay in WordPress's own moderation queue to avoid duplicate contents
+and quality observations. Stable manual case references support providers with
+no linked local inbox entry; references can be removed without altering the
+original provider record.
+
+The complete new experience was checked in English, Swiss German, French,
+Italian and Spanish using native WordPress in Firefox at 320, 390, 768 and 1440
+CSS pixels. Labels, expanded explanations, privacy locks, review corrections,
+POST/nonce failures and narrow-layout overflow were included. These are desktop
+browser runs and do not establish real mobile-device or screen-reader coverage.
