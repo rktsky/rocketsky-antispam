@@ -57,9 +57,9 @@ final class Guard {
 	 *
 	 * @since 0.1.0
 	 * @since 0.2.0 Receives an optional local content-rule service.
-	 * @param Settings $settings Validated settings.
-	 * @param Token    $token Token protocol.
-	 * @param Store    $store Durable replay ledger.
+	 * @param Settings          $settings Validated settings.
+	 * @param Token             $token Token protocol.
+	 * @param Store             $store Durable replay ledger.
 	 * @param ContentRules|null $rules Optional bounded local content policy.
 	 * @return void
 	 */
@@ -67,7 +67,7 @@ final class Guard {
 		$this->settings = $settings;
 		$this->token    = $token;
 		$this->store    = $store;
-		$this->rules = $rules;
+		$this->rules    = $rules;
 	}
 
 	/**
@@ -77,9 +77,9 @@ final class Guard {
 	 *
 	 * @since 0.1.0
 	 * @since 0.2.0 Evaluates allowlisted fields through the optional local content policy.
-	 * @param string $provider Expected integration.
-	 * @param string $form_id Expected native form ID.
-	 * @param array  $posted Unslashed submitted controls; never an authorization source.
+	 * @param string               $provider Expected integration.
+	 * @param string               $form_id Expected native form ID.
+	 * @param array                $posted Unslashed submitted controls; never an authorization source.
 	 * @param array<string,string> $fields Whitelisted native text fields for local rules.
 	 * @return string Empty for a pass, otherwise a fixed internal reason code.
 	 */
@@ -108,7 +108,10 @@ final class Guard {
 		}
 		$day = gmdate( 'Y-m-d' );
 		$this->store->record( $provider, $reason, $day );
-		$this->receipts[ hash( 'sha256', $provider . '|' . $form_id . '|' . $value ) ] = array( 'reason' => $reason, 'day' => $day );
+		$this->receipts[ hash( 'sha256', $provider . '|' . $form_id . '|' . $value ) ] = array(
+			'reason' => $reason,
+			'day'    => $day,
+		);
 		return $reason;
 	}
 
@@ -132,13 +135,13 @@ final class Guard {
 	 * @since 0.2.0
 	 * @param string $provider Known provider.
 	 * @param string $form_id Native form ID.
-	 * @param array $posted Raw protection controls only; contents are ignored here.
+	 * @param array  $posted Raw protection controls only; contents are ignored here.
 	 * @return void
 	 */
 	public function observe_spam( string $provider, string $form_id, array $posted ): void {
 		$token = $posted['rktsky_antispam_token'] ?? '';
 		$token = is_string( $token ) && strlen( $token ) <= 400 ? $token : '';
-		$key = hash( 'sha256', $provider . '|' . $form_id . '|' . $token );
+		$key   = hash( 'sha256', $provider . '|' . $form_id . '|' . $token );
 		if ( isset( $this->receipts[ $key ] ) ) {
 			if ( '' === $this->receipts[ $key ]['reason'] ) {
 				$this->store->reclassify( $provider, $this->receipts[ $key ]['day'] );
@@ -147,7 +150,10 @@ final class Guard {
 			return;
 		}
 		$this->store->record( $provider, 'native_spam' );
-		$this->receipts[ $key ] = array( 'reason' => 'native_spam', 'day' => gmdate( 'Y-m-d' ) );
+		$this->receipts[ $key ] = array(
+			'reason' => 'native_spam',
+			'day'    => gmdate( 'Y-m-d' ),
+		);
 	}
 
 	/**

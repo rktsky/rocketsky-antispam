@@ -23,13 +23,13 @@ final class Plugin {
 	 * @return void
 	 */
 	public static function boot(): void {
-		$settings = new Settings();
-		$token    = new Token();
-		$store    = new Store();
+		$settings   = new Settings();
+		$token      = new Token();
+		$store      = new Store();
 		$quarantine = new Quarantine( $settings );
-		$feedback = new Feedback();
-		$guard    = new Guard( $settings, $token, $store, new ContentRules( $settings, new Language(), new Country( $settings ) ) );
-		$fields   = new Fields( $settings, $token );
+		$feedback   = new Feedback();
+		$guard      = new Guard( $settings, $token, $store, new ContentRules( $settings, new Language(), new Country( $settings ) ) );
+		$fields     = new Fields( $settings, $token );
 		( new Integrations( $settings, $guard, $fields, $quarantine, $feedback ) )->register();
 		( new Admin( $settings, $store, $quarantine, $feedback ) )->register();
 		$quarantine->register();

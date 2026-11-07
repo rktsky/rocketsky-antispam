@@ -41,9 +41,9 @@ final class Language {
 			'nl' => 'het een deze dit dat zijn niet voor met van wij jullie mijn jouw onze ook maar als omdat welke worden hebben heel meer bedankt naar',
 			'pt' => 'os as uma uns umas que para por com não como mas dos das isto este esta estes estas muito obrigado quando porque nós nosso sobre sem',
 		);
-		$scores = array();
+		$scores       = array();
 		foreach ( $vocabularies as $language => $vocabulary ) {
-			$hits = array_intersect( array_unique( $words ), explode( ' ', $vocabulary ) );
+			$hits                = array_intersect( array_unique( $words ), explode( ' ', $vocabulary ) );
 			$scores[ $language ] = count( $hits );
 		}
 		arsort( $scores );

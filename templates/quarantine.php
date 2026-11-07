@@ -18,17 +18,21 @@
 defined( 'ABSPATH' ) || exit;
 require __DIR__ . '/admin-header.php';
 ?>
-	<?php if ( isset( $_GET['record-deleted'] ) && '1' === $_GET['record-deleted'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only fixed success notice, never a mutation.
+	<?php
+	if ( isset( $_GET['record-deleted'] ) && '1' === $_GET['record-deleted'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only fixed success notice, never a mutation.
 		?>
 		<div class="notice notice-success inline"><p><?php esc_html_e( 'Quarantine record deleted.', 'wp-antispam' ); ?></p></div>
-	<?php elseif ( isset( $_GET['record-deleted'] ) && '0' === $_GET['record-deleted'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only fixed failure notice, never a mutation.
+		<?php
+	elseif ( isset( $_GET['record-deleted'] ) && '0' === $_GET['record-deleted'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only fixed failure notice, never a mutation.
 		?>
 		<div class="notice notice-error inline"><p><?php esc_html_e( 'The record is no longer available or could not be deleted.', 'wp-antispam' ); ?></p></div>
 	<?php endif; ?>
-	<?php if ( isset( $_GET['review-updated'] ) && '1' === $_GET['review-updated'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only fixed review notice.
+	<?php
+	if ( isset( $_GET['review-updated'] ) && '1' === $_GET['review-updated'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only fixed review notice.
 		?>
 		<div class="notice notice-success inline"><p><?php esc_html_e( 'Review saved. The submission remains in quarantine.', 'wp-antispam' ); ?></p></div>
-	<?php elseif ( isset( $_GET['review-updated'] ) && '0' === $_GET['review-updated'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only fixed failure notice.
+		<?php
+	elseif ( isset( $_GET['review-updated'] ) && '0' === $_GET['review-updated'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only fixed failure notice.
 		?>
 		<div class="notice notice-error inline"><p><?php esc_html_e( 'This record could not be reviewed. It may have expired or have no tracked prediction.', 'wp-antispam' ); ?></p></div>
 	<?php endif; ?>
@@ -62,7 +66,10 @@ require __DIR__ . '/admin-header.php';
 				<?php endif; ?>
 				<?php if ( null !== $review_status ) : ?>
 					<section class="rktsky-antispam__review" aria-labelledby="rktsky-review-heading"><h3 id="rktsky-review-heading"><?php esc_html_e( 'Review this decision', 'wp-antispam' ); ?></h3><p><?php esc_html_e( 'Your assessment updates the reviewed metrics and keeps this quarantined entry in place.', 'wp-antispam' ); ?></p>
-						<?php if ( ! empty( $review_status['reviewed'] ) ) : ?><p class="rktsky-antispam__review-status"><?php echo esc_html( ! empty( $review_status['actual_spam'] ) ? __( 'Current assessment: spam', 'wp-antispam' ) : __( 'Current assessment: normal message', 'wp-antispam' ) ); ?></p><?php endif; ?>
+						<?php
+						if ( ! empty( $review_status['reviewed'] ) ) :
+							?>
+							<p class="rktsky-antispam__review-status"><?php echo esc_html( ! empty( $review_status['actual_spam'] ) ? __( 'Current assessment: spam', 'wp-antispam' ) : __( 'Current assessment: normal message', 'wp-antispam' ) ); ?></p><?php endif; ?>
 						<form action="<?php echo esc_url( $delete_url ); ?>" method="post"><input type="hidden" name="action" value="rktsky_antispam_review" /><input type="hidden" name="entry" value="<?php echo esc_attr( (string) $entry['id'] ); ?>" /><?php wp_nonce_field( 'rktsky_antispam_review_' . (int) $entry['id'] ); ?><div class="rktsky-antispam__review-buttons"><button type="submit" name="assessment" value="spam" class="button"><?php esc_html_e( 'Confirm spam', 'wp-antispam' ); ?></button><button type="submit" name="assessment" value="normal" class="button"><?php esc_html_e( 'Not spam', 'wp-antispam' ); ?></button></div></form>
 					</section>
 				<?php endif; ?>
@@ -87,7 +94,11 @@ require __DIR__ . '/admin-header.php';
 		<form action="<?php echo esc_url( admin_url( 'options.php' ) ); ?>" method="post" class="rktsky-antispam__card rktsky-antispam__quarantine-settings">
 			<?php settings_fields( 'rktsky_antispam' ); ?>
 			<?php require __DIR__ . '/privacy-mode.php'; ?>
-			<p class="rktsky-antispam__mode-hint" data-rk-mode-hint <?php if ( ! $privacy_mode ) : ?>hidden<?php endif; ?>><?php esc_html_e( 'Turn off privacy-conscious mode to enable quarantine.', 'wp-antispam' ); ?></p>
+			<p class="rktsky-antispam__mode-hint" data-rk-mode-hint
+			<?php
+			if ( ! $privacy_mode ) :
+				?>
+				hidden<?php endif; ?>><?php esc_html_e( 'Turn off privacy-conscious mode to enable quarantine.', 'wp-antispam' ); ?></p>
 			<input type="hidden" name="<?php echo esc_attr( \Rktsky\Antispam\Settings::OPTION ); ?>[quarantine_enabled]" value="0" />
 			<fieldset data-rk-optional-processing <?php disabled( $privacy_mode ); ?>>
 			<legend class="screen-reader-text"><?php esc_html_e( 'Quarantine storage configuration', 'wp-antispam' ); ?></legend>
@@ -114,9 +125,15 @@ require __DIR__ . '/admin-header.php';
 				</tbody></table></div>
 				<?php if ( (int) $listing['pages'] > 1 ) : ?>
 					<nav class="rktsky-antispam__pagination" aria-label="<?php esc_attr_e( 'Quarantine pages', 'wp-antispam' ); ?>">
-						<?php if ( (int) $listing['page'] > 1 ) : ?><a class="button" href="<?php echo esc_url( add_query_arg( 'paged', (int) $listing['page'] - 1, $quarantine_url ) ); ?>"><?php esc_html_e( 'Previous', 'wp-antispam' ); ?></a><?php endif; ?>
+						<?php
+						if ( (int) $listing['page'] > 1 ) :
+							?>
+							<a class="button" href="<?php echo esc_url( add_query_arg( 'paged', (int) $listing['page'] - 1, $quarantine_url ) ); ?>"><?php esc_html_e( 'Previous', 'wp-antispam' ); ?></a><?php endif; ?>
 						<span><?php echo esc_html( sprintf( /* translators: 1: current page number, 2: total pages. */ __( 'Page %1$d of %2$d', 'wp-antispam' ), (int) $listing['page'], (int) $listing['pages'] ) ); ?></span>
-						<?php if ( (int) $listing['page'] < (int) $listing['pages'] ) : ?><a class="button" href="<?php echo esc_url( add_query_arg( 'paged', (int) $listing['page'] + 1, $quarantine_url ) ); ?>"><?php esc_html_e( 'Next', 'wp-antispam' ); ?></a><?php endif; ?>
+						<?php
+						if ( (int) $listing['page'] < (int) $listing['pages'] ) :
+							?>
+							<a class="button" href="<?php echo esc_url( add_query_arg( 'paged', (int) $listing['page'] + 1, $quarantine_url ) ); ?>"><?php esc_html_e( 'Next', 'wp-antispam' ); ?></a><?php endif; ?>
 					</nav>
 				<?php endif; ?>
 			<?php endif; ?>

@@ -62,17 +62,17 @@ final class Admin {
 	 *
 	 * @since 0.1.0
 	 * @since 0.2.0 Accepts the encrypted quarantine and reviewed-outcome services.
-	 * @param Settings $settings Site settings service.
-	 * @param Store    $store Aggregate statistics repository.
+	 * @param Settings        $settings Site settings service.
+	 * @param Store           $store Aggregate statistics repository.
 	 * @param Quarantine|null $quarantine Local rejected-submission repository; null keeps the overview available during bootstrap.
 	 * @param Feedback|null   $feedback Reviewed-outcome service, without submission content.
 	 * @return void
 	 */
 	public function __construct( Settings $settings, Store $store, ?Quarantine $quarantine = null, ?Feedback $feedback = null ) {
-		$this->settings = $settings;
-		$this->store    = $store;
+		$this->settings   = $settings;
+		$this->store      = $store;
 		$this->quarantine = $quarantine;
-		$this->feedback = $feedback;
+		$this->feedback   = $feedback;
 	}
 
 	/**
@@ -119,7 +119,16 @@ final class Admin {
 			return;
 		}
 		wp_enqueue_style( 'rktsky-antispam-admin', plugins_url( 'assets/admin.css', RKTSKY_ANTISPAM_FILE ), array(), RKTSKY_ANTISPAM_VERSION );
-		wp_enqueue_script( 'rktsky-antispam-admin', plugins_url( 'assets/admin.js', RKTSKY_ANTISPAM_FILE ), array(), RKTSKY_ANTISPAM_VERSION, array( 'in_footer' => true, 'strategy' => 'defer' ) );
+		wp_enqueue_script(
+			'rktsky-antispam-admin',
+			plugins_url( 'assets/admin.js', RKTSKY_ANTISPAM_FILE ),
+			array(),
+			RKTSKY_ANTISPAM_VERSION,
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
 	}
 
 	/**
@@ -144,22 +153,34 @@ final class Admin {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
-		$options      = $this->settings->all();
+		$options       = $this->settings->all();
 		$requested_tab = isset( $_GET['tab'] ) && is_string( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only, fixed allowlisted view selection.
-		$tab = in_array( $requested_tab, array( 'rules', 'quarantine' ), true ) ? $requested_tab : 'overview';
-		$base_url     = admin_url( 'options-general.php?page=wp-antispam' );
-		$tabs         = array( 'overview' => __( 'Overview', 'wp-antispam' ), 'rules' => __( 'Rules', 'wp-antispam' ), 'quarantine' => __( 'Quarantine', 'wp-antispam' ) );
+		$tab           = in_array( $requested_tab, array( 'rules', 'quarantine' ), true ) ? $requested_tab : 'overview';
+		$base_url      = admin_url( 'options-general.php?page=wp-antispam' );
+		$tabs          = array(
+			'overview'   => __( 'Overview', 'wp-antispam' ),
+			'rules'      => __( 'Rules', 'wp-antispam' ),
+			'quarantine' => __( 'Quarantine', 'wp-antispam' ),
+		);
 		$reason_labels = $this->reason_labels();
-		$privacy_mode = ! array_key_exists( 'privacy_mode', $options ) || ! empty( $options['privacy_mode'] );
+		$privacy_mode  = ! array_key_exists( 'privacy_mode', $options ) || ! empty( $options['privacy_mode'] );
 		if ( 'rules' === $tab ) {
 			$rule_lists = array();
 			foreach ( array( 'spam_keywords', 'spam_patterns', 'countries', 'trusted_proxies' ) as $key ) {
-				$value = $options[ $key ] ?? '';
+				$value              = $options[ $key ] ?? '';
 				$rule_lists[ $key ] = is_array( $value ) ? implode( 'countries' === $key ? ', ' : "\n", $value ) : (string) $value;
 			}
-			$languages = array( 'de' => __( 'German', 'wp-antispam' ), 'en' => __( 'English', 'wp-antispam' ), 'fr' => __( 'French', 'wp-antispam' ), 'it' => __( 'Italian', 'wp-antispam' ), 'es' => __( 'Spanish', 'wp-antispam' ), 'nl' => __( 'Dutch', 'wp-antispam' ), 'pt' => __( 'Portuguese', 'wp-antispam' ) );
+			$languages            = array(
+				'de' => __( 'German', 'wp-antispam' ),
+				'en' => __( 'English', 'wp-antispam' ),
+				'fr' => __( 'French', 'wp-antispam' ),
+				'it' => __( 'Italian', 'wp-antispam' ),
+				'es' => __( 'Spanish', 'wp-antispam' ),
+				'nl' => __( 'Dutch', 'wp-antispam' ),
+				'pt' => __( 'Portuguese', 'wp-antispam' ),
+			);
 			$notification_address = get_option( 'admin_email', '' );
-			$country_available = class_exists( Country::class ) && ( new Country( $this->settings ) )->available();
+			$country_available    = class_exists( Country::class ) && ( new Country( $this->settings ) )->available();
 			require dirname( RKTSKY_ANTISPAM_FILE ) . '/templates/rules.php';
 			return;
 		}
@@ -167,18 +188,34 @@ final class Admin {
 			if ( null === $this->quarantine ) {
 				wp_die( esc_html__( 'Quarantine storage is unavailable.', 'wp-antispam' ), '', array( 'response' => 503 ) );
 			}
-			$entry_id = $this->query_id( 'entry' );
-			$entry = $entry_id > 0 ? $this->quarantine->read( $entry_id ) : null;
-			$review_status = $entry && $this->feedback ? $this->feedback->status( 'quarantine', (string) $entry_id ) : null;
-			$listing = $entry_id > 0 ? array() : $this->quarantine->listing( max( 1, $this->query_id( 'paged' ) ) );
-			$provider_labels = array( 'comments' => __( 'WordPress comments', 'wp-antispam' ), 'cf7' => 'Contact Form 7', 'gravityforms' => 'Gravity Forms', 'wpforms' => 'WPForms' );
-			$quarantine_url = add_query_arg( 'tab', 'quarantine', $base_url );
-			$delete_url = admin_url( 'admin-post.php' );
+			$entry_id        = $this->query_id( 'entry' );
+			$entry           = $entry_id > 0 ? $this->quarantine->read( $entry_id ) : null;
+			$review_status   = $entry && $this->feedback ? $this->feedback->status( 'quarantine', (string) $entry_id ) : null;
+			$listing         = $entry_id > 0 ? array() : $this->quarantine->listing( max( 1, $this->query_id( 'paged' ) ) );
+			$provider_labels = array(
+				'comments'     => __( 'WordPress comments', 'wp-antispam' ),
+				'cf7'          => 'Contact Form 7',
+				'gravityforms' => 'Gravity Forms',
+				'wpforms'      => 'WPForms',
+			);
+			$quarantine_url  = add_query_arg( 'tab', 'quarantine', $base_url );
+			$delete_url      = admin_url( 'admin-post.php' );
 			require dirname( RKTSKY_ANTISPAM_FILE ) . '/templates/quarantine.php';
 			return;
 		}
 		$summary      = $this->store->summary( 7 );
-		$quality = $this->feedback ? $this->feedback->metrics() : array( 'tp' => 0, 'fp' => 0, 'fn' => 0, 'tn' => 0, 'reviewed' => 0, 'pending' => 0, 'precision' => null, 'recall' => null, 'accuracy' => null, 'period_days' => 90 );
+		$quality      = $this->feedback ? $this->feedback->metrics() : array(
+			'tp'          => 0,
+			'fp'          => 0,
+			'fn'          => 0,
+			'tn'          => 0,
+			'reviewed'    => 0,
+			'pending'     => 0,
+			'precision'   => null,
+			'recall'      => null,
+			'accuracy'    => null,
+			'period_days' => 90,
+		);
 		$detected     = Integrations::detected();
 		$integrations = array(
 			'comments'     => array(
@@ -208,8 +245,8 @@ final class Admin {
 				++$active_count;
 			}
 		}
-		$privacy_url   = admin_url( 'options-privacy.php' );
-		$clear_url     = admin_url( 'admin-post.php' );
+		$privacy_url = admin_url( 'options-privacy.php' );
+		$clear_url   = admin_url( 'admin-post.php' );
 		require dirname( RKTSKY_ANTISPAM_FILE ) . '/templates/settings.php';
 	}
 
@@ -221,24 +258,24 @@ final class Admin {
 	 */
 	private function reason_labels(): array {
 		return array(
-			'honeypot'  => __( 'Honeypot filled', 'wp-antispam' ),
-			'missing'   => __( 'Missing protection token', 'wp-antispam' ),
-			'invalid'   => __( 'Invalid protection token', 'wp-antispam' ),
-			'expired'   => __( 'Expired protection token', 'wp-antispam' ),
-			'replay'    => __( 'Token already used', 'wp-antispam' ),
-			'too_fast'  => __( 'Submitted too quickly', 'wp-antispam' ),
-			'pingback'  => __( 'Trackback or pingback', 'wp-antispam' ),
-			'storage'   => __( 'Protection storage unavailable', 'wp-antispam' ),
-			'malformed' => __( 'Malformed protection fields', 'wp-antispam' ),
-			'context'   => __( 'Form does not match token', 'wp-antispam' ),
-			'rest'      => __( 'Unprotected comment request', 'wp-antispam' ),
-			'keyword'   => __( 'Blocked keyword', 'wp-antispam' ),
-			'bbcode'    => __( 'BBCode link markup', 'wp-antispam' ),
-			'pattern'   => __( 'Matched content pattern', 'wp-antispam' ),
+			'honeypot'      => __( 'Honeypot filled', 'wp-antispam' ),
+			'missing'       => __( 'Missing protection token', 'wp-antispam' ),
+			'invalid'       => __( 'Invalid protection token', 'wp-antispam' ),
+			'expired'       => __( 'Expired protection token', 'wp-antispam' ),
+			'replay'        => __( 'Token already used', 'wp-antispam' ),
+			'too_fast'      => __( 'Submitted too quickly', 'wp-antispam' ),
+			'pingback'      => __( 'Trackback or pingback', 'wp-antispam' ),
+			'storage'       => __( 'Protection storage unavailable', 'wp-antispam' ),
+			'malformed'     => __( 'Malformed protection fields', 'wp-antispam' ),
+			'context'       => __( 'Form does not match token', 'wp-antispam' ),
+			'rest'          => __( 'Unprotected comment request', 'wp-antispam' ),
+			'keyword'       => __( 'Blocked keyword', 'wp-antispam' ),
+			'bbcode'        => __( 'BBCode link markup', 'wp-antispam' ),
+			'pattern'       => __( 'Matched content pattern', 'wp-antispam' ),
 			'pattern_limit' => __( 'Content rule processing limit', 'wp-antispam' ),
-			'native_spam' => __( 'Native provider spam check', 'wp-antispam' ),
-			'language'  => __( 'Comment language rule', 'wp-antispam' ),
-			'country'   => __( 'Comment country rule', 'wp-antispam' ),
+			'native_spam'   => __( 'Native provider spam check', 'wp-antispam' ),
+			'language'      => __( 'Comment language rule', 'wp-antispam' ),
+			'country'       => __( 'Comment country rule', 'wp-antispam' ),
 		);
 	}
 
@@ -279,7 +316,16 @@ final class Admin {
 			wp_die( esc_html__( 'Quarantine storage is unavailable.', 'wp-antispam' ), '', array( 'response' => 503 ) );
 		}
 		$deleted = $this->quarantine->delete( (int) $entry_id );
-		wp_safe_redirect( add_query_arg( array( 'page' => 'wp-antispam', 'tab' => 'quarantine', 'record-deleted' => $deleted ? '1' : '0' ), admin_url( 'options-general.php' ) ) );
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'           => 'wp-antispam',
+					'tab'            => 'quarantine',
+					'record-deleted' => $deleted ? '1' : '0',
+				),
+				admin_url( 'options-general.php' )
+			)
+		);
 		exit;
 	}
 
@@ -299,15 +345,25 @@ final class Admin {
 		if ( ! isset( $_SERVER['REQUEST_METHOD'] ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
 			wp_die( esc_html__( 'This action requires a form submission.', 'wp-antispam' ), '', array( 'response' => 405 ) );
 		}
-		$entry_id = isset( $_POST['entry'] ) && is_string( $_POST['entry'] ) ? sanitize_text_field( wp_unslash( $_POST['entry'] ) ) : '';
+		$entry_id   = isset( $_POST['entry'] ) && is_string( $_POST['entry'] ) ? sanitize_text_field( wp_unslash( $_POST['entry'] ) ) : '';
 		$assessment = isset( $_POST['assessment'] ) && is_string( $_POST['assessment'] ) ? sanitize_key( wp_unslash( $_POST['assessment'] ) ) : '';
 		if ( ! preg_match( '/^[1-9][0-9]{0,8}$/D', $entry_id ) || ! in_array( $assessment, array( 'spam', 'normal' ), true ) ) {
 			wp_die( esc_html__( 'The quarantine record is unavailable.', 'wp-antispam' ), '', array( 'response' => 400 ) );
 		}
 		check_admin_referer( 'rktsky_antispam_review_' . $entry_id );
-		$entry = $this->quarantine ? $this->quarantine->read( (int) $entry_id ) : null;
+		$entry    = $this->quarantine ? $this->quarantine->read( (int) $entry_id ) : null;
 		$reviewed = null !== $entry && $this->feedback && $this->feedback->review( 'quarantine', $entry_id, 'spam' === $assessment );
-		wp_safe_redirect( add_query_arg( array( 'page' => 'wp-antispam', 'tab' => 'quarantine', 'entry' => $entry_id, 'review-updated' => $reviewed ? '1' : '0' ), admin_url( 'options-general.php' ) ) );
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'           => 'wp-antispam',
+					'tab'            => 'quarantine',
+					'entry'          => $entry_id,
+					'review-updated' => $reviewed ? '1' : '0',
+				),
+				admin_url( 'options-general.php' )
+			)
+		);
 		exit;
 	}
 
@@ -329,16 +385,24 @@ final class Admin {
 			wp_die( esc_html__( 'This action requires a form submission.', 'wp-antispam' ), '', array( 'response' => 405 ) );
 		}
 		check_admin_referer( 'rktsky_antispam_classify_delivered' );
-		$provider = isset( $_POST['provider'] ) && is_string( $_POST['provider'] ) ? sanitize_key( wp_unslash( $_POST['provider'] ) ) : '';
-		$reference = isset( $_POST['reference'] ) && is_string( $_POST['reference'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['reference'] ) ) ) : '';
+		$provider   = isset( $_POST['provider'] ) && is_string( $_POST['provider'] ) ? sanitize_key( wp_unslash( $_POST['provider'] ) ) : '';
+		$reference  = isset( $_POST['reference'] ) && is_string( $_POST['reference'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['reference'] ) ) ) : '';
 		$assessment = isset( $_POST['assessment'] ) && is_string( $_POST['assessment'] ) ? sanitize_key( wp_unslash( $_POST['assessment'] ) ) : '';
-		$valid = in_array( $provider, array( 'comments', 'cf7', 'gravityforms', 'wpforms' ), true ) && '' !== $reference && strlen( $reference ) <= 128 && in_array( $assessment, array( 'spam', 'normal', 'forget' ), true );
-		$recorded = false;
+		$valid      = in_array( $provider, array( 'comments', 'cf7', 'gravityforms', 'wpforms' ), true ) && '' !== $reference && strlen( $reference ) <= 128 && in_array( $assessment, array( 'spam', 'normal', 'forget' ), true );
+		$recorded   = false;
 		if ( $valid && $this->feedback ) {
 			$recorded = 'forget' === $assessment ? $this->feedback->forget_manual( $provider, $reference ) : $this->feedback->report_delivered( $provider, $reference, 'spam' === $assessment );
 		}
 		$notice = $recorded && 'forget' === $assessment ? 'reference-forgotten' : 'classification-saved';
-		wp_safe_redirect( add_query_arg( array( 'page' => 'wp-antispam', $notice => $recorded ? '1' : '0' ), admin_url( 'options-general.php' ) ) );
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'  => 'wp-antispam',
+					$notice => $recorded ? '1' : '0',
+				),
+				admin_url( 'options-general.php' )
+			)
+		);
 		exit;
 	}
 

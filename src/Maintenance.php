@@ -24,18 +24,25 @@ final class Maintenance {
 	 */
 	public static function run(): void {
 		$settings = new Settings();
-		$options = $settings->all();
+		$options  = $settings->all();
 		( new Quarantine( $settings ) )->cleanup();
 		if ( $options['comment_spam_days'] > 0 ) {
-			$comments = get_comments( array(
-				'status' => 'spam',
-				'type__in' => array( '', 'comment', 'review' ),
-				'number' => 100,
-				'fields' => 'ids',
-				'orderby' => 'comment_ID',
-				'order' => 'ASC',
-				'date_query' => array( array( 'column' => 'comment_date_gmt', 'before' => gmdate( 'Y-m-d H:i:s', time() - $options['comment_spam_days'] * DAY_IN_SECONDS ) ) ),
-			) );
+			$comments = get_comments(
+				array(
+					'status'     => 'spam',
+					'type__in'   => array( '', 'comment', 'review' ),
+					'number'     => 100,
+					'fields'     => 'ids',
+					'orderby'    => 'comment_ID',
+					'order'      => 'ASC',
+					'date_query' => array(
+						array(
+							'column' => 'comment_date_gmt',
+							'before' => gmdate( 'Y-m-d H:i:s', time() - $options['comment_spam_days'] * DAY_IN_SECONDS ),
+						),
+					),
+				)
+			);
 			foreach ( $comments as $id ) {
 				clean_comment_cache( $id );
 				if ( 'spam' === wp_get_comment_status( $id ) ) {
@@ -62,9 +69,9 @@ final class Maintenance {
 		if ( ! $options['notify_admin'] || $options['privacy_mode'] ) {
 			return;
 		}
-		$day = gmdate( 'Y-m-d', time() - DAY_IN_SECONDS );
+		$day      = gmdate( 'Y-m-d', time() - DAY_IN_SECONDS );
 		$activity = ( new Store() )->summary( 2 );
-		$blocked = 0;
+		$blocked  = 0;
 		foreach ( $activity['daily'] as $row ) {
 			if ( $day === $row['day'] ) {
 				$blocked = (int) $row['blocked'];
@@ -73,7 +80,7 @@ final class Maintenance {
 		if ( 0 === $blocked || ! is_email( get_option( 'admin_email' ) ) ) {
 			return;
 		}
-		$name = 'rktsky_antispam_digest_claim';
+		$name     = 'rktsky_antispam_digest_claim';
 		$previous = $wpdb->get_var( $wpdb->prepare( 'SELECT option_value FROM %i WHERE option_name=%s', $wpdb->options, $name ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- Fresh database state is required for the cross-process mail claim.
 		if ( is_string( $previous ) && $previous >= $day ) {
 			return;
@@ -89,6 +96,13 @@ final class Maintenance {
 			__( 'WP Antispam: daily rejection summary', 'wp-antispam' ),
 			sprintf( /* translators: 1: UTC date, 2: rejected submission count, 3: local settings URL. */ __( 'On %1$s (UTC), WP Antispam recorded %2$d rejected submissions. This includes technical verification failures and is not a measured spam detection accuracy. No visitor content is included in this email. Review the counts on your website: %3$s', 'wp-antispam' ), $day, $blocked, admin_url( 'options-general.php?page=wp-antispam' ) )
 		);
-		update_option( 'rktsky_antispam_digest_status', array( 'day' => $day, 'accepted_by_mailer' => true === $sent ), false );
+		update_option(
+			'rktsky_antispam_digest_status',
+			array(
+				'day'                => $day,
+				'accepted_by_mailer' => true === $sent,
+			),
+			false
+		);
 	}
 }

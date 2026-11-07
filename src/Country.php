@@ -86,7 +86,7 @@ final class Country {
 	 */
 	public static function valid_cidr( string $cidr ): bool {
 		$parts = explode( '/', $cidr );
-		$ip = @inet_pton( $parts[0] ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Invalid administrator input is a normal validation failure.
+		$ip    = @inet_pton( $parts[0] ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Invalid administrator input is a normal validation failure.
 		if ( false === $ip || count( $parts ) > 2 ) {
 			return false;
 		}
@@ -108,12 +108,12 @@ final class Country {
 				continue;
 			}
 			$parts = explode( '/', $network );
-			$base = inet_pton( $parts[0] );
+			$base  = inet_pton( $parts[0] );
 			if ( strlen( $address ) !== strlen( $base ) ) {
 				continue;
 			}
-			$bits = isset( $parts[1] ) ? (int) $parts[1] : strlen( $base ) * 8;
-			$bytes = intdiv( $bits, 8 );
+			$bits      = isset( $parts[1] ) ? (int) $parts[1] : strlen( $base ) * 8;
+			$bytes     = intdiv( $bits, 8 );
 			$remainder = $bits % 8;
 			if ( substr( $address, 0, $bytes ) === substr( $base, 0, $bytes ) && ( 0 === $remainder || ( ord( $address[ $bytes ] ) & ( 255 << ( 8 - $remainder ) ) ) === ( ord( $base[ $bytes ] ) & ( 255 << ( 8 - $remainder ) ) ) ) ) {
 				return true;

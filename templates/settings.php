@@ -20,14 +20,17 @@ defined( 'ABSPATH' ) || exit;
 	<?php if ( isset( $_GET['statistics-cleared'] ) && '1' === $_GET['statistics-cleared'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only static notice; this query value never triggers mutation or dynamic output. ?>
 		<div class="notice notice-success inline"><p><?php esc_html_e( 'Activity statistics deleted. Used tokens remain protected against reuse.', 'wp-antispam' ); ?></p></div>
 	<?php endif; ?>
-	<?php if ( isset( $_GET['classification-saved'] ) && '1' === $_GET['classification-saved'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only fixed report notice.
+	<?php
+	if ( isset( $_GET['classification-saved'] ) && '1' === $_GET['classification-saved'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only fixed report notice.
 		?>
 		<div class="notice notice-success inline"><p><?php esc_html_e( 'Classification saved. Reusing the same reference updates the existing case.', 'wp-antispam' ); ?></p></div>
-	<?php elseif ( isset( $_GET['classification-saved'] ) && '0' === $_GET['classification-saved'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only fixed failure notice.
+		<?php
+	elseif ( isset( $_GET['classification-saved'] ) && '0' === $_GET['classification-saved'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only fixed failure notice.
 		?>
 		<div class="notice notice-error inline"><p><?php esc_html_e( 'The case action could not be completed. Check the reference and try again.', 'wp-antispam' ); ?></p></div>
 	<?php endif; ?>
-	<?php if ( isset( $_GET['reference-forgotten'] ) && '1' === $_GET['reference-forgotten'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only fixed reference-removal notice.
+	<?php
+	if ( isset( $_GET['reference-forgotten'] ) && '1' === $_GET['reference-forgotten'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only fixed reference-removal notice.
 		?>
 		<div class="notice notice-success inline"><p><?php esc_html_e( 'Case reference forgotten. Reviewed counts retain their evaluation window.', 'wp-antispam' ); ?></p></div>
 	<?php endif; ?>

@@ -38,15 +38,19 @@ final class Dashboard {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
-		$store = new Store();
+		$store   = new Store();
 		$summary = $store->summary( 7 );
-		$total = $store->blocked_comments();
+		$total   = $store->blocked_comments();
 		$quality = ( new Feedback() )->metrics();
 		$indexed = array_column( $summary['daily'], null, 'day' );
-		$days = array();
+		$days    = array();
 		for ( $offset = 6; $offset >= 0; --$offset ) {
-			$day = gmdate( 'Y-m-d', time() - $offset * DAY_IN_SECONDS );
-			$days[] = $indexed[ $day ] ?? array( 'day' => $day, 'accepted' => 0, 'blocked' => 0 );
+			$day    = gmdate( 'Y-m-d', time() - $offset * DAY_IN_SECONDS );
+			$days[] = $indexed[ $day ] ?? array(
+				'day'      => $day,
+				'accepted' => 0,
+				'blocked'  => 0,
+			);
 		}
 		include dirname( __DIR__ ) . '/templates/dashboard.php';
 	}

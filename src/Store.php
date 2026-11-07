@@ -44,11 +44,13 @@ final class Store {
 		) $collation;"
 		);
 		$totals = $wpdb->prefix . 'rktsky_antispam_totals';
-		dbDelta( "CREATE TABLE $totals (
+		dbDelta(
+			"CREATE TABLE $totals (
 			provider varchar(20) NOT NULL,
 			total bigint(20) unsigned NOT NULL DEFAULT 0,
 			PRIMARY KEY  (provider)
-		) $collation;" );
+		) $collation;"
+		);
 		dbDelta(
 			"CREATE TABLE $stats (
 			day date NOT NULL,
