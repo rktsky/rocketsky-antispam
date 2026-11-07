@@ -323,5 +323,4 @@ final class GravityForms extends Adapter {
 
 		return $data;
 	}
-
 }

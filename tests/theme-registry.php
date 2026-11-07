@@ -30,16 +30,18 @@ function rktsky_antispam_theme_adapters(): int {
 	return count( $objects );
 }
 
-$effective = array_fill_keys( \Rktsky\Antispam\Providers::ids(), false );
+$effective         = array_fill_keys( \Rktsky\Antispam\Providers::ids(), false );
 $effective['divi'] = true;
-$override = static function () use ( &$effective ) { return $effective; };
+$override          = static function () use ( &$effective ) {
+	return $effective;
+};
 add_filter( 'pre_option_' . \Rktsky\Antispam\Settings::OPTION, $override );
 try {
 	if ( defined( 'ET_BUILDER_VERSION' ) || class_exists( '\ET\Builder\Packages\ModuleLibrary\ContactForm\ContactFormModule' ) ) {
 		throw new RuntimeException( 'The late-theme fixture must start without Divi loaded.' );
 	}
 	$settings = new \Rktsky\Antispam\Settings();
-	$tokens = new \Rktsky\Antispam\Token();
+	$tokens   = new \Rktsky\Antispam\Token();
 	$registry = new \Rktsky\Antispam\Integrations( $settings, new \Rktsky\Antispam\Guard( $settings, $tokens, new \Rktsky\Antispam\Store() ), new \Rktsky\Antispam\Fields( $settings, $tokens ) );
 	$registry->register();
 	$registry->register_theme();
@@ -58,7 +60,7 @@ try {
 		throw new RuntimeException( 'Repeated lifecycle detection must not duplicate native hooks.' );
 	}
 	$effective['divi'] = false;
-	$disabled = new \Rktsky\Antispam\Integrations( $settings, new \Rktsky\Antispam\Guard( $settings, $tokens, new \Rktsky\Antispam\Store() ), new \Rktsky\Antispam\Fields( $settings, $tokens ) );
+	$disabled          = new \Rktsky\Antispam\Integrations( $settings, new \Rktsky\Antispam\Guard( $settings, $tokens, new \Rktsky\Antispam\Store() ), new \Rktsky\Antispam\Fields( $settings, $tokens ) );
 	$disabled->register_theme();
 	if ( 1 !== rktsky_antispam_theme_adapters() ) {
 		throw new RuntimeException( 'A disabled integration must not register another adapter.' );

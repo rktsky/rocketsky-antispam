@@ -182,5 +182,4 @@ final class ContactForm7 extends Adapter {
 
 		return $data;
 	}
-
 }

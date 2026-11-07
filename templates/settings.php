@@ -71,14 +71,14 @@ defined( 'ABSPATH' ) || exit;
 				<div class="rktsky-antispam__integration-list">
 					<?php foreach ( $integration_groups as $rktsky_antispam_group ) : ?>
 					<fieldset class="rktsky-antispam__integration-group"><legend><?php echo esc_html( $rktsky_antispam_group['label'] ); ?></legend>
-					<?php foreach ( $rktsky_antispam_group['providers'] as $rktsky_antispam_provider ) : ?>
-						<?php $rktsky_antispam_integration = $integrations[ $rktsky_antispam_provider ]; ?>
+						<?php foreach ( $rktsky_antispam_group['providers'] as $rktsky_antispam_provider ) : ?>
+							<?php $rktsky_antispam_integration = $integrations[ $rktsky_antispam_provider ]; ?>
 						<div class="rktsky-antispam__integration">
 							<span class="rktsky-antispam__provider-mark" aria-hidden="true"><?php echo esc_html( $rktsky_antispam_integration['mark'] ); ?></span>
 							<div class="rktsky-antispam__provider-copy"><label for="rktsky-<?php echo esc_attr( $rktsky_antispam_provider ); ?>"><?php echo esc_html( $rktsky_antispam_integration['name'] ); ?></label><span class="rktsky-antispam__availability"><?php echo esc_html( ! empty( $detected[ $rktsky_antispam_provider ] ) ? __( 'Available', 'wp-antispam' ) : __( 'Compatible plugin not available', 'wp-antispam' ) ); ?></span><p id="rktsky-<?php echo esc_attr( $rktsky_antispam_provider ); ?>-help"><?php echo esc_html( $rktsky_antispam_integration['detail'] ); ?></p></div>
 							<div class="rktsky-antispam__check"><input type="hidden" name="<?php echo esc_attr( \Rktsky\Antispam\Settings::OPTION ); ?>[<?php echo esc_attr( $rktsky_antispam_provider ); ?>]" value="0" /><input type="checkbox" name="<?php echo esc_attr( \Rktsky\Antispam\Settings::OPTION ); ?>[<?php echo esc_attr( $rktsky_antispam_provider ); ?>]" id="rktsky-<?php echo esc_attr( $rktsky_antispam_provider ); ?>" value="1" aria-describedby="rktsky-<?php echo esc_attr( $rktsky_antispam_provider ); ?>-help" <?php checked( ! empty( $options[ $rktsky_antispam_provider ] ) ); ?> /><span aria-hidden="true"><?php esc_html_e( 'Enable', 'wp-antispam' ); ?></span></div>
 						</div>
-						<?php if ( 'comments' === $rktsky_antispam_provider ) : ?>
+							<?php if ( 'comments' === $rktsky_antispam_provider ) : ?>
 							<div class="rktsky-antispam__field">
 								<input type="hidden" name="<?php echo esc_attr( \Rktsky\Antispam\Settings::OPTION ); ?>[allow_pingbacks]" value="0" />
 								<fieldset data-rk-optional-processing <?php disabled( $privacy_mode ); ?>>
@@ -86,7 +86,11 @@ defined( 'ABSPATH' ) || exit;
 									<label class="rktsky-antispam__inline-check" for="rktsky-allow-pingbacks"><input type="checkbox" id="rktsky-allow-pingbacks" name="<?php echo esc_attr( \Rktsky\Antispam\Settings::OPTION ); ?>[allow_pingbacks]" value="1" aria-describedby="rktsky-pingbacks-help" <?php checked( ! empty( $options['allow_pingbacks'] ) ); ?> /><span><?php esc_html_e( 'Allow native pingbacks and trackbacks', 'wp-antispam' ); ?></span></label>
 									<p class="description" id="rktsky-pingbacks-help"><?php esc_html_e( 'Privacy relevant: WordPress verifies pingbacks by requesting the remote source page and may forward the sender IP address. Native WordPress moderation still applies. These protocol requests do not use JavaScript tokens.', 'wp-antispam' ); ?></p>
 								</fieldset>
-								<p class="rktsky-antispam__mode-hint" data-rk-mode-hint <?php if ( ! $privacy_mode ) : ?>hidden<?php endif; ?>><?php esc_html_e( 'Turn off privacy-conscious mode to allow pingbacks and trackbacks.', 'wp-antispam' ); ?></p>
+								<p class="rktsky-antispam__mode-hint" data-rk-mode-hint
+								<?php
+								if ( ! $privacy_mode ) :
+									?>
+									hidden<?php endif; ?>><?php esc_html_e( 'Turn off privacy-conscious mode to allow pingbacks and trackbacks.', 'wp-antispam' ); ?></p>
 							</div>
 						<?php endif; ?>
 					<?php endforeach; ?>

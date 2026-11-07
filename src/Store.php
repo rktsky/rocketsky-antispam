@@ -81,7 +81,7 @@ final class Store {
 	 *
 	 * @since 0.3.0
 	 * @param string $job Fixed internal task identifier.
-	 * @param int $expires Expiry at most two days in the future.
+	 * @param int    $expires Expiry at most two days in the future.
 	 * @return bool Whether this process inserted the unique task claim.
 	 */
 	public function claim_job( string $job, int $expires ): bool {

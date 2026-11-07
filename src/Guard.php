@@ -81,7 +81,7 @@ final class Guard {
 	 * @param string               $form_id Expected native form ID.
 	 * @param array                $posted Unslashed submitted controls; never an authorization source.
 	 * @param array<string,string> $fields Whitelisted native text fields for local rules.
-	 * @param bool $technical_only Whether to exclude all content and country policies.
+	 * @param bool                 $technical_only Whether to exclude all content and country policies.
 	 * @since 0.3.0 Supports technical-only checks for account and payment workflows.
 	 * @return string Empty for a pass, otherwise a fixed internal reason code.
 	 */

@@ -117,7 +117,7 @@ final class Fields {
 		if ( ! $attributes ) {
 			return '';
 		}
-		$intent = $attributes['data-rk-antispam-intent'];
+		$intent   = $attributes['data-rk-antispam-intent'];
 		$endpoint = $attributes['data-rk-antispam-endpoint'];
 		ob_start();
 		include dirname( __DIR__ ) . '/templates/fields.php';
@@ -145,12 +145,15 @@ final class Fields {
 			plugins_url( 'assets/protection.js', RKTSKY_ANTISPAM_FILE ),
 			array(),
 			RKTSKY_ANTISPAM_VERSION,
-			array( 'in_footer' => true, 'strategy' => 'defer' )
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
 		);
 		return array(
 			'data-rk-antispam-provider' => $provider,
-			'data-rk-antispam-form' => $form_id,
-			'data-rk-antispam-intent' => $intent,
+			'data-rk-antispam-form'     => $form_id,
+			'data-rk-antispam-intent'   => $intent,
 			'data-rk-antispam-endpoint' => rest_url( 'rktsky-antispam/v1/challenge' ),
 		);
 	}

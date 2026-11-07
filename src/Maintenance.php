@@ -79,7 +79,7 @@ final class Maintenance {
 		if ( 0 === $blocked || ! is_email( get_option( 'admin_email' ) ) ) {
 			return;
 		}
-		$name = 'rktsky_antispam_digest_claim';
+		$name     = 'rktsky_antispam_digest_claim';
 		$previous = get_option( $name, '' );
 		if ( is_string( $previous ) && $previous >= $day ) {
 			return;

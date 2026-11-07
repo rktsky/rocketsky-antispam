@@ -38,7 +38,7 @@ final class Divi extends Adapter {
 	 * Adds descriptors to actual D4 contact forms without modifying builder arrays.
 	 *
 	 * @since 0.3.0
-	 * @param mixed $output Original frontend HTML or Visual Builder structure.
+	 * @param mixed  $output Original frontend HTML or Visual Builder structure.
 	 * @param string $slug Original shortcode module slug.
 	 * @return mixed Original unrelated/builder output or protected native HTML.
 	 */
@@ -51,7 +51,7 @@ final class Divi extends Adapter {
 	 *
 	 * @since 0.3.0
 	 * @param string $output Original native frontend wrapper HTML.
-	 * @param array $args Native module context containing its registered name.
+	 * @param array  $args Native module context containing its registered name.
 	 * @return string Original unrelated wrapper or protected contact form HTML.
 	 */
 	public function render_module( string $output, array $args ): string {
@@ -136,14 +136,21 @@ final class Divi extends Adapter {
 	 * @return void Terminates the current native page request through wp_die.
 	 */
 	private function reject( string $target ): void {
-		$ajax = isset( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && is_string( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && 'xmlhttprequest' === sanitize_key( wp_unslash( $_SERVER['HTTP_X_REQUESTED_WITH'] ) );
+		$ajax    = isset( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && is_string( $_SERVER['HTTP_X_REQUESTED_WITH'] ) && 'xmlhttprequest' === sanitize_key( wp_unslash( $_SERVER['HTTP_X_REQUESTED_WITH'] ) );
 		$post_id = get_queried_object_id();
-		$reload = $post_id > 0 ? get_permalink( $post_id ) : home_url( '/' );
+		$reload  = $post_id > 0 ? get_permalink( $post_id ) : home_url( '/' );
 		if ( ! is_string( $reload ) || '' === $reload ) {
 			$reload = home_url( '/' );
 		}
 		$html = '<div id="et_pb_contact_form_' . esc_attr( $target ) . '"><div class="et-pb-contact-message"><p class="et_pb_contact_error_text" role="alert">' . esc_html( $this->guard->message() ) . '</p><p><a href="' . esc_url( $reload ) . '">' . esc_html__( 'Reload the form', 'wp-antispam' ) . '</a></p></div></div>';
 		nocache_headers();
-		wp_die( $html, 'WP Antispam', array( 'response' => $ajax ? 200 : 403, 'back_link' => false ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Every dynamic fragment is escaped for its HTML context above.
+		wp_die(
+			$html, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Every dynamic fragment is escaped for its HTML context above.
+			'WP Antispam',
+			array(
+				'response'  => $ajax ? 200 : 403,
+				'back_link' => false,
+			)
+		);
 	}
 }

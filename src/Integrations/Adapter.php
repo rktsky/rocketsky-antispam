@@ -184,7 +184,7 @@ abstract class Adapter {
 	 * @return array Own unslashed controls only.
 	 */
 	protected function protection_controls(): array {
-		$proof = array();
+		$proof   = array();
 		$visited = 0;
 		foreach ( $_POST as $key => $value ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Guard verifies the local protection proof; native action nonces remain provider-owned.
 			if ( ++$visited > 2000 ) {

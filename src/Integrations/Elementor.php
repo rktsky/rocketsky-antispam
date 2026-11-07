@@ -58,9 +58,9 @@ final class Elementor extends Adapter {
 	 * @return string Original document with descriptors on eligible form elements.
 	 */
 	public function cached_content( string $content ): string {
-		$scan = new \WP_HTML_Tag_Processor( $content );
-		$forms = array();
-		$index = 0;
+		$scan    = new \WP_HTML_Tag_Processor( $content );
+		$forms   = array();
+		$index   = 0;
 		$current = 0;
 		while ( $scan->next_tag( array( 'tag_closers' => 'visit' ) ) ) {
 			$tag = $scan->get_tag();
@@ -81,7 +81,7 @@ final class Elementor extends Adapter {
 			return $content;
 		}
 		$output = new \WP_HTML_Tag_Processor( $content );
-		$index = 0;
+		$index  = 0;
 		while ( $output->next_tag( 'FORM' ) ) {
 			++$index;
 			if ( empty( $forms[ $index ] ) ) {
@@ -110,7 +110,7 @@ final class Elementor extends Adapter {
 		if ( ! is_object( $widget ) || ! method_exists( $widget, 'get_name' ) || 'form' !== $widget->get_name() || ! method_exists( $widget, 'get_id' ) ) {
 			return $content;
 		}
-		$id = $widget->get_id();
+		$id      = $widget->get_id();
 		$closing = strripos( $content, '</form>' );
 		if ( ! is_string( $id ) || ! preg_match( '/^[a-zA-Z0-9_-]{1,64}$/D', $id ) || false === $closing || str_contains( $content, 'data-rk-antispam-provider=' ) ) {
 			return $content;
@@ -135,8 +135,11 @@ final class Elementor extends Adapter {
 		}
 		$id = $this->form_id( $record );
 		if ( $this->check( $record, $handler, $id ) ) {
-			$this->validated ??= new \WeakMap();
-			$this->validated[ $record ] = array( 'form' => $id, 'token' => $this->token_evidence( $this->posted() ) );
+			$this->validated          ??= new \WeakMap();
+			$this->validated[ $record ] = array(
+				'form'  => $id,
+				'token' => $this->token_evidence( $this->posted() ),
+			);
 		}
 	}
 
@@ -157,7 +160,7 @@ final class Elementor extends Adapter {
 		if ( ! $this->ready( $record, $handler ) || ! empty( $handler->errors ) ) {
 			return;
 		}
-		$id = $this->form_id( $record );
+		$id     = $this->form_id( $record );
 		$permit = null !== $this->validated && isset( $this->validated[ $record ] ) ? $this->validated[ $record ] : null;
 		if ( null !== $permit ) {
 			unset( $this->validated[ $record ] );
@@ -202,7 +205,7 @@ final class Elementor extends Adapter {
 	 * @return bool Whether local proof and configured content rules passed.
 	 */
 	private function check( $record, $handler, string $id ): bool {
-		$data = $this->content( $record );
+		$data   = $this->content( $record );
 		$reason = $this->guard->check( 'elementor', $id, $this->posted(), $data['fields'] );
 		if ( '' === $reason ) {
 			return true;
@@ -225,8 +228,11 @@ final class Elementor extends Adapter {
 	 * @return array{fields:array<string,string>,email:string} Bounded content only.
 	 */
 	private function content( $record ): array {
-		$data = array( 'fields' => array(), 'email' => '' );
-		$fields = $record->get( 'fields' );
+		$data        = array(
+			'fields' => array(),
+			'email'  => '',
+		);
+		$fields      = $record->get( 'fields' );
 		$definitions = $record->get_form_settings( 'form_fields' );
 		if ( ! is_array( $fields ) || ! is_array( $definitions ) ) {
 			return $data;
@@ -235,7 +241,7 @@ final class Elementor extends Adapter {
 			if ( ! is_array( $definition ) || ! isset( $definition['custom_id'], $definition['field_type'] ) || ! is_string( $definition['custom_id'] ) || ! in_array( $definition['field_type'], array( 'text', 'textarea', 'email', 'url', 'tel', 'number', 'select', 'radio', 'checkbox', 'date', 'time' ), true ) ) {
 				continue;
 			}
-			$id = $definition['custom_id'];
+			$id    = $definition['custom_id'];
 			$field = $fields[ $id ] ?? null;
 			if ( ! is_array( $field ) || ! isset( $field['type'], $field['value'] ) || $definition['field_type'] !== $field['type'] ) {
 				continue;

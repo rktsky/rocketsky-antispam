@@ -12,7 +12,7 @@ require_once dirname( __DIR__ ) . '/src/Integrations/Registration.php';
  * Requires an observable pre-creation boundary without dumping account content.
  *
  * @since 0.3.0
- * @param bool $condition Required outcome.
+ * @param bool   $condition Required outcome.
  * @param string $message Failed invariant.
  * @return void
  */
@@ -24,17 +24,31 @@ function rktsky_antispam_registration_expect( bool $condition, string $message )
 }
 
 $GLOBALS['rktsky_registration_assertions'] = 0;
-$options = get_option( \Rktsky\Antispam\Settings::OPTION );
-$created = array();
-$settings = new \Rktsky\Antispam\Settings();
-$token = new \Rktsky\Antispam\Token();
-$store = new \Rktsky\Antispam\Store();
-$guard = new \Rktsky\Antispam\Guard( $settings, $token, $store, new \Rktsky\Antispam\ContentRules( $settings, new \Rktsky\Antispam\Language(), new \Rktsky\Antispam\Country( $settings ) ) );
-$adapter = new \Rktsky\Antispam\Integrations\Registration( $settings, $guard, new \Rktsky\Antispam\Fields( $settings, $token ) );
+$options                                   = get_option( \Rktsky\Antispam\Settings::OPTION );
+$created                                   = array();
+$settings                                  = new \Rktsky\Antispam\Settings();
+$token                                     = new \Rktsky\Antispam\Token();
+$store                                     = new \Rktsky\Antispam\Store();
+$guard                                     = new \Rktsky\Antispam\Guard( $settings, $token, $store, new \Rktsky\Antispam\ContentRules( $settings, new \Rktsky\Antispam\Language(), new \Rktsky\Antispam\Country( $settings ) ) );
+$adapter                                   = new \Rktsky\Antispam\Integrations\Registration( $settings, $guard, new \Rktsky\Antispam\Fields( $settings, $token ) );
 wp_set_current_user( 0 );
 add_filter( 'pre_wp_mail', '__return_false', PHP_INT_MAX );
 try {
-	update_option( \Rktsky\Antispam\Settings::OPTION, array_merge( $settings->all(), array( 'registration' => true, 'minimum_seconds' => 0, 'spam_keywords' => 'fixture', 'privacy_mode' => false, 'country_mode' => 'block', 'countries' => array( 'CH' ), 'country_unknown_allowed' => false ) ) );
+	update_option(
+		\Rktsky\Antispam\Settings::OPTION,
+		array_merge(
+			$settings->all(),
+			array(
+				'registration'            => true,
+				'minimum_seconds'         => 0,
+				'spam_keywords'           => 'fixture',
+				'privacy_mode'            => false,
+				'country_mode'            => 'block',
+				'countries'               => array( 'CH' ),
+				'country_unknown_allowed' => false,
+			)
+		)
+	);
 	$adapter->register();
 	$outside = new WP_Error();
 	rktsky_antispam_registration_expect( $adapter->validate( $outside, 'fixture', 'fixture@example.invalid' ) === $outside && ! $outside->has_errors(), 'Other providers using Core registration APIs must retain their own form protection scope.' );
@@ -68,16 +82,29 @@ try {
 	rktsky_antispam_registration_expect( $adapter->validate( $existing, '', '' ) === $existing && array( 'native' ) === $existing->get_error_codes(), 'An earlier native registration error must remain intact.' );
 	$_POST = array();
 	$login = 'fixture_' . bin2hex( random_bytes( 8 ) );
-	$id = wp_insert_user( array( 'user_login' => $login, 'user_pass' => wp_generate_password(), 'user_email' => $login . '@example.invalid' ) );
+	$id    = wp_insert_user(
+		array(
+			'user_login' => $login,
+			'user_pass'  => wp_generate_password(),
+			'user_email' => $login . '@example.invalid',
+		)
+	);
 	rktsky_antispam_registration_expect( is_int( $id ) && $id > 0, 'Authorized server-side Core user creation must retain its own separate API.' );
 	$created[] = $id;
-	$base = array( 'user_name' => 'synthetic', 'user_email' => 'fixture@example.invalid', 'errors' => new WP_Error() );
+	$base      = array(
+		'user_name'  => 'synthetic',
+		'user_email' => 'fixture@example.invalid',
+		'errors'     => new WP_Error(),
+	);
 	rktsky_antispam_registration_expect( ! $adapter->validate_signup( $base )['errors']->has_errors(), 'Generic network validation outside wp-signup must remain available to provider APIs.' );
 	$adapter->begin_signup();
 	$rejected = $adapter->validate_signup( $base );
 	rktsky_antispam_registration_expect( in_array( 'generic', $rejected['errors']->get_error_codes(), true ), 'Anonymous native signup must expose the protection failure in Core generic errors.' );
-	$proof = $token->issue( 'registration', 'signup' );
-	$_POST = array( 'rktsky_antispam_token' => $proof['token'], $proof['trap'] => '' );
+	$proof          = $token->issue( 'registration', 'signup' );
+	$_POST          = array(
+		'rktsky_antispam_token' => $proof['token'],
+		$proof['trap']          => '',
+	);
 	$base['errors'] = new WP_Error();
 	rktsky_antispam_registration_expect( ! $adapter->validate_signup( $base )['errors']->has_errors(), 'Fresh network-stage proof must pass the shared guard.' );
 	$base['errors'] = new WP_Error();

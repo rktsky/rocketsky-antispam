@@ -271,5 +271,4 @@ final class WpForms extends Adapter {
 
 		return $data;
 	}
-
 }

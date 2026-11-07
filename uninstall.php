@@ -39,7 +39,13 @@ function rktsky_antispam_uninstall_site(): void {
 if ( is_multisite() ) {
 	$rktsky_antispam_network_offset = 0;
 	do {
-		$rktsky_antispam_networks = get_networks( array( 'fields' => 'ids', 'number' => 100, 'offset' => $rktsky_antispam_network_offset ) );
+		$rktsky_antispam_networks = get_networks(
+			array(
+				'fields' => 'ids',
+				'number' => 100,
+				'offset' => $rktsky_antispam_network_offset,
+			)
+		);
 		foreach ( $rktsky_antispam_networks as $rktsky_antispam_network_id ) {
 			$rktsky_antispam_main_id = (int) get_main_site_id( $rktsky_antispam_network_id );
 			if ( $rktsky_antispam_main_id > 0 ) {
@@ -54,7 +60,7 @@ if ( is_multisite() ) {
 			delete_network_option( $rktsky_antispam_network_id, 'rktsky_antispam_network_schema' );
 			delete_network_option( $rktsky_antispam_network_id, 'rktsky_antispam_network_cursor' );
 		}
-		$rktsky_antispam_network_count = count( $rktsky_antispam_networks );
+		$rktsky_antispam_network_count   = count( $rktsky_antispam_networks );
 		$rktsky_antispam_network_offset += 100;
 	} while ( 100 === $rktsky_antispam_network_count );
 	$rktsky_antispam_offset = 0;

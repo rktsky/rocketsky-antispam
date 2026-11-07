@@ -80,8 +80,8 @@ final class Registration extends Adapter {
 	 *
 	 * @since 0.3.0
 	 * @param \WP_Error $errors Existing native validation errors.
-	 * @param string $login Native sanitized login, deliberately not inspected.
-	 * @param string $email Native email, deliberately not inspected.
+	 * @param string    $login Native sanitized login, deliberately not inspected.
+	 * @param string    $email Native email, deliberately not inspected.
 	 * @return \WP_Error Existing errors with an optional protection failure.
 	 */
 	public function validate( \WP_Error $errors, string $login, string $email ): \WP_Error {

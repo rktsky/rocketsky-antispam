@@ -26,27 +26,27 @@ final class Integrations extends Integrations\Adapter {
 	 * @var array<string,string>
 	 */
 	private const CALLBACKS = array(
-		'comment_fields' => 'comments',
-		'check_comment' => 'comments',
-		'check_rest_comment' => 'comments',
-		'observe_comment_spam' => 'comments',
-		'cf7_fields' => 'cf7',
-		'cf7_processed_data' => 'cf7',
-		'check_cf7' => 'cf7',
-		'cf7_message' => 'cf7',
-		'gravity_fields' => 'gravityforms',
-		'check_gravity' => 'gravityforms',
-		'gravity_message' => 'gravityforms',
-		'abort_gravity' => 'gravityforms',
-		'gravity_confirmation' => 'gravityforms',
-		'observe_gravity_spam' => 'gravityforms',
-		'track_gravity_entry' => 'gravityforms',
-		'wpforms_fields' => 'wpforms',
-		'check_wpforms' => 'wpforms',
-		'begin_wpforms' => 'wpforms',
+		'comment_fields'           => 'comments',
+		'check_comment'            => 'comments',
+		'check_rest_comment'       => 'comments',
+		'observe_comment_spam'     => 'comments',
+		'cf7_fields'               => 'cf7',
+		'cf7_processed_data'       => 'cf7',
+		'check_cf7'                => 'cf7',
+		'cf7_message'              => 'cf7',
+		'gravity_fields'           => 'gravityforms',
+		'check_gravity'            => 'gravityforms',
+		'gravity_message'          => 'gravityforms',
+		'abort_gravity'            => 'gravityforms',
+		'gravity_confirmation'     => 'gravityforms',
+		'observe_gravity_spam'     => 'gravityforms',
+		'track_gravity_entry'      => 'gravityforms',
+		'wpforms_fields'           => 'wpforms',
+		'check_wpforms'            => 'wpforms',
+		'begin_wpforms'            => 'wpforms',
 		'observe_wpforms_honeypot' => 'wpforms',
 		'observe_wpforms_antispam' => 'wpforms',
-		'observe_wpforms_spam' => 'wpforms',
+		'observe_wpforms_spam'     => 'wpforms',
 	);
 	/**
 	 * Loaded modules, each retaining its own per-request native lifecycle state.
@@ -139,7 +139,7 @@ final class Integrations extends Integrations\Adapter {
 		if ( ! isset( $this->adapters[ $provider ] ) ) {
 			$name = Providers::ADAPTERS[ $provider ];
 			require_once __DIR__ . '/Integrations/' . $name . '.php';
-			$class = __NAMESPACE__ . '\\Integrations\\' . $name;
+			$class                       = __NAMESPACE__ . '\\Integrations\\' . $name;
 			$this->adapters[ $provider ] = new $class( $this->settings, $this->guard, $this->fields, $this->quarantine, $this->feedback );
 		}
 		return $this->adapters[ $provider ];

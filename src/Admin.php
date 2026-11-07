@@ -212,32 +212,80 @@ final class Admin {
 			'period_days' => 90,
 		);
 		$detected     = Integrations::detected();
-		$labels = Providers::labels();
+		$labels       = Providers::labels();
 		$integrations = array(
-			'comments' => array( 'detail' => __( 'Protects the native comment form and rejects trackbacks and pingbacks.', 'wp-antispam' ), 'mark' => 'W' ),
-			'registration' => array( 'detail' => __( 'Checks native account registration before accounts or activation emails are created. No account fields are retained.', 'wp-antispam' ), 'mark' => 'W' ),
-			'cf7' => array( 'detail' => __( 'Adds protection through the native form and spam hooks.', 'wp-antispam' ), 'mark' => 'C7' ),
-			'gravityforms' => array( 'detail' => __( 'Validates submissions before entries, drafts and notifications are created.', 'wp-antispam' ), 'mark' => 'G' ),
-			'wpforms' => array( 'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ), 'mark' => 'WP' ),
-			'formidable' => array( 'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ), 'mark' => 'F' ),
-			'fluentforms' => array( 'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ), 'mark' => 'FF' ),
-			'wsform' => array( 'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ), 'mark' => 'WS' ),
-			'elementor' => array( 'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ), 'mark' => 'E' ),
-			'divi' => array( 'detail' => __( 'Uses technical checks for Divi 4 and 5 contact forms. Content rules and quarantine are excluded.', 'wp-antispam' ), 'mark' => 'D' ),
-			'wc_checkout' => array( 'detail' => __( 'Checks classic and block checkout before final processing or payment. Content rules and quarantine are excluded.', 'wp-antispam' ), 'mark' => 'WC' ),
-			'wc_registration' => array( 'detail' => __( 'Protects registration on My Account. Account creation during checkout uses checkout protection. No account fields are retained.', 'wp-antispam' ), 'mark' => 'WC' ),
+			'comments'        => array(
+				'detail' => __( 'Protects the native comment form and rejects trackbacks and pingbacks.', 'wp-antispam' ),
+				'mark'   => 'W',
+			),
+			'registration'    => array(
+				'detail' => __( 'Checks native account registration before accounts or activation emails are created. No account fields are retained.', 'wp-antispam' ),
+				'mark'   => 'W',
+			),
+			'cf7'             => array(
+				'detail' => __( 'Adds protection through the native form and spam hooks.', 'wp-antispam' ),
+				'mark'   => 'C7',
+			),
+			'gravityforms'    => array(
+				'detail' => __( 'Validates submissions before entries, drafts and notifications are created.', 'wp-antispam' ),
+				'mark'   => 'G',
+			),
+			'wpforms'         => array(
+				'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ),
+				'mark'   => 'WP',
+			),
+			'formidable'      => array(
+				'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ),
+				'mark'   => 'F',
+			),
+			'fluentforms'     => array(
+				'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ),
+				'mark'   => 'FF',
+			),
+			'wsform'          => array(
+				'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ),
+				'mark'   => 'WS',
+			),
+			'elementor'       => array(
+				'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ),
+				'mark'   => 'E',
+			),
+			'divi'            => array(
+				'detail' => __( 'Uses technical checks for Divi 4 and 5 contact forms. Content rules and quarantine are excluded.', 'wp-antispam' ),
+				'mark'   => 'D',
+			),
+			'wc_checkout'     => array(
+				'detail' => __( 'Checks classic and block checkout before final processing or payment. Content rules and quarantine are excluded.', 'wp-antispam' ),
+				'mark'   => 'WC',
+			),
+			'wc_registration' => array(
+				'detail' => __( 'Protects registration on My Account. Account creation during checkout uses checkout protection. No account fields are retained.', 'wp-antispam' ),
+				'mark'   => 'WC',
+			),
 		);
 		foreach ( $integrations as $provider => &$integration ) {
 			$integration['name'] = $labels[ $provider ];
 		}
 		unset( $integration );
 		$integration_groups = array(
-			array( 'label' => 'WordPress', 'providers' => array( 'comments', 'registration' ) ),
-			array( 'label' => __( 'Form plugins', 'wp-antispam' ), 'providers' => array( 'cf7', 'gravityforms', 'wpforms', 'formidable', 'fluentforms', 'wsform' ) ),
-			array( 'label' => __( 'Page builders', 'wp-antispam' ), 'providers' => array( 'elementor', 'divi' ) ),
-			array( 'label' => 'WooCommerce', 'providers' => array( 'wc_checkout', 'wc_registration' ) ),
+			array(
+				'label'     => 'WordPress',
+				'providers' => array( 'comments', 'registration' ),
+			),
+			array(
+				'label'     => __( 'Form plugins', 'wp-antispam' ),
+				'providers' => array( 'cf7', 'gravityforms', 'wpforms', 'formidable', 'fluentforms', 'wsform' ),
+			),
+			array(
+				'label'     => __( 'Page builders', 'wp-antispam' ),
+				'providers' => array( 'elementor', 'divi' ),
+			),
+			array(
+				'label'     => 'WooCommerce',
+				'providers' => array( 'wc_checkout', 'wc_registration' ),
+			),
 		);
-		$active_count = 0;
+		$active_count       = 0;
 		foreach ( $integrations as $provider => $integration ) {
 			if ( ! empty( $detected[ $provider ] ) && ! empty( $options[ $provider ] ) ) {
 				++$active_count;
