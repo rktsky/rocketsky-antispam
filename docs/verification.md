@@ -307,3 +307,38 @@ WS-Exporter wird ergänzt; es wird keine zweite unpaginierte Suche ausgeführt.
 Separate Upload-AJAX-Routen vor einer endgültigen Formularübermittlung sind kein
 Nachweisbestandteil des finalen Formularschutzes. Kommerzielle Zusatzmodule und
 weitere als die aufgeführten Versionen benötigen weiterhin ihre eigene Abnahme.
+
+### Abschliessender CI- und Paketnachweis 0.5.0
+
+Der [Workflowlauf 42425665645](https://github.com/rktsky/wp-antispam/actions/runs/42425665645)
+auf Commit `536788c23e53dfce2bbf91073f01553b466fef7a` besteht alle 14 Jobs.
+Die Matrix umfasst PHP 8.2 bis 8.5, aktuelles WordPress und WordPress 6.6 sowie
+separate WooCommerce-, Formular-, Multisite-, Browser- und Standardsprüfungen.
+Die nativen Datenbankjobs verwenden MySQL 8.0. Die ursprüngliche Testkopplung
+über denselben künstlichen Fluent-Besucher ist behoben; der native Floodschutz
+bleibt unverändert aktiv. Die öffentlichen Läufe enthalten keine kommerziellen
+Anbieterpakete. Deren oben aufgeführte Prüfungen sind lokale Nachweise.
+
+94 eigene PHP-Dateien bestehen die Syntaxprüfung. WordPress Coding Standards
+melden im produktiven Code keine Fehler oder Warnungen. Alle 314 Nachrichten
+sind vollständig in den mitgelieferten Sprachkatalogen vorhanden und durch GNU
+msgfmt sowie vollständigen MO-Readback geprüft. Die GitHub-README ist Englisch.
+
+Plugin Check 2.2.0 mit Laufzeitinitialisierung meldet in der getrennten
+Verzeichnis-Prüfkopie ohne GitHub-Update-Header keine Fehler und die vier
+bekannten Hinweise zu Name/Slug und lokaler Sprachdateiladung. Das tatsächliche
+GitHub-Paket behält seine eigene Update-Identität zum Schutz vor fremden
+Verzeichnisupdates. Sein vollständiger Report enthält deshalb zusätzlich den
+für eine WordPress.org-Einreichung erwarteten Befund `plugin_updater_detected`.
+Dieser Header gehört vor einer Verzeichnisveröffentlichung entfernt; die
+Prüfungen ersetzen weder die Namensfestlegung noch den Verzeichnisreview.
+
+`wp-antispam-0.5.0.zip` enthält 71 Produktionsdateien, stimmt dateiweise mit dem
+geprüften Quellstand überein und enthält keine Tests, Entwicklungsabhängigkeiten
+oder Formularanbieterpakete. SHA-256:
+`5191e69c513f652a59d460327ce108d0e80874276545f67e99fda7ca00879977`.
+Die echte Installation und Aktivierung des Archivs bestehen die 227 nativen
+Verwaltungsprüfungen. Deaktivierung und Deinstallation über die WordPress-API
+entfernen anschliessend alle sechs eigenen Tabellen, Einstellungen und den
+Bereinigungstermin. Die Aktualisierung dieses Nachweises ändert keine
+Produktionsdatei.
