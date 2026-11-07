@@ -168,5 +168,40 @@ neun echte Firefox-Abläufe mit fünf authentifizierten Speichervorgängen über
 `options.php`, sichtbaren Settings-Notices, Datenschutzsperren ohne JavaScript und
 vier erwarteten Warnungen vor dem Verlassen ungespeicherter Änderungen. Das
 Zurücknehmen einer Änderung und ein gewöhnliches Speichern erzeugen keine Warnung.
-Die Originaloptionen wurden exakt wiederhergestellt. Die Gestaltungsnachweise
-werden gegen den abgeschlossenen Stand separat erfasst.
+Die Originaloptionen wurden exakt wiederhergestellt. Die Gestaltung wurde in Firefox 153.0 auf macOS gegen WordPress 7.1.4 geprüft:
+fünf Sprachen, alle fünf Ansichten bei 320, 390, 768 und 1440 CSS-Pixeln. Diese
+100 Ausgangszustände zeigen keinen horizontalen Überlauf, keine eigenen Texte
+unter 14 Pixeln und keine JavaScriptfehler. Geöffnete Bereiche, Tastaturfokus,
+erzwungene Kontrastfarben und reduzierte Bewegung sind eingeschlossen. Weitere
+60 Zustände mit bewerteten Ergebnissen, gefüllter Quarantäne und Datensatzdetails
+wurden in einer getrennten privaten Kopie mit synthetischen Plugin-API-Daten
+geprüft. Lange Inhalte und als Text dargestelltes Markup blieben bedienbar.
+Die ursprünglichen Einstellungen und Profilwerte wurden wiederhergestellt.
+Desktop-Browseremulation ersetzt keine physischen Geräte oder Screenreader.
+
+
+### Abgeschlossener CI- und Distributionsnachweis
+
+Der [Workflowlauf 42416956097](https://github.com/rktsky/wp-antispam/actions/runs/42416956097)
+auf Commit `acd0fa84d6f7eb87a457e2577800767bfbedb415` besteht im ersten Versuch
+alle 14 Jobs. Die neuen 227 Verwaltungsprüfungen bestehen in allen fünf nativen
+Basisjobs: PHP 8.2.35, 8.3.36, 8.4.27 und 8.5.12 mit WordPress 7.1.4 sowie
+PHP 8.2.35 mit WordPress 6.6. Alle elf Datenbankjobs verwenden nach den tatsächlichen
+Containerlogs MySQL 8.0.46. WooCommerce besteht in beiden Jobs je 33 Originalfälle,
+die zusätzlichen Formularanbieter je 30 und Multisite je 94. Der separate
+Browser-Bridge-Job besteht 12 Prüfungen. Die kommerziellen Originalanbieterfälle
+bleiben die zuvor dokumentierten lokalen Nachweise; Gravity-Lizenzfälle werden
+in der öffentlichen CI ausdrücklich übersprungen.
+
+Die Syntaxprüfung umfasst 82 eigene PHP-Dateien. WordPress Coding Standards
+melden keine Befunde im produktiven Quellcode. Plugin Check 2.2.0 mit
+Laufzeitinitialisierung besteht auf der Distribution ohne Fehler und mit den vier
+bekannten sichtbaren Hinweisen zum Namen/Slug und zur lokalen Sprachdateiladung.
+Die 286 verwendeten Nachrichten sind vollständig in den mitgelieferten
+Sprachkatalogen enthalten und mit GNU msgfmt sowie vollständigem MO-Readback geprüft.
+
+Das Installationspaket `wp-antispam-0.4.0.zip` enthält 65 Produktionsdateien,
+stimmt dateiweise mit diesem Quellstand überein und enthält keine Tests oder
+Originalanbieterpakete. SHA-256:
+`8e109dbff0e867fa6275fd1a5cfcc9261572e1e4efc19c920b22e8d003b02a30`.
+Die nachfolgende Aktualisierung dieses Prüfnachweises ändert keinen produktiven Code.
