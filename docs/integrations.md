@@ -126,3 +126,16 @@ A rejected guard does not create an account/order or invoke a gateway. Existing 
 My Account uses `woocommerce_process_registration_errors` before `wc_create_new_customer`, preserving native field and nonce errors. Accounts requested during checkout use checkout proof, avoiding a second consumption. Both account adapters and checkout skip all content/country/language policies and retain no fields. Quarantine independently excludes these scopes at its persistence boundary.
 
 Sources: [checkout extension data](https://developer.woocommerce.com/docs/apis/store-api/extending-store-api/extend-store-api-add-data/), [checkout flow and events](https://developer.woocommerce.com/docs/block-development/extensible-blocks/cart-and-checkout-blocks/checkout-payment-methods/checkout-flow-and-events/), [original Checkout implementation](https://github.com/woocommerce/woocommerce/blob/trunk/plugins/woocommerce/includes/class-wc-checkout.php), [original Store API](https://github.com/woocommerce/woocommerce/tree/trunk/plugins/woocommerce/src/StoreApi), [WordPress dispatch boundary](https://developer.wordpress.org/reference/hooks/rest_dispatch_request/).
+
+
+### Divi contact forms
+
+The adapter covers the reviewed same-page transports of Divi 4.27.9 and Divi 5.4.0. Legacy theme initialization happens after `plugins_loaded`; repeated native theme lifecycle detection registers the adapter once. Documented D4/D5 output filters add persistent protection hosts. Before template rendering, a narrowly recognized native contact envelope is checked using technical proof only. Multiple target envelopes cannot share one proof. Native nonce/captcha checks remain Divi-owned.
+
+The local AJAX error retains the container and error-marker shape selected by the original `jQuery.load` transport; a server-generated reload link allows recovery. Full-page rejection uses HTTP403. Contact data never enters content rules or quarantine. The original frontend engines and owned adapter contracts passed local tests; native commercial PHP processing remains a release-verification gate. Details and primary source links: [Elementor/Divi verification](../tests/provider-elementor-divi.md).
+
+### Native pingbacks and trackbacks
+
+These server protocols are disabled by default and locked off in privacy-conscious mode. Explicit allowance is limited to native Core hook intents with one-use source/target binding; ordinary frontend/REST comments cannot bypass proof by changing their type. Pingback rejection precedes Core's remote source fetch. When allowed, Core may fetch that source and forward the sender IP; native moderation/storage remain WordPress-owned. Protocol messages do not enter local quarantine or reviewed quality counts. See [protocol and privacy details](pingbacks.md).
+
+Network scheduling and isolated site storage are documented in [Multisite](multisite.md).

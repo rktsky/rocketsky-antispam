@@ -39,7 +39,7 @@ Für die Qualitätsauswertung werden ursprüngliche Entscheidungen und spätere 
 
 Eine tägliche Administratorbenachrichtigung bündelt Ablehnungen des vorangegangenen UTC-Tags, um keine Mailflut zu erzeugen.
 
-Unter `docs/` stehen [Architektur und Bedrohungsmodell](docs/security.md), [Integrationsverträge](docs/integrations.md), [Gestaltung](docs/design.md), [Prüfnachweise](docs/verification.md) und [Veröffentlichung](docs/releasing.md).
+Unter `docs/` stehen [Architektur und Bedrohungsmodell](docs/security.md), [Integrationsverträge](docs/integrations.md), [Gestaltung](docs/design.md), [Prüfnachweise](docs/verification.md) und [Veröffentlichung](docs/releasing.md) und [Multisite](docs/multisite.md).
 
 ## Entwicklung
 

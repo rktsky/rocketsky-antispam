@@ -82,6 +82,12 @@ Quellen für die Prüfmethode: [WordPress Plugin Check](https://wordpress.org/pl
 
 ## Erweiterung 0.3.0
 
+
+Der abschliessende [GitHub-Lauf 42407222571](https://github.com/rktsky/wp-antispam/actions/runs/42407222571) prüfte Commit `1938c38185cc5d18d8f4f2087b7737ac22f91a7a` am 7. November 2026. Alle 14 Jobs bestanden: Standards, fünf native Basisjobs, zwei WooCommerce-Jobs, zwei zusätzliche Formularanbieter-Jobs, zwei Multisite-Jobs, Browserprotokoll und offizielles Plugin Check. Die Datenbankjobs verwendeten echten MySQL 8.0.46. Die Matrix umfasst PHP 8.2–8.5 mit aktueller WordPress-Version und zusätzlich WordPress 6.6; Multisite wurde gesondert mit WordPress 6.6/PHP 8.2 und WordPress 7.1.4/PHP 8.5 geprüft.
+
+Plugin Check 2.2.0: keine Fehler und vier bekannte Hinweise. Drei Hinweise betreffen den gewünschten `WP`-Namen/Slug, einer die lokale Sprachdatei-Ladung für GitHub-Installationen. Die originalen Gravity-Forms-Lizenzpakete stehen der öffentlichen CI nicht zur Verfügung; diese Fälle werden dort ausdrücklich übersprungen und bleiben durch die tatsächliche lokale Prüfung mit Gravity Forms 3.2.2 belegt.
+
+
 Die Anbieter sind jetzt intern getrennte Module. Die Auslieferung enthält keinen kommerziellen Anbieter und keine Testlaufzeit. Neue Integrationen sind nach einem Update zunächst ausgeschaltet. WordPress, Originalplugins und deren Abhängigkeiten bleiben unverändert.
 
 Zusätzliche isolierte Prüfungen gegen WordPress 7.1.4/PHP 8.3.26:
@@ -104,4 +110,4 @@ Für WooCommerce wurden Browserabläufe mit Mindestzeit 0 und 2 Sekunden, ausgef
 
 Die Oberfläche wurde nach der Erweiterung gesamthaft geprüft: fünf Sprachen, Übersicht/Regeln/Quarantäne, jeweils 320/390/768/1440 CSS-Pixel, Tastaturfokus, reduzierte Bewegung, erzwungene Farben und beschriftete Felder. Rocketsky- und Speo-Ziele, neue Tabs und `rel`-Werte sind geprüft; sämtliche Grafiken laden lokal. Diese Desktop-Browseremulation ersetzt keine physische Geräte-/Safari-Abnahme.
 
-Weitere Details: [Formularverträge](integrations-extra-forms.md), [Elementor-/Divi-Nachweis](../tests/provider-elementor-divi.md) und [Sicherheitsmodell](security.md). Die CI enthält separate Originalanbieter-/WooCommerce-/Multisite-Jobs mit MySQL sowie das isolierte Browserprotokoll. Ein neuer Workflowlauf ist erst nach dem Push ein Nachweis für den endgültigen Commit.
+Weitere Details: [Formularverträge](integrations-extra-forms.md), [Elementor-/Divi-Nachweis](../tests/provider-elementor-divi.md) und [Sicherheitsmodell](security.md). Die CI enthält separate Originalanbieter-/WooCommerce-/Multisite-Jobs mit MySQL sowie das isolierte Browserprotokoll. Der oben verlinkte vollständige Workflowlauf belegt den endgültigen Quellstand; nachfolgende reine Dokumentationsänderungen verändern das getestete Produkt nicht.

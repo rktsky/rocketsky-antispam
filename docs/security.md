@@ -40,3 +40,10 @@ Gelesene Primärquellen, 7. November 2026:
 - [DSGVO: Art. 5, 25 und 32](https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng)
 - [WordPress Directory Guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/)
 
+
+
+## Datenbankgrenze ab 0.3.0
+
+WordPress- und Anbieterdaten werden über ihre dokumentierten Objekt-, Einstellungs- und Formularschnittstellen verarbeitet. Eigene vorbereitete Abfragen sind auf die sechs Tabellen für Token, Tagesstatistik, Gesamtzähler, verschlüsselte Quarantäne, Bewertungsmetadaten und Versandsperren begrenzt. Schemaeinrichtung verwendet `dbDelta`; es gibt keine separate Datenbankverbindung. Die Versandsperre liegt in der eigenen Tabelle `rktsky_antispam_jobs`, während Einstellungen und Versandstatus die Options-API verwenden. Ihre internen Aufgabenkennungen enthalten keine Formularinhalte und werden nach spätestens zwei Tagen zur geplanten Bereinigung fällig.
+
+Die Gleichzeitigkeit wird durch eindeutige Schlüssel und atomare Operationen über `$wpdb` abgesichert. Eine Folge unabhängiger Options-Lese- und Schreibaufrufe würde die einmalige Token- oder Aufgabenannahme nicht gleichwertig garantieren. Die Netzwerkverwaltung verwendet die nativen Site-/Metadaten-APIs. Es werden keine Core- oder Anbietertabellen mit eigenen SQL-Abfragen gelesen oder verändert.
