@@ -23,10 +23,10 @@ if ( 'observer' === ( $argv[1] ?? '' ) ) {
 	}
 	$destination = WPMU_PLUGIN_DIR . '/rktsky-antispam-divi4-observer.php';
 	$source      = file_get_contents( __DIR__ . '/fixtures/divi4-observer.php' );
-	if ( is_file( $destination ) && ! str_contains( file_get_contents( $destination ), 'function rktsky_antispam_divi4_fixture_event' ) ) {
+	if ( is_link( $destination ) || ( is_file( $destination ) && ! str_contains( file_get_contents( $destination ), 'function rktsky_antispam_divi4_fixture_event' ) ) ) {
 		throw new RuntimeException( 'Refusing to replace an unknown existing MU plugin.' );
 	}
-	if ( ! wp_mkdir_p( WPMU_PLUGIN_DIR ) || false === file_put_contents( $destination, $source ) ) {
+	if ( false === $source || ! wp_mkdir_p( WPMU_PLUGIN_DIR ) || false === file_put_contents( $destination, $source ) ) {
 		throw new RuntimeException( 'The owned disposable fixture observer could not be installed.' );
 	}
 	echo wp_json_encode( array( 'observer' => true ) ) . "\n";
