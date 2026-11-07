@@ -19,6 +19,16 @@ Der Browser verwendet weder Cookies noch persistente Browserdaten. Challenge-Fet
 - Verteilte Lastangriffe gehören vor WordPress begrenzt. Der öffentliche Challenge-Endpunkt schreibt keine Datenbankzeilen; HTTP-Bootstrap und kryptografische Arbeit kosten dennoch Ressourcen.
 - Fremder Code mit Server-/Datenbankrechten, Salt-Leaks, XSS oder kompromittierte Administratoren liegen ausserhalb dieser Schutzgrenze. Sicherheitsupdates, Backups und angemessene Serverkonfiguration bleiben erforderlich.
 
+## Divi: frühe Grenze vor nativer Verarbeitung
+
+Seit 0.3.1 prüft der Divi-Adapter erkannte native Kontakt-POSTs an `wp_loaded` mit Priorität 100. Diese Grenze liegt vor der Formularverarbeitung während Frontend-, REST- und AJAX-Ausgaben. Ein REST-Methodenwechsel wie `_method=GET` ändert den eingegangenen POST nicht; der Kontext gewährt keine Ausnahme. Die nativen Präfixe für Submit, Feldliste und Nonce wählen den Schutz auch dann aus, wenn der folgende Zielbezug ungültig ist. Unzulässige oder überlange Suffixe und mehrere verschiedene Ziele führen zur Ablehnung. Unterstützt sind ein bis 64 ASCII-Buchstaben, Ziffern, Unterstriche oder Bindestriche.
+
+Die Signatur bleibt an `divi/contact` gebunden. Geprüft werden der technische Nachweis, Honeypot und die konfigurierte Mindestzeit. Der Adapter übernimmt keine Kontaktwerte in Inhalts-, Sprach- oder Länderregeln und speichert sie nicht in der Quarantäne. Divis eigene Nonce-, Pflichtfeld- und Captcha-Prüfungen bleiben aktiv. Eine Ablehnung durch WP Antispam stoppt vor Divis Kontakt-Submit-Aktion und Mailversuch. Die native Folgeaktion ist keine veränderbare Validierungsschnittstelle.
+
+Die tatsächliche Formular-Container-ID und die Seiten-ID werden nur für die sichtbare Fehlerrückgabe verwendet, begrenzt und bei der Ausgabe escaped. Diese Angaben autorisieren keine Verarbeitung. Ein Reload-Link verwendet ausschliesslich einen von Core erzeugten Permalink einer öffentlich sichtbaren Seite, sonst die Startseite. Manipulierte private Seitenreferenzen legen weder private Permalinks noch Slugs offen. AJAX erhält das vom nativen Selektor benötigte Fehlerfragment mit HTTP200; ein vollständiger abgewiesener POST erhält HTTP403. Formularinhalte werden nicht zurückgespiegelt.
+
+Die Originalpakete Divi Theme/Builder 4.27.9 und Divi Theme 5.19.0 wurden mit echten PHP- und Browserabläufen einschliesslich REST-Ausgabe geprüft. Native D4-Nonce-Fehler verlangen den von Divi angewiesenen vollständigen Seitenreload. Nach dem nativen Formularersatz sind neue Nonce und Proof bereits vorhanden, die originale direkte Submit-Bindung wird jedoch erst beim Reload wieder initialisiert. Das wurde auch bei deaktiviertem Adapter beobachtet; die Bridge schreibt weder native Nonces noch Feldmetadaten um. Einzelheiten und Versionsgrenzen stehen im [Divi-Prüfnachweis](../tests/provider-elementor-divi.md).
+
 ## Privilegierte Oberfläche
 
 WordPress Settings API (`options.php`) prüft Berechtigungen und CSRF-Nonce. Das Plugin akzeptiert ausschliesslich bekannte Keys, boolesche Schalter und begrenzte Zahlen. Die eigene Statistiklöschung verlangt POST, `manage_options` und eine native Nonce. Templates escapen am Ausgabeort. SQL nutzt vorbereitete Werte und `%i` für die ausschliesslich intern gebildeten eigenen Tabellennamen. Assets sind auf den eigenen Adminscreen bzw. tatsächlich gerenderte Formulare begrenzt.

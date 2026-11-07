@@ -55,6 +55,21 @@ $store->install();
 $store->clear();
 
 try {
+	delete_option( Settings::OPTION );
+	$defaults = $settings->all();
+	rktsky_antispam_expect( true === $defaults['comments'], 'A fresh installation must protect native comments.' );
+	foreach ( array_diff( \Rktsky\Antispam\Providers::ids(), array( 'comments' ) ) as $provider ) {
+		rktsky_antispam_expect( false === $defaults[ $provider ], 'Form and account integrations must require explicit enablement.' );
+	}
+	$existing = array_replace( $defaults, array( 'cf7' => true, 'gravityforms' => true, 'wpforms' => true, 'divi' => true ) );
+	update_option( Settings::OPTION, $existing, false );
+	rktsky_antispam_expect( $existing === $settings->all(), 'An upgrade must preserve existing integration choices, including unavailable providers.' );
+	$unrelated = $settings->sanitize( array( 'retention_days' => '14' ) );
+	rktsky_antispam_expect( true === $unrelated['cf7'] && true === $unrelated['gravityforms'] && true === $unrelated['wpforms'] && true === $unrelated['divi'], 'Saving another settings section must preserve saved integration choices.' );
+	$disabled = $settings->sanitize( array( 'cf7' => '0' ) );
+	rktsky_antispam_expect( false === $disabled['cf7'] && true === $disabled['gravityforms'], 'Explicitly disabling a provider must leave other saved choices intact.' );
+	update_option( Settings::OPTION, $settings->defaults(), false );
+
 	$valid = $token->issue( 'comments', '42' );
 	$proof = $token->verify( $valid['token'], 'comments', '42' );
 	rktsky_antispam_expect( is_array( $proof ), 'A freshly issued token must authenticate.' );

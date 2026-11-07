@@ -57,7 +57,7 @@ await page.route('http://127.0.0.1:8891/**', async (route) => {
 		contentType: 'text/html',
 		body: `<!doctype html><html><body>
  <form id="ordinary"><input name="message" required value="Synthetic message"><button id="send" name="action" value="deliver">Send</button><span hidden data-rk-antispam data-provider="cf7" data-form="42" data-intent="${'a'.repeat(64)}" data-endpoint="/challenge"><input type="hidden" name="rktsky_antispam_token"></span></form>
- <form id="host" data-rk-antispam-provider="wsform" data-rk-antispam-form="1" data-rk-antispam-intent="${'a'.repeat(64)}" data-rk-antispam-endpoint="/challenge"><button id="ws-send">Send native</button></form>
+ <form id="host" data-rk-antispam-provider="wsform" data-rk-antispam-form="1" data-rk-antispam-target="rk-fixture-sales" data-rk-antispam-page="22" data-rk-antispam-intent="${'a'.repeat(64)}" data-rk-antispam-endpoint="/challenge"><button id="ws-send">Send native</button></form>
  <form id="failure"><span hidden data-rk-antispam data-provider="cf7" data-form="44" data-intent="${'a'.repeat(64)}" data-endpoint="/failure"><input type="hidden" name="rktsky_antispam_token"></span><button>Send temporary failure</button></form>
  <form id="external"><span hidden data-rk-antispam data-provider="cf7" data-form="43" data-intent="${'a'.repeat(64)}" data-endpoint="https://example.invalid/challenge"><input type="hidden" name="rktsky_antispam_token"></span><button>Send external config</button></form>
  <script>window.delivered=[];document.addEventListener('submit',e=>{e.preventDefault();window.delivered.push({id:e.target.id,token:new FormData(e.target).get('rktsky_antispam_token'),trap:[...new FormData(e.target)].find(([k])=>k.startsWith('rktsky_as_')),submitter:e.submitter&&e.submitter.id});});</script><script src="/protection.js"></script></body></html>`
@@ -101,6 +101,13 @@ try {
 		host.token && host.trap[1] === '' && issued === before + 1,
 		'Native form child replacement restores protection with one challenge'
 	);
+	const metadata = await page.evaluate(() => {
+		const form = document.querySelector('#host');
+		const values = new FormData(form);
+		return { target: values.get('rktsky_antispam_target'), page: values.get('rktsky_antispam_page'), proof: window.rktskyAntispamBridge.serialized(form) };
+	});
+	expect(metadata.target === 'rk-fixture-sales' && metadata.page === '22', 'Native child replacement restores display-only container and public-page metadata');
+	expect(!Object.keys(metadata.proof).some(key => key === 'rktsky_antispam_target' || key === 'rktsky_antispam_page'), 'Display metadata cannot become token authority in the structured proof transport');
 	await page.locator('#external button').click();
 	await page.waitForFunction(() => window.delivered.length === 4, {}, { timeout: 5000 });
 	expect(

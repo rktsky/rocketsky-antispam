@@ -3,7 +3,7 @@ Tags: antispam, spam, contact form 7, gravity forms, wpforms
 Requires at least: 6.6
 Requires PHP: 8.2
 Tested up to: 7.1
-Stable tag: 0.3.0
+Stable tag: 0.3.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -11,7 +11,7 @@ Local spam protection for comments and forms. No external spam service, tracking
 
 == Description ==
 
-WP Antispam adds local checks to WordPress comments and registration, Contact Form 7, Gravity Forms, WPForms, Formidable Forms, Fluent Forms, WS Form, Elementor Forms, Divi contact forms and WooCommerce checkout and registration. Choose integrations under Settings → WP Antispam. New integrations require explicit activation; no form edits are needed.
+WP Antispam adds local checks to WordPress comments and registration, Contact Form 7, Gravity Forms, WPForms, Formidable Forms, Fluent Forms, WS Form, Elementor Forms, Divi contact forms and WooCommerce checkout and registration. Choose integrations under Settings → WP Antispam. Form integrations are off by default; existing saved choices are kept. No form edits are needed.
 
 Signed tokens, a dynamically named honeypot and atomic one-use checks protect submissions. An optional minimum completion time is disabled by default to accommodate autofill and fast users. Provider validation and existing spam decisions remain in place.
 
@@ -35,7 +35,7 @@ A suggested privacy-policy paragraph is available through WordPress's privacy-po
 
 Protected forms require JavaScript and a working local REST API. REST comment creation requires protection tokens too. Native pingbacks and trackbacks are off by default and can be explicitly allowed outside privacy-conscious mode. WordPress may request the remote source and forward the sender IP for pingback verification. Multisite supports individual and network activation with separate site settings and storage.
 
-This is a 0.3.0 development candidate. Browser-capable bots can obtain valid tokens; this plugin cannot guarantee human submissions or prevent volumetric attacks. See the source repository's verification and integration documentation before production use.
+This is a 0.3.1 development candidate. Browser-capable bots can obtain valid tokens; this plugin cannot guarantee human submissions or prevent volumetric attacks. See the source repository's verification and integration documentation before production use.
 
 Source and verification: https://github.com/rktsky/wp-antispam
 
@@ -64,6 +64,14 @@ No. Used tokens remain protected until expiry.
 Own tables and options are removed by default. You can opt to keep plugin data before uninstalling.
 
 == Changelog ==
+
+= 0.3.1 =
+* Verifies Divi 4, standalone Divi Builder and Divi 5 against unchanged original packages.
+* Checks native Divi requests before frontend, REST and AJAX rendering.
+* Preserves visible rejection messages and reload links for custom form container IDs.
+* Rejects unsupported native envelope identifiers instead of skipping protection.
+* Requires opt-in for new form integrations and disables unavailable provider controls while preserving saved choices.
+* Aligns administration controls, enlarges supporting text and improves translated narrow layouts.
 
 = 0.3.0 =
 * Separates provider modules and adds native registration, Formidable, Fluent Forms, WS Form, Elementor Forms, Divi contact forms and WooCommerce integration.

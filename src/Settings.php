@@ -26,6 +26,8 @@ final class Settings {
 
 	/**
 	 * Returns explicit defaults, including fixed protection-token lifetime.
+	 * Form integrations require opt-in; reading an existing selection never
+	 * depends on whether its provider happens to be active in this request.
 	 *
 	 * @since 0.1.0
 	 * @return array<string,mixed> Settings defaults, including bounded local policies.
@@ -34,9 +36,9 @@ final class Settings {
 		return array(
 			'comments'                 => true,
 			'allow_pingbacks'          => false,
-			'cf7'                      => true,
-			'gravityforms'             => true,
-			'wpforms'                  => true,
+			'cf7'                      => false,
+			'gravityforms'             => false,
+			'wpforms'                  => false,
 			'registration'             => false,
 			'formidable'               => false,
 			'fluentforms'              => false,

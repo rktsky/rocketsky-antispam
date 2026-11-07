@@ -9,6 +9,10 @@
 require __DIR__ . '/bootstrap.php';
 wp_set_current_user( 1 );
 
+// Native-provider fixtures opt in explicitly, independently of product defaults.
+$settings = new \Rktsky\Antispam\Settings();
+update_option( \Rktsky\Antispam\Settings::OPTION, array_replace( $settings->all(), array( 'cf7' => true, 'gravityforms' => true, 'wpforms' => true ) ), false );
+
 $forms = get_option( 'rktsky_antispam_test_forms', array() );
 if ( ! empty( $forms ) ) {
 	echo wp_json_encode( $forms ) . "\n";

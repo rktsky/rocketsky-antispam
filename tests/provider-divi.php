@@ -143,6 +143,52 @@ namespace {
 		return preg_replace( '/[^a-z0-9_\\-]/', '', strtolower( $value ) ); }
 
 	/**
+	 * Validates fixture UTF-8 without modifying caller input.
+	 * @since 0.3.1
+	 * @param string $value Candidate text.
+	 * @param bool $strip Whether invalid input should be removed.
+	 * @return string Original valid text or empty.
+	 */
+	function wp_check_invalid_utf8( $value, $strip = false ): string {
+		return 1 === preg_match( '//u', $value ) ? $value : '';
+	}
+	/**
+	 * Supplies the synthetic current public page identity.
+	 * @since 0.3.1
+	 * @return int Current page ID.
+	 */
+	function get_the_ID(): int {
+		return 22;
+	}
+	/**
+	 * Restricts presentation metadata to the synthetic public page.
+	 * @since 0.3.1
+	 * @param int $id Candidate page.
+	 * @return bool Whether it is public.
+	 */
+	function is_post_publicly_viewable( $id ): bool {
+		return 22 === (int) $id;
+	}
+	/**
+	 * Normalizes a validated numeric display reference.
+	 * @since 0.3.1
+	 * @param mixed $value Candidate numeric value.
+	 * @return int Positive integer.
+	 */
+	function absint( $value ): int {
+		return abs( (int) $value );
+	}
+	/**
+	 * Supplies basic fixture text sanitization for presentation references.
+	 * @since 0.3.1
+	 * @param string $value Candidate text.
+	 * @return string Plain text.
+	 */
+	function sanitize_text_field( $value ): string {
+		return trim( strip_tags( $value ) );
+	}
+
+	/**
 	 * Returns the synthetic backend context.
 	 *
 	 * @since 0.3.0
@@ -276,10 +322,10 @@ namespace {
 	$guard    = new \Rktsky\Antispam\Guard();
 	$adapter  = new \Rktsky\Antispam\Integrations\Divi( $settings, $guard, new \Rktsky\Antispam\Fields(), new \Rktsky\Antispam\Quarantine() );
 	$adapter->register();
-	rktsky_antispam_divi_expect( -1000 === $GLOBALS['rktsky_divi_hooks']['template_redirect'][1], 'The native same-page gate must run before template rendering.' );
+	rktsky_antispam_divi_expect( 100 === $GLOBALS['rktsky_divi_hooks']['wp_loaded'][1], 'Native contact POST must be checked before frontend, REST and AJAX rendering.' );
 	rktsky_antispam_divi_expect( isset( $GLOBALS['rktsky_divi_hooks']['et_module_shortcode_output'], $GLOBALS['rktsky_divi_hooks']['divi_module_wrapper_render'] ) && ! isset( $GLOBALS['rktsky_divi_hooks']['et_pb_contact_form_submit'] ), 'D4/D5 output hooks must register without relying on the late submit observer.' );
 
-	$native    = '<div id="et_pb_contact_form_0"><form method="post" class="et_pb_contact_form clearfix"><input name="et_pb_contactform_submit_0" value="et_contact_proccess"></form></div>';
+	$native    = '<div id="et_pb_contact_form_0" class="et_pb_contact_form_container"><form method="post" class="et_pb_contact_form clearfix"><input name="et_pb_contactform_submit_0" value="et_contact_proccess"></form></div>';
 	$decorated = $adapter->render_shortcode( $native, 'et_pb_contact_form' );
 	rktsky_antispam_divi_expect( str_contains( $decorated, 'data-rk-antispam-provider="divi"' ) && str_contains( $decorated, 'data-rk-antispam-form="contact"' ) && str_contains( $decorated, 'proof&quot;&lt;&amp;' ), 'Native HTML API must escape the persistent D4 technical host.' );
 	rktsky_antispam_divi_expect( str_contains( $decorated, 'name="et_pb_contactform_submit_0" value="et_contact_proccess"' ), 'The adapter must not rewrite native submit controls.' );
@@ -310,12 +356,20 @@ namespace {
 		$adapter->validate();
 		rktsky_antispam_divi_expect( count( $guard->checks ) === $before + 1, 'Removing one or two known envelope markers cannot avoid the technical gate.' );
 	}
-	foreach ( array( 'et_pb_contactform_submit_', 'et_pb_contactform_submit_' . str_repeat( 'x', 65 ), 'et_pb_contactform_submit_<script>', 'other_provider' ) as $name ) {
-		$_POST  = array( $name => 'unrelated' );
-		$before = count( $guard->checks );
-		$adapter->validate();
-		rktsky_antispam_divi_expect( count( $guard->checks ) === $before, 'Unsupported envelopes must not be interpreted as native Divi identifiers.' );
+	foreach ( array( 'et_pb_contactform_submit_', 'et_pb_contactform_submit_' . str_repeat( 'x', 65 ), 'et_pb_contactform_submit_native/identifier', 'et_pb_contactform_submit_<script>' ) as $name ) {
+		$_POST = array( $name => 'synthetic' );
+		$before = count( $guard->rejected );
+		try {
+			$adapter->validate();
+		} catch ( RuntimeException $failure ) {
+			rktsky_antispam_divi_expect( 'fixture-request-stopped' === $failure->getMessage(), 'Unexpected unsupported-envelope failure.' );
+		}
+		rktsky_antispam_divi_expect( count( $guard->rejected ) === $before + 1, 'Every reserved native prefix must fail closed when its suffix is unsupported.' );
 	}
+	$_POST = array( 'other_provider' => 'unrelated' );
+	$before = count( $guard->checks );
+	$adapter->validate();
+	rktsky_antispam_divi_expect( count( $guard->checks ) === $before, 'Unrelated provider fields must preserve native processing.' );
 	$_POST  = array(
 		'et_pb_contactform_submit_0' => 'et_contact_proccess',
 		'et_pb_contactform_submit_1' => 'et_contact_proccess',
@@ -333,6 +387,7 @@ namespace {
 			$_POST                            = array(
 				'et_pb_contactform_submit_c024e92d-c0b5-4052-86b2-0b27af7c40ac' => 'et_contact_process',
 				'unsafe'           => '<script>DO-NOT-REFLECT</script>',
+				'rktsky_antispam_page' => '22',
 				'_wp_http_referer' => 'https://external.invalid/DO-NOT-REFLECT',
 			);
 			$_SERVER['HTTP_X_REQUESTED_WITH'] = $ajax ? 'XMLHttpRequest' : '';
@@ -348,14 +403,38 @@ namespace {
 	}
 	$guard->reason = '';
 	$_POST         = array( 'et_pb_contactform_submit_0' => 'et_contact_proccess' );
-	foreach ( array( 'GET', 'disabled', 'admin', 'admin_ajax' ) as $context ) {
+	foreach ( array( 'GET', 'disabled' ) as $context ) {
 		$_SERVER['REQUEST_METHOD']    = 'GET' === $context ? 'GET' : 'POST';
 		$settings->active             = 'disabled' !== $context;
 		$GLOBALS['rktsky_divi_admin'] = 'admin' === $context;
 		$GLOBALS['rktsky_divi_ajax']  = 'admin_ajax' === $context;
 		$before                       = count( $guard->checks );
 		$adapter->validate();
-		rktsky_antispam_divi_expect( count( $guard->checks ) === $before, 'Only an enabled frontend same-page POST belongs to this adapter.' );
+		rktsky_antispam_divi_expect( count( $guard->checks ) === $before, 'Disabled protection and native GET requests must preserve ordinary processing.' );
 	}
+	$settings->active = true;
+	$_SERVER['REQUEST_METHOD'] = 'POST';
+	foreach ( array( 'admin', 'admin_ajax' ) as $context ) {
+		$GLOBALS['rktsky_divi_admin'] = 'admin' === $context;
+		$GLOBALS['rktsky_divi_ajax'] = 'admin_ajax' === $context;
+		$before = count( $guard->checks );
+		$adapter->validate();
+		rktsky_antispam_divi_expect( count( $guard->checks ) === $before + 1, 'Backend context flags cannot bypass the early native contact gate.' );
+	}
+	$GLOBALS['rktsky_divi_admin'] = false;
+	$GLOBALS['rktsky_divi_ajax'] = false;
+	$guard->reason = 'missing';
+	foreach ( array( '22', '23' ) as $page ) {
+		$_POST = array( 'et_pb_contactform_submit_0' => 'et_contact_proccess', 'rktsky_antispam_target' => 'rk-fixture-sales', 'rktsky_antispam_page' => $page );
+		try {
+			$adapter->validate();
+		} catch ( RuntimeException $failure ) {
+			rktsky_antispam_divi_expect( 'fixture-request-stopped' === $failure->getMessage(), 'Unexpected custom-target failure.' );
+		}
+		$html = $GLOBALS['rktsky_divi_die'][0];
+		rktsky_antispam_divi_expect( str_contains( $html, 'id="rk-fixture-sales"' ), 'Custom CSS IDs must remain the exact native fragment target.' );
+		rktsky_antispam_divi_expect( '22' === $page ? str_contains( $html, '?page_id=22' ) : ! str_contains( $html, '?page_id=23' ), 'A display reference must never reveal a private post permalink.' );
+	}
+
 	echo 'PASS: ' . $GLOBALS['rktsky_divi_assertions'] . " Divi adapter contracts; commercial PHP engine not loaded.\n";
 }

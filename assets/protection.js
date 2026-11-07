@@ -18,6 +18,7 @@
 	 * Resolves a control, restoring our hidden container after native rerenders.
 	 *
 	 * @since 0.3.0
+	 * @since 0.3.1 Copies optional display-only target and page metadata.
 	 * @param {Element} element Existing control or native host form.
 	 * @return {Element|null} Inside-form control with a signed server descriptor.
 	 */
@@ -39,6 +40,28 @@
 			token.autocomplete = 'off';
 			control.append( token );
 			element.append( control );
+		}
+		if ( control ) {
+			// Display metadata restores native error selection before the main query
+			// exists. It carries no token authority or submitted form content.
+			const host = control.closest( hosts );
+			if ( host ) {
+				[ 'target', 'page' ].forEach( ( key ) => {
+					const value = host.getAttribute( 'data-rk-antispam-' + key );
+					if ( value === null || value.length > 256 ) {
+						return;
+					}
+					const name = 'rktsky_antispam_' + key;
+					let input = control.querySelector( '[name="' + name + '"]' );
+					if ( ! input ) {
+						input = document.createElement( 'input' );
+						input.type = 'hidden';
+						input.name = name;
+						control.append( input );
+					}
+					input.value = value;
+				} );
+			}
 		}
 		if ( control && ! states.has( control ) ) {
 			states.set( control, { ready: false, used: false, issued: 0, pending: null, submitting: false, trap: '', attempted: false } );
