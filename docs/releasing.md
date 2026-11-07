@@ -2,6 +2,17 @@
 
 WP Antispam ist ein Entwicklungskandidat. Eine Einreichung im WordPress-Pluginverzeichnis ist nicht Teil der bisherigen Veröffentlichung und benötigt den tatsächlichen WordPress.org-Account, einen bestätigten verfügbaren Slug und den Reviewprozess.
 
+Die GitHub-Distribution setzt seit 0.5.0 eine eigene `Update URI`. Damit bietet
+WordPress keine fremde Verzeichnisaktualisierung unter einem gleichnamigen
+Entwicklungsslug an. Ein GitHub-Updater wird dadurch nicht eingerichtet; Updates
+erfolgen manuell. Vor einer Verzeichniseinreichung sind Name und Slug festzulegen
+und dieser Header für die tatsächliche WordPress.org-Distribution zu entfernen.
+Quelle: [offizielle Header-Anforderungen](https://developer.wordpress.org/plugins/plugin-basics/header-requirements/).
+Die CI-Prüfung für WordPress.org entfernt nur diesen Header in einer getrennten
+Prüfkopie. Der GitHub-Quellstand und das GitHub-Installationspaket behalten ihn.
+Der vollständige lokale GitHub-Report führt den erwarteten Verzeichnisbefund
+`plugin_updater_detected` sichtbar; es wird kein Verzeichnis-Upload freigegeben.
+
 Der offizielle Plugin-Check meldet für `WP Antispam` und `wp-antispam` eine `trademarked_term`-Warnung zum Begriff `wp`. Der Quellcode des Checkers kennzeichnet `wp` ausdrücklich als erlaubt und warnt trotzdem. Daraus wird kein Umbenennungsbedarf abgeleitet; der gewünschte Name bleibt erhalten. Diese Warnung bleibt sichtbar. Die tatsächliche Slugverfügbarkeit und der gewöhnliche Verzeichnisreview bleiben vor der Einreichung zu prüfen. Quelle: [offizieller Trademarks_Check](https://github.com/WordPress/plugin-check/blob/trunk/includes/Checker/Checks/Plugin_Repo/Trademarks_Check.php#L141).
 
 `load_plugin_textdomain` registriert derzeit die mitgelieferten Übersetzungen für die GitHub-Installation. Plugin Check weist auf die automatische Sprachversorgung für auf WordPress.org gehostete Plugins hin. Beim Übergang auf das Verzeichnis diesen Vertrag erneut prüfen; die gegenwärtige lokale Sprachversorgung nicht für einen kosmetisch leeren Report entfernen.

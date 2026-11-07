@@ -14,6 +14,7 @@
  * @var array<string,string> $reason_labels Fixed check labels.
  * @var string $quarantine_url Local quarantine list URL.
  * @var string $delete_url Authenticated POST endpoint.
+ * @var \Rktsky\Antispam\SpamHandling $spam_handling Active integration review destinations.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -97,9 +98,25 @@ require __DIR__ . '/admin-header.php';
 	<?php else : ?>
 		<header class="rktsky-antispam__page-heading">
 			<h2><?php esc_html_e( 'Review spam', 'wp-antispam' ); ?></h2>
-			<p><?php esc_html_e( 'Review WordPress comments in their native queue and rejected form submissions here.', 'wp-antispam' ); ?></p>
+			<p><?php esc_html_e( 'Open each integration\'s spam queue or review locally retained rejections below.', 'wp-antispam' ); ?></p>
 		</header>
-		<div class="rktsky-antispam__quick-actions"><a class="button" href="<?php echo esc_url( admin_url( 'edit-comments.php?comment_status=spam' ) ); ?>"><?php esc_html_e( 'Review spam comments', 'wp-antispam' ); ?></a></div>
+		<?php $rktsky_antispam_directory = $spam_handling->directory(); ?>
+		<?php if ( ! empty( $rktsky_antispam_directory ) ) : ?>
+			<section class="rktsky-antispam__card rktsky-antispam__spam-directory" aria-labelledby="rktsky-spam-directory-heading">
+				<h3 id="rktsky-spam-directory-heading"><?php esc_html_e( 'Spam review locations', 'wp-antispam' ); ?></h3>
+				<dl>
+					<?php foreach ( $rktsky_antispam_directory as $rktsky_antispam_provider => $rktsky_antispam_route ) : ?>
+						<div><dt><?php echo esc_html( $provider_labels[ $rktsky_antispam_provider ] ); ?></dt><dd><a href="<?php echo esc_url( $rktsky_antispam_route['url'] ); ?>"><?php echo esc_html( $rktsky_antispam_route['label'] ); ?></a>
+							<?php
+							if ( in_array( $rktsky_antispam_route['mode'], array( 'blocked', 'conditional' ), true ) ) :
+								?>
+								<p><?php echo esc_html( $rktsky_antispam_route['description'] ); ?></p><?php endif; ?>
+						</dd></div>
+					<?php endforeach; ?>
+				</dl>
+				<p class="rktsky-antispam__help-note"><?php esc_html_e( 'Native spam storage follows the provider\'s privacy and retention settings, independently of privacy-conscious mode. WP Antispam quarantine is encrypted, with capture limits and automatic deletion.', 'wp-antispam' ); ?> <?php echo esc_html( $spam_handling->local_retention()['description'] ); ?></p>
+			</section>
+		<?php endif; ?>
 
 		<section class="rktsky-antispam__quarantine-list" aria-labelledby="rktsky-quarantine-list-heading">
 			<div class="rktsky-antispam__section-title"><h2 id="rktsky-quarantine-list-heading"><?php esc_html_e( 'Rejected submissions', 'wp-antispam' ); ?></h2><span><?php echo esc_html( ! empty( $options['quarantine_enabled'] ) ? __( 'Quarantine enabled', 'wp-antispam' ) : __( 'New storage is off', 'wp-antispam' ) ); ?></span></div>

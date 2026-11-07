@@ -205,3 +205,105 @@ stimmt dateiweise mit diesem Quellstand überein und enthält keine Tests oder
 Originalanbieterpakete. SHA-256:
 `8e109dbff0e867fa6275fd1a5cfcc9261572e1e4efc19c920b22e8d003b02a30`.
 Die nachfolgende Aktualisierung dieses Prüfnachweises ändert keinen produktiven Code.
+
+## Native Spamablage und kontextuelle Bedienung 0.5.0
+
+Die Ablage ist je Integration zentral beschrieben und unter «Spam prüfen» direkt
+verlinkt. Die gleichen Hinweise erscheinen auf passenden nativen
+Verwaltungsseiten. Kommentar- und Formularbetreuer erhalten nur Links, für die sie
+berechtigt sind. Ausgeschaltete Anbieter und fremde Ansichten zeigen keinen
+Schutzhinweis. Formulare ohne geeignete native Ablage verweisen auf die eigene
+Quarantäne oder ausdrücklich auf ausgeschaltete Aufbewahrung.
+
+Neue native Regressionen:
+
+- `native-spam-routing.php`: 28 echte klassische/REST-Kommentarfälle und 36
+  Gravity-Forms-Fälle. Inhaltstreffer speichern native Spamdatensätze;
+  fehlende, manipulierte, fremde oder verbrauchte Nachweise, Speicherfehler und
+  Regex-Ressourcenlimits erzeugen keine nativen Einträge. Die Gravity-Fälle
+  prüfen Benachrichtigungen und das tatsächliche Feed-Framework, Mehrseiten,
+  Entwürfe, API-Validierung und Resume-E-Mails. Die native Aktion «Kein Spam»
+  korrigiert die bewertete Vorhersage; anschliessende native Folgeaktionen
+  bleiben unter der Kontrolle des Anbieters.
+- `native-cf7-spam.php`: zwölf echte Ablage-/Moderationsabläufe mit Contact Form 7
+  6.2.4.1 und Flamingo 2.6.4. Dazu gehören normale Nachrichten, Inhaltstreffer,
+  fehlende und wiederverwendete Nachweise auch bei vorheriger nativer
+  Spamentscheidung, explizites Speicherverbot, deaktivierte Flamingo-Spamablage,
+  Quarantänefallback sowie Datenschutzexport/-löschung und Quellenänderung.
+  Native Spamablage und Quarantäne werden nicht doppelt angelegt.
+- `native-provider-spam.php`: 27 frische Engine-Fälle mit Formidable 7.0, Fluent
+  Forms 6.2.17 und WS Form Lite 1.12.19. Sie prüfen native Spamablage,
+  Keyword/BBCode/Regex, technische Vorabfehler, Replay, sichtbare Ablehnung,
+  ausgeschaltete native Speicherung und Quarantäne. Fluent-Spam löst keine
+  Zahlungs-, Benachrichtigungs- oder nachgelagerten Eintragsaktionen aus.
+- `context-notices.php`: 41 native Menü-, Rollen- und Routingprüfungen ohne
+  persistente Änderungen. Registrierte native Menürechte und tatsächliche
+  Screenhooks bestimmen den Hinweis, einschliesslich der unterschiedlichen
+  Gravity-Forms-Eltern für eingeschränkte Rollen.
+
+Die Browserprüfung der Verwaltung umfasst 72 Zustände mit den tatsächlich
+installierten Versionen WordPress 7.1.4, Gravity Forms 3.2.2, WPForms Lite 2.0.4
+und Contact Form 7 6.2.4.1. Nach der Kürzung wiederholter Beschreibungen und dem
+mobilen Umbruch wurden die betroffenen Integrations-/Prüfansichten gezielt in
+allen fünf Sprachen bei 320 und 1440 CSS-Pixeln erneut geprüft, einschliesslich
+zweier negativer Hinweisfälle. Kein horizontaler Überlauf, eigene Texte unter
+14 Pixeln oder JavaScriptfehler wurden dabei gemessen. Native Hinweise verwenden
+die tatsächlichen Einhängepunkte von Gravity Forms und WPForms.
+
+Die Gravity-Browserabläufe prüfen iframe und modernes AJAX jeweils mit
+Inhaltstreffern, normalem Versand, Save-and-Continue sowie fehlgeschlagener
+Resume-Prüfung und frischem Wiederholungsnachweis. Ein dabei gefundener
+iframe-Fehler durch fehlende native Bestätigungsanker wurde mit dem nativen
+Nachrichten-Serializer behoben. Die gezielte Nachprüfung besteht drei betroffene
+Abläufe ohne JavaScriptausnahme: einmaliger nativer Spam ohne Mail/Feed,
+Entwurf ohne Mail/Feed und abgewiesener Resumeversuch mit anschliessend genau
+einer erlaubten Resume-E-Mail. Das vollständige vorherige Funktionsprotokoll
+enthält acht erfolgreiche Transportabläufe; sein damaliger Ankerfehler gilt
+nicht als fehlerfreier Browserlauf. Optionen, eigene Tabellen und synthetische
+Formulare/Seiten wurden nach den Prüfungen wiederhergestellt beziehungsweise
+entfernt.
+
+Die lokalen Läufe verwenden PHP 8.3.26 und die SQLite Database Integration 1.8.0.
+Das ist kein MySQL-Nachweis; die öffentliche CI prüft die nativen Datenbankfälle
+separat mit MySQL. Ein fokussierter Guard-Lauf mit aktivem Datenschutzmodus und
+ohne Inhaltsregeln misst 1000 Tokenausgaben und 1000 Verifikationen jeweils ohne
+SQL-Abfrage. Je 50 gültige und fehlende Nachweise benötigen unverändert zwei
+beziehungsweise eine eigene Abfrage. Die gemessenen Mediane lagen lokal bei
+617 beziehungsweise 389 Mikrosekunden für die Guard-Prüfung; WordPress-Bootstrap
+und native Anbieterabläufe sind darin nicht enthalten. Eigene Testzähler und
+Tokenclaims wurden exakt zurückgesetzt. Daraus wird kein allgemeiner
+Geschwindigkeitswert einer Website abgeleitet.
+
+Die WPForms-Pro-Prüfung verwendet Version 1.9.7.3. Der vollständige Lauf besteht
+28 native Abläufe mit 327 Assertions. Nach der letzten Ergänzung zur
+Hintergrund-Anonymisierung wurde die betroffene Rückkopplungsrunde erneut mit
+83 Assertions erfolgreich geprüft. Keyword-, BBCode- und Regex-Treffer erzeugen
+einen nativen Spamdatensatz mit sichtbarer Ablehnung. Benachrichtigung,
+Zahlungsspeicherung, normale Folgeaktionen und die allgemeinen
+Eintrag-gespeichert-Aktionen bleiben dabei aus. Der gezielte native
+Spam-Metadatenaufruf erhält keine rohen Einsendungsdaten.
+
+Geprüft sind native Moderation, Berechtigungsfehler, Inhaltsänderungen über den
+Editor und die API, Statusänderungen, Eintrags-/Formularlöschung und
+Datenschutzexport/-löschung. Eine fremde E-Mail nur in einem Textfeld wird nicht
+als betroffene Person behandelt. 51 solche Suchkandidaten vor dem tatsächlichen
+Absender prüfen die Fortsetzung der Datenschutzsuche auf einer weiteren Seite.
+Die Anonymisierung über einen nativ erlaubten Hintergrundaufruf entfernt den
+alten Bezug ebenfalls. Ausgeschaltete Integrationseinstellungen verhindern die
+Bereinigung zuvor angelegter Referenzen nicht. Native Speicherverbote verhindern
+auch eine eigene Quarantänekopie; ein Speicher-Policy-Veto führt vor dem
+nativen Schreibaufruf zum Abbruch.
+
+Die ergänzenden freien Anbieterprüfungen für Rückkopplung und Datenschutz
+bestehen 239 native Assertions, einschliesslich einer eigenständigen
+Core-Installation ohne aktivierte Formularanbieter. Sie decken die native
+Formidable-Seitengrenze mit 201 beobachteten Einträgen ab, WS-Spam im Papierkorb,
+automatische Bereinigung, den tatsächlichen WS-REST-Editor und dessen
+Berechtigungsfehler sowie Änderungen der E-Mail-Feldzuordnung in Fluent Forms.
+WS-Referenzen verwenden den stabilen nativen Eintragshash, damit native
+Datenschutzexporte auch nach Statusänderungen eindeutig bleiben. Der bestehende
+WS-Exporter wird ergänzt; es wird keine zweite unpaginierte Suche ausgeführt.
+
+Separate Upload-AJAX-Routen vor einer endgültigen Formularübermittlung sind kein
+Nachweisbestandteil des finalen Formularschutzes. Kommerzielle Zusatzmodule und
+weitere als die aufgeführten Versionen benötigen weiterhin ihre eigene Abnahme.

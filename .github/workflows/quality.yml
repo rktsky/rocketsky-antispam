@@ -89,6 +89,7 @@ jobs:
             wp plugin install wpforms-lite --activate --path="$WP_ANTISPAM_WP_ROOT"
             if [ "$ANTISPAM_TEST_PHP_VERSION" != '8.2' ]; then
               wp plugin install contact-form-7 --activate --path="$WP_ANTISPAM_WP_ROOT"
+              wp plugin install flamingo --activate --path="$WP_ANTISPAM_WP_ROOT"
             fi
           fi
           ln -s "$GITHUB_WORKSPACE" "$WP_ANTISPAM_WP_ROOT/wp-content/plugins/wp-antispam"
@@ -97,6 +98,8 @@ jobs:
           printf '%s\n' '<?php add_filter( "pre_wp_mail", "__return_false", PHP_INT_MAX ); add_filter( "pre_http_request", static function () { return new WP_Error( "test_http_blocked", "Disposable fixture." ); }, PHP_INT_MAX );' > "$WP_ANTISPAM_WP_ROOT/wp-content/mu-plugins/fixture-mail.php"
       - run: php tests/native.php
       - run: php tests/native-admin.php
+      - run: php tests/context-notices.php
+      - run: php tests/native-spam-routing.php
       - run: php tests/registration.php
       - run: php tests/theme-registry.php
       - run: php tests/provider-divi.php
@@ -111,6 +114,8 @@ jobs:
         run: php tests/prepare-providers.php
       - if: matrix.wordpress == 'latest'
         run: php tests/native-providers.php
+      - if: matrix.wordpress == 'latest'
+        run: php tests/native-cf7-spam.php
       - run: php tests/integrations.php
       - run: php tests/content-rules.php
 
@@ -211,6 +216,8 @@ jobs:
           wp config set WP_HTTP_BLOCK_EXTERNAL true --raw --path="$WP_ANTISPAM_WP_ROOT"
       - run: php tests/setup-extra-forms.php
       - run: php tests/native-extra-forms.php
+      - run: php tests/native-provider-spam.php
+      - run: php tests/native-provider-feedback.php
       - run: php tests/adapters-extra-forms.php
 
   plugin-check:
@@ -221,6 +228,17 @@ jobs:
         run: |
           mkdir -p /tmp/wp-antispam-distribution/wp-antispam
           rsync -a --exclude-from=.distignore ./ /tmp/wp-antispam-distribution/wp-antispam/
+          # Directory validation excludes the GitHub-only update identity header.
+          # The shipped GitHub source/archive retains collision protection.
+          python3 - <<'PY'
+          from pathlib import Path
+          plugin = Path('/tmp/wp-antispam-distribution/wp-antispam/wp-antispam.php')
+          source = plugin.read_text()
+          header = ' * Update URI: https://github.com/rktsky/wp-antispam\n'
+          if source.count(header) != 1:
+              raise SystemExit('The exact GitHub-only update identity is required.')
+          plugin.write_text(source.replace(header, '', 1))
+          PY
       - uses: WordPress/plugin-check-action@10857da14b6c2246d15402b3e69f777edcf8c12e # v1
         with:
           build-dir: /tmp/wp-antispam-distribution/wp-antispam

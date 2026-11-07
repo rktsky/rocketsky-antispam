@@ -38,6 +38,14 @@ final class Feedback {
 	private array $gravity_links = array();
 
 	/**
+	 * Avoids repeated ledger reads during one native inbox metadata save.
+	 *
+	 * @since 0.5.0
+	 * @var array<int,bool>
+	 */
+	private array $flamingo_links = array();
+
+	/**
 	 * Creates only the owned metadata table through WordPress's schema API.
 	 *
 	 * @since 0.2.0
@@ -76,6 +84,12 @@ final class Feedback {
 		add_action( 'rktsky_antispam_quarantine_deleted', array( $this, 'forget_quarantine' ) );
 		add_action( 'deleted_comment', array( $this, 'forget_comment' ) );
 		add_action( 'transition_comment_status', array( $this, 'comment_review' ), 10, 3 );
+		add_filter( 'wp_update_comment_data', array( $this, 'comment_update' ), PHP_INT_MAX, 2 );
+		add_action( 'deleted_post', array( $this, 'forget_flamingo' ), 10, 2 );
+		add_action( 'post_updated', array( $this, 'flamingo_update' ), 10, 3 );
+		add_action( 'updated_post_meta', array( $this, 'flamingo_meta_update' ), 10, 3 );
+		add_action( 'added_post_meta', array( $this, 'flamingo_meta_update' ), 10, 3 );
+		add_action( 'deleted_post_meta', array( $this, 'flamingo_meta_update' ), 10, 3 );
 		add_action( 'gform_update_status', array( $this, 'gravity_review' ), 10, 3 );
 		add_action( 'gform_delete_entry', array( $this, 'forget_gravity' ) );
 		add_filter( 'gform_save_field_value', array( $this, 'gravity_field_update' ), PHP_INT_MAX, 5 );
@@ -93,7 +107,7 @@ final class Feedback {
 	 *
 	 * @since 0.2.0
 	 * @param string     $source Native source category or quarantine.
-	 * @param int|string $id Positive native object ID.
+	 * @param int|string $id Positive native ID, or the stable WS submission hash.
 	 * @param bool       $predicted_spam Whether the observed decision rejected as spam.
 	 * @return void
 	 */
@@ -108,6 +122,9 @@ final class Feedback {
 		if ( 'gravityforms' === $source && false !== $inserted ) {
 			$this->gravity_links[ (int) $id ] = true;
 		}
+		if ( 'cf7' === $source && false !== $inserted ) {
+			$this->flamingo_links[ (int) $id ] = true;
+		}
 	}
 
 	/**
@@ -119,7 +136,7 @@ final class Feedback {
 	 *
 	 * @since 0.2.0
 	 * @param string     $source Tracked source category.
-	 * @param int|string $id Native object ID or stable manual case reference.
+	 * @param int|string $id Native ID, stable WS submission hash or manual case reference.
 	 * @param bool       $actual_spam Human judgement of the same observed item.
 	 * @return bool Whether that label exists on the still-linked active observation.
 	 */
@@ -256,7 +273,7 @@ final class Feedback {
 	 *
 	 * @since 0.2.0
 	 * @param string     $source Tracked source category.
-	 * @param int|string $id Native object ID or stable manual case reference.
+	 * @param int|string $id Native ID, stable WS submission hash or manual case reference.
 	 * @return array{predicted_spam:bool,actual_spam:?bool,reviewed:bool}|null Active label or null.
 	 */
 	public function status( string $source, $id ): ?array {
@@ -284,12 +301,15 @@ final class Feedback {
 	 *
 	 * @since 0.2.0
 	 * @param string     $source Tracked source category.
-	 * @param int|string $id Native object ID or stable manual case reference.
+	 * @param int|string $id Native ID, stable WS submission hash or manual case reference.
 	 * @return void
 	 */
 	public function forget( string $source, $id ): void {
 		if ( 'gravityforms' === $source ) {
 			$this->gravity_links[ (int) $id ] = false;
+		}
+		if ( 'cf7' === $source ) {
+			$this->flamingo_links[ (int) $id ] = false;
 		}
 		$ref = $this->reference( $source, $id );
 		if ( '' === $ref ) {
@@ -352,6 +372,98 @@ final class Feedback {
 	 */
 	public function forget_comment( $id ): void {
 		$this->forget( 'comments', $id );
+	}
+
+	/**
+	 * Detaches a comment prediction before its subject or message is changed.
+	 *
+	 * Status-only moderation remains linked. A failed later native write can
+	 * conservatively lose an observation, never attach it to a different message.
+	 *
+	 * @since 0.5.0
+	 * @param array|\WP_Error $data Proposed unslashed native comment values.
+	 * @param array           $original Previous unslashed comment values.
+	 * @return array|\WP_Error Unmodified native update or preceding error.
+	 */
+	public function comment_update( $data, array $original ) {
+		if ( ! is_array( $data ) ) {
+			return $data;
+		}
+		foreach ( array( 'comment_content', 'comment_author', 'comment_author_email', 'comment_author_url', 'user_id' ) as $key ) {
+			if ( array_key_exists( $key, $data ) && (string) ( $original[ $key ] ?? '' ) !== (string) $data[ $key ] ) {
+				$this->forget( 'comments', (int) ( $original['comment_ID'] ?? 0 ) );
+				break;
+			}
+		}
+		return $data;
+	}
+
+	/**
+	 * Detaches a tracked CF7 inbox reference after native message deletion.
+	 *
+	 * @since 0.5.0
+	 * @param int      $id Deleted native post ID.
+	 * @param \WP_Post $post Deleted post supplied by WordPress.
+	 * @return void
+	 */
+	public function forget_flamingo( $id, $post ): void {
+		if ( isset( $post->post_type ) && 'flamingo_inbound' === $post->post_type ) {
+			$this->forget( 'cf7', $id );
+		}
+	}
+
+	/**
+	 * Reviews a native inbox status change only while its original content remains.
+	 *
+	 * WordPress emits this update after persistence and before Flamingo re-saves
+	 * unchanged metadata. Unknown historical messages never create observations.
+	 *
+	 * @since 0.5.0
+	 * @param int      $id Updated native message post ID.
+	 * @param \WP_Post $updated Persisted message values.
+	 * @param \WP_Post $original Previous native message values.
+	 * @return void
+	 */
+	public function flamingo_update( $id, $updated, $original ): void {
+		if ( ! isset( $updated->post_type ) || 'flamingo_inbound' !== $updated->post_type ) {
+			return;
+		}
+		if ( $updated->post_content !== $original->post_content || $updated->post_title !== $original->post_title ) {
+			$this->forget( 'cf7', $id );
+			return;
+		}
+		if ( $updated->post_status === $original->post_status ) {
+			return;
+		}
+		if ( 'flamingo-spam' === $updated->post_status ) {
+			$this->review( 'cf7', $id, true );
+		} elseif ( 'publish' === $updated->post_status && 'flamingo-spam' === $original->post_status ) {
+			$this->review( 'cf7', $id, false );
+		}
+	}
+
+	/**
+	 * Removes the prediction link when native inbox content metadata is changed.
+	 *
+	 * This includes privacy erasure and native API edits. Values are never copied
+	 * into the ledger; unchanged update_post_meta calls do not emit this action.
+	 *
+	 * @since 0.5.0
+	 * @param int|int[] $meta_id Updated or deleted native metadata identifiers.
+	 * @param int       $id Native post ID.
+	 * @param string    $key Native metadata key, inspected only for content fields.
+	 * @return void
+	 */
+	public function flamingo_meta_update( $meta_id, $id, string $key ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundBeforeLastUsed -- The native metadata hook supplies this unused identifier first.
+		if ( ! ( str_starts_with( $key, '_field_' ) || in_array( $key, array( '_from', '_from_name', '_from_email', '_subject', '_fields', '_consent' ), true ) ) || 'flamingo_inbound' !== get_post_type( $id ) ) {
+			return;
+		}
+		if ( ! array_key_exists( (int) $id, $this->flamingo_links ) ) {
+			$this->flamingo_links[ (int) $id ] = null !== $this->row( 'cf7', $id );
+		}
+		if ( $this->flamingo_links[ (int) $id ] ) {
+			$this->forget( 'cf7', $id );
+		}
 	}
 
 	/**
@@ -536,35 +648,118 @@ final class Feedback {
 		$sources = array(
 			'comments'     => $this->subject_comments( $email_address, $page ),
 			'gravityforms' => $this->subject_gravity_entries( $email_address, $page ),
+			'cf7'          => $this->subject_flamingo( $email_address, $page ),
 		);
+		$sources = $this->privacy_sources( $sources, $email_address, $page );
 		$data    = array();
 		foreach ( $sources as $source => $ids ) {
 			foreach ( $ids as $id ) {
-				$row = $this->row( $source, $id );
-				if ( null === $row ) {
-					continue;
+				$item = $this->export_item( $source, $id );
+				if ( null !== $item ) {
+					$data[] = $item;
 				}
-				$data[] = array(
-					'group_id'    => 'rktsky-antispam-feedback',
-					'group_label' => __( 'WP Antispam reviewed decisions', 'wp-antispam' ),
-					'item_id'     => $source . '-' . (int) $id,
-					'data'        => array(
-						array(
-							'name'  => __( 'Predicted spam', 'wp-antispam' ),
-							'value' => (string) (int) $row['predicted_spam'],
-						),
-						array(
-							'name'  => __( 'Human review', 'wp-antispam' ),
-							'value' => null === $row['actual_spam'] ? __( 'Not reviewed', 'wp-antispam' ) : (string) (int) $row['actual_spam'],
-						),
-					),
-				);
 			}
 		}
 		return array(
 			'data' => $data,
-			'done' => count( $sources['comments'] ) < 50 && count( $sources['gravityforms'] ) < 50,
+			'done' => $this->privacy_done( $sources, $email_address, $page ),
 		);
+	}
+
+
+	/**
+	 * Exports one known native reference within a confirmed privacy callback.
+	 *
+	 * Provider decorators supply IDs resolved by their own authenticated privacy
+	 * workflow. The local HMAC and source content are never exposed.
+	 *
+	 * @since 0.5.0
+	 * @param string     $source Fixed native source category.
+	 * @param int|string $id Existing native ID or stable WS submission hash.
+	 * @return array|null Native export item, or null without permission/observation.
+	 */
+	public function export_item( string $source, $id ): ?array {
+		if ( ! current_user_can( 'export_others_personal_data' ) ) {
+			return null;
+		}
+		$row = $this->row( $source, $id );
+		if ( null === $row ) {
+			return null;
+		}
+		return array(
+			'group_id'    => 'rktsky-antispam-feedback',
+			'group_label' => __( 'WP Antispam reviewed decisions', 'wp-antispam' ),
+			'item_id'     => $source . '-' . (string) $id,
+			'data'        => array(
+				array(
+					'name'  => __( 'Predicted spam', 'wp-antispam' ),
+					'value' => (string) (int) $row['predicted_spam'],
+				),
+				array(
+					'name'  => __( 'Human review', 'wp-antispam' ),
+					'value' => null === $row['actual_spam'] ? __( 'Not reviewed', 'wp-antispam' ) : (string) (int) $row['actual_spam'],
+				),
+			),
+		);
+	}
+
+	/**
+	 * Accepts bounded native subject mappings from optional integration modules.
+	 *
+	 * No request input selects source categories or API callbacks. Each module
+	 * must use its provider's confirmed email mapping and preserve pagination.
+	 *
+	 * @since 0.5.0
+	 * @param array<string,int[]> $sources Built-in subject ID pages.
+	 * @param string              $email Confirmed email from WordPress privacy tools.
+	 * @param int                 $page Positive native privacy page.
+	 * @return array<string,int[]> Allowlisted bounded native ID pages.
+	 */
+	private function privacy_sources( array $sources, string $email, int $page ): array {
+		/**
+		 * Adds native subject identifiers without copying fields into the ledger.
+		 *
+		 * @since 0.5.0
+		 * @param array<string,int[]> $sources Existing native ID pages.
+		 * @param string $email Confirmed subject email; never persisted here.
+		 * @param int $page Positive native privacy page.
+		 */
+		$mapped = apply_filters( 'rktsky_antispam_feedback_subjects', $sources, $email, $page );
+		if ( ! is_array( $mapped ) ) {
+			return $sources;
+		}
+		foreach ( $mapped as $source => $ids ) {
+			if ( ! in_array( $source, Providers::ids(), true ) || ! is_array( $ids ) ) {
+				continue;
+			}
+			$sources[ $source ] = array_values( array_filter( array_map( 'absint', array_slice( $ids, 0, 400 ) ) ) );
+		}
+		return $sources;
+	}
+
+	/**
+	 * Preserves native pagination when filtering can produce a sparse subject page.
+	 *
+	 * A provider can require a further page even if this page contains fewer than
+	 * fifty exact subject matches. It cannot end another source's incomplete page.
+	 *
+	 * @since 0.5.0
+	 * @param array<string,int[]> $sources Current native subject pages.
+	 * @param string              $email Confirmed privacy subject, never stored here.
+	 * @param int                 $page Current positive privacy page.
+	 * @return bool Whether all native mappings have reached their last page.
+	 */
+	private function privacy_done( array $sources, string $email, int $page ): bool {
+		$done = max( array_map( 'count', $sources ) ) < 50;
+		/**
+		 * Retains continuation for native APIs with approximate search pagination.
+		 *
+		 * @since 0.5.0
+		 * @param bool $done Whether built-in subject pages are complete.
+		 * @param string $email Confirmed subject email.
+		 * @param int $page Current native privacy page.
+		 */
+		return $done && (bool) apply_filters( 'rktsky_antispam_feedback_subjects_done', $done, $email, $page );
 	}
 
 	/**
@@ -585,7 +780,9 @@ final class Feedback {
 		$sources  = array(
 			'comments'     => $this->subject_comments( $email_address, $page ),
 			'gravityforms' => $this->subject_gravity_entries( $email_address, $page ),
+			'cf7'          => $this->subject_flamingo( $email_address, $page ),
 		);
+		$sources  = $this->privacy_sources( $sources, $email_address, $page );
 		$removed  = false;
 		$retained = false;
 		foreach ( $sources as $source => $ids ) {
@@ -602,7 +799,7 @@ final class Feedback {
 			'items_removed'  => $removed,
 			'items_retained' => $retained,
 			'messages'       => array(),
-			'done'           => count( $sources['comments'] ) < 50 && count( $sources['gravityforms'] ) < 50,
+			'done'           => $this->privacy_done( $sources, $email_address, $page ),
 		);
 	}
 
@@ -611,7 +808,7 @@ final class Feedback {
 	 *
 	 * @since 0.2.0
 	 * @param string     $source Supported source category.
-	 * @param int|string $id Original native ID or stable manual case reference.
+	 * @param int|string $id Original native ID, stable WS hash or manual case reference.
 	 * @return array|null Active linked metadata, or null for missing/expired data.
 	 */
 	private function row( string $source, $id ): ?array {
@@ -648,6 +845,40 @@ final class Feedback {
 					'fields'       => 'ids',
 					'orderby'      => 'comment_ID',
 					'order'        => 'ASC',
+				)
+			)
+		);
+	}
+
+	/**
+	 * Resolves sender email through WordPress's documented native post query API.
+	 *
+	 * Flamingo stores its subject identity in _from_email. Source messages stay
+	 * untouched while this callback pages through IDs, including native spam/trash.
+	 * No raw database access or duplicate email index is introduced.
+	 *
+	 * @since 0.5.0
+	 * @param string $email Confirmed subject email from WordPress privacy tools.
+	 * @param int    $page Positive privacy page, starting at one.
+	 * @return int[] At most fifty native inbox IDs, without retained field values.
+	 */
+	private function subject_flamingo( string $email, int $page ): array {
+		if ( ! is_email( $email ) || $page < 1 || ! post_type_exists( 'flamingo_inbound' ) ) {
+			return array();
+		}
+		return array_map(
+			'intval',
+			get_posts(
+				array(
+					'post_type'      => 'flamingo_inbound',
+					'post_status'    => array( 'publish', 'flamingo-spam', 'trash' ),
+					'posts_per_page' => 50,
+					'offset'         => ( $page - 1 ) * 50,
+					'orderby'        => 'ID',
+					'order'          => 'ASC',
+					'fields'         => 'ids',
+					'meta_key'       => '_from_email', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Confirmed, infrequent privacy workflow; uses the original sender index with bounded pages.
+					'meta_value'     => $email, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Exact native subject match; no alternate provider SQL or persistent copy.
 				)
 			)
 		);
@@ -758,7 +989,7 @@ final class Feedback {
 	 *
 	 * @since 0.2.0
 	 * @param string     $source Source category.
-	 * @param int|string $id Original native object ID.
+	 * @param int|string $id Original native ID or stable WS submission hash.
 	 * @return bool Whether the current actor can review this source.
 	 */
 	private function authorized( string $source, $id ): bool {
@@ -768,7 +999,18 @@ final class Feedback {
 		if ( 'gravityforms' === $source ) {
 			return current_user_can( 'gravityforms_edit_entries' ) || current_user_can( 'manage_options' ); // phpcs:ignore WordPress.WP.Capabilities.Unknown -- Gravity Forms registers this native capability for editing and moderating stored entries.
 		}
-		return current_user_can( 'manage_options' );
+		if ( 'cf7' === $source ) {
+			return current_user_can( 'manage_options' ) || current_user_can( 'flamingo_edit_inbound_message', (int) $id ); // phpcs:ignore WordPress.WP.Capabilities.Unknown -- Flamingo registers this object-level capability for native inbox moderation.
+		}
+		/**
+		 * Authorizes optional native provider moderation using its own scoped ACL.
+		 *
+		 * @since 0.5.0
+		 * @param bool $allowed Native site-administrator permission.
+		 * @param string $source Fixed native source category.
+		 * @param int|string $id Original native object identifier.
+		 */
+		return (bool) apply_filters( 'rktsky_antispam_feedback_can_review', current_user_can( 'manage_options' ), $source, $id );
 	}
 
 	/**
@@ -779,7 +1021,7 @@ final class Feedback {
 	 *
 	 * @since 0.2.0
 	 * @param string     $source Fixed supported source category.
-	 * @param int|string $id Native object ID or stable manual case reference.
+	 * @param int|string $id Native ID, stable WS submission hash or manual case reference.
 	 * @return string Hex HMAC, or empty when source/reference shape is invalid.
 	 */
 	private function reference( string $source, $id ): string {
@@ -787,6 +1029,23 @@ final class Feedback {
 		$manual = in_array( $source, array_map( static fn( $provider ) => 'manual_' . $provider, Providers::ids() ), true );
 		if ( ( ! $native && ! $manual ) || ( ! is_int( $id ) && ! is_string( $id ) ) ) {
 			return '';
+		}
+		if ( 'wsform' === $source ) {
+			/**
+			 * Resolves a native WS submission ID to its status-independent hash.
+			 *
+			 * WS privacy exports identify trashed submissions by hash. The provider
+			 * module must use its native object API; an unresolved ID is not stored.
+			 *
+			 * @since 0.5.0
+			 * @param int|string $id Native ID or already resolved submission hash.
+			 * @param string $source Fixed native source category.
+			 */
+			$id = apply_filters( 'rktsky_antispam_feedback_reference', $id, $source );
+			if ( ! is_string( $id ) || 1 !== preg_match( '/^[a-f0-9]{32}$/D', $id ) ) {
+				return '';
+			}
+			return hash_hmac( 'sha256', get_current_blog_id() . '|' . $source . '|' . $id, wp_salt( 'auth' ) . '|rktsky-antispam-feedback|1' );
 		}
 		$id = (string) $id;
 		if ( '' === $id || strlen( $id ) > 128 || ( $native && 1 !== preg_match( '/^[1-9][0-9]{0,19}$/D', $id ) ) ) {

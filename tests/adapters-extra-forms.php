@@ -10,7 +10,12 @@
  */
 namespace Rktsky\Antispam {
 	/** Explicit dependency stub; enablement belongs to the registry. @since 0.3.0 */
-	final class Settings {}
+	final class Settings {
+		/** Exposes the registry's enabled-adapter fixture. @since 0.5.0 @param string $provider Provider category. @return bool Always enabled in this contract fixture. */
+		public function enabled( string $provider ): bool {
+			return true;
+		}
+	}
 	/** Explicit guard stub recording transport/content boundaries. @since 0.3.0 */
 	final class Guard {
 		/** @var array Recorded checks. @since 0.3.0 */
@@ -38,6 +43,14 @@ namespace Rktsky\Antispam {
 		 */
 		public function message(): string {
 			return 'Please retry <safely>.';}
+		/** Classifies only the fixed synthetic policy verdict. @since 0.5.0 @param string $reason Synthetic reason. @return bool Whether it is a content verdict. */
+		public static function is_content_reason( string $reason ): bool {
+			return in_array( $reason, array( 'keyword', 'bbcode', 'pattern', 'language', 'country' ), true );
+		}
+		/** Supplies the separate fixed content error. @since 0.5.0 @return string Synthetic public message. */
+		public function spam_message(): string {
+			return 'This submission was not sent.';
+		}
 	}
 	/** Explicit escaped-rendering contract stub. @since 0.3.0 */
 	final class Fields {
@@ -255,7 +268,7 @@ namespace {
 	$ws         = new \Rktsky\Antispam\Integrations\WsForm( $settings, $guard, $fields, $quarantine );
 	foreach ( array( $formidable, $fluent, $ws ) as $adapter ) {
 		$adapter->register();}
-	rktsky_extra_expect( 6 === count( $GLOBALS['extra_hooks'] ), 'Exactly documented render/final-validation hooks must be installed.' );
+	rktsky_extra_expect( isset( $GLOBALS['extra_hooks']['frm_spam_entry_sources'], $GLOBALS['extra_hooks']['frm_pre_create_entry'], $GLOBALS['extra_hooks']['fluentform/before_insert_submission'], $GLOBALS['extra_hooks']['wsf_api_submit_response_data'] ), 'Documented validation, native spam storage and final response hooks must be installed.' );
 	rktsky_extra_expect( ! isset( $GLOBALS['extra_hooks']['frm_validate_entry'] ), 'Formidable preliminary validation must not consume final proof.' );
 	rktsky_extra_expect( 4 === $GLOBALS['extra_hooks']['fluentform/validation_errors'][2] && 3 === $GLOBALS['extra_hooks']['wsf_submit_validate'][2], 'Native callback argument contracts must match.' );
 	ob_start();

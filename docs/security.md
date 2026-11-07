@@ -6,7 +6,7 @@ Ein fremder Besucher darf das öffentliche Formular lesen und Challenges für de
 
 Die lokale REST-Route nimmt nur begrenzte Stringwerte an; Ausgabe ist `no-store`. Die HMAC-Nachrichten sind nach Protokollzweck und WordPress-Site-ID getrennt und verwenden das native Auth-Salt. Ein Token enthält Version, Anbieter, Formular-ID, UTC-Zeit und kryptografischen Zufall. Kanonische Base64-Kodierung verhindert mehrere Schreibweisen desselben signierten Payloads. Scope, Framing, Signatur und Alter werden serverseitig geprüft. Der dynamische Honeypot muss vorhanden und exakt leer sein; Arrays werden nicht als gültige Werte akzeptiert.
 
-Der Replay-Schutz verwendet ausschliesslich die offizielle WordPress-Datenbank-API `$wpdb` und eigene Plugin-Tabellen. Ein eindeutiger Schlüssel erzwingt den einmaligen Verbrauch auch bei parallelen Anfragen. Datenbankfehler im Replay-Schutz führen zur Ablehnung; ein Fehler wird nicht durch einen ungeschützten Fallback umgangen. Der Gravity-Forms-Adapter reicht ausschliesslich zwischen Validierung und dem einmaligen unmittelbar zugehörigen Abort-Hook ein formular- und tokengebundenes Ergebnis weiter. Eine neue Validierung oder der Verbrauch des Ergebnisses beendet diesen begrenzten Vorgang. Es gibt keine pauschale Freigabe desselben Tokens im PHP-Request. Statistiken löschen erhält das Replay-Ledger.
+Der Replay-Schutz verwendet ausschliesslich die offizielle WordPress-Datenbank-API `$wpdb` und eigene Plugin-Tabellen. Ein eindeutiger Schlüssel erzwingt den einmaligen Verbrauch auch bei parallelen Anfragen. Datenbankfehler im Replay-Schutz führen zur Ablehnung; ein Fehler wird nicht durch einen ungeschützten Fallback umgangen. Der Gravity-Forms-Adapter bindet seine Zwischenergebnisse an das genaue Formular, den Token und den nativen Verarbeitungsschritt. Der normale Übergang von Validierung zum Abort-Hook und die Weitergabe eines Inhaltstreffers an die native Spamentscheidung verwenden getrennte einmalige Freigaben. Eine neue Validierung oder der Verbrauch des Ergebnisses beendet den jeweiligen Vorgang. Seit 0.5.0 wird ein gültiger technischer Nachweis vor den Inhaltsregeln atomar verbraucht. Auch ein nativer Spamdatensatz kann deshalb nicht durch Wiederholung desselben Tokens vervielfacht werden. Es gibt keine pauschale Freigabe desselben Tokens im PHP-Request. Statistiken löschen erhält das Replay-Ledger.
 
 Der Browser verwendet weder Cookies noch persistente Browserdaten. Challenge-Fetches haben `credentials: omit`, `referrerPolicy: no-referrer`, Zeitlimit und dieselbe Origin. Der globale MutationObserver verarbeitet nur neu eingefügte Teilbäume, um nach AJAX gerenderte Formulare anzubinden. Er verändert keine fremden Eingabefelder und übermittelt keine Formularinhalte.
 
@@ -31,13 +31,13 @@ Die Originalpakete Divi Theme/Builder 4.27.9 und Divi Theme 5.19.0 wurden mit ec
 
 ## Privilegierte Oberfläche
 
-WordPress Settings API (`options.php`) prüft Berechtigungen und CSRF-Nonce. Das Plugin akzeptiert ausschliesslich bekannte Keys, boolesche Schalter und begrenzte Zahlen. Die eigene Statistiklöschung verlangt POST, `manage_options` und eine native Nonce. Templates escapen am Ausgabeort. SQL nutzt vorbereitete Werte und `%i` für die ausschliesslich intern gebildeten eigenen Tabellennamen. Assets sind auf den eigenen Adminscreen bzw. tatsächlich gerenderte Formulare begrenzt.
+WordPress Settings API (`options.php`) prüft Berechtigungen und CSRF-Nonce. Das Plugin akzeptiert ausschliesslich bekannte Keys, boolesche Schalter und begrenzte Zahlen. Die eigene Statistiklöschung verlangt POST, `manage_options` und eine native Nonce. Templates escapen am Ausgabeort. SQL nutzt vorbereitete Werte und `%i` für die ausschliesslich intern gebildeten eigenen Tabellennamen. Die vollständigen Verwaltungsassets sind auf den eigenen Adminscreen begrenzt. Ein kleiner separater Stil gilt nur für eigene Hinweise auf freigegebenen Anbieteransichten. Hinweise verwenden registrierte Menürechte; sie lesen keine Einsendungen und ändern keine Anbietereinstellungen. Öffentliche Formulare erhalten kein Werbe- oder Schutzbranding.
 
 ## nDSG und DSGVO
 
 Datensparsame Voreinstellungen, lokale Verarbeitung, zweckgebundene kurze Sicherheitszustände und nachvollziehbare Löschung orientieren sich an Datenschutz durch Technik und Voreinstellungen. Es werden keine IP-/E-Mail-Hashes angelegt. In der optionalen Quarantäne werden ausgewählte Kontaktfelder verschlüsselt gespeichert. Gespeicherte Token-Digests sind aus zufälligen technischen Werten abgeleitet; keine Nachricht oder Person wird darin kodiert. Die optional gespeicherten Quarantäneinhalte sind über die native WordPress-Auskunft und -Löschung nach der zugehörigen Kontakt-E-Mail erfasst. Nicht zuordenbare oder nach Schlüsselrotation unlesbare Datensätze benötigen die manuelle Prüfung oder Ablaufbereinigung. Die Datenverarbeitung des Formularanbieters bleibt unabhängig davon.
 
-Die Aktivierung des datensparsamen Modus verhindert neue Inhaltsaufbewahrung, Länderprüfungen und Administrator-Digests. Vorhandene Quarantänedaten verbleiben geschützt bis zur Löschung. Er ist keine Rechtskonformitätsgarantie. Verschlüsselung hebt den Personenbezug nicht auf; eine Sicherung von Datenbank und Site-Salts gemeinsam ermöglicht weiterhin die Entschlüsselung.
+Die Aktivierung des datensparsamen Modus verhindert neue Inhalte in der eigenen Quarantäne, Länderprüfungen und Administrator-Digests. Vorhandene Quarantänedaten verbleiben geschützt bis zur Löschung. Er ist keine Rechtskonformitätsgarantie. Verschlüsselung hebt den Personenbezug nicht auf; eine Sicherung von Datenbank und Site-Salts gemeinsam ermöglicht weiterhin die Entschlüsselung.
 
 30 Tage Statistikaufbewahrung, maximal 30 Tage optionale Quarantäne und zwei Stunden Tokengültigkeit sind Produktentscheidungen, keine gesetzlichen Fristen. Cron-Latenz, Backups, Hosting-Logs und Formularanbieter müssen in der tatsächlichen Website berücksichtigt werden. Technische Massnahmen allein begründen keine pauschale Rechtskonformität aller Installationen. Der WordPress-Textvorschlag beschreibt den tatsächlichen Datenfluss und verlangt Anpassung an den Betrieb.
 
@@ -57,3 +57,25 @@ Gelesene Primärquellen, 7. November 2026:
 WordPress- und Anbieterdaten werden über ihre dokumentierten Objekt-, Einstellungs- und Formularschnittstellen verarbeitet. Eigene vorbereitete Abfragen sind auf die sechs Tabellen für Token, Tagesstatistik, Gesamtzähler, verschlüsselte Quarantäne, Bewertungsmetadaten und Versandsperren begrenzt. Schemaeinrichtung verwendet `dbDelta`; es gibt keine separate Datenbankverbindung. Die Versandsperre liegt in der eigenen Tabelle `rktsky_antispam_jobs`, während Einstellungen und Versandstatus die Options-API verwenden. Ihre internen Aufgabenkennungen enthalten keine Formularinhalte und werden nach spätestens zwei Tagen zur geplanten Bereinigung fällig.
 
 Die Gleichzeitigkeit wird durch eindeutige Schlüssel und atomare Operationen über `$wpdb` abgesichert. Eine Folge unabhängiger Options-Lese- und Schreibaufrufe würde die einmalige Token- oder Aufgabenannahme nicht gleichwertig garantieren. Die Netzwerkverwaltung verwendet die nativen Site-/Metadaten-APIs. Es werden keine Core- oder Anbietertabellen mit eigenen SQL-Abfragen gelesen oder verändert.
+
+
+## Native Spamablage ab 0.5.0
+
+Inhaltstreffer mit verbrauchtem gültigem Nachweis können die native Spamablage
+nutzen. Technische Fehler bleiben vor der nativen Persistenz. Anbieterpfade
+müssen nachweisen, dass unsere Ablehnung keine Benachrichtigung, Zahlung,
+Kontoanlage oder normale Folgeaktion auslöst. Ein Statusfeld allein genügt dafür
+nicht. Wo eine Version oder Formularkonfiguration diese Grenze nicht anbietet,
+bleibt die optionale eigene Quarantäne zuständig. Deren Aufbewahrungsschalter
+verändert keine nativen Anbieterfristen.
+
+Die zusätzliche Ausnahme für Fluent Forms erlaubt genau einen begrenzten
+Spam-Insert über dessen dokumentiertes Submission-Modell, nachdem der technische
+Nachweis einmalig verbraucht wurde. Die Tabelle `fluentform_submissions` bleibt
+unverändert. Gespeichert werden Formular-ID, native Seriennummer, begrenzte
+deklarierte Text-/Auswahlfelder, Spamstatus und Zeitstempel. IP, Browser,
+Gerätekennungen, Quell-URL, Benutzer-ID, versteckte Felder, Passwörter, Dateien
+und Zahlungsdaten bleiben ausgeschlossen. Die vorhandene normale
+Verarbeitung würde Benachrichtigungen und Zahlungsaktionen vor einem sicheren
+Abbruch auslösen; deshalb wird dieser eng begrenzte Schreibweg verwendet.
+Es gibt keine Freigabe für weitere Anbieterabfragen oder -tabellen.

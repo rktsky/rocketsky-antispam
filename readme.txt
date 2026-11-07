@@ -3,7 +3,7 @@ Tags: antispam, spam, contact form 7, gravity forms, wpforms
 Requires at least: 6.6
 Requires PHP: 8.2
 Tested up to: 7.1
-Stable tag: 0.4.0
+Stable tag: 0.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,7 +19,7 @@ All functionality is included. No account, API key, paid plan or external spam s
 
 = Privacy =
 
-WP Antispam never stores IP addresses, user agents or fingerprints. Its default privacy-conscious mode disables new content storage, country checks and administrator mail. Optional local content rules inspect allowlisted fields. With explicit opt-in and privacy-conscious mode disabled, encrypted quarantine can retain selected contact fields for 1–30 days, up to 500 records, with WordPress privacy export and erasure. Password, hidden, payment and file fields are excluded. It sets no cookies and uses no browser storage or telemetry. Its challenge request goes only to the same website and contains a provider ID, form ID and signed public form descriptor.
+WP Antispam never stores IP addresses, user agents or fingerprints. Its default privacy-conscious mode disables new content storage in its own quarantine, country checks and administrator mail. Native provider spam storage follows that provider's separate settings and retention. Optional local content rules inspect allowlisted fields. With explicit opt-in and privacy-conscious mode disabled, encrypted quarantine can retain selected contact fields for 1–30 days, up to 500 records, with WordPress privacy export and erasure. Password, hidden, payment and file fields are excluded. It sets no cookies and uses no browser storage or telemetry. Its challenge request goes only to the same website and contains a provider ID, form ID and signed public form descriptor.
 
 The plugin stores digests of used random tokens and their expiry timestamps. Tokens expire after two hours. Expired digests are removed by hourly WordPress cron in bounded batches; delayed cron execution can extend physical storage. Local keyword, BBCode and bounded regular-expression rules can protect supported forms. Comment language checks use a local heuristic with an explicit unknown-language policy. Country checks need a local GeoIP source or a header from configured trusted infrastructure; no external IP lookup is performed.
 
@@ -35,7 +35,7 @@ A suggested privacy-policy paragraph is available through WordPress's privacy-po
 
 Protected forms require JavaScript and a working local REST API. REST comment creation requires protection tokens too. Native pingbacks and trackbacks are off by default and can be explicitly allowed outside privacy-conscious mode. WordPress may request the remote source and forward the sender IP for pingback verification. Multisite supports individual and network activation with separate site settings and storage.
 
-This is a 0.4.0 development candidate. Browser-capable bots can obtain valid tokens; this plugin cannot guarantee human submissions or prevent volumetric attacks. See the source repository's verification and integration documentation before production use.
+This is a 0.5.0 development candidate. Browser-capable bots can obtain valid tokens; this plugin cannot guarantee human submissions or prevent volumetric attacks. See the source repository's verification and integration documentation before production use.
 
 Source and verification: https://github.com/rktsky/wp-antispam
 
@@ -51,6 +51,10 @@ Source and verification: https://github.com/rktsky/wp-antispam
 
 No. Supported native forms receive protection through their provider's hooks.
 
+= Where can I review rejected submissions? =
+
+Open Settings → WP Antispam → Review spam. Each active integration links to its native spam queue or to WP Antispam quarantine. Relevant provider administration pages also show local protection and storage guidance. Quarantine must be enabled before it can retain selected rejected message fields; earlier discarded submissions cannot be recovered. Invalid technical proofs stop before native entry creation. Account and checkout contents are not quarantined.
+
 = Are other plugins' external services disabled? =
 
 No. Review your form provider, captcha and hosting settings separately.
@@ -64,6 +68,10 @@ No. Used tokens remain protected until expiry.
 Own tables and options are removed by default. You can opt to keep plugin data before uninstalling.
 
 == Changelog ==
+
+= 0.5.0 =
+* Use native spam queues for verified content rejections where supported, with direct review links and contextual protection notices.
+* Keep invalid technical requests before native persistence and respect local quarantine and provider storage settings.
 
 = 0.4.0 =
 * Separates the administration into Overview, Integrations, Filter rules, Review spam and Settings.

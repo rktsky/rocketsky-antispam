@@ -3,9 +3,9 @@
 # This file is distributed under the GPL-2.0-or-later license.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Antispam 0.4.0\n"
+"Project-Id-Version: WP Antispam 0.5.0\n"
 "POT-Creation-Date: 2026-11-07 15:00+0100\n"
-"PO-Revision-Date: 2026-11-07 15:00+0100\n"
+"PO-Revision-Date: 2026-11-08 00:15+0100\n"
 "Last-Translator: Rocketsky\n"
 "Language-Team: Rocketsky\n"
 "MIME-Version: 1.0\n"
@@ -47,7 +47,7 @@ msgstr "0 lascia la cancellazione a WordPress. Se attivata, l’attività pianif
 msgid "Accuracy"
 msgstr "Accuratezza"
 
-#: templates/quarantine.php:109
+#: templates/quarantine.php:126
 msgid "Actions"
 msgstr "Azioni"
 
@@ -59,7 +59,7 @@ msgstr "Attività"
 msgid "Activity statistics deleted. Used tokens remain protected against reuse."
 msgstr "Statistiche di attività eliminate. I token utilizzati restano protetti dal riutilizzo."
 
-#: src/Admin.php:279
+#: src/Admin.php:291
 msgid "Adds protection through the native form and spam hooks."
 msgstr "Aggiunge la protezione tramite le interfacce native del modulo e del controllo antispam."
 
@@ -115,11 +115,11 @@ msgstr "Valuta un invio ricevuto"
 msgid "Assessment"
 msgstr "Valutazione"
 
-#: src/Admin.php:395
+#: src/Admin.php:407
 msgid "BBCode link markup"
 msgstr "Marcatura dei link BBCode"
 
-#: templates/quarantine.php:50
+#: templates/quarantine.php:51
 msgid "Back to rejected submissions"
 msgstr "Torna agli invii rifiutati"
 
@@ -127,7 +127,7 @@ msgstr "Torna agli invii rifiutati"
 msgid "Block listed countries"
 msgstr "Blocca i paesi elencati"
 
-#: src/Admin.php:394
+#: src/Admin.php:406
 msgid "Blocked keyword"
 msgstr "Termine bloccato"
 
@@ -135,7 +135,7 @@ msgstr "Termine bloccato"
 msgid "Blocked keywords"
 msgstr "Termini bloccati"
 
-#: templates/quarantine.php:47
+#: templates/quarantine.php:48
 msgid "Case reference forgotten. Reviewed counts retain their evaluation window."
 msgstr "Riferimento al caso rimosso. I conteggi valutati mantengono il loro periodo di valutazione."
 
@@ -147,15 +147,15 @@ msgstr "Le modifiche si applicano dopo il salvataggio."
 msgid "Check protection status and recent activity. Review individual submissions under Review spam."
 msgstr "Controlla lo stato della protezione e l’attività recente. Esamina i singoli invii in «Esamina lo spam»."
 
-#: src/Admin.php:311
+#: src/Admin.php:323
 msgid "Checks classic and block checkout before final processing or payment. Content rules and quarantine are excluded."
 msgstr "Verifica il checkout classico e a blocchi prima dell’elaborazione finale o del pagamento. Regole sui contenuti e quarantena sono escluse."
 
-#: src/Admin.php:275
+#: src/Admin.php:287
 msgid "Checks native account registration before accounts or activation emails are created. No account fields are retained."
 msgstr "Verifica le registrazioni WordPress prima di creare account o inviare email di attivazione. I campi dell’account non vengono conservati."
 
-#: src/Admin.php:287 src/Admin.php:291 src/Admin.php:295 src/Admin.php:299 src/Admin.php:303
+#: src/Admin.php:299 src/Admin.php:303 src/Admin.php:307 src/Admin.php:311 src/Admin.php:315
 msgid "Checks submissions before the form is processed."
 msgstr "Controlla gli invii prima dell’elaborazione del modulo."
 
@@ -167,7 +167,7 @@ msgstr "Attiva almeno un’integrazione per iniziare a controllare gli invii."
 msgid "Choose what WP Antispam stores, how long it keeps records and whether it sends notifications."
 msgstr "Scegli quali dati conserva WP Antispam, per quanto tempo e se invia notifiche."
 
-#: templates/quarantine.php:44
+#: templates/quarantine.php:45
 msgid "Classification saved. Reusing the same reference updates the existing case."
 msgstr "Classificazione salvata. Riutilizzare lo stesso riferimento aggiorna il caso esistente."
 
@@ -179,11 +179,11 @@ msgstr "Codici paese ISO di due lettere, separati da virgole."
 msgid "Comment countries"
 msgstr "Paesi dei commenti"
 
-#: src/Admin.php:400
+#: src/Admin.php:412
 msgid "Comment country rule"
 msgstr "Regola del paese per i commenti"
 
-#: src/Admin.php:399
+#: src/Admin.php:411
 msgid "Comment language rule"
 msgstr "Regola della lingua per i commenti"
 
@@ -191,11 +191,11 @@ msgstr "Regola della lingua per i commenti"
 msgid "Comment languages"
 msgstr "Lingue dei commenti"
 
-#: src/Integrations/Comments.php:101 src/Integrations/Comments.php:128
+#: src/Integrations/Comments.php:115 src/Integrations/Comments.php:147
 msgid "Comment not submitted"
 msgstr "Commento non inviato"
 
-#: templates/provider.php:18
+#: templates/provider.php:19
 msgid "Compatible plugin not available"
 msgstr "Plugin compatibile non disponibile"
 
@@ -203,7 +203,7 @@ msgstr "Plugin compatibile non disponibile"
 msgid "Configured"
 msgstr "Configurato"
 
-#: templates/quarantine.php:83
+#: templates/quarantine.php:84
 msgid "Confirm spam"
 msgstr "Conferma come spam"
 
@@ -227,9 +227,13 @@ msgstr "Filtri del contenuto"
 msgid "Content filters do not apply to Divi, registration or checkout."
 msgstr "I filtri sui contenuti non si applicano a Divi, alle registrazioni o al checkout."
 
-#: src/Admin.php:397
+#: src/Admin.php:409
 msgid "Content rule processing limit"
 msgstr "Limite di elaborazione di una regola sui contenuti"
+
+#: src/SpamHandling.php:168
+msgid "Content spam uses this native spam queue and its own retention settings."
+msgstr "Lo spam rilevato nei contenuti usa questa coda nativa e le relative impostazioni di conservazione."
 
 #: templates/quality.php:24
 msgid "Correct decisions among all reviewed cases."
@@ -255,11 +259,11 @@ msgstr "Regola del paese"
 msgid "Country source"
 msgstr "Origine del paese"
 
-#: templates/quarantine.php:82
+#: templates/quarantine.php:83
 msgid "Current assessment: normal message"
 msgstr "Valutazione attuale: messaggio normale"
 
-#: templates/quarantine.php:82
+#: templates/quarantine.php:83
 msgid "Current assessment: spam"
 msgstr "Valutazione attuale: spam"
 
@@ -299,7 +303,7 @@ msgstr "Elimina le voci in quarantena dopo"
 msgid "Delete statistics"
 msgstr "Elimina le statistiche"
 
-#: templates/quarantine.php:92
+#: templates/quarantine.php:93
 msgid "Delete this record"
 msgstr "Elimina questa voce"
 
@@ -307,7 +311,7 @@ msgstr "Elimina questa voce"
 msgid "Deletes daily activity counts and the lifetime rejected-comment total. Reviewed detection results remain available for their 90-day window. This cannot be undone."
 msgstr "Elimina i contatori giornalieri di attività e il totale dei commenti rifiutati. I risultati di rilevamento valutati restano disponibili per il loro periodo di valutazione di 90 giorni. La cancellazione è irreversibile."
 
-#: templates/quarantine.php:87
+#: templates/quarantine.php:88
 msgid "Deleting this record is permanent. This screen cannot publish comments or resend forms."
 msgstr "La cancellazione di questa voce è definitiva. Questa schermata non può pubblicare commenti o inviare nuovamente moduli."
 
@@ -327,7 +331,7 @@ msgstr "Configurazione del riepilogo via e-mail"
 msgid "Divi contact form"
 msgstr "Modulo di contatto Divi"
 
-#: src/Admin.php:196
+#: src/Admin.php:208
 msgid "Dutch"
 msgstr "Neerlandese"
 
@@ -335,7 +339,7 @@ msgstr "Neerlandese"
 msgid "Email address"
 msgstr "Indirizzo e-mail"
 
-#: templates/provider.php:24
+#: templates/provider.php:33
 msgid "Enable"
 msgstr "Attiva"
 
@@ -343,11 +347,11 @@ msgstr "Attiva"
 msgid "Enable protection for the providers you use. Each integration covers all of its forms; no form edits are needed."
 msgstr "Attiva la protezione per i fornitori che usi. Ogni integrazione copre tutti i relativi moduli, senza doverli modificare."
 
-#: templates/provider.php:18
+#: templates/provider.php:19
 msgid "Enabled"
 msgstr "Attivato"
 
-#: src/Admin.php:192
+#: src/Admin.php:204
 msgid "English"
 msgstr "Inglese"
 
@@ -359,7 +363,7 @@ msgstr "ID della voce o riferimento interno"
 msgid "Expire within 2 hours; removed by scheduled cleanup"
 msgstr "Scadono entro 2 ore; eliminati dalla pulizia pianificata"
 
-#: src/Admin.php:386
+#: src/Admin.php:398
 msgid "Expired protection token"
 msgstr "Token di protezione scaduto"
 
@@ -375,7 +379,7 @@ msgstr "Scopri Speo"
 msgid "False alarms"
 msgstr "Falsi allarmi"
 
-#: src/Plugin.php:186
+#: src/Plugin.php:191
 msgid "Feedback statistics use local metadata about the original decision and a later administrator classification for up to 90 days. References to native comments, quarantined entries and manually reported case identifiers are stored as site-keyed HMAC values, without copying their content into feedback records. These references remain locally linkable while the source exists. Reviewed records can be detached from deleted sources while preserving the 90-day evaluation window. Metrics apply to reviewed examples only; unreviewed submissions and unavailable external inbox classifications are not treated as confirmed outcomes. WordPress privacy requests and source deletion must also remove or detach related feedback references. No feedback metadata is sent to a third party."
 msgstr "Le statistiche di valutazione usano metadati locali sulla decisione originale e su una successiva classificazione dell’amministrazione per un massimo di 90 giorni. I riferimenti a commenti nativi, voci in quarantena e identificativi di casi segnalati manualmente sono conservati come valori HMAC con chiave del sito, senza copiarne il contenuto nei dati di valutazione. Questi riferimenti restano collegabili localmente finché esiste la fonte. Le voci valutate possono essere scollegate da fonti eliminate mantenendo il periodo di valutazione di 90 giorni. Le metriche riguardano solo esempi valutati; gli invii non valutati e le classificazioni non disponibili di caselle esterne non sono trattati come risultati confermati. Le richieste WordPress relative ai dati personali e la cancellazione delle fonti devono anche rimuovere o scollegare i riferimenti di valutazione associati. Nessun metadato di valutazione viene inviato a terzi."
 
@@ -383,9 +387,21 @@ msgstr "Le statistiche di valutazione usano metadati locali sulla decisione orig
 msgid "Feedback uses local, linkable HMAC case references for up to 90 days, also in privacy-conscious mode. Scheduled cleanup may run late."
 msgstr "Le valutazioni usano riferimenti HMAC locali e collegabili ai casi per un massimo di 90 giorni, anche in modalità di minimizzazione dei dati. La pulizia pianificata può subire ritardi."
 
-#: src/Admin.php:165 templates/rules.php:26
+#: src/Admin.php:176 templates/rules.php:26
 msgid "Filter rules"
 msgstr "Regole di filtro"
+
+#: src/SpamHandling.php:82
+msgid "Flamingo spam"
+msgstr "Spam di Flamingo"
+
+#: src/SpamHandling.php:84
+msgid "Flamingo stores spam when the form allows it; otherwise WP Antispam retention applies. A form's storage prohibition is respected."
+msgstr "Flamingo conserva lo spam se il modulo lo consente; altrimenti si applica la conservazione di WP Antispam. Un divieto di conservazione del modulo viene rispettato."
+
+#: src/SpamHandling.php:77
+msgid "Fluent Forms entries"
+msgstr "Voci di Fluent Forms"
 
 #: templates/delivered-review.php:49
 msgid "Forget case reference"
@@ -399,19 +415,19 @@ msgstr "La rimozione elimina il collegamento. I risultati valutati restano dispo
 msgid "Form"
 msgstr "Modulo"
 
-#: templates/quarantine.php:60 templates/quarantine.php:109 templates/quarantine.php:111
+#: templates/quarantine.php:61 templates/quarantine.php:126 templates/quarantine.php:128
 msgid "Form ID"
 msgstr "ID del modulo"
 
-#: src/Admin.php:392
+#: src/Admin.php:404
 msgid "Form does not match token"
 msgstr "Il modulo non corrisponde al token"
 
-#: templates/quarantine.php:56 templates/quarantine.php:111
+#: templates/quarantine.php:57 templates/quarantine.php:128
 msgid "Form integration"
 msgstr "Integrazione del modulo"
 
-#: src/Admin.php:329
+#: src/Admin.php:341
 msgid "Form plugins"
 msgstr "Plugin per moduli"
 
@@ -419,19 +435,27 @@ msgstr "Plugin per moduli"
 msgid "Form provider"
 msgstr "Fornitore del modulo"
 
-#: src/Admin.php:193
+#: src/SpamHandling.php:72
+msgid "Formidable spam"
+msgstr "Spam di Formidable"
+
+#: src/Admin.php:205
 msgid "French"
 msgstr "Francese"
 
-#: src/Admin.php:191
+#: src/Admin.php:203
 msgid "German"
 msgstr "Tedesco"
 
-#: src/Admin.php:383
+#: src/SpamHandling.php:69
+msgid "Gravity Forms spam"
+msgstr "Spam di Gravity Forms"
+
+#: src/Admin.php:395
 msgid "Honeypot filled"
 msgstr "Campo esca compilato"
 
-#: src/Feedback.php:557
+#: src/Feedback.php:699
 msgid "Human review"
 msgstr "Valutazione umana"
 
@@ -443,23 +467,27 @@ msgstr "Include token scaduti ed errori tecnici."
 msgid "Includes technical failures. The rejection rate is not a measured spam detection accuracy. Counts refresh when this dashboard loads."
 msgstr "Include errori tecnici. Il tasso di rifiuto non misura l’accuratezza del rilevamento dello spam. I contatori si aggiornano al caricamento di questa bacheca."
 
-#: templates/delivered-review.php:22 templates/delivered-review.php:42 templates/quarantine.php:109 templates/quarantine.php:111
+#: templates/delivered-review.php:22 templates/delivered-review.php:42 templates/quarantine.php:126 templates/quarantine.php:128
 msgid "Integration"
 msgstr "Integrazione"
 
-#: src/Admin.php:164 templates/integrations.php:18 templates/overview.php:25
+#: src/SpamHandling.php:114
+msgid "Integration settings"
+msgstr "Impostazioni delle integrazioni"
+
+#: src/Admin.php:175 templates/integrations.php:18 templates/overview.php:25
 msgid "Integrations"
 msgstr "Integrazioni"
 
-#: src/Admin.php:385
+#: src/Admin.php:397
 msgid "Invalid protection token"
 msgstr "Token di protezione non valido"
 
-#: templates/quarantine.php:52
+#: templates/quarantine.php:53
 msgid "It may have expired or already been deleted."
 msgstr "Potrebbe essere scaduta o essere già stata eliminata."
 
-#: src/Admin.php:194
+#: src/Admin.php:206
 msgid "Italian"
 msgstr "Italiano"
 
@@ -479,7 +507,12 @@ msgstr "Ultimi 7 giorni · UTC"
 msgid "Local PHP GeoIP extension"
 msgstr "Estensione PHP GeoIP locale"
 
-#: wp-antispam.php:5
+#: src/Integrations/GravityForms.php:340
+#, php-format
+msgid "Local content policy: %s."
+msgstr "Regola locale sui contenuti: %s."
+
+#: wp-antispam.php:6
 msgid "Local spam protection for comments, registrations and forms. No external services."
 msgstr "Protezione antispam locale per commenti, registrazioni e moduli. Senza servizi esterni."
 
@@ -487,7 +520,7 @@ msgstr "Protezione antispam locale per commenti, registrazioni e moduli. Senza s
 msgid "Make sure your website privacy information describes the options you enable."
 msgstr "Assicurati che l’informativa sulla privacy del sito descriva le opzioni attivate."
 
-#: src/Admin.php:391
+#: src/Admin.php:403
 msgid "Malformed protection fields"
 msgstr "Campi di protezione non corretti"
 
@@ -495,7 +528,7 @@ msgstr "Campi di protezione non corretti"
 msgid "Manage integrations"
 msgstr "Gestisci le integrazioni"
 
-#: src/Admin.php:396
+#: src/Admin.php:408
 msgid "Matched content pattern"
 msgstr "Modello di contenuto rilevato"
 
@@ -507,19 +540,27 @@ msgstr "Tempo minimo prima dell’invio"
 msgid "Missed spam"
 msgstr "Spam non rilevato"
 
-#: src/Admin.php:384
+#: src/Admin.php:396
 msgid "Missing protection token"
 msgstr "Token di protezione mancante"
 
-#: src/Admin.php:398
+#: src/Admin.php:410
 msgid "Native provider spam check"
 msgstr "Controllo antispam nativo del fornitore"
 
-#: templates/overview.php:27 templates/quarantine.php:105
+#: src/SpamHandling.php:91 src/SpamHandling.php:97
+msgid "Native spam storage depends on each form's settings. Other rejections follow WP Antispam retention settings."
+msgstr "La conservazione nativa dello spam dipende dalle impostazioni di ogni modulo. Gli altri rifiuti seguono le impostazioni di conservazione di WP Antispam."
+
+#: templates/quarantine.php:117
+msgid "Native spam storage follows the provider's privacy and retention settings, independently of privacy-conscious mode. WP Antispam quarantine is encrypted, with capture limits and automatic deletion."
+msgstr "Il salvataggio nativo dello spam segue le impostazioni di privacy e conservazione del fornitore, indipendentemente dalla modalità di minimizzazione dei dati. La quarantena di WP Antispam è cifrata, con limiti di acquisizione ed eliminazione automatica."
+
+#: templates/overview.php:27 templates/quarantine.php:122
 msgid "New storage is off"
 msgstr "Nuovi salvataggi disattivati"
 
-#: templates/quarantine.php:124
+#: templates/quarantine.php:141
 msgid "Next"
 msgstr "Avanti"
 
@@ -527,7 +568,7 @@ msgstr "Avanti"
 msgid "No reviewed results yet. Assess rejected submissions or report missed spam to build the dataset."
 msgstr "Non ci sono ancora risultati valutati. Valuta gli invii rifiutati o segnala lo spam non rilevato per costruire la base di dati."
 
-#: templates/quarantine.php:107
+#: templates/quarantine.php:124
 msgid "No stored submissions"
 msgstr "Nessun invio salvato"
 
@@ -535,19 +576,23 @@ msgstr "Nessun invio salvato"
 msgid "No submissions checked in this period. Counts appear when a protected form is submitted."
 msgstr "Nessun invio controllato in questo periodo. I contatori appaiono quando viene inviato un modulo protetto."
 
-#: templates/quarantine.php:69
+#: src/SpamHandling.php:115
+msgid "No supported review destination is available for this integration."
+msgstr "Per questa integrazione non è disponibile una destinazione di revisione supportata."
+
+#: templates/quarantine.php:70
 msgid "No text fields were retained for this submission."
 msgstr "Nessun campo di testo è stato conservato per questo invio."
 
-#: src/Feedback.php:558
+#: src/Feedback.php:700
 msgid "Not reviewed"
 msgstr "Non valutato"
 
-#: templates/delivered-review.php:28 templates/quarantine.php:83
+#: templates/delivered-review.php:28 templates/quarantine.php:84
 msgid "Not spam"
 msgstr "Non è spam"
 
-#: templates/integrations.php:28 templates/overview.php:26 templates/provider.php:18 templates/rules.php:49 templates/rules.php:84 templates/rules.php:96
+#: templates/integrations.php:28 templates/overview.php:26 templates/provider.php:19 templates/rules.php:49 templates/rules.php:84 templates/rules.php:96
 msgid "Off"
 msgstr "Disattivato"
 
@@ -580,13 +625,17 @@ msgstr "Una parola o frase per riga. Gli invii corrispondenti vengono rifiutati.
 msgid "Only reviewed records from the period shown are included. Unreviewed submissions are excluded. These rates describe that reviewed subset and do not establish accuracy across all visitors or forms."
 msgstr "Sono incluse solo le voci valutate nel periodo indicato. Gli invii non valutati sono esclusi. Questi tassi descrivono il sottoinsieme valutato e non dimostrano l’accuratezza per tutti i visitatori o moduli."
 
-#: templates/quarantine.php:65
+#: templates/quarantine.php:66
 msgid "Only selected text fields are kept. Files and technical security fields are excluded. Long values may be shortened."
 msgstr "Vengono conservati solo i campi di testo selezionati. File e campi tecnici di sicurezza sono esclusi. I valori lunghi possono essere abbreviati."
 
 #: templates/dashboard.php:33
 msgid "Open WP Antispam"
 msgstr "Apri WP Antispam"
+
+#: templates/quarantine.php:101
+msgid "Open each integration's spam queue or review locally retained rejections below."
+msgstr "Apri lo spam di ciascuna integrazione oppure esamina qui sotto gli invii rifiutati e conservati localmente."
 
 #: templates/overview.php:62
 msgid "Open quarantine"
@@ -600,20 +649,20 @@ msgstr "Altri plugin possono eseguire controlli aggiuntivi."
 msgid "Other supported integrations"
 msgstr "Altre integrazioni supportate"
 
-#: src/Plugin.php:185
+#: src/Plugin.php:190
 msgid "Our forms use WP Antispam for local spam protection. Signed tokens, hidden fields and configured content rules are checked on our server. The plugin uses no external spam or IP-lookup service, cookies, browser storage or fingerprints. Used random-token digests expire after two hours and are removed by scheduled cleanup. Daily aggregate counters are kept for the configured period (30 days by default); the total rejected-comment counter remains until statistics are reset. Optional quarantine stores selected rejected submission fields, including names, email addresses and messages, encrypted locally for the configured period (7 days by default, at most 30 days and 500 records). Password, hidden, payment and file fields are excluded. The privacy-conscious mode disables quarantine, country checks, administrator email digests and native pingbacks/trackbacks. If native pingbacks are explicitly allowed, WordPress requests the remote source page and may forward the sender IP address; native WordPress moderation still applies. Optional country checks use a local GeoIP source or explicitly trusted infrastructure metadata and do not store IP addresses. Optional daily administrator emails contain aggregate counts only. Optional cleanup permanently deletes WordPress spam comments after the configured age. Scheduled deletion may run late if WordPress cron is delayed. WordPress privacy export and erasure tools cover quarantine records associated with the submitted contact email. WordPress, form providers, hosting, email delivery and backups process data independently. Adapt this notice to the features actually enabled, retention, legal basis and infrastructure of your website; this mode is not a legal compliance certification."
 msgstr "I nostri moduli usano WP Antispam per la protezione locale dallo spam. Token firmati, campi nascosti e regole sui contenuti configurate vengono controllati sul nostro server. Il plugin non utilizza servizi esterni antispam o di ricerca IP, cookie, archiviazione nel browser o impronte digitali del browser. Le impronte dei token casuali utilizzati scadono dopo due ore e vengono eliminate dalla pulizia pianificata. I contatori giornalieri aggregati sono conservati per il periodo configurato, 30 giorni per impostazione predefinita; il contatore totale dei commenti rifiutati resta fino all’azzeramento delle statistiche. La quarantena facoltativa conserva localmente, in forma cifrata, alcuni campi degli invii rifiutati, inclusi nomi, indirizzi e-mail e messaggi, per il periodo configurato: 7 giorni per impostazione predefinita, al massimo 30 giorni e 500 voci. I campi password, nascosti, di pagamento e file sono esclusi. La modalità di minimizzazione dei dati disattiva quarantena, controlli dei paesi, riepiloghi via e-mail all’amministrazione e pingback/trackback nativi. Se i pingback nativi sono espressamente consentiti, WordPress richiede la pagina di origine remota e può trasmettere l’indirizzo IP del mittente; la moderazione nativa di WordPress rimane attiva. I controlli facoltativi dei paesi usano una fonte GeoIP locale o metadati di infrastruttura esplicitamente attendibili e non memorizzano indirizzi IP. Le e-mail giornaliere facoltative all’amministrazione contengono solo contatori aggregati. La pulizia facoltativa elimina definitivamente i commenti spam di WordPress dopo l’età configurata. La cancellazione pianificata può subire ritardi se WordPress Cron viene eseguito in ritardo. Gli strumenti di esportazione e cancellazione dei dati personali di WordPress coprono le voci in quarantena associate all’indirizzo e-mail di contatto fornito. WordPress, i fornitori di moduli, l’hosting, la consegna delle e-mail e i backup trattano i dati in modo indipendente. Adatta questa informativa alle funzionalità effettivamente attivate, ai tempi di conservazione, alla base giuridica e all’infrastruttura del tuo sito; questa modalità non è una certificazione di conformità legale."
 
-#: src/Admin.php:163 templates/overview.php:21
+#: src/Admin.php:174 templates/overview.php:21
 msgid "Overview"
 msgstr "Panoramica"
 
-#: templates/quarantine.php:120
+#: templates/quarantine.php:137
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr "Pagina %1$d di %2$d"
 
-#: src/Admin.php:333
+#: src/Admin.php:345
 msgid "Page builders"
 msgstr "Page builder"
 
@@ -637,7 +686,7 @@ msgstr "Elimina definitivamente i commenti spam dopo"
 msgid "Pingbacks and trackbacks"
 msgstr "Pingback e trackback"
 
-#: src/Admin.php:197
+#: src/Admin.php:209
 msgid "Portuguese"
 msgstr "Portoghese"
 
@@ -645,11 +694,11 @@ msgstr "Portoghese"
 msgid "Precision"
 msgstr "Precisione"
 
-#: src/Feedback.php:553
+#: src/Feedback.php:695
 msgid "Predicted spam"
 msgstr "Previsto come spam"
 
-#: templates/quarantine.php:119
+#: templates/quarantine.php:136
 msgid "Previous"
 msgstr "Indietro"
 
@@ -681,7 +730,7 @@ msgstr "Sostegno al progetto"
 msgid "Protected forms need JavaScript to obtain a fresh token. Visitors are shown an error when verification is unavailable."
 msgstr "I moduli protetti richiedono JavaScript per ottenere un token aggiornato. Se la verifica non è disponibile, viene mostrato un errore."
 
-#: templates/overview.php:53 templates/quarantine.php:61 templates/quarantine.php:61 templates/quarantine.php:109 templates/quarantine.php:111 templates/quarantine.php:111
+#: templates/overview.php:53 templates/quarantine.php:62 templates/quarantine.php:62 templates/quarantine.php:126 templates/quarantine.php:128 templates/quarantine.php:128
 msgid "Protection check"
 msgstr "Controllo di protezione"
 
@@ -689,15 +738,15 @@ msgstr "Controllo di protezione"
 msgid "Protection status"
 msgstr "Stato della protezione"
 
-#: src/Admin.php:390
+#: src/Admin.php:402
 msgid "Protection storage unavailable"
 msgstr "Archivio di protezione non disponibile"
 
-#: src/Admin.php:271
+#: src/Admin.php:283
 msgid "Protects native WordPress comments. Pingbacks and trackbacks have separate settings."
 msgstr "Protegge i commenti nativi di WordPress. Pingback e trackback hanno impostazioni separate."
 
-#: src/Admin.php:315
+#: src/Admin.php:327
 msgid "Protects registration on My Account. Account creation during checkout uses checkout protection. No account fields are retained."
 msgstr "Protegge la registrazione in Il mio account. La creazione di account durante il checkout usa la protezione del checkout. I campi dell’account non vengono conservati."
 
@@ -705,15 +754,15 @@ msgstr "Protegge la registrazione in Il mio account. La creazione di account dur
 msgid "Quarantine"
 msgstr "Quarantena"
 
-#: templates/quarantine.php:105
+#: templates/quarantine.php:122
 msgid "Quarantine enabled"
 msgstr "Quarantena attivata"
 
-#: templates/quarantine.php:115
+#: templates/quarantine.php:132
 msgid "Quarantine pages"
 msgstr "Pagine della quarantena"
 
-#: templates/quarantine.php:25
+#: templates/quarantine.php:26
 msgid "Quarantine record deleted."
 msgstr "Voce in quarantena eliminata."
 
@@ -721,7 +770,7 @@ msgstr "Voce in quarantena eliminata."
 msgid "Quarantine storage configuration"
 msgstr "Configurazione dell’archiviazione in quarantena"
 
-#: src/Admin.php:206 src/Admin.php:438
+#: src/Admin.php:218 src/Admin.php:450
 msgid "Quarantine storage is unavailable."
 msgstr "L’archivio della quarantena non è disponibile."
 
@@ -729,7 +778,7 @@ msgstr "L’archivio della quarantena non è disponibile."
 msgid "Recall"
 msgstr "Richiamo"
 
-#: templates/quarantine.php:59 templates/quarantine.php:109 templates/quarantine.php:111
+#: templates/quarantine.php:60 templates/quarantine.php:126 templates/quarantine.php:128
 msgid "Received"
 msgstr "Ricevuto"
 
@@ -738,7 +787,7 @@ msgstr "Ricevuto"
 msgid "Recipient: %s"
 msgstr "Destinatario: %s"
 
-#: templates/quarantine.php:107
+#: templates/quarantine.php:124
 msgid "Records appear here when quarantine is enabled and WP Antispam rejects a new submission. Earlier rejections are not recovered."
 msgstr "Le voci appaiono qui quando la quarantena è attiva e WP Antispam rifiuta un nuovo invio. I rifiuti precedenti non vengono recuperati."
 
@@ -758,15 +807,19 @@ msgstr "Rifiutati"
 msgid "Rejected form submissions temporarily stored by this site."
 msgstr "Invii di moduli rifiutati temporaneamente conservati da questo sito."
 
-#: templates/quarantine.php:55
+#: src/SpamHandling.php:170
+msgid "Rejected requests in WP Antispam"
+msgstr "Richieste rifiutate in WP Antispam"
+
+#: templates/quarantine.php:56
 msgid "Rejected submission"
 msgstr "Invio rifiutato"
 
-#: templates/quarantine.php:109
+#: templates/quarantine.php:126
 msgid "Rejected submission metadata. Open a record to view its stored fields."
 msgstr "Metadati degli invii rifiutati. Apri una voce per vedere i campi conservati."
 
-#: templates/quarantine.php:105
+#: templates/quarantine.php:122
 msgid "Rejected submissions"
 msgstr "Invii rifiutati"
 
@@ -786,9 +839,9 @@ msgstr "Rimuovi un riferimento salvato"
 msgid "Retention and quarantine"
 msgstr "Conservazione e quarantena"
 
-#: templates/quarantine.php:100
-msgid "Review WordPress comments in their native queue and rejected form submissions here."
-msgstr "Esamina i commenti WordPress nella coda di moderazione nativa e gli invii dei moduli rifiutati qui."
+#: src/SpamHandling.php:195
+msgid "Retention settings"
+msgstr "Impostazioni di conservazione"
 
 #: templates/quality.php:27
 msgid "Review quarantined submissions and use supported native comment or form moderation to improve the dataset. A dash means no reviewed basis is available for that rate."
@@ -798,15 +851,15 @@ msgstr "Valuta gli invii in quarantena e usa la moderazione nativa supportata di
 msgid "Review rejected submissions"
 msgstr "Esamina gli invii rifiutati"
 
-#: templates/quarantine.php:34
+#: templates/quarantine.php:35
 msgid "Review saved. The submission remains in quarantine."
 msgstr "Valutazione salvata. L’invio resta in quarantena."
 
-#: src/Admin.php:166 templates/overview.php:27 templates/quality.php:19 templates/quarantine.php:99
+#: src/Admin.php:177 templates/overview.php:27 templates/quality.php:19 templates/quarantine.php:100
 msgid "Review spam"
 msgstr "Esamina lo spam"
 
-#: templates/overview.php:61 templates/quarantine.php:102
+#: templates/overview.php:61
 msgid "Review spam comments"
 msgstr "Esamina i commenti spam"
 
@@ -814,7 +867,7 @@ msgstr "Esamina i commenti spam"
 msgid "Review the suggested privacy policy text"
 msgstr "Consulta il testo suggerito per l’informativa privacy"
 
-#: templates/quarantine.php:78
+#: templates/quarantine.php:79
 msgid "Review this decision"
 msgstr "Valuta questa decisione"
 
@@ -847,13 +900,17 @@ msgstr "Salva le impostazioni"
 msgid "Scheduled deletion after the period below"
 msgstr "Cancellazione pianificata dopo il periodo seguente"
 
-#: templates/quarantine.php:62
+#: templates/quarantine.php:63
 msgid "Scheduled for deletion"
 msgstr "Cancellazione prevista"
 
 #: templates/delivered-review.php:28
 msgid "Select an assessment"
 msgstr "Scegli una valutazione"
+
+#: src/SpamHandling.php:189
+msgid "Selected rejected message fields can be retained in WP Antispam quarantine."
+msgstr "Alcuni campi dei messaggi rifiutati possono essere conservati nella quarantena di WP Antispam."
 
 #: templates/rules.php:74
 msgid "Selecting none disables the language restriction."
@@ -871,7 +928,7 @@ msgstr "Invia contatori aggregati tramite la posta di WordPress. I contenuti dei
 msgid "Set up protection"
 msgstr "Configura la protezione"
 
-#: src/Admin.php:142 src/Admin.php:167 templates/settings.php:24
+#: src/Admin.php:153 src/Admin.php:178 templates/settings.php:24
 msgid "Settings"
 msgstr "Impostazioni"
 
@@ -891,7 +948,11 @@ msgstr "Alcuni dati della quarantena non sono stati cancellati automaticamente. 
 msgid "Spam"
 msgstr "Spam"
 
-#: src/Admin.php:195
+#: templates/quarantine.php:106
+msgid "Spam review locations"
+msgstr "Dove esaminare lo spam"
+
+#: src/Admin.php:207
 msgid "Spanish"
 msgstr "Spagnolo"
 
@@ -912,7 +973,7 @@ msgstr "Commenti WordPress bloccati dall’ultimo azzeramento delle statistiche:
 msgid "Stopped by WP Antispam"
 msgstr "Bloccati da WP Antispam"
 
-#: templates/quarantine.php:107
+#: templates/quarantine.php:124
 msgid "Storage settings"
 msgstr "Impostazioni di conservazione"
 
@@ -924,11 +985,11 @@ msgstr "Conserva gli invii rifiutati in quarantena"
 msgid "Stored data and privacy information"
 msgstr "Dati conservati e informazioni sulla privacy"
 
-#: templates/quarantine.php:64
+#: templates/quarantine.php:65
 msgid "Stored fields"
 msgstr "Campi conservati"
 
-#: templates/quarantine.php:67
+#: templates/quarantine.php:68
 msgid "Stored fields could not be read. The record can still be deleted."
 msgstr "Non è stato possibile leggere i campi conservati. La voce può comunque essere eliminata."
 
@@ -940,7 +1001,7 @@ msgstr "I campi conservati possono includere nomi, indirizzi e-mail e messaggi. 
 msgid "Storing new rejections"
 msgstr "Salva i nuovi invii rifiutati"
 
-#: src/Admin.php:388
+#: src/Admin.php:400
 msgid "Submitted too quickly"
 msgstr "Invio troppo rapido"
 
@@ -948,7 +1009,7 @@ msgstr "Invio troppo rapido"
 msgid "Technical checks"
 msgstr "Controlli tecnici"
 
-#: templates/quarantine.php:44
+#: templates/quarantine.php:45
 msgid "The case action could not be completed. Check the reference and try again."
 msgstr "Non è stato possibile completare l’azione sul caso. Controlla il riferimento e riprova."
 
@@ -964,23 +1025,27 @@ msgstr "La fonte configurata non è disponibile. Si applica la gestione dei paes
 msgid "The form protection is unavailable. Please reload the page."
 msgstr "La protezione del modulo non è disponibile. Ricarica la pagina."
 
-#: src/Admin.php:434 src/Admin.php:473
+#: src/Admin.php:446 src/Admin.php:485
 msgid "The quarantine record is unavailable."
 msgstr "La voce in quarantena non è disponibile."
 
-#: templates/quarantine.php:29
+#: templates/quarantine.php:30
 msgid "The record is no longer available or could not be deleted."
 msgstr "La voce non è più disponibile o non è stato possibile eliminarla."
 
-#: src/Guard.php:168
+#: src/Guard.php:199
 msgid "The spam protection could not verify this submission. Please wait a moment and try again. If it still fails, reload the page. JavaScript must be enabled."
 msgstr "La protezione antispam non ha potuto verificare questo invio. Attendi un momento e riprova. Se il problema persiste, ricarica la pagina. JavaScript deve essere attivo."
+
+#: src/Guard.php:148
+msgid "The spam protection rejected this submission. Please check your message and try again."
+msgstr "La protezione antispam ha rifiutato questo invio. Controlla il messaggio e riprova."
 
 #: templates/integrations.php:46
 msgid "These providers are not currently available. Install or activate a compatible provider to use its integration. Earlier saved choices are kept."
 msgstr "Questi fornitori non sono attualmente disponibili. Installa o attiva un fornitore compatibile per usare la relativa integrazione. Le scelte già salvate vengono conservate."
 
-#: src/Admin.php:430 src/Admin.php:468 src/Admin.php:507 src/Admin.php:546
+#: src/Admin.php:442 src/Admin.php:480 src/Admin.php:519 src/Admin.php:558
 msgid "This action requires a form submission."
 msgstr "Questa azione richiede l’invio di un modulo."
 
@@ -992,23 +1057,23 @@ msgstr "Questo modulo usa una protezione antispam locale. Attiva JavaScript per 
 msgid "This mode limits optional processing. It does not certify compliance with the GDPR or the Swiss FADP."
 msgstr "Questa modalità limita i trattamenti facoltativi. Non certifica la conformità al GDPR o alla LPD svizzera."
 
-#: templates/quarantine.php:38
+#: templates/quarantine.php:39
 msgid "This record could not be reviewed. It may have expired or have no tracked prediction."
 msgstr "Non è stato possibile valutare questa voce. Potrebbe essere scaduta o non avere una previsione registrata."
 
-#: templates/quarantine.php:52
+#: templates/quarantine.php:53
 msgid "This record is unavailable"
 msgstr "Questa voce non è disponibile"
 
-#: templates/quarantine.php:57
+#: templates/quarantine.php:58
 msgid "This submission was stopped by a local protection check. A failed check does not confirm that its contents are spam."
 msgstr "Questo invio è stato fermato da un controllo di protezione locale. Il fallimento del controllo non conferma che il contenuto sia spam."
 
-#: src/Admin.php:387
+#: src/Admin.php:399
 msgid "Token already used"
 msgstr "Token già utilizzato"
 
-#: src/Admin.php:389
+#: src/Admin.php:401
 msgid "Trackback or pingback"
 msgstr "Trackback o pingback"
 
@@ -1044,7 +1109,7 @@ msgstr "Disattiva la modalità di minimizzazione dei dati per attivare la quaran
 msgid "Uninstalling"
 msgstr "Disinstallazione"
 
-#: src/Admin.php:393
+#: src/Admin.php:405
 msgid "Unprotected comment request"
 msgstr "Richiesta di commento non protetta"
 
@@ -1068,19 +1133,23 @@ msgstr "Impronte dei token utilizzati"
 msgid "Uses a local GeoIP extension or an explicitly trusted proxy header. No external country lookup is made. Network country does not establish where a person lives."
 msgstr "Usa un’estensione GeoIP locale o l’intestazione di un proxy esplicitamente attendibile. Non viene effettuata alcuna ricerca esterna del paese. Il paese della rete non determina dove vive una persona."
 
-#: src/Admin.php:307
+#: src/Admin.php:319
 msgid "Uses technical checks for Divi 4 and 5 contact forms. Content rules and quarantine are excluded."
 msgstr "Usa verifiche tecniche per i moduli di contatto Divi 4 e 5. Regole sui contenuti e quarantena sono escluse."
 
-#: src/Admin.php:283
+#: src/Admin.php:295
 msgid "Validates submissions before entries, drafts and notifications are created."
 msgstr "Controlla gli invii prima della creazione di voci, bozze e notifiche."
 
-#: templates/quarantine.php:111
+#: src/Plugin.php:189
+msgid "Verified content matches can be retained in WordPress or the form provider's native spam queue. Native retention and privacy settings apply independently of WP Antispam quarantine and privacy-conscious mode. Invalid technical proofs stop before native entry creation; selected rejected message fields may instead be retained in the optional WP Antispam quarantine. Forms that explicitly prohibit message storage are respected. Account, password, order and payment contents are not quarantined."
+msgstr "Gli invii con verifica tecnica valida il cui contenuto corrisponde a una regola possono essere conservati in WordPress o nello spam nativo del fornitore del modulo. Le impostazioni native di conservazione e privacy si applicano indipendentemente dalla quarantena e dalla modalità di minimizzazione dei dati di WP Antispam. Le prove tecniche non valide interrompono il trattamento prima della creazione di una voce nativa; alcuni campi dei messaggi rifiutati possono invece essere conservati nella quarantena facoltativa di WP Antispam. I moduli che vietano esplicitamente la conservazione dei messaggi vengono rispettati. I contenuti relativi ad account, password, ordini e pagamenti non vengono messi in quarantena."
+
+#: templates/quarantine.php:128
 msgid "View"
 msgstr "Visualizza"
 
-#: templates/quarantine.php:111
+#: templates/quarantine.php:128
 #, php-format
 msgid "View quarantine record %d"
 msgstr "Visualizza la voce in quarantena %d"
@@ -1089,15 +1158,48 @@ msgstr "Visualizza la voce in quarantena %d"
 msgid "View stopped submissions by check"
 msgstr "Visualizza gli invii bloccati per controllo"
 
-#: src/Admin.php:102 src/Admin.php:103 src/Dashboard.php:27
+#: src/Admin.php:113 src/Admin.php:114 src/Dashboard.php:27
 msgid "WP Antispam"
 msgstr "WP Antispam"
 
-#: src/Quarantine.php:320 src/Quarantine.php:335 src/Quarantine.php:395
+#: src/SpamHandling.php:211
+msgid "WP Antispam activity"
+msgstr "Attività di WP Antispam"
+
+#: src/SpamHandling.php:104 src/SpamHandling.php:106
+msgid "WP Antispam does not retain account fields or passwords."
+msgstr "WP Antispam non conserva campi dell’account né password."
+
+#: src/SpamHandling.php:110
+msgid "WP Antispam does not retain message or file contents."
+msgstr "WP Antispam non conserva contenuti di messaggi o file."
+
+#: src/SpamHandling.php:108
+msgid "WP Antispam does not retain order, payment or file contents."
+msgstr "WP Antispam non conserva contenuti di ordini, pagamenti o file."
+
+#: src/SpamHandling.php:196
+msgid "WP Antispam does not retain rejected message contents."
+msgstr "WP Antispam non conserva i contenuti dei messaggi rifiutati."
+
+#: templates/context-notices.php:16
+#, php-format
+msgid "WP Antispam is enabled for %s."
+msgstr "WP Antispam è attivo per %s."
+
+#: src/ContextNotices.php:187
+msgid "WP Antispam keeps no content copy of requests stopped before native storage."
+msgstr "WP Antispam non conserva copie dei contenuti delle richieste bloccate prima del salvataggio nativo."
+
+#: src/Quarantine.php:320 src/Quarantine.php:335 src/Quarantine.php:395 src/SpamHandling.php:188
 msgid "WP Antispam quarantine"
 msgstr "Quarantena WP Antispam"
 
-#: src/Feedback.php:499 src/Feedback.php:515 src/Feedback.php:549
+#: src/SpamHandling.php:170
+msgid "WP Antispam retention settings"
+msgstr "Conservazione di WP Antispam"
+
+#: src/Feedback.php:611 src/Feedback.php:627 src/Feedback.php:691
 msgid "WP Antispam reviewed decisions"
 msgstr "Decisioni valutate di WP Antispam"
 
@@ -1108,6 +1210,14 @@ msgstr "Sezioni di WP Antispam"
 #: src/Maintenance.php:94
 msgid "WP Antispam: daily rejection summary"
 msgstr "WP Antispam: riepilogo giornaliero dei rifiuti"
+
+#: src/SpamHandling.php:95
+msgid "WPForms spam"
+msgstr "Spam di WPForms"
+
+#: src/SpamHandling.php:89
+msgid "WS Form submissions"
+msgstr "Invii di WS Form"
 
 #: templates/sponsors.php:23
 msgid "Website analytics by Rocketsky."
@@ -1125,6 +1235,10 @@ msgstr "Checkout WooCommerce"
 msgid "WooCommerce registration"
 msgstr "Registrazione WooCommerce"
 
+#: src/SpamHandling.php:67
+msgid "WordPress comment spam"
+msgstr "Commenti spam di WordPress"
+
 #: src/Providers.php:95
 msgid "WordPress comments"
 msgstr "Commenti WordPress"
@@ -1137,19 +1251,19 @@ msgstr "Strumenti privacy di WordPress"
 msgid "WordPress registration"
 msgstr "Registrazione WordPress"
 
-#: src/Feedback.php:583 src/Quarantine.php:420
+#: src/Feedback.php:778 src/Quarantine.php:420
 msgid "You cannot erase this personal data."
 msgstr "Non puoi cancellare questi dati personali."
 
-#: src/Feedback.php:534 src/Quarantine.php:354
+#: src/Feedback.php:646 src/NativeFeedback.php:524 src/Quarantine.php:354
 msgid "You cannot export this personal data."
 msgstr "Non puoi esportare questi dati personali."
 
-#: src/Admin.php:427 src/Admin.php:465 src/Admin.php:504 src/Admin.php:543
+#: src/Admin.php:439 src/Admin.php:477 src/Admin.php:516 src/Admin.php:555
 msgid "You do not have permission to change these settings."
 msgstr "Non hai il permesso di modificare queste impostazioni."
 
-#: templates/quarantine.php:78
+#: templates/quarantine.php:79
 msgid "Your assessment updates the reviewed metrics and keeps this quarantined entry in place."
 msgstr "La tua valutazione aggiorna le metriche e mantiene questa voce in quarantena."
 

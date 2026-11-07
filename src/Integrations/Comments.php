@@ -28,6 +28,17 @@ final class Comments extends Adapter {
 	private array $comment_evidence = array();
 
 	/**
+	 * Content decisions awaiting Core's approval filter in the same native call.
+	 *
+	 * This is a spam label, never permission to bypass technical verification.
+	 * REST assigns its prepared status directly because Core approves it earlier.
+	 *
+	 * @since 0.5.0
+	 * @var array<string,bool>
+	 */
+	private array $comment_spam = array();
+
+	/**
 	 * Exact native XML-RPC server owning the current single-use pingback intent.
 	 *
 	 * @since 0.3.0
@@ -60,6 +71,7 @@ final class Comments extends Adapter {
 	public function register(): void {
 		add_action( 'comment_form', array( $this, 'comment_fields' ) );
 		add_filter( 'preprocess_comment', array( $this, 'check_comment' ) );
+		add_filter( 'pre_comment_approved', array( $this, 'approve_comment' ), PHP_INT_MAX, 2 );
 		add_filter( 'rest_pre_insert_comment', array( $this, 'check_rest_comment' ), 10, 2 );
 		add_action( 'wp_insert_comment', array( $this, 'observe_comment_spam' ), PHP_INT_MAX, 2 );
 		add_action( 'xmlrpc_call', array( $this, 'begin_xmlrpc' ), PHP_INT_MAX, 3 );
@@ -81,15 +93,17 @@ final class Comments extends Adapter {
 	}
 
 	/**
-	 * Rejects unprotected native submissions before WordPress inserts a comment.
+	 * Rejects unverifiable requests and routes verified content matches to Core spam.
 	 *
 	 * @since 0.1.0
+	 * @since 0.5.0 Keeps reviewable policy matches in the native moderation queue.
 	 * @param array $comment Native comment data.
 	 * @return array Unmodified accepted comment data.
 	 */
 	public function check_comment( array $comment ): array {
 		$type = isset( $comment['comment_type'] ) && is_string( $comment['comment_type'] ) ? $comment['comment_type'] : '';
 		$post = isset( $comment['comment_post_ID'] ) ? absint( $comment['comment_post_ID'] ) : 0;
+		unset( $this->comment_spam[ (string) $post ] );
 		if ( in_array( $type, array( 'pingback', 'trackback' ), true ) ) {
 			unset( $this->comment_evidence[ (string) $post ] );
 			if ( $this->consume_native_ping( $type, $post, $comment['comment_author_url'] ?? '' ) ) {
@@ -115,8 +129,13 @@ final class Comments extends Adapter {
 		$posted                                   = $this->posted();
 		$this->comment_evidence[ (string) $post ] = $this->token_evidence( $posted );
 		$reason                                   = $this->guard->check( 'comments', (string) $post, $posted, $data['fields'] );
+		if ( Guard::is_content_reason( $reason ) ) {
+			$this->comment_spam[ (string) $post ] = true;
+			return $comment;
+		}
 
 		if ( '' !== $reason ) {
+			unset( $this->comment_evidence[ (string) $post ] );
 			if ( 'pingback' === $reason ) {
 				$this->guard->reject( 'comments', 'pingback' );
 			} else {
@@ -137,6 +156,26 @@ final class Comments extends Adapter {
 	}
 
 	/**
+	 * Labels one verified native comment without reversing earlier Core rejections.
+	 *
+	 * WordPress still owns duplicate/flood checks, persistence, notifications,
+	 * moderation, retention and privacy tools. No second content copy is retained.
+	 *
+	 * @since 0.5.0
+	 * @param int|string|\WP_Error $approved Earlier native approval or rejection.
+	 * @param array                $comment Native comment data for this call.
+	 * @return int|string|\WP_Error Original result or the native spam status.
+	 */
+	public function approve_comment( $approved, array $comment ) {
+		$post = isset( $comment['comment_post_ID'] ) ? (string) absint( $comment['comment_post_ID'] ) : '0';
+		$spam = ! empty( $this->comment_spam[ $post ] );
+		if ( ! $spam || is_wp_error( $approved ) || in_array( $approved, array( 'spam', 'trash' ), true ) ) {
+			return $approved;
+		}
+		return 'spam';
+	}
+
+	/**
 	 * Protects REST comment creation, which bypasses preprocess_comment in Core.
 	 *
 	 * Existing-comment edits retain Core's independent authorization path.
@@ -154,6 +193,7 @@ final class Comments extends Adapter {
 
 		$post = isset( $comment['comment_post_ID'] ) ? absint( $comment['comment_post_ID'] ) : 0;
 		$type = isset( $comment['comment_type'] ) && is_string( $comment['comment_type'] ) ? $comment['comment_type'] : '';
+		unset( $this->comment_spam[ (string) $post ] );
 		$this->reset_ping_intents();
 		if ( in_array( $type, array( 'pingback', 'trackback' ), true ) ) {
 			unset( $this->comment_evidence[ (string) $post ] );
@@ -164,8 +204,15 @@ final class Comments extends Adapter {
 		$data                                     = $this->comment_content( $comment, false );
 		$this->comment_evidence[ (string) $post ] = $this->token_evidence( is_array( $params ) ? $params : array() );
 		$reason                                   = $this->guard->check( 'comments', (string) $post, is_array( $params ) ? $params : array(), $data['fields'] );
+		if ( Guard::is_content_reason( $reason ) ) {
+			if ( ! isset( $comment['comment_approved'] ) || 'trash' !== $comment['comment_approved'] ) {
+				$comment['comment_approved'] = 'spam';
+			}
+			return $comment;
+		}
 
 		if ( '' !== $reason ) {
+			unset( $this->comment_evidence[ (string) $post ] );
 			if ( 'pingback' === $reason ) {
 				$this->guard->reject( 'comments', 'pingback' );
 			} else {
@@ -191,6 +238,7 @@ final class Comments extends Adapter {
 	 */
 	public function observe_comment_spam( $comment_id, $comment ): void {
 		$post_id = (string) absint( $comment->comment_post_ID );
+		unset( $this->comment_spam[ $post_id ] );
 		if ( ! array_key_exists( $post_id, $this->comment_evidence ) ) {
 			return;
 		}

@@ -23,9 +23,17 @@ final class ContactForm7 extends Adapter {
 	 * Contact Form 7 forms rejected during the current request.
 	 *
 	 * @since 0.1.0
-	 * @var array<string, bool>
+	 * @var array<string, string>
 	 */
 	private $cf7_errors = array();
+
+	/**
+	 * Exact local evidence for the current native Flamingo save callback.
+	 *
+	 * @since 0.5.0
+	 * @var array<string,array<string,string>>
+	 */
+	private array $cf7_evidence = array();
 
 	/**
 	 * Registers native hooks after provider detection and explicit enablement.
@@ -38,6 +46,21 @@ final class ContactForm7 extends Adapter {
 		add_filter( 'wpcf7_posted_data', array( $this, 'cf7_processed_data' ) );
 		add_filter( 'wpcf7_spam', array( $this, 'check_cf7' ), 20, 2 );
 		add_filter( 'wpcf7_display_message', array( $this, 'cf7_message' ), 20, 2 );
+		add_filter( 'wpcf7_flamingo_submit_if', array( $this, 'flamingo_cases' ), PHP_INT_MAX );
+		add_action( 'wpcf7_after_flamingo', array( $this, 'observe_flamingo' ), PHP_INT_MAX );
+	}
+
+	/**
+	 * Checks the original CF7 saver and both required Flamingo APIs.
+	 *
+	 * This detects a native inbox, without enabling storage or overriding a form's
+	 * do_not_store setting. Native retention belongs to Flamingo.
+	 *
+	 * @since 0.5.0
+	 * @return bool Whether the native message-saving integration is registered.
+	 */
+	public static function native_available(): bool {
+		return class_exists( '\\Flamingo_Contact' ) && class_exists( '\\Flamingo_Inbound_Message' ) && false !== has_action( 'wpcf7_submit', 'wpcf7_flamingo_submit' );
 	}
 
 	/**
@@ -94,24 +117,31 @@ final class ContactForm7 extends Adapter {
 		$form    = $submission ? $submission->get_contact_form() : null;
 		$form_id = $form ? (string) $form->id() : '0';
 		unset( $this->cf7_errors[ $form_id ] );
+		$this->cf7_evidence[ $form_id ] = $this->token_evidence( $this->posted() );
 
 		if ( $spam ) {
-			$this->guard->observe_spam( 'cf7', $form_id, $this->posted() );
-			if ( $this->retention_enabled() ) {
-				$this->retain( 'cf7', $form_id, 'native_spam', $this->cf7_content( $form, $submission ) );
+			$reason = $this->guard->check( 'cf7', $form_id, $this->posted(), array(), true );
+			if ( '' === $reason ) {
+				$this->guard->observe_spam( 'cf7', $form_id, $this->posted() );
+				if ( ! $this->flamingo_stores_spam( $form ) && $this->cf7_storage_allowed( $submission ) && $this->retention_enabled() ) {
+					$this->retain( 'cf7', $form_id, 'native_spam', $this->cf7_content( $form, $submission ) );
+				}
+				return true;
 			}
-			return true;
+			$data = $this->cf7_content( $form, $submission );
+		} else {
+			$data   = $this->cf7_content( $form, $submission );
+			$reason = $this->guard->check( 'cf7', $form_id, $this->posted(), $data['fields'] );
 		}
-
-		$data   = $this->cf7_content( $form, $submission );
-		$reason = $this->guard->check( 'cf7', $form_id, $this->posted(), $data['fields'] );
 
 		if ( '' === $reason ) {
 			return false;
 		}
 
-		$this->cf7_errors[ $form_id ] = true;
-		$this->retain( 'cf7', $form_id, $reason, $data );
+		$this->cf7_errors[ $form_id ] = $reason;
+		if ( $this->cf7_storage_allowed( $submission ) && ( ! Guard::is_content_reason( $reason ) || ! $this->flamingo_stores_spam( $form ) ) ) {
+			$this->retain( 'cf7', $form_id, $reason, $data );
+		}
 
 		if ( $submission ) {
 			$submission->add_spam_log(
@@ -137,10 +167,79 @@ final class ContactForm7 extends Adapter {
 		$form = \WPCF7_ContactForm::get_current();
 
 		if ( 'spam' === $status && $form && ! empty( $this->cf7_errors[ (string) $form->id() ] ) ) {
-			return $this->guard->message();
+			return Guard::is_content_reason( $this->cf7_errors[ (string) $form->id() ] ) ? $this->guard->spam_message() : $this->guard->message();
 		}
 
 		return $message;
+	}
+
+	/**
+	 * Keeps invalid technical requests out of the provider's native inbox.
+	 *
+	 * Only this request's local technical rejection removes the spam save case.
+	 * Authentic content matches and other providers' spam verdicts remain native.
+	 * Existing restrictions from other filters are preserved.
+	 *
+	 * @since 0.5.0
+	 * @param array $cases Existing CF7 statuses eligible for Flamingo persistence.
+	 * @return array Original cases, excluding spam for a local technical rejection.
+	 */
+	public function flamingo_cases( array $cases ): array {
+		$form   = \WPCF7_ContactForm::get_current();
+		$reason = $form ? ( $this->cf7_errors[ (string) $form->id() ] ?? '' ) : '';
+		return '' !== $reason && ! Guard::is_content_reason( $reason ) ? array_values( array_diff( $cases, array( 'spam' ) ) ) : $cases;
+	}
+
+	/**
+	 * Tracks a persisted native inbox item without copying any message fields.
+	 *
+	 * The saver callback is synchronous with the protected CF7 lifecycle. Failed
+	 * native saves and submissions never seen by this adapter create no ledger row.
+	 *
+	 * @since 0.5.0
+	 * @param array $result Native submission result including Flamingo object ID.
+	 * @return void
+	 */
+	public function observe_flamingo( array $result ): void {
+		$form    = \WPCF7_ContactForm::get_current();
+		$form_id = $form ? (string) $form->id() : '';
+		if ( ! $this->feedback || ! isset( $this->cf7_evidence[ $form_id ] ) || empty( $result['flamingo_inbound_id'] ) ) {
+			return;
+		}
+		$status = $result['status'] ?? '';
+		$this->feedback->track( 'cf7', (int) $result['flamingo_inbound_id'], 'spam' === $status );
+		unset( $this->cf7_evidence[ $form_id ] );
+	}
+
+	/**
+	 * Respects CF7's explicit submission-level prohibition on message retention.
+	 *
+	 * Older providers without this API retain the established opt-in policy.
+	 *
+	 * @since 0.5.0
+	 * @param \WPCF7_Submission|null $submission Current provider submission.
+	 * @return bool Whether CF7 has not explicitly prohibited retention.
+	 */
+	private function cf7_storage_allowed( $submission ): bool {
+		return ! $submission || ! is_callable( array( $submission, 'get_meta' ) ) || ! $submission->get_meta( 'do_not_store' );
+	}
+
+	/**
+	 * Honours native saver filters and demonstration forms before choosing an inbox.
+	 *
+	 * The submission's explicit do_not_store flag separately prohibits both local
+	 * and native retention. This method never enables a disabled native save case.
+	 *
+	 * @since 0.5.0
+	 * @param \WPCF7_ContactForm|null $form Current native form definition.
+	 * @return bool Whether the registered native saver accepts a spam result.
+	 */
+	private function flamingo_stores_spam( $form ): bool {
+		if ( ! self::native_available() || ( $form && is_callable( array( $form, 'in_demo_mode' ) ) && $form->in_demo_mode() ) ) {
+			return false;
+		}
+		$cases = apply_filters( 'wpcf7_flamingo_submit_if', array( 'spam', 'mail_sent', 'mail_failed' ) ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Reads the original provider's documented saver policy without changing it.
+		return is_array( $cases ) && in_array( 'spam', $cases, true );
 	}
 
 	/**

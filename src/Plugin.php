@@ -41,21 +41,25 @@ final class Plugin {
 	public static function boot(): void {
 		Network::register();
 		self::upgrade();
-		$settings     = new Settings();
-		$token        = new Token();
-		$store        = new Store();
-		$quarantine   = new Quarantine( $settings );
-		$feedback     = new Feedback();
-		$guard        = new Guard( $settings, $token, $store, new ContentRules( $settings, new Language(), new Country( $settings ) ) );
-		$fields       = new Fields( $settings, $token );
-		$integrations = new Integrations( $settings, $guard, $fields, $quarantine, $feedback );
+		$settings      = new Settings();
+		$token         = new Token();
+		$store         = new Store();
+		$quarantine    = new Quarantine( $settings );
+		$feedback      = new Feedback();
+		$spam_handling = new SpamHandling( $settings, $quarantine );
+		$guard         = new Guard( $settings, $token, $store, new ContentRules( $settings, new Language(), new Country( $settings ) ) );
+		$fields        = new Fields( $settings, $token );
+		$integrations  = new Integrations( $settings, $guard, $fields, $quarantine, $feedback );
 		$integrations->register();
 		add_action( 'after_setup_theme', array( $integrations, 'register_theme' ), PHP_INT_MAX );
 		add_action( 'init', array( $integrations, 'register_theme' ), PHP_INT_MAX );
 		add_action( 'wp_loaded', array( $integrations, 'register_theme' ), 0 );
-		( new Admin( $settings, $store, $quarantine, $feedback ) )->register();
+		( new Admin( $settings, $store, $quarantine, $feedback, $spam_handling ) )->register();
+		( new ContextNotices( $settings, $spam_handling ) )->register();
 		$quarantine->register();
 		$feedback->register();
+		( new NativeFeedback( $feedback ) )->register();
+		( new WpFormsFeedback( $feedback ) )->register();
 		add_action( 'wp_dashboard_setup', array( Dashboard::class, 'register' ) );
 		add_action( 'admin_init', array( self::class, 'upgrade' ) );
 		add_action( 'admin_init', array( $settings, 'register' ) );
@@ -182,6 +186,7 @@ final class Plugin {
 	 */
 	public static function privacy(): void {
 		if ( function_exists( 'wp_add_privacy_policy_content' ) ) {
+			wp_add_privacy_policy_content( 'WP Antispam', wpautop( esc_html__( 'Verified content matches can be retained in WordPress or the form provider\'s native spam queue. Native retention and privacy settings apply independently of WP Antispam quarantine and privacy-conscious mode. Invalid technical proofs stop before native entry creation; selected rejected message fields may instead be retained in the optional WP Antispam quarantine. Forms that explicitly prohibit message storage are respected. Account, password, order and payment contents are not quarantined.', 'wp-antispam' ) ) );
 			wp_add_privacy_policy_content( 'WP Antispam', wpautop( esc_html__( 'Our forms use WP Antispam for local spam protection. Signed tokens, hidden fields and configured content rules are checked on our server. The plugin uses no external spam or IP-lookup service, cookies, browser storage or fingerprints. Used random-token digests expire after two hours and are removed by scheduled cleanup. Daily aggregate counters are kept for the configured period (30 days by default); the total rejected-comment counter remains until statistics are reset. Optional quarantine stores selected rejected submission fields, including names, email addresses and messages, encrypted locally for the configured period (7 days by default, at most 30 days and 500 records). Password, hidden, payment and file fields are excluded. The privacy-conscious mode disables quarantine, country checks, administrator email digests and native pingbacks/trackbacks. If native pingbacks are explicitly allowed, WordPress requests the remote source page and may forward the sender IP address; native WordPress moderation still applies. Optional country checks use a local GeoIP source or explicitly trusted infrastructure metadata and do not store IP addresses. Optional daily administrator emails contain aggregate counts only. Optional cleanup permanently deletes WordPress spam comments after the configured age. Scheduled deletion may run late if WordPress cron is delayed. WordPress privacy export and erasure tools cover quarantine records associated with the submitted contact email. WordPress, form providers, hosting, email delivery and backups process data independently. Adapt this notice to the features actually enabled, retention, legal basis and infrastructure of your website; this mode is not a legal compliance certification.', 'wp-antispam' ) ) );
 			wp_add_privacy_policy_content( 'WP Antispam', wpautop( esc_html__( 'Feedback statistics use local metadata about the original decision and a later administrator classification for up to 90 days. References to native comments, quarantined entries and manually reported case identifiers are stored as site-keyed HMAC values, without copying their content into feedback records. These references remain locally linkable while the source exists. Reviewed records can be detached from deleted sources while preserving the 90-day evaluation window. Metrics apply to reviewed examples only; unreviewed submissions and unavailable external inbox classifications are not treated as confirmed outcomes. WordPress privacy requests and source deletion must also remove or detach related feedback references. No feedback metadata is sent to a third party.', 'wp-antispam' ) ) );
 		}

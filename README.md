@@ -1,76 +1,99 @@
 # WP Antispam
 
-Eigenständiges Open-Source-Plugin von **Rocketsky**, GPL-2.0-or-later. Lokaler Spamschutz für WordPress-Kommentare und Registrierung, Contact Form 7, Gravity Forms, WPForms, Formidable Forms, Fluent Forms, WS Form, Elementor Forms, Divi-Kontaktformulare sowie WooCommerce-Checkout und Registrierung. Keine kostenpflichtigen Funktionen, externen Captchas oder Spamdienste.
+An open-source WordPress plugin by **Rocketsky**, licensed under GPL-2.0-or-later. Local spam protection for WordPress comments and registration, Contact Form 7, Gravity Forms, WPForms, Formidable Forms, Fluent Forms, WS Form, Elementor Forms, Divi contact forms, and WooCommerce checkout and registration. All features are included, with no paid tier, external captcha, or spam service.
 
-**Stand: 0.4.0, Entwicklungskandidat.** Die tatsächlichen Prüfungen und offenen Freigabepunkte stehen in [docs/verification.md](docs/verification.md). Eine Freigabe durch WordPress.org ist damit nicht verbunden.
+**Version 0.5.0 is a development candidate.** Actual test coverage and remaining release requirements are recorded in [verification](docs/verification.md). The plugin has not been approved by the WordPress.org plugin directory.
 
-## Installation und Bedienung
+## Installation
 
-Formularintegrationen sind bei neuen Installationen ausgeschaltet. Aktiviere die
-Anbieter, die Du nutzt. Ein verfügbares Plugin bedeutet, dass die Integration
-bereitsteht; die Anzeige zählt keine angelegten oder veröffentlichten Formulare.
-Bestehende gespeicherte Auswahlen bleiben beim Update erhalten. Fehlt ein Anbieter,
-ist sein Schalter ausgegraut und ohne Häkchen; die gespeicherte Auswahl bleibt für
-eine spätere Reaktivierung erhalten.
+1. Install the plugin directory as `wp-antispam` inside `wp-content/plugins/` and activate it in WordPress. The technical minimum requirements are WordPress 6.6 and PHP 8.2; tested versions are listed in the verification document.
+2. Open **Settings → WP Antispam → Integrations** and enable the providers you use. Supported forms receive protection automatically. No snippets or form-editor changes are required.
+3. Test a normal submission and a rejection/retry case on your website. Protected forms require JavaScript and access to the local REST endpoint. WP Antispam does not change existing captcha or external-service settings in form plugins.
 
-1. Den Plugin-Ordner als `wp-antispam` nach `wp-content/plugins/` installieren und in WordPress aktivieren. PHP 8.2 und WordPress 6.6 sind die technischen Mindestanforderungen; die tatsächlich geprüften Versionen stehen im Prüfnachweis.
-2. Unter **Einstellungen → WP Antispam → Integrationen** die gewünschten Anbieter aktivieren. Vorhandene Formulare erhalten die Schutzfelder automatisch. Keine Snippets oder Änderungen im Formular-Editor nötig.
-3. Eine gültige Einsendung und einen Fehlerfall auf der eigenen Website prüfen. Formulare benötigen JavaScript und Zugriff auf den lokalen REST-Endpunkt. Bestehende Captchas und andere Dienste der Formularplugins werden durch WP Antispam nicht umkonfiguriert.
+Comment protection is enabled by default. Form, account, and checkout integrations require explicit activation on new installations. Existing saved choices are preserved during updates. An unavailable provider has a disabled, unchecked control; its saved choice remains available if the provider is reactivated. Provider availability describes integration readiness, rather than the number of forms created or published.
 
-Der Kommentarschutz ist standardmässig aktiviert. Kommentare über REST benötigen ebenfalls gültige Schutzfelder; externe Kommentar-Apps und eigene Integrationen müssen berücksichtigt werden. Trackbacks/Pingbacks werden standardmässig früh abgewiesen. Ihre ausdrückliche Freigabe ist bei ausgeschaltetem datensparsamen Modus möglich: WordPress ruft bei Pingbacks die Quellseite ab und kann die Absender-IP weiterleiten. Multisite unterstützt einzelne Aktivierung und Netzwerkaktivierung mit getrennten Einstellungen und Daten je Website.
+REST comment creation also requires valid protection fields. External comment applications and custom integrations need to account for this requirement. Pingbacks and trackbacks are rejected by default. They can be explicitly allowed outside privacy-conscious mode; native WordPress pingback verification requests the source page and may forward the sender IP address.
 
-## Verwaltung
+Multisite supports individual and network activation, with separate settings and data for each website.
 
-Die Verwaltung ist nach Aufgaben aufgeteilt:
+GitHub builds are updated manually. Their Update URI prevents WordPress from offering an unrelated plugin-directory update under the same development slug.
 
-- **Übersicht:** Schutzstatus, Aktivität und bewertete Erkennungsergebnisse.
-- **Integrationen:** verfügbare Anbieter aktivieren und technische Prüfungen einstellen.
-- **Filterregeln:** Inhalte und Kommentare nach den eigenen Regeln filtern.
-- **Spam prüfen:** Kommentar-Moderation öffnen, Quarantäne prüfen und zugestellte Einsendungen bewerten.
-- **Einstellungen:** Datenschutzmodus, Aufbewahrung, Benachrichtigungen und Deinstallation.
+## Administration
 
-Jede Einstellungsseite speichert ihre eigenen Felder. Andere gespeicherte Bereiche
-bleiben erhalten. Der Datenschutzmodus wird zentral unter Einstellungen geändert.
+The administration is organised by task:
 
-## Schutzverfahren und Grenzen
+- **Overview:** protection status, activity, and reviewed detection results.
+- **Integrations:** enable available providers and configure technical checks.
+- **Filter rules:** configure content and comment policies.
+- **Review spam:** open the appropriate spam queue, review quarantine, and classify delivered submissions.
+- **Settings:** privacy-conscious mode, retention, notifications, and uninstall behaviour.
 
-Ein im HTML signierter Formularbezug ermöglicht einen frischen, lokal signierten Token. Ein zufälliger Honeypot-Feldname, strikte Scope-/Zeitprüfung und atomare Einmalverwendung prüfen die Einsendung. Die optionale Mindestzeit ist standardmässig aus, weil sie schnelle Eingaben und Autofill beeinträchtigen kann. Native Berechtigungen, Validierung und Spamprüfungen der Anbieter bleiben zuständig.
+Each settings page saves its own fields while preserving other sections. Privacy-conscious mode is configured centrally under Settings.
 
-Konfigurierbare Keyword-, BBCode- und begrenzte Regex-Regeln prüfen erlaubte Formularfelder lokal. Kommentare lassen sich zusätzlich nach einer lokalen Sprachheuristik oder dem Land filtern. WP Antispam erkennt viele einfache Formularbots und verhindert Wiederverwendung gültiger Tokens. Ein Bot, der JavaScript ausführt oder das öffentliche Challenge-Protokoll nachbildet, kann eigene gültige Tokens erhalten. Manueller Spam, kompromittierte Websites und volumetrische Angriffe benötigen weitere Massnahmen. Ein bestandener lokaler Check ist kein Nachweis einer menschlichen Person oder einer zugestellten Nachricht.
+## Where rejected submissions go
 
-## Daten und Betrieb
+**Review spam** links to the review destinations of all enabled, available integrations. The same destinations appear beside each integration and in notices on relevant provider administration screens. WordPress comments remain under **Comments → Spam**. Supported form providers use their own spam queues where the required workflow is available; Contact Form 7 can use Flamingo. Form-specific storage settings are respected.
 
-- Der standardmässige **datensparsame Modus** verhindert neue Inhaltsaufbewahrung, Länderprüfungen und Administrator-Digests. Lokale Inhalts- und Sprachregeln bleiben möglich. Er ist keine nDSG-/DSGVO-Zertifizierung einer Website. Das Einschalten löscht zuvor gespeicherte Quarantäneinhalte nicht automatisch; diese bleiben bis zur Löschung zugriffsgeschützt.
-- Optional lassen sich ausgewählte Felder abgewiesener Kommentare und Formulare in einer verschlüsselten lokalen Quarantäne speichern: höchstens 500 Einträge, standardmässig 7 und höchstens 30 Tage. Versteckte Felder, Passwortfelder, Zahlungsfelder und Dateien werden ausgeschlossen. WordPress-Export und -Löschung nach Kontakt-E-Mail sind integriert. IP-Adressen, User-Agents und Browserprofile speichert WP Antispam auch dabei nicht.
-- Keine Cookies, Local Storage, Telemetrie oder ausgehenden Anfragen an Spam-/IP-Dienste. Optionale tägliche Administrator-E-Mails enthalten nur Zähler und nutzen den konfigurierten WordPress-Mailversand.
-- Der Browser sendet an den eigenen REST-Endpunkt ausschliesslich Formularanbieter, Formular-ID und den öffentlichen signierten Formularbezug. Der Server speichert beim Einlösen einen HMAC-Digest des zufälligen Tokens und dessen Ablaufzeit. Ein Digest ist keine Verschlüsselung von Formulardaten.
-- Tokens sind zwei Stunden gültig. Verbrauchte Digests werden nach Ablauf durch die stündliche WP-Cron-Aufgabe in begrenzten Batches entfernt. Verspätete Cron-Ausführung kann die physische Aufbewahrung verlängern; die Gültigkeit verlängert sich dadurch nicht.
-- Tageszähler enthalten UTC-Datum, Anbieter, festgelegten Prüfgrund und Anzahl. Der Gesamtzähler abgewiesener Kommentare bleibt bis zum manuellen Zurücksetzen erhalten. Standardaufbewahrung: 30 Tage, einstellbar von 1 bis 90 Tagen. Löschung erfolgt ebenfalls per Cron. Die Oberfläche zählt technische Ablehnungen mit und bezeichnet diese deshalb nicht pauschal als erkannten Spam.
-- **Aktivitätsstatistik löschen** entfernt Tageszähler und den Gesamtzähler abgewiesener Kommentare. Die laufende Replay-Sperre und das 90-Tage-Fenster bewerteter Entscheidungen bleiben erhalten. Deaktivieren stoppt Cron und erhält Daten. Deinstallieren entfernt eigene Tabellen und Optionen, sofern die entsprechende Einstellung aktiviert ist.
-- WordPress, Hosting, Backups und die Formularanbieter können unabhängig davon personenbezogene Daten speichern oder externe Dienste verwenden. Die native WordPress-Datenschutzerklärung erhält einen anpassbaren Textvorschlag. Die technische Ausgestaltung unterstützt nDSG-/DSGVO-Anforderungen; Rechtsgrundlage, konkrete Information, Anbieter und Betrieb gehören zur Beurteilung der jeweiligen Website.
+When suitable native storage is unavailable, selected rejected message fields can be kept in the optional encrypted **WP Antispam quarantine**. If retention is off, WP Antispam does not store those contents and cannot recover earlier rejections. The interface states this explicitly. Account, password, order, and payment contents are excluded from quarantine.
 
-Optional werden bereits in WordPress als Spam gespeicherte Kommentare nach einer festgelegten Frist endgültig gelöscht (0 = aus, höchstens 90 Tage; begrenzte Cron-Batches). Diese Einstellung betrifft vorhandene Spam-Kommentare und ist unabhängig von der eigenen Quarantäne.
+Invalid technical proofs stop processing before a native entry is created. Authentic submissions matching a content rule can be retained in the appropriate native spam queue. Native storage and retention follow the form provider's own settings, independently of WP Antispam quarantine and privacy-conscious mode. A native **Not spam** action may trigger that provider's follow-up actions; the provider controls its moderation workflow.
 
-Sprachfilter erkennen kurze oder unklare Texte nicht zuverlässig; deren Behandlung ist ausdrücklich einstellbar. Länderfilter benötigen eine lokale PHP-GeoIP-Quelle oder einen Landesheader von explizit konfigurierten vertrauenswürdigen Proxy-Adressen. Ein Browserheader allein wird nicht vertraut. Die GeoIP-Quelle muss vom Hosting aktuell gehalten werden; das Plugin lädt keine IP-Datenbanken und ruft keine externen Standortdienste ab.
+Provider versions, form-specific conditions, and verification limits are documented in [integration contracts](docs/integrations.md).
 
-Das Dashboard zeigt täglich aktualisierte Ereigniszähler, die Ablehnungsquote und den Gesamtzähler abgewiesener Kommentare. Technische Fehler sind als solche nachvollziehbar; die operative Ablehnungsquote enthält auch solche Fehler. Die getrennte Qualitätsauswertung berechnet Präzision, Trefferquote und Genauigkeit anhand der innerhalb von 90 Tagen bewerteten Fälle. Ungeprüfte Einträge bleiben separat; die Raten gelten für diese bewertete Datenbasis. Aufbewahrte Ablehnungen lassen sich als Spam oder Fehlalarm bewerten. Native Kommentar-Umklassifizierungen und nachvollziehbare manuelle Fallmeldungen ergänzen die Datenbasis. Eine Bewertung allein veröffentlicht oder versendet keine Inhalte erneut.
+## Protection and limits
 
-Für die Qualitätsauswertung werden ursprüngliche Entscheidungen und spätere Bewertungen als lokale Metadaten bis zu 90 Tage gehalten. Site-gebundene HMAC-Referenzen ersetzen rohe Eintrags- und Fallkennungen; sie sind lokal zuordenbare Pseudonyme. Das Löschen einer Quelle entfernt oder entkoppelt ihren Bezug. Manuelle Fallreferenzen lassen sich mit derselben Referenz gezielt entfernen. Die Bewertungsfunktion trainiert keine automatische neue Filterregel.
+A signed form reference allows the browser to request a fresh, locally signed token. The server checks its provider and form scope, age, dynamically named honeypot, and atomic one-time use. The optional minimum completion time is off by default because it can reject fast submissions and autofill. Native provider permissions, validation, and spam checks remain in place.
 
-Eine tägliche Administratorbenachrichtigung bündelt Ablehnungen des vorangegangenen UTC-Tags, um keine Mailflut zu erzeugen.
+Optional keyword, BBCode-link, and bounded regular-expression rules inspect selected declared fields locally. Comments can also be filtered by a local language heuristic or country policy. Language detection is unreliable for short or ambiguous text; the handling of unknown results is configurable.
 
-Unter `docs/` stehen [Architektur und Bedrohungsmodell](docs/security.md), [Integrationsverträge](docs/integrations.md), [Gestaltung](docs/design.md), [Prüfnachweise](docs/verification.md) und [Veröffentlichung](docs/releasing.md) und [Multisite](docs/multisite.md).
+Country checks require a local PHP GeoIP source or a country header supplied by explicitly configured trusted proxy addresses. A browser-provided header alone is not trusted. Hosting must maintain the local GeoIP source; the plugin does not download IP databases or call external location services.
 
-## Entwicklung
+A bot that runs JavaScript or reproduces the public challenge protocol can obtain valid tokens. Passing a local check does not establish that the sender is human or that a message was delivered. Manual spam, compromised websites, and volumetric attacks require additional measures.
 
-Keine Build-Abhängigkeiten zur Laufzeit. PHP-Klassen in `src/`, escaped Templates in `templates/`, lesbare eigene Assets in `assets/`. Funktionale Änderungen und Gestaltung werden getrennt committed. Drittcode und installierte Originalpakete bleiben unverändert. Entwicklungswerkzeuge und Testinstallationen gehören nicht in das auszuliefernde Plugin.
+WordPress registration, WooCommerce registration, and checkout use technical checks only. Passwords, account details, payment information, and addresses do not enter content rules or quarantine. Classic WooCommerce checkout and final Store API checkout requests are checked before processing. Existing orders and native drafts remain under the WooCommerce lifecycle. Unverified gateway transports and specialised commercial form add-ons need their own acceptance tests.
 
-Offizielle Referenzen: [Plugin Handbook](https://developer.wordpress.org/plugins/), [Security](https://developer.wordpress.org/plugins/security/), [PHPDoc](https://developer.wordpress.org/coding-standards/inline-documentation-standards/php/), [Directory Guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/). Die Quellen dienen den API- und Standardverträgen; der Plugin-Code wurde eigenständig entwickelt.
+Divi contact forms use technical verification without content rules or message retention. See the documented version and transport coverage before relying on a particular setup.
 
-## Erweiterte Integrationen ab 0.3.0
+## Privacy and retention
 
-Die Adapter liegen getrennt unter `src/Integrations/`. Nur aktivierte und verfügbare Integrationen werden geladen. Bestehende Kommentare-, CF7-, Gravity- und WPForms-Einstellungen bleiben erhalten. Registrierung, weitere Formularanbieter und WooCommerce sind nach dem Update zunächst ausgeschaltet und lassen sich einzeln aktivieren.
+- The default **privacy-conscious mode** disables new content capture in WP Antispam quarantine, country checks, administrator digests, and native pingbacks/trackbacks. Local content and language rules remain available. Native provider storage follows separate settings. Enabling this mode does not delete existing quarantine records; they remain access-controlled until expiry or manual deletion. This mode does not certify a website's compliance with the Swiss FADP/nDSG or GDPR.
+- With explicit opt-in, encrypted local quarantine retains selected rejected contact fields: up to 500 records, for seven days by default and at most 30 days. Hidden, password, payment, and file fields are excluded. WordPress personal-data export and erasure support matching contact email addresses. WP Antispam does not store IP addresses, user agents, or browser fingerprints in its own storage.
+- The plugin sets no cookies and uses no local storage, telemetry, external spam service, or IP lookup. Optional daily administrator emails contain aggregate counts and use the website's configured WordPress mail delivery.
+- The browser sends only the provider ID, form ID, and signed public form reference to the website's own challenge endpoint. Consumed random-token digests and their expiry are stored locally; a digest does not contain encrypted form contents.
+- Tokens are valid for two hours. Hourly WP-Cron cleanup removes expired digests in bounded batches. Delayed cron can extend physical retention, while token validity remains unchanged.
+- Aggregate counters contain the UTC day, provider, fixed result reason, and count. Default retention is 30 days, configurable from one to 90 days. The lifetime rejected-comment counter remains until statistics are reset. Technical rejections are included and are not presented as confirmed spam detections.
+- **Delete activity statistics** removes daily counters and the lifetime rejected-comment total. Replay protection and the separate 90-day reviewed-outcome dataset remain intact. Deactivation stops scheduled cleanup and retains data. Uninstall removes owned tables and options by default; administrators can choose to retain them.
+- Optional scheduled cleanup permanently deletes WordPress comments already marked as spam once they exceed the configured age. Zero disables this feature; the maximum is 90 days. It operates in bounded batches and is independent of quarantine retention. Other providers retain control of their own spam cleanup.
 
-WordPress-Registrierung sowie WooCommerce-Konten und Checkout verwenden ausschliesslich technische Prüfungen. Passwörter, Konto-, Zahlungs- und Adressfelder gelangen nicht in Inhaltsregeln oder Quarantäne. Der klassische WooCommerce-Checkout und die abschliessenden Checkout-Aufrufe der Store API werden vor ihrer Verarbeitung geprüft. Bereits vorhandene Bestellungen und native Entwürfe unterliegen dem WooCommerce-Lebenszyklus; das Plugin löscht sie nicht. Unverifizierte externe Gateway-Transporte sind kein nachgewiesener Teil der Abdeckung.
+WordPress, form providers, hosting, mail delivery, and backups may process personal data independently. The WordPress privacy-policy guide includes editable disclosure text. Website operators must adapt it to the enabled features, infrastructure, retention, and applicable legal basis.
 
-Formidable Forms, Fluent Forms, WS Form und Elementor Forms erhalten automatisch Schutzfelder. Die optionale lokale Inhaltsprüfung und verschlüsselte Aufbewahrung verwenden ausschliesslich ausgewählte native Feldtypen. Spezielle kommerzielle Zusatzmodule, Zahlungsformulare und abweichende eigene Transportwege benötigen eine eigene Abnahme; die geprüften Verträge und Versionen stehen in `docs/integrations.md` und `docs/verification.md`.
+## Statistics and reviewed results
+
+The dashboard shows daily activity, the rejection rate, and the total number of rejected comments. The operational rejection rate includes technical failures.
+
+A separate quality view calculates precision, recall, and accuracy from cases reviewed within a 90-day window. Unreviewed cases remain separate and are excluded from quality denominators. These rates describe the reviewed dataset, rather than an unbiased measurement of every submission.
+
+Quarantined rejections can be assessed as spam or normal messages. Supported native moderation changes update existing observations; unknown historical entries are not automatically treated as missed spam. Administrators can classify delivered cases using stable local references. Reusing a reference updates the same case, and references can be forgotten explicitly. Assessment alone does not publish comments or resend forms, and it does not train a new automatic filter rule.
+
+The feedback ledger keeps immutable original decisions, subsequent labels, and bounded timestamps. Site-keyed HMAC references replace raw entry and case identifiers; they remain locally linkable pseudonyms while linked. Source deletion removes or detaches related references. Reviewed outcomes can remain within their original evaluation window after detachment. Confirmed privacy workflows use the supported native subject mappings described in the integration documentation.
+
+Daily administrator notifications combine the preceding UTC day's aggregate rejections into one digest.
+
+## Development
+
+The plugin has no build dependencies at runtime. PHP classes live in `src/`, escaped templates in `templates/`, and readable owned assets in `assets/`. Functional changes, visual changes, and pure formatting use separate commits. WordPress, provider packages, and vendor code remain unchanged. Development tools and test installations are excluded from distribution.
+
+The adapters are separate modules under `src/Integrations/`. Only enabled integrations with an available native contract are loaded. A shared provider registry defines supported scopes, labels, and statistics categories.
+
+WordPress and provider records use their documented APIs. Prepared database operations are limited to the six approved owned tables. A separate, narrowly approved Fluent Forms model insert handles native spam storage where its normal submission workflow cannot safely stop notification and payment actions. The exact boundary is documented in [the security model](docs/security.md).
+
+Project documentation:
+
+- [Architecture, security, and data handling](docs/security.md)
+- [Integration contracts and provider versions](docs/integrations.md)
+- [Administration design](docs/design.md)
+- [Test evidence and remaining coverage](docs/verification.md)
+- [Release process](docs/releasing.md)
+- [Multisite behaviour](docs/multisite.md)
+
+Official references: [Plugin Handbook](https://developer.wordpress.org/plugins/), [Plugin Security](https://developer.wordpress.org/plugins/security/), [Inline Documentation Standards](https://developer.wordpress.org/coding-standards/inline-documentation-standards/php/), and [Plugin Directory Guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/).

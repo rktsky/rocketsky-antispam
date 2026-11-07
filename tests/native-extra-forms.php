@@ -23,6 +23,35 @@ function rktsky_extra_native_expect( bool $condition, string $message ): void {
 		throw new RuntimeException( $message ); }
 }
 
+/**
+ * Counts synthetic records through provider APIs without querying their tables.
+ *
+ * @since 0.5.0
+ * @param string $provider Explicit fixture provider.
+ * @param int $id Native fixture form ID.
+ * @return int Native record count including spam.
+ */
+function rktsky_extra_native_count( string $provider, int $id ): int {
+	$user = get_current_user_id();
+	wp_set_current_user( 1 );
+	try {
+		if ( 'formidable' === $provider ) {
+			return (int) FrmEntry::getRecordCount( array( 'it.form_id' => $id, 'it.is_draft' => array( 0, 1, FrmSpamEntriesHelper::SPAM_ENTRY_STATUS ) ) );
+		}
+		if ( 'fluentforms' === $provider ) {
+			return (int) fluentFormApi( 'submissions' )->get( array( 'form_ids' => array( $id ), 'per_page' => 1 ) )['total'];
+		}
+		$submit = new WS_Form_Submit();
+		$total = 0;
+		foreach ( array( 'publish', 'draft', 'spam', 'trash' ) as $status ) {
+			$total += (int) $submit->db_get_count_by_status( $id, $status );
+		}
+		return $total;
+	} finally {
+		wp_set_current_user( $user );
+	}
+}
+
 $provider = $argv[1] ?? '';
 $case     = $argv[2] ?? '';
 $forms    = get_option( 'rktsky_antispam_extra_test_forms', array() );
@@ -77,7 +106,7 @@ if ( '' === $provider ) {
 }
 
 rktsky_extra_native_expect( in_array( $provider, array( 'formidable', 'fluentforms', 'wsform' ), true ), 'Unknown synthetic provider.' );
-$id = (int) $forms[ $provider ];
+$id = 'fluentforms' === $provider && isset( $argv[5] ) ? (int) $argv[5] : (int) $forms[ $provider ];
 wp_set_current_user( 0 );
 $_SERVER['REMOTE_ADDR']        = '192.0.2.90';
 $_SERVER['HTTP_USER_AGENT']    = 'Synthetic native extra-form browser';
@@ -85,9 +114,12 @@ $_SERVER['REQUEST_METHOD']     = 'GET';
 $settings                      = new \Rktsky\Antispam\Settings();
 $original                      = $settings->all();
 $options                       = $original;
-$options['privacy_mode']       = 'quarantine' !== $case;
-$options['quarantine_enabled'] = 'quarantine' === $case;
-$options['spam_keywords']      = in_array( $case, array( 'keyword', 'quarantine' ), true ) ? 'blocked-content-check' : '';
+$policy_cases = array( 'keyword', 'quarantine', 'content_missing', 'content_honeypot', 'content_replay', 'native_block', 'native_redirect' );
+$options['privacy_mode']       = ! in_array( $case, array( 'quarantine', 'native_block' ), true );
+$options['quarantine_enabled'] = in_array( $case, array( 'quarantine', 'native_block' ), true );
+$options['spam_keywords']      = in_array( $case, $policy_cases, true ) ? 'blocked-content-check' : '';
+$options['bbcode_filter']      = 'bbcode' === $case;
+$options['spam_patterns']      = 'pattern' === $case ? 'blocked-content-check' : '';
 update_option( \Rktsky\Antispam\Settings::OPTION, $options, false );
 $restore = static function () use ( $original ): void {
 	update_option( \Rktsky\Antispam\Settings::OPTION, $original, false );
@@ -97,9 +129,32 @@ $token_service = new \Rktsky\Antispam\Token();
 $proof         = 'replay' === $case ? get_option( 'rktsky_antispam_extra_replay', array() ) : $token_service->issue( $provider, (string) $id );
 if ( 'replay_prime' === $case ) {
 	update_option( 'rktsky_antispam_extra_replay', $proof, false ); }
-$missing = in_array( $case, array( 'missing', 'retry_missing' ), true );
+$missing = in_array( $case, array( 'missing', 'retry_missing', 'content_missing' ), true );
 $pass    = in_array( $case, array( 'valid', 'replay_prime', 'retry_fresh' ), true );
-$body    = ( in_array( $case, array( 'keyword', 'quarantine' ), true ) ? 'blocked-content-check ' : '' ) . 'Synthetic body ' . $provider . ' ' . $case . ' ' . wp_generate_uuid4();
+$body    = ( in_array( $case, array_merge( $policy_cases, array( 'pattern' ) ), true ) ? 'blocked-content-check ' : '' ) . 'Synthetic body ' . $provider . ' ' . $case . ' ' . wp_generate_uuid4();
+if ( 'bbcode' === $case ) {
+	$body .= ' [url=https://example.invalid]Synthetic link[/url]';
+}
+if ( 'native_block' === $case && 'formidable' === $provider ) {
+	add_filter( 'frm_save_spam_entry', static fn( $save, $source ) => 'rktsky_antispam' === $source ? false : $save, PHP_INT_MAX, 2 );
+}
+if ( 'native_block' === $case && 'wsform' === $provider ) {
+	add_filter( 'wsf_pre_render', static function ( $form ) {
+		foreach ( $form->meta->action->groups[0]->rows ?? array() as $row ) {
+			$config = json_decode( $row->data[1] ?? '', true );
+			if ( 'database' === ( $config['id'] ?? '' ) ) { $row->disabled = 'on'; }
+		}
+		return $form;
+	}, PHP_INT_MAX );
+}
+if ( 'native_redirect' === $case && 'formidable' === $provider ) {
+	$form = FrmForm::getOne( $id );
+	$original_form_options = $form->options;
+	FrmForm::update( $id, array( 'options' => array_replace( $form->options, array( 'success_action' => 'redirect', 'success_url' => 'https://example.invalid/should-not-redirect' ) ) ) );
+	register_shutdown_function( static function () use ( $id, $original_form_options ): void { FrmForm::update( $id, array( 'options' => $original_form_options ) ); } );
+}
+$fixture_email = $argv[4] ?? 'fixture@example.invalid';
+rktsky_extra_native_expect( 'fixture@example.invalid' === $fixture_email || 1 === preg_match( '/^feedback-[a-f0-9]{12}@example[.]invalid$/D', $fixture_email ), 'Only synthetic fixture email addresses are accepted.' );
 $raw     = array();
 if ( 'formidable' === $provider ) {
 	$html     = do_shortcode( '[formidable id="' . $id . '"]' );
@@ -115,13 +170,13 @@ if ( 'formidable' === $provider ) {
 	$raw['antispam_token'] = $native_form->getAttribute( 'data-token' );
 	$raw['item_meta']      = array();
 	foreach ( $forms['formidable_fields'] as $type => $field ) {
-		$raw['item_meta'][ $field ] = 'email' === $type ? 'fixture@example.invalid' : ( 'textarea' === $type ? $body : 'Synthetic name' ); }
+		$raw['item_meta'][ $field ] = 'email' === $type ? $fixture_email : ( 'textarea' === $type ? $body : 'Synthetic name' ); }
 	$raw['item_meta'][999999] = 'unknown-secret';
 } elseif ( 'fluentforms' === $provider ) {
 	$html = do_shortcode( '[fluentform id="' . $id . '"]' );
 	$raw  = array(
 		'name'    => 'Synthetic name',
-		'email'   => 'fixture@example.invalid',
+		'email'   => $fixture_email,
 		'message' => $body,
 	);
 } else {
@@ -131,7 +186,7 @@ if ( 'formidable' === $provider ) {
 		'wsf_post_mode' => 'submit',
 	);
 	foreach ( $forms['wsform_fields'] as $type => $field ) {
-		$raw[ 'field_' . $field ] = 'email' === $type ? 'fixture@example.invalid' : ( 'textarea' === $type ? $body : 'Synthetic name' ); }
+		$raw[ 'field_' . $field ] = 'email' === $type ? $fixture_email : ( 'textarea' === $type ? $body : 'Synthetic name' ); }
 	$raw['field_999999'] = 'unknown-secret';
 }
 if ( 'render' === $case ) {
@@ -144,7 +199,11 @@ $raw['credit_card'] = 'payment-secret';
 $raw['upload']      = 'file-secret';
 if ( ! $missing ) {
 	$raw['rktsky_antispam_token'] = $proof['token'];
-	$raw[ $proof['trap'] ]        = 'honeypot' === $case ? 'synthetic-bot' : ''; }
+	$raw[ $proof['trap'] ]        = in_array( $case, array( 'honeypot', 'content_honeypot' ), true ) ? 'synthetic-bot' : ''; }
+if ( 'content_replay' === $case ) {
+	$guard = new \Rktsky\Antispam\Guard( $settings, $token_service, new \Rktsky\Antispam\Store() );
+	rktsky_extra_native_expect( '' === $guard->check( $provider, (string) $id, $raw, array(), true ), 'The replay fixture must first consume authentic proof.' );
+}
 $_POST                     = wp_slash(
 	'fluentforms' === $provider ? array(
 		'data'    => http_build_query( $raw ),
@@ -153,17 +212,31 @@ $_POST                     = wp_slash(
 );
 $_REQUEST                  = $_POST;
 $_SERVER['REQUEST_METHOD'] = 'POST';
-$tables                    = array(
-	'formidable'  => 'frm_items',
-	'fluentforms' => 'fluentform_submissions',
-	'wsform'      => 'wsf_submit',
-);
-$table                     = $wpdb->prefix . $tables[ $provider ];
-$before                    = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i WHERE form_id=%d', $table, $id ) );
+$before                    = rktsky_extra_native_count( $provider, $id );
+$native_spam = false;
+if ( in_array( $case, array( 'keyword', 'quarantine', 'bbcode', 'pattern', 'native_redirect' ), true ) ) {
+	if ( 'formidable' === $provider ) {
+		$native_spam = \Rktsky\Antispam\Integrations\Formidable::native_available();
+	} elseif ( 'fluentforms' === $provider ) {
+		$native_spam = \Rktsky\Antispam\Integrations\Fluent::native_available();
+	} else {
+		wp_set_current_user( 1 );
+		$ws = new WS_Form_Form();
+		$ws->id = $id;
+		$native_spam = \Rktsky\Antispam\Integrations\WsForm::native_available( $ws->db_read( true, true ) );
+		wp_set_current_user( 0 );
+	}
+}
 $qtable                    = $wpdb->prefix . 'rktsky_antispam_quarantine';
 $qbefore                   = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT MAX(id) FROM %i', $qtable ) );
 $actions                   = 0;
 $mails                     = 0;
+$native_ids                = array();
+if ( 'formidable' === $provider ) {
+	add_action( 'frm_after_create_entry', static function ( $created ) use ( &$native_ids ): void { $native_ids[] = (int) $created; }, PHP_INT_MAX );
+} elseif ( 'wsform' === $provider ) {
+	add_action( 'wsf_submit_create', static function ( $created ) use ( &$native_ids ): void { $native_ids[] = (int) $created->id; }, PHP_INT_MAX );
+}
 $action_hooks              = array(
 	'formidable'  => 'frm_after_create_entry',
 	'fluentforms' => 'fluentform/submission_inserted',
@@ -184,22 +257,61 @@ add_filter(
 	},
 	0
 );
-$verify = static function ( array $result ) use ( &$actions, &$mails, $provider, $case, $pass, $before, $table, $id, $qbefore, $qtable, $settings ): void {
+if ( 'fluentforms' === $provider ) {
+	foreach ( array( 'fluentform/before_insert_payment_form', 'fluentform/notify_on_form_submit', 'fluentform/before_form_actions_processing', 'fluentform_submission_inserted' ) as $side_effect ) {
+		add_action( $side_effect, static function () use ( &$actions ): void { ++$actions; }, 0 );
+	}
+}
+$verify = static function ( array $result ) use ( &$actions, &$mails, &$native_ids, $provider, $case, $pass, $native_spam, $before, $id, $qbefore, $qtable, $settings ): void {
 	global $wpdb;
-	$after = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i WHERE form_id=%d', $table, $id ) );
-	rktsky_extra_native_expect( $after === $before + ( $pass ? 1 : 0 ), 'The original provider must persist exactly one valid entry and no rejected entry.' );
-	rktsky_extra_native_expect( $pass ? $actions > 0 : 0 === $actions && 0 === $mails, 'Rejected native forms must stop before provider actions and mail attempts.' );
+	$after = rktsky_extra_native_count( $provider, $id );
+	rktsky_extra_native_expect( $after === $before + ( $pass || $native_spam ? 1 : 0 ), 'Only accepted submissions and supported native content-spam decisions may create a provider record.' );
+	rktsky_extra_native_expect( $pass ? $actions > 0 : ( ( 'fluentforms' !== $provider && $native_spam ) || 0 === $actions ) && 0 === $mails, 'Rejected native forms must not send mail or run ordinary submission actions.' );
+	if ( $pass || $native_spam ) {
+		wp_set_current_user( 1 );
+		if ( 'fluentforms' === $provider ) {
+			$latest = fluentFormApi( 'submissions' )->get( array( 'form_ids' => array( $id ), 'per_page' => 1, 'sort_type' => 'DESC', 'entry_type' => 'all' ) );
+			$native_ids = array( (int) $latest['data'][0]->id );
+		}
+		rktsky_extra_native_expect( 1 === count( $native_ids ), 'A content verdict must create exactly one native spam object.' );
+		if ( 'formidable' === $provider ) {
+			$entry = FrmEntry::getOne( $native_ids[0], true );
+			rktsky_extra_native_expect( FrmSpamEntriesHelper::is_spam( $entry ) === $native_spam && ( ! $native_spam || ! isset( $entry->metas[999999] ) ), 'Native Formidable spam must contain no undeclared metadata.' );
+		} elseif ( 'wsform' === $provider ) {
+			$reader = new WS_Form_Submit();
+			$reader->id = $native_ids[0];
+			$entry = $reader->db_read( true, false );
+			rktsky_extra_native_expect( ( 'spam' === $entry->status ) === $native_spam, 'The original WS database action must persist native spam status.' );
+		} else {
+			$entry = fluentFormApi( 'submissions' )->find( $native_ids[0] );
+			$stored = wp_json_encode( $entry->response );
+			rktsky_extra_native_expect( ( 'spam' === $entry->status ) === $native_spam, 'Fluent must retain the actual native status.' );
+			if ( $native_spam ) {
+				rktsky_extra_native_expect( ! str_contains( $stored, 'secret' ) && ! str_contains( $stored, 'rktsky_' ) && empty( $entry->ip ) && empty( $entry->browser ) && empty( $entry->device ) && empty( $entry->source_url ) && empty( $entry->user_id ), 'Fluent native spam must exclude undeclared, sensitive and technical metadata.' );
+			}
+		}
+		$feedback = ( new \Rktsky\Antispam\Feedback() )->status( $provider, $native_ids[0] );
+		rktsky_extra_native_expect( null !== $feedback && $feedback['predicted_spam'] === $native_spam && ! $feedback['reviewed'], 'Native storage must create one exact unreviewed prediction for accepted and spam entries.' );
+		if ( 'observe-id' === ( $GLOBALS['argv'][3] ?? '' ) ) {
+			echo 'NATIVE-ID: ' . $native_ids[0] . "\n";
+		}
+		wp_set_current_user( 0 );
+	}
 	if ( ! $pass ) {
 		$encoded = wp_json_encode( $result );
-		rktsky_extra_native_expect( str_contains( $encoded, 'rktsky_antispam' ) || ( 'wsform' === $provider && ! empty( $result['error_validation'] ) ), 'A local rejection must remain a visible native validation failure.' );
+		rktsky_extra_native_expect( $native_spam || str_contains( $encoded, 'rktsky_antispam' ) || ( 'wsform' === $provider && ! empty( $result['error_validation'] ) ), 'A local rejection must remain a visible native validation failure.' );
 		if ( 'wsform' === $provider ) {
 			rktsky_extra_native_expect( false === ( $result['data']['js'][0]['form_hide'] ?? null ), 'WS retry errors must use boolean false so the native client keeps the form visible.' );
 		}
 	}
-	if ( 'quarantine' === $case ) {
+	if ( in_array( $case, array( 'quarantine', 'native_block' ), true ) ) {
 		wp_set_current_user( 1 );
 		$rows = $wpdb->get_col( $wpdb->prepare( 'SELECT id FROM %i WHERE id>%d AND provider=%s AND form_id=%s', $qtable, $qbefore, $provider, (string) $id ) );
-		rktsky_extra_native_expect( 1 === count( $rows ), 'One rejected native submission must create exactly one optional quarantine record.' );
+		rktsky_extra_native_expect( ( $native_spam ? 0 : 1 ) === count( $rows ), 'Native spam records must not be duplicated into optional local quarantine.' );
+		if ( $native_spam ) {
+			echo 'PASS: ' . $provider . '/' . $case . "\n";
+			return;
+		}
 		$quarantine = new \Rktsky\Antispam\Quarantine( $settings );
 		$record     = $quarantine->read( (int) $rows[0] );
 		$text       = wp_json_encode( $record['fields'] ?? array() );
@@ -211,6 +323,11 @@ $verify = static function ( array $result ) use ( &$actions, &$mails, $provider,
 if ( 'formidable' === $provider ) {
 	FrmEntriesController::process_entry();
 	global $frm_vars;
+	if ( $native_spam ) {
+		$feedback_html = do_shortcode( '[formidable id="' . $id . '"]' );
+		$public_error = ( new \Rktsky\Antispam\Guard( $settings, $token_service, new \Rktsky\Antispam\Store() ) )->spam_message();
+		rktsky_extra_native_expect( str_contains( $feedback_html, esc_html( $public_error ) ) && ! str_contains( $feedback_html, 'should-not-redirect' ), 'Stored native spam must display a real rejection and never the configured success redirect.' );
+	}
 	$verify( (array) ( $frm_vars['created_entries'][ $id ] ?? array() ) );
 } elseif ( 'fluentforms' === $provider ) {
 	try {
@@ -227,7 +344,8 @@ if ( 'formidable' === $provider ) {
 		static function ( $result ) use ( &$response ) {
 			$response = $result;
 			return $result;
-		}
+		},
+		PHP_INT_MAX
 	);
 	// WordPress flushes output before later shutdown callbacks; inspect the unchanged native response filter instead.
 	ob_start(

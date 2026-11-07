@@ -8,6 +8,8 @@
 
 namespace Rktsky\Antispam\Integrations;
 
+use Rktsky\Antispam\Guard;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -17,6 +19,47 @@ defined( 'ABSPATH' ) || exit;
  */
 final class WsForm extends Adapter {
 	/**
+	 * Exact native submission objects flagged after successful technical verification.
+	 *
+	 * @since 0.5.0
+	 * @var array<int,array{object:object,form:string,data:array,reason:string}>
+	 */
+	private array $native_spam = array();
+
+	/**
+	 * Validated objects waiting for the provider's actual persistence result.
+	 *
+	 * @since 0.5.0
+	 * @var array<int,array{object:object,form:string,proof:array}>
+	 */
+	private array $observed = array();
+
+	/**
+	 * Checks the actual stored form's enabled native Save Submission action.
+	 *
+	 * No database action is added or enabled here. The provider resolves its own
+	 * event/conditional selection; a missing form never implies queue availability.
+	 *
+	 * @since 0.5.0
+	 * @param object|null $form Authoritative native form object, never request JSON.
+	 * @return bool Whether this form can store a native spam submission.
+	 */
+	public static function native_available( $form = null ): bool {
+		if ( ! is_object( $form ) || empty( $form->id ) || ! defined( 'WS_FORM_VERSION' ) || version_compare( WS_FORM_VERSION, '1.12.19', '<' ) || ! class_exists( '\WS_Form_Action' ) || ! isset( \WS_Form_Action::$actions['database'] ) ) {
+			return false;
+		}
+		$database = \WS_Form_Action::$actions['database'];
+		if ( ! is_callable( array( $database, 'get_form_actions' ) ) ) {
+			return false;
+		}
+		foreach ( $database->get_form_actions( $form, 'submit' ) as $action ) {
+			if ( is_array( $action ) && 'database' === ( $action['id'] ?? '' ) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+	/**
 	 * Registers retained host descriptors and the native pre-persistence validator.
 	 *
 	 * @since 0.3.0
@@ -25,6 +68,7 @@ final class WsForm extends Adapter {
 	public function register(): void {
 		add_filter( 'wsf_shortcode', array( $this, 'render' ), PHP_INT_MAX );
 		add_filter( 'wsf_submit_validate', array( $this, 'validate' ), PHP_INT_MAX, 3 );
+		add_filter( 'wsf_api_submit_response_data', array( $this, 'response' ), PHP_INT_MAX, 2 );
 	}
 
 	/**
@@ -71,6 +115,9 @@ final class WsForm extends Adapter {
 	 * @return array Existing actions plus a local visible retry message on rejection.
 	 */
 	public function validate( array $errors, $mode, $submission ): array {
+		if ( is_object( $submission ) ) {
+			unset( $this->native_spam[ spl_object_id( $submission ) ], $this->observed[ spl_object_id( $submission ) ] );
+		}
 		if ( $errors || ! is_object( $submission ) || ! isset( $submission->form_id, $submission->form_object ) || ! is_numeric( $submission->form_id ) || (int) $submission->form_id < 1 || ! is_object( $submission->form_object ) ) {
 			return $errors;
 		}
@@ -78,17 +125,95 @@ final class WsForm extends Adapter {
 		$posted = $this->posted();
 		$data   = $this->content( $submission );
 		$reason = $this->guard->check( 'wsform', $id, $posted, $data['fields'] );
+		if ( '' === $reason && $this->settings->enabled( 'wsform' ) ) {
+			$this->observed[ spl_object_id( $submission ) ] = array(
+				'object' => $submission,
+				'form'   => $id,
+				'proof'  => $this->token_evidence( $posted ),
+			);
+		}
 		if ( '' !== $reason ) {
+			if ( Guard::is_content_reason( $reason ) && 'submit' === $mode && empty( $submission->id ) && empty( $submission->row_id_filter ) && self::native_available( $submission->form_object ) ) {
+				// Native spam stops every non-database action, including payment/account actions.
+				$submission->spam_level                            = 100;
+				$submission->actions_stopped                       = true;
+				$this->native_spam[ spl_object_id( $submission ) ] = array(
+					'object' => $submission,
+					'form'   => $id,
+					'data'   => $data,
+					'reason' => $reason,
+				);
+				return $errors;
+			}
 			$this->retain( 'wsform', $id, $reason, $data );
 			$errors[] = array(
 				'action'    => 'message',
-				'message'   => $this->guard->message(),
+				'message'   => Guard::is_content_reason( $reason ) ? $this->guard->spam_message() : $this->guard->message(),
 				'type'      => 'danger',
 				'form_hide' => false,
 				'duration'  => '',
 			);
 		}
 		return $errors;
+	}
+
+	/**
+	 * Replaces native success actions only for the exact content-rejected object.
+	 *
+	 * The original action runner stores its native spam record and handles native
+	 * files under the form's own validation/storage contract after valid proof.
+	 * All non-database actions are skipped by that runner. This response returns
+	 * a visible retry error, omits the native resume hash and never copies files.
+	 * A dynamically removed database action falls back to optional local retention.
+	 *
+	 * @since 0.5.0
+	 * @param array  $response Native response containing actions, nonces and status.
+	 * @param object $submission Exact native submission object.
+	 * @return array Native response or a neutral local rejection without success actions.
+	 */
+	public function response( array $response, $submission ): array {
+		if ( ! is_object( $submission ) ) {
+			return $response;
+		}
+		$observed = $this->observed[ spl_object_id( $submission ) ] ?? null;
+		unset( $this->observed[ spl_object_id( $submission ) ] );
+		if ( $observed && $observed['object'] === $submission && ! empty( $submission->id ) && (string) $submission->form_id === $observed['form'] ) {
+			$spam = 'spam' === ( $submission->status ?? '' );
+			if ( $spam ) {
+				$this->guard->observe_spam( 'wsform', $observed['form'], $observed['proof'] );
+			}
+			if ( $this->feedback && is_string( $submission->hash ?? null ) && 1 === preg_match( '/^[a-f0-9]{32}$/D', $submission->hash ) ) {
+				$this->feedback->track( 'wsform', $submission->hash, $spam );
+			}
+		}
+		if ( ! isset( $this->native_spam[ spl_object_id( $submission ) ] ) || $this->native_spam[ spl_object_id( $submission ) ]['object'] !== $submission ) {
+			return $response;
+		}
+		$permit = $this->native_spam[ spl_object_id( $submission ) ];
+		unset( $this->native_spam[ spl_object_id( $submission ) ] );
+		if ( ! empty( $submission->id ) && 'spam' === ( $submission->status ?? '' ) && (string) $submission->form_id === $permit['form'] ) {
+			if ( $this->feedback && is_string( $submission->hash ?? null ) && 1 === preg_match( '/^[a-f0-9]{32}$/D', $submission->hash ) ) {
+				$this->feedback->track( 'wsform', $submission->hash, true );
+			}
+		} else {
+			$this->retain( 'wsform', $permit['form'], $permit['reason'], $permit['data'] );
+		}
+		$response['error']            = true;
+		$response['error_validation'] = true;
+		$response['error_message']    = $this->guard->spam_message();
+		$response['data']             = array(
+			'js' => array(
+				array(
+					'action'    => 'message',
+					'message'   => $this->guard->spam_message(),
+					'type'      => 'danger',
+					'form_hide' => false,
+					'duration'  => '',
+				),
+			),
+		);
+		unset( $response['hash'] );
+		return $response;
 	}
 
 	/**

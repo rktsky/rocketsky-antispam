@@ -2,8 +2,9 @@
 /**
  * Plugin Name: WP Antispam
  * Plugin URI: https://github.com/rktsky/wp-antispam
+ * Update URI: https://github.com/rktsky/wp-antispam
  * Description: Local spam protection for comments, registrations and forms. No external services.
- * Version: 0.4.0
+ * Version: 0.5.0
  * Requires at least: 6.6
  * Requires PHP: 8.2
  * Author: Rocketsky
@@ -21,11 +22,11 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'RKTSKY_ANTISPAM_VERSION', '0.4.0' );
+define( 'RKTSKY_ANTISPAM_VERSION', '0.5.0' );
 define( 'RKTSKY_ANTISPAM_FILE', __FILE__ );
 
 // Explicit local includes avoid filesystem discovery and third-party autoloaders.
-foreach ( array( 'Providers', 'Settings', 'Country', 'Language', 'ContentRules', 'Token', 'Store', 'Quarantine', 'Feedback', 'Guard', 'Fields', 'Integrations', 'Admin', 'Dashboard', 'Maintenance', 'Network', 'Plugin' ) as $rktsky_antispam_class ) {
+foreach ( array( 'Providers', 'Settings', 'Country', 'Language', 'ContentRules', 'Token', 'Store', 'Quarantine', 'Feedback', 'NativeFeedback', 'WpFormsFeedback', 'Guard', 'Fields', 'Integrations', 'SpamHandling', 'ContextNotices', 'Admin', 'Dashboard', 'Maintenance', 'Network', 'Plugin' ) as $rktsky_antispam_class ) {
 	require_once __DIR__ . '/src/' . $rktsky_antispam_class . '.php';
 }
 unset( $rktsky_antispam_class );

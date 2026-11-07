@@ -211,8 +211,9 @@ final class Elementor extends Adapter {
 			return true;
 		}
 		$this->retain( 'elementor', $id, $reason, $data );
-		$handler->add_error( 'rktsky_antispam', $this->guard->message() );
-		$handler->add_error_message( $this->guard->message() );
+		$message = Guard::is_content_reason( $reason ) ? $this->guard->spam_message() : $this->guard->message();
+		$handler->add_error( 'rktsky_antispam', $message );
+		$handler->add_error_message( $message );
 		return false;
 	}
 

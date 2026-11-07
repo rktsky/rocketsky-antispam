@@ -50,6 +50,14 @@ final class Admin {
 	private ?Feedback $feedback;
 
 	/**
+	 * Shared destination descriptions for integration setup and spam review.
+	 *
+	 * @since 0.5.0
+	 * @var SpamHandling
+	 */
+	private SpamHandling $spam_handling;
+
+	/**
 	 * Screen hook returned by WordPress.
 	 *
 	 * @since 0.1.0
@@ -62,17 +70,20 @@ final class Admin {
 	 *
 	 * @since 0.1.0
 	 * @since 0.2.0 Accepts the encrypted quarantine and reviewed-outcome services.
-	 * @param Settings        $settings Site settings service.
-	 * @param Store           $store Aggregate statistics repository.
-	 * @param Quarantine|null $quarantine Local rejected-submission repository; null keeps the overview available during bootstrap.
-	 * @param Feedback|null   $feedback Reviewed-outcome service, without submission content.
+	 * @since 0.5.0 Shares review destinations with contextual provider notices.
+	 * @param Settings          $settings Site settings service.
+	 * @param Store             $store Aggregate statistics repository.
+	 * @param Quarantine|null   $quarantine Local rejected-submission repository; null keeps the overview available during bootstrap.
+	 * @param Feedback|null     $feedback Reviewed-outcome service, without submission content.
+	 * @param SpamHandling|null $spam_handling Shared presentation service; defaults to the current retention policy.
 	 * @return void
 	 */
-	public function __construct( Settings $settings, Store $store, ?Quarantine $quarantine = null, ?Feedback $feedback = null ) {
-		$this->settings   = $settings;
-		$this->store      = $store;
-		$this->quarantine = $quarantine;
-		$this->feedback   = $feedback;
+	public function __construct( Settings $settings, Store $store, ?Quarantine $quarantine = null, ?Feedback $feedback = null, ?SpamHandling $spam_handling = null ) {
+		$this->settings      = $settings;
+		$this->store         = $store;
+		$this->quarantine    = $quarantine;
+		$this->feedback      = $feedback;
+		$this->spam_handling = $spam_handling ?? new SpamHandling( $settings, $quarantine );
 	}
 
 	/**
@@ -173,9 +184,10 @@ final class Admin {
 		foreach ( array_keys( $tabs ) as $view ) {
 			$view_urls[ $view ] = add_query_arg( 'tab', $view, $base_url );
 		}
-		$privacy_mode = ! empty( $options['privacy_mode'] );
-		$privacy_url  = admin_url( 'options-privacy.php' );
-		$clear_url    = admin_url( 'admin-post.php' );
+		$privacy_mode  = ! empty( $options['privacy_mode'] );
+		$privacy_url   = admin_url( 'options-privacy.php' );
+		$clear_url     = admin_url( 'admin-post.php' );
+		$spam_handling = $this->spam_handling;
 		if ( 'settings' === $tab ) {
 			$notification_address = get_option( 'admin_email', '' );
 			require dirname( RKTSKY_ANTISPAM_FILE ) . '/templates/settings.php';

@@ -61,11 +61,31 @@ namespace Rktsky\Antispam {
 		 * @param string $form_id Native form ID.
 		 * @param array  $posted Synthetic submitted controls.
 		 * @param array  $fields Selected native content fields.
+		 * @param bool $technical_only Whether content rules are excluded.
 		 * @return string Configured synthetic verdict.
 		 */
-		public function check( string $provider, string $form_id, array $posted, array $fields = array() ): string {
-			$this->checks[] = array( $provider, $form_id, $posted, $fields );
-			return $this->reason;
+		public function check( string $provider, string $form_id, array $posted, array $fields = array(), bool $technical_only = false ): string {
+			$this->checks[] = array( $provider, $form_id, $posted, $fields, $technical_only );
+			return $technical_only && self::is_content_reason( $this->reason ) ? '' : $this->reason;
+		}
+		/**
+		 * Exposes only the owned fixed classification contract for adapter tests.
+		 *
+		 * @since 0.5.0
+		 * @param string $reason Synthetic guard verdict.
+		 * @return bool Whether the configured verdict is a content match.
+		 */
+		public static function is_content_reason( string $reason ): bool {
+			return in_array( $reason, array( 'keyword', 'bbcode', 'pattern', 'language', 'country' ), true );
+		}
+		/**
+		 * Supplies a visible content-rejection fixture message.
+		 *
+		 * @since 0.5.0
+		 * @return string Non-sensitive synthetic rejection.
+		 */
+		public function spam_message(): string {
+			return 'Content rejected <safely>.';
 		}
 		/**
 		 * Records native classification metadata without simulating statistics.
@@ -261,6 +281,17 @@ namespace {
 	 * @return string Escaped HTML text.
 	 */
 	function esc_html( string $value ): string {
+		return htmlspecialchars( $value, ENT_QUOTES, 'UTF-8' );
+	}
+
+	/**
+	 * Escapes the adapter's native confirmation identifier in this isolated stub.
+	 *
+	 * @since 0.5.0
+	 * @param string $value Fixture attribute value.
+	 * @return string Quoted-attribute-safe markup.
+	 */
+	function esc_attr( string $value ): string {
 		return htmlspecialchars( $value, ENT_QUOTES, 'UTF-8' );
 	}
 
@@ -600,7 +631,7 @@ namespace {
 	$submission = new WPCF7_Submission();
 	integration_expect( strpos( $adapter->cf7_fields( '<p>Native</p>' ), '<p>Native</p><input' ) === 0, 'CF7 markup must preserve native fields.' );
 	$count = count( $guard->checks );
-	integration_expect( true === $adapter->check_cf7( true, $submission ) && count( $guard->checks ) === $count, 'CF7 must preserve earlier spam decisions without evaluating again.' );
+	integration_expect( true === $adapter->check_cf7( true, $submission ) && count( $guard->checks ) === $count + 1 && end( $guard->checks )[3] === array() && true === end( $guard->checks )[4], 'CF7 must preserve earlier spam while checking technical proof before native storage.' );
 	$guard->reason = 'replay';
 	integration_expect( true === $adapter->check_cf7( false, $submission ) && end( $guard->checks )[1] === '51' && count( $submission->logs ) === 1, 'CF7 must bind its native form and record a fixed diagnostic when rejecting.' );
 	integration_expect( $adapter->cf7_message( 'Native', 'spam' ) === $guard->message() && $adapter->cf7_message( 'Native', 'mail_sent' ) === 'Native', 'CF7 retry copy must apply only to a local spam decision.' );
@@ -678,7 +709,7 @@ namespace {
 	$quarantine = new \Rktsky\Antispam\Quarantine();
 	$feedback = new \Rktsky\Antispam\Feedback();
 	$guard = new \Rktsky\Antispam\Guard();
-	$guard->reason = 'keyword';
+	$guard->reason = 'missing';
 	$adapter = new \Rktsky\Antispam\Integrations( $settings, $guard, $fields, $quarantine, $feedback );
 	$comment = array( 'comment_type' => 'comment', 'comment_post_ID' => 91, 'comment_author' => 'Synthetic author', 'comment_author_email' => 'fixture@example.invalid', 'comment_author_url' => 'https://example.invalid/', 'comment_content' => 'Synthetic message', 'comment_author_IP' => '192.0.2.1', 'comment_agent' => 'private-agent' );
 	try {
@@ -715,7 +746,7 @@ namespace {
 	integration_expect( end( $quarantine->captured )[3] === array( 'message' => 'Synthetic CF7 message', 'email' => 'fixture@example.invalid' ), 'CF7 must capture declared allowed tags only, excluding hidden/file/technical/unknown fields.' );
 	$count = count( $guard->checks );
 	$adapter->check_cf7( true, $submission );
-	integration_expect( count( $guard->checks ) === $count && end( $quarantine->captured )[2] === 'native_spam', 'Earlier CF7 spam must be observed without evaluating or reversing it.' );
+	integration_expect( count( $guard->checks ) === $count + 1 && end( $quarantine->captured )[2] === 'native_spam', 'Earlier CF7 spam must retain its verdict after a technical proof check.' );
 
 	$text_field = new GF_Field_Contract_Stub();
 	$email_field = clone $text_field;

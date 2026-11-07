@@ -77,6 +77,7 @@ final class Guard {
 	 *
 	 * @since 0.1.0
 	 * @since 0.2.0 Evaluates allowlisted fields through the optional local content policy.
+	 * @since 0.5.0 Claims authentic proof before classifying content for native spam storage.
 	 * @param string               $provider Expected integration.
 	 * @param string               $form_id Expected native form ID.
 	 * @param array                $posted Unslashed submitted controls; never an authorization source.
@@ -102,11 +103,13 @@ final class Guard {
 		} elseif ( time() - $proof['issued'] < $this->settings->all()['minimum_seconds'] ) {
 			$reason = 'too_fast';
 		}
-		if ( '' === $reason && ! $technical_only && $this->rules ) {
-			$reason = $this->rules->check( $provider, $fields );
-		}
 		if ( '' === $reason && ! $this->store->claim( $proof['digest'], $proof['expires'] ) ) {
 			$reason = $this->store->claim_failure();
+		}
+		// A native spam entry is still persistence: content matches never bypass
+		// atomic proof consumption, even when the visitor submits the same text again.
+		if ( '' === $reason && ! $technical_only && $this->rules ) {
+			$reason = $this->rules->check( $provider, $fields );
 		}
 		$day = gmdate( 'Y-m-d' );
 		$this->store->record( $provider, $reason, $day );
@@ -115,6 +118,34 @@ final class Guard {
 			'day'    => $day,
 		);
 		return $reason;
+	}
+
+	/**
+	 * Distinguishes configured content matches from unverifiable technical failures.
+	 *
+	 * Only these verdicts can use a provider's native spam workflow after check()
+	 * has authenticated and consumed proof. A PCRE processing limit is technical;
+	 * it does not establish a match and must never authorize native persistence.
+	 *
+	 * @since 0.5.0
+	 * @param string $reason Fixed verdict returned by this guard.
+	 * @return bool Whether the verdict describes a configured content policy match.
+	 */
+	public static function is_content_reason( string $reason ): bool {
+		return in_array( $reason, array( 'keyword', 'bbcode', 'pattern', 'language', 'country' ), true );
+	}
+
+	/**
+	 * Describes a content rejection without promising delivery or retained contents.
+	 *
+	 * Native spam persistence and optional local quarantine have different storage
+	 * owners. This public message reveals neither matched rules nor storage details.
+	 *
+	 * @since 0.5.0
+	 * @return string Localized visible rejection suitable for native confirmations.
+	 */
+	public function spam_message(): string {
+		return __( 'The spam protection rejected this submission. Please check your message and try again.', 'wp-antispam' );
 	}
 
 	/**
