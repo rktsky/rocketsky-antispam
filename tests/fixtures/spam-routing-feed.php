@@ -37,7 +37,8 @@ final class RktskyAntispamRoutingFeed extends GFFeedAddOn {
 	 * @return self Synthetic native-framework add-on.
 	 */
 	public static function get_instance() {
-		if ( null === self::$instance ) { self::$instance = new self(); }
+		if ( null === self::$instance ) {
+			self::$instance = new self(); }
 		return self::$instance;
 	}
 

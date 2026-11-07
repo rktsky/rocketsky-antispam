@@ -49,17 +49,28 @@ function rktsky_notice_html( ContextNotices $notices, string $screen ): string {
 	return (string) ob_get_clean();
 }
 
-$rktsky_notice_user = get_current_user_id();
-$rktsky_notice_admins = get_users( array( 'role' => 'administrator', 'number' => 1, 'fields' => 'ID' ) );
+$rktsky_notice_user   = get_current_user_id();
+$rktsky_notice_admins = get_users(
+	array(
+		'role'   => 'administrator',
+		'number' => 1,
+		'fields' => 'ID',
+	)
+);
 rktsky_notice_expect( ! empty( $rktsky_notice_admins ), 'A disposable fixture administrator is required.' );
 wp_set_current_user( (int) $rktsky_notice_admins[0] );
 $rktsky_notice_options = ( new Settings() )->all();
 foreach ( Providers::ids() as $rktsky_notice_provider ) {
 	$rktsky_notice_options[ $rktsky_notice_provider ] = true;
 }
-$rktsky_notice_options['privacy_mode'] = true;
+$rktsky_notice_options['privacy_mode']       = true;
 $rktsky_notice_options['quarantine_enabled'] = false;
-$rktsky_notice_grants = array( 'read' => true, 'manage_options' => true, 'rk_fixture_forms' => true, 'rk_fixture_entries' => true );
+$rktsky_notice_grants                        = array(
+	'read'               => true,
+	'manage_options'     => true,
+	'rk_fixture_forms'   => true,
+	'rk_fixture_entries' => true,
+);
 
 /**
  * Supplies only process-local settings through the documented option filter.
@@ -67,22 +78,26 @@ $rktsky_notice_grants = array( 'read' => true, 'manage_options' => true, 'rk_fix
  * @since 0.5.0
  * @return array Process-local validated test configuration.
  */
-$rktsky_notice_option_filter = static function () use ( &$rktsky_notice_options ): array { return $rktsky_notice_options; };
+$rktsky_notice_option_filter = static function () use ( &$rktsky_notice_options ): array {
+	return $rktsky_notice_options;
+};
 /**
  * Models a custom role without persisting roles or changing user metadata.
  *
  * @since 0.5.0
  * @return array<string,bool> Exact native capability grants for this case.
  */
-$rktsky_notice_cap_filter = static function () use ( &$rktsky_notice_grants ): array { return $rktsky_notice_grants; };
+$rktsky_notice_cap_filter = static function () use ( &$rktsky_notice_grants ): array {
+	return $rktsky_notice_grants;
+};
 add_filter( 'pre_option_' . Settings::OPTION, $rktsky_notice_option_filter );
 add_filter( 'user_has_cap', $rktsky_notice_cap_filter, PHP_INT_MAX );
 
 try {
 	$rktsky_notice_settings = new Settings();
 	$rktsky_notice_handling = new SpamHandling( $rktsky_notice_settings, new Quarantine( $rktsky_notice_settings ) );
-	$rktsky_notice_service = new ContextNotices( $rktsky_notice_settings, $rktsky_notice_handling );
-	$rktsky_notice_native = $rktsky_notice_handling->describe( 'comments' );
+	$rktsky_notice_service  = new ContextNotices( $rktsky_notice_settings, $rktsky_notice_handling );
+	$rktsky_notice_native   = $rktsky_notice_handling->describe( 'comments' );
 	rktsky_notice_expect( 'native' === $rktsky_notice_native['mode'] && str_contains( $rktsky_notice_native['url'], 'comment_status=spam' ), 'Comments must retain their native spam destination.' );
 	foreach ( array( 'elementor' ) as $rktsky_notice_provider ) {
 		$rktsky_notice_route = $rktsky_notice_handling->describe( $rktsky_notice_provider );
@@ -92,9 +107,9 @@ try {
 		rktsky_notice_expect( 'blocked' === $rktsky_notice_handling->describe( $rktsky_notice_provider )['mode'], 'Technical-only scopes must never promise a content quarantine.' );
 	}
 	$rktsky_notice_wpforms = $rktsky_notice_handling->describe( 'wpforms' );
-	$rktsky_notice_pro = is_callable( array( \Rktsky\Antispam\Integrations\WpForms::class, 'native_available' ) ) && \Rktsky\Antispam\Integrations\WpForms::native_available();
+	$rktsky_notice_pro     = is_callable( array( \Rktsky\Antispam\Integrations\WpForms::class, 'native_available' ) ) && \Rktsky\Antispam\Integrations\WpForms::native_available();
 	rktsky_notice_expect( ( $rktsky_notice_pro ? 'conditional' : 'discard' ) === $rktsky_notice_wpforms['mode'], 'WPForms must distinguish Pro native capability from the Lite retention fallback.' );
-	$rktsky_notice_options['privacy_mode'] = false;
+	$rktsky_notice_options['privacy_mode']       = false;
 	$rktsky_notice_options['quarantine_enabled'] = true;
 	rktsky_notice_expect( 'quarantine' === $rktsky_notice_handling->local_retention()['mode'], 'Actual enabled encryption capability must expose local quarantine.' );
 	$rktsky_notice_options['privacy_mode'] = true;
@@ -118,8 +133,8 @@ try {
 		array( 'divi', 'et_divi_options', 'et_divi_options' ),
 		array( 'wc_checkout', 'wc-orders', 'woocommerce' ),
 	);
-	$rktsky_notice_hooks = array();
-	$rktsky_notice_match = new ReflectionMethod( ContextNotices::class, 'screen_providers' );
+	$rktsky_notice_hooks     = array();
+	$rktsky_notice_match     = new ReflectionMethod( ContextNotices::class, 'screen_providers' );
 	foreach ( $rktsky_notice_inventory as $rktsky_notice_page ) {
 		list( $rktsky_notice_provider, $rktsky_notice_slug, $rktsky_notice_parent ) = $rktsky_notice_page;
 		add_menu_page( 'Synthetic menu', 'Translated synthetic ' . $rktsky_notice_parent, 'rk_fixture_forms', $rktsky_notice_parent, '__return_null' );
@@ -128,12 +143,18 @@ try {
 		rktsky_notice_expect( array( $rktsky_notice_provider ) === $rktsky_notice_match->invoke( $rktsky_notice_service, get_current_screen() ), 'Registered translated native menu hooks must match their fixed integration.' );
 	}
 
-	$rktsky_notice_grants = array( 'read' => true, 'moderate_comments' => true );
-	$rktsky_notice_html = rktsky_notice_html( $rktsky_notice_service, 'edit-comments' );
+	$rktsky_notice_grants = array(
+		'read'              => true,
+		'moderate_comments' => true,
+	);
+	$rktsky_notice_html   = rktsky_notice_html( $rktsky_notice_service, 'edit-comments' );
 	rktsky_notice_expect( str_contains( $rktsky_notice_html, 'comment_status=spam' ) && ! str_contains( $rktsky_notice_html, 'page=wp-antispam' ), 'A comment moderator must receive the native queue without inaccessible WP Antispam links.' );
 	$rktsky_notice_grants = array( 'read' => true );
 	rktsky_notice_expect( '' === rktsky_notice_html( $rktsky_notice_service, 'edit-comments' ), 'A read-only subscriber must receive no protection notice on a forged comment screen.' );
-	$rktsky_notice_grants = array( 'read' => true, 'rk_fixture_entries' => true );
+	$rktsky_notice_grants = array(
+		'read'               => true,
+		'rk_fixture_entries' => true,
+	);
 	if ( ! empty( Providers::detected()['wpforms'] ) ) {
 		$rktsky_notice_html = rktsky_notice_html( $rktsky_notice_service, $rktsky_notice_hooks['wpforms-overview'] );
 		rktsky_notice_expect( str_contains( $rktsky_notice_html, 'WP Antispam is enabled' ) && ! str_contains( $rktsky_notice_html, '<a ' ), 'An authorized WPForms manager must receive text without privileged local links.' );
@@ -143,7 +164,7 @@ try {
 		rktsky_notice_expect( str_contains( $rktsky_notice_html, 'page=gf_entries' ) && ! str_contains( $rktsky_notice_html, 'page=wp-antispam' ), 'A native Gravity Forms entry manager must receive only the authorized native destination.' );
 		$rktsky_notice_options['gravityforms'] = false;
 		rktsky_notice_expect( '' === rktsky_notice_html( $rktsky_notice_service, $rktsky_notice_hooks['gf_entries'] ), 'An available but disabled provider must make no protection claim.' );
-		$rktsky_notice_options['gravityforms'] = true;
+		$rktsky_notice_options['gravityforms']    = true;
 		$rktsky_notice_grants['rk_fixture_forms'] = true;
 		remove_submenu_page( 'gf_edit_forms', 'gf_entries' );
 		remove_menu_page( 'gf_edit_forms' );
@@ -153,17 +174,23 @@ try {
 		$rktsky_notice_html = rktsky_notice_html( $rktsky_notice_service, $rktsky_notice_entry_hook );
 		rktsky_notice_expect( str_contains( $rktsky_notice_html, 'page=gf_entries' ) && str_contains( $rktsky_notice_html, 'gf-notice' ), 'An entry-only native role must retain its alternate top-level hook, inbox link and GF notice classification.' );
 	}
-	$rktsky_notice_grants = array( 'read' => true, 'manage_options' => true, 'moderate_comments' => true );
+	$rktsky_notice_grants = array(
+		'read'              => true,
+		'manage_options'    => true,
+		'moderate_comments' => true,
+	);
 	foreach ( array( 'dashboard', 'plugins', 'edit-comments-network', 'profile-user', 'front' ) as $rktsky_notice_screen ) {
 		rktsky_notice_expect( '' === rktsky_notice_html( $rktsky_notice_service, $rktsky_notice_screen ), 'Unrelated, network, user and frontend screens must receive no notice.' );
 	}
 	$rktsky_notice_options['comments'] = false;
 	rktsky_notice_expect( '' === rktsky_notice_html( $rktsky_notice_service, 'edit-comments' ), 'Disabled comment protection must not emit a notice.' );
 	$rktsky_notice_options['comments'] = true;
-	$rktsky_notice_html = rktsky_notice_html( $rktsky_notice_service, 'edit-comments' );
+	$rktsky_notice_html                = rktsky_notice_html( $rktsky_notice_service, 'edit-comments' );
 	rktsky_notice_expect( str_contains( $rktsky_notice_html, 'notice-info' ) && ! str_contains( $rktsky_notice_html, 'is-dismissible' ), 'Guidance must use a native information notice without a global dismissal workflow.' );
 	$rktsky_notice_grants = array( 'read' => true );
-	ob_start(); $rktsky_notice_service->render(); $rktsky_notice_late = (string) ob_get_clean();
+	ob_start();
+	$rktsky_notice_service->render();
+	$rktsky_notice_late = (string) ob_get_clean();
 	rktsky_notice_expect( '' === $rktsky_notice_late, 'Capability revocation after screen preparation must suppress output.' );
 	echo 'PASS: ' . $rktsky_notice_assertions . " native menu, role and review-metadata assertions; no persistent fixture writes.\n";
 } finally {

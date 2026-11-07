@@ -12,11 +12,11 @@
 
 require __DIR__ . '/bootstrap.php';
 
-$rktsky_native_settings = new \Rktsky\Antispam\Settings();
-$rktsky_native_original = $rktsky_native_settings->all();
-$rktsky_native_options = $rktsky_native_original;
-$rktsky_native_options['formidable'] = true;
-$rktsky_native_options['wsform'] = true;
+$rktsky_native_settings               = new \Rktsky\Antispam\Settings();
+$rktsky_native_original               = $rktsky_native_settings->all();
+$rktsky_native_options                = $rktsky_native_original;
+$rktsky_native_options['formidable']  = true;
+$rktsky_native_options['wsform']      = true;
 $rktsky_native_options['fluentforms'] = true;
 update_option( \Rktsky\Antispam\Settings::OPTION, $rktsky_native_options, false );
 $rktsky_native_count = 0;
@@ -35,11 +35,19 @@ try {
 				$rktsky_native_command = array_merge( $rktsky_native_command, array( '-d', 'extension=/tmp/rktsky-antispam-runtime/iconv.so' ) );
 			}
 			$rktsky_native_command = array_merge( $rktsky_native_command, array( __DIR__ . '/native-extra-forms.php', $rktsky_native_provider, $rktsky_native_case ) );
-			$rktsky_native_pipes = array();
-			$rktsky_native_process = proc_open( $rktsky_native_command, array( 0 => array( 'pipe', 'r' ), 1 => array( 'pipe', 'w' ), 2 => array( 'pipe', 'w' ) ), $rktsky_native_pipes );
+			$rktsky_native_pipes   = array();
+			$rktsky_native_process = proc_open(
+				$rktsky_native_command,
+				array(
+					0 => array( 'pipe', 'r' ),
+					1 => array( 'pipe', 'w' ),
+					2 => array( 'pipe', 'w' ),
+				),
+				$rktsky_native_pipes
+			);
 			fclose( $rktsky_native_pipes[0] );
 			$rktsky_native_output = stream_get_contents( $rktsky_native_pipes[1] );
-			$rktsky_native_error = stream_get_contents( $rktsky_native_pipes[2] );
+			$rktsky_native_error  = stream_get_contents( $rktsky_native_pipes[2] );
 			fclose( $rktsky_native_pipes[1] );
 			fclose( $rktsky_native_pipes[2] );
 			$rktsky_native_status = proc_close( $rktsky_native_process );
