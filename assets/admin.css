@@ -6,6 +6,7 @@
  *
  * @since 0.1.0
  * @since 0.4.0 Consolidated the five-view administration system.
+ * @since 0.5.3 Aligns the retained calendar explanation with its disclosure.
  */
 .rktsky-antispam {
 	--rktsky-ink: #17142d;
@@ -133,6 +134,8 @@
 .rktsky-antispam__quality-basis > p + p { margin-top: 12px; }
 .rktsky-antispam__disclosure-body > .rktsky-antispam__field:first-child { margin-top: 0; }
 .rktsky-antispam__disclosure-body > form > .button { margin-top: 20px; }
+/* Historical calendar explanations share the disclosure's inset and boundary. */
+#rktsky-earlier-calendars > p { padding: 20px 20px 0; border-top: 1px solid var(--rktsky-line); }
 
 /* Field geometry is stable across native WordPress colour schemes. */
 .rktsky-antispam__field { min-width: 0; margin-top: 22px; }
@@ -371,6 +374,8 @@
 	.rktsky-antispam__disclosure > summary,
 	.rktsky-antispam__disclosure-body,
 	.rktsky-antispam__quality-basis { padding: 16px; }
+	#rktsky-earlier-calendars > p { padding: 16px 16px 0; }
+	#rktsky-earlier-calendars > .rktsky-antispam__reasons { margin: 16px; }
 	.rktsky-antispam__disclosure > summary { display: grid; grid-template-columns: minmax(0, 1fr) 12px; gap: 8px 12px; }
 	.rktsky-antispam__disclosure-title { grid-column: 1; grid-row: 1; overflow-wrap: normal; }
 	.rktsky-antispam__disclosure > summary::after { grid-column: 2; grid-row: 1; justify-self: end; margin: 0; }
