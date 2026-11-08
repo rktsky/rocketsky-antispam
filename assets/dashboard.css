@@ -1,0 +1,66 @@
+/**
+ * Gives the owned native dashboard widget a readable, compact summary.
+ * Every rule is scoped to its own postbox; no fonts, scripts or remote assets.
+ *
+ * @since 0.5.2
+ */
+#rktsky_antispam_dashboard .rktsky-antispam-widget {
+	--rktsky-widget-ink: #17142d;
+	--rktsky-widget-muted: #625d70;
+	--rktsky-widget-line: #d7d4df;
+	--rktsky-widget-purple: #50349b;
+	padding-block: 4px;
+	color: var(--rktsky-widget-ink);
+	font-size: 16px;
+	line-height: 1.55;
+}
+.rktsky-antispam-widget *,
+.rktsky-antispam-widget *::before,
+.rktsky-antispam-widget *::after { box-sizing: border-box; }
+#rktsky_antispam_dashboard .rktsky-antispam-widget :is(p, dl, h3) { margin: 0; font-size: inherit; line-height: 1.55; }
+.rktsky-antispam-widget__period { color: var(--rktsky-widget-muted); font-weight: 600; }
+.rktsky-antispam-widget__counts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px 16px; padding-block: 12px 8px; }
+.rktsky-antispam-widget__counts > div { display: contents; }
+.rktsky-antispam-widget__counts dt { grid-row: 1; }
+.rktsky-antispam-widget__counts dd { grid-row: 2; }
+.rktsky-antispam-widget__counts > div:first-child :is(dt, dd) { grid-column: 1; }
+.rktsky-antispam-widget__counts > div + div :is(dt, dd) { grid-column: 2; }
+.rktsky-antispam-widget__counts dd { margin: 2px 0 0; color: var(--rktsky-widget-purple); font-size: 32px; font-weight: 650; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.rktsky-antispam-widget__counts > div + div dd { color: var(--rktsky-widget-ink); }
+.rktsky-antispam-widget__rate { display: block; margin-top: 6px; color: var(--rktsky-widget-muted); font-size: 14px; font-weight: 400; line-height: 1.55; }
+.rktsky-antispam-widget__daily-rate { display: block; color: var(--rktsky-widget-muted); font-size: 14px; line-height: 1.4; }
+.rktsky-antispam-widget__note { color: var(--rktsky-widget-muted); }
+#rktsky_antispam_dashboard .rktsky-antispam-widget__empty { margin-top: 12px; }
+.rktsky-antispam-widget__daily { margin-top: 12px; border-block: 1px solid var(--rktsky-widget-line); }
+.rktsky-antispam-widget__daily summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; padding-block: 10px; cursor: pointer; list-style: none; font-weight: 600; }
+.rktsky-antispam-widget__daily summary::-webkit-details-marker { display: none; }
+.rktsky-antispam-widget__daily summary::after { content: ""; width: 7px; height: 7px; margin-inline: 4px; border-block-start: 2px solid currentColor; border-inline-end: 2px solid currentColor; transform: rotate(45deg); flex-shrink: 0; }
+.rktsky-antispam-widget__daily[open] summary::after { transform: rotate(135deg); }
+.rktsky-antispam-widget__daily table { width: 100%; margin-bottom: 12px; border-collapse: collapse; font-size: 14px; font-variant-numeric: tabular-nums; }
+.rktsky-antispam-widget__daily :is(th, td) { padding: 7px 4px; border-bottom: 1px solid var(--rktsky-widget-line); text-align: end; }
+.rktsky-antispam-widget__daily th:first-child { padding-inline-start: 0; text-align: start; }
+.rktsky-antispam-widget__daily tbody th { font-weight: 400; }
+.rktsky-antispam-widget__daily tr:last-child :is(th, td) { border-bottom: 0; }
+.rktsky-antispam-widget__lifetime { padding-block: 12px; border-bottom: 1px solid var(--rktsky-widget-line); }
+.rktsky-antispam-widget__lifetime > div,
+.rktsky-antispam-widget__rates > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 8px 16px; }
+.rktsky-antispam-widget__lifetime dd,
+.rktsky-antispam-widget__rates dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; }
+.rktsky-antispam-widget__quality { padding-block: 12px; }
+#rktsky_antispam_dashboard .rktsky-antispam-widget__quality h3 { margin-bottom: 4px; font-size: 17px; font-weight: 600; }
+.rktsky-antispam-widget__rates { padding-block: 8px; }
+.rktsky-antispam-widget__rates > div + div { margin-top: 4px; }
+.rktsky-antispam-widget__actions { display: flex; flex-wrap: wrap; gap: 8px; }
+#rktsky_antispam_dashboard .rktsky-antispam-widget__actions .button { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; max-width: 100%; padding: 8px 12px; border: 1px solid var(--rktsky-widget-purple); background: #fff; color: var(--rktsky-widget-purple); font-size: 16px; line-height: 1.4; white-space: normal; text-align: center; }
+#rktsky_antispam_dashboard .rktsky-antispam-widget__actions .button:hover { border-color: var(--rktsky-widget-purple); background: #f5f3f8; color: var(--rktsky-widget-ink); }
+.rktsky-antispam-widget :is(a, summary):focus-visible { outline: 3px solid var(--rktsky-widget-purple); outline-offset: 3px; box-shadow: none; }
+@media (forced-colors: active) {
+	#rktsky_antispam_dashboard .rktsky-antispam-widget { --rktsky-widget-ink: CanvasText; --rktsky-widget-muted: CanvasText; --rktsky-widget-line: CanvasText; --rktsky-widget-purple: CanvasText; }
+	.rktsky-antispam-widget :is(a, summary):focus-visible { outline-color: Highlight; }
+	#rktsky_antispam_dashboard .rktsky-antispam-widget__actions .button { border-color: ButtonText; background: ButtonFace; color: ButtonText; }
+}
+@media (prefers-reduced-motion: reduce) {
+	.rktsky-antispam-widget *,
+	.rktsky-antispam-widget *::before,
+	.rktsky-antispam-widget *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}

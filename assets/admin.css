@@ -41,8 +41,8 @@
 }
 
 /* Compact identity and ordinary links keep navigation native and bookmarkable. */
-.rktsky-antispam__masthead { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
-.rktsky-antispam__identity { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; min-width: 0; }
+.rktsky-antispam__masthead { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 16px; margin-bottom: 20px; }
+.rktsky-antispam__identity { display: flex; flex: 1 1 400px; flex-wrap: wrap; align-items: center; gap: 10px; min-width: 0; }
 .rktsky-antispam__identity h1 { padding: 0; font-size: 24px; line-height: 1.3; letter-spacing: -.035em; }
 .rktsky-antispam__symbol {
 	display: grid;
@@ -59,6 +59,10 @@
 	letter-spacing: -.12em;
 }
 .rktsky-antispam a.rktsky-antispam__byline { color: var(--rktsky-muted); font-size: 14px; }
+.rktsky-antispam__masthead-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.rktsky-antispam a.rktsky-antispam__review-link { display: inline-flex; align-items: center; gap: 8px; min-height: 46px; padding: 8px 12px; border: 1px solid var(--rktsky-line); border-radius: 7px; background: var(--rktsky-paper); font-size: 15px; line-height: 1.4; text-decoration: none; }
+.rktsky-antispam a.rktsky-antispam__review-link:hover { border-color: var(--rktsky-purple); background: var(--rktsky-soft); }
+.rktsky-antispam__external-icon { display: block; flex: 0 0 16px; width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .rktsky-antispam__version { flex-shrink: 0; padding: 4px 8px; border: 1px solid var(--rktsky-line); border-radius: 6px; color: var(--rktsky-muted); font-size: 14px; }
 /* Core may relocate another plugin's notice beside the nested screen heading. */
 .rktsky-antispam__identity > .notice { order: 2; flex: 1 0 100%; min-width: 0; max-width: 100%; font-size: 14px; }
@@ -312,8 +316,14 @@
 .rktsky-antispam__record-actions p { max-width: 70ch; color: var(--rktsky-muted); font-size: 14px; }
 .rktsky-antispam .rktsky-antispam__quarantine-disclosure { margin: 20px 0; color: var(--rktsky-muted); font-size: 14px; }
 
-/* Sponsorship is a quiet footer; an outbound CTA includes its own vector icon. */
-.rktsky-antispam__sponsors { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 24px; align-items: center; margin: 32px 0 24px; padding-top: 24px; border-top: 1px solid var(--rktsky-line); }
+/* Support and sponsorship share one footer, separate from configuration tasks. */
+.rktsky-antispam__support { margin: 32px 0 24px; padding-top: 24px; border-top: 1px solid var(--rktsky-line); }
+.rktsky-antispam__support-intro { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px 24px; padding: 20px; border: 1px solid var(--rktsky-line); border-radius: 12px; background: var(--rktsky-soft); }
+.rktsky-antispam__support-intro > div:first-child { flex: 1 1 380px; min-width: 0; }
+.rktsky-antispam__support-intro h2 { font-size: 18px; line-height: 1.4; letter-spacing: 0; }
+.rktsky-antispam__support-intro p { max-width: 72ch; margin-top: 6px; color: var(--rktsky-muted); font-size: 14px; }
+.rktsky-antispam__support-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.rktsky-antispam__sponsors { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 24px; align-items: center; margin-top: 20px; }
 .rktsky-antispam__sponsor { min-width: 0; color: var(--rktsky-muted); font-size: 14px; }
 .rktsky-antispam__sponsor p { font-size: 14px; }
 .rktsky-antispam a.rktsky-antispam__sponsor-brand { display: inline-flex; align-items: center; gap: 8px; color: var(--rktsky-ink); font-size: 18px; font-weight: 650; text-decoration: none; }
@@ -352,6 +362,7 @@
 }
 @media (max-width: 580px) {
 	.rktsky-antispam__identity { gap: 8px; }
+	.rktsky-antispam__masthead-actions { width: 100%; justify-content: space-between; }
 	.rktsky-antispam a.rktsky-antispam__byline { flex-basis: 100%; margin-left: 42px; }
 	.rktsky-antispam__tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
 	.rktsky-antispam__tabs a:last-child { grid-column: 1 / -1; }
@@ -392,6 +403,9 @@
 	.rktsky-antispam__quarantine-table tr { grid-template-columns: minmax(0, 1fr); }
 	.rktsky-antispam__sponsor--speo { gap: 12px; }
 	.rktsky-antispam__sponsor--speo .rktsky-antispam__sponsor-link { flex-basis: 100%; }
+	.rktsky-antispam__support-intro { padding: 16px; }
+	.rktsky-antispam__support-actions { width: 100%; }
+	.rktsky-antispam__support-actions .rktsky-antispam__sponsor-link { width: 100%; }
 }
 @media (max-width: 390px) {
 	.rktsky-antispam__language-choices { grid-template-columns: minmax(0, 1fr); }
