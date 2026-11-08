@@ -1292,7 +1292,7 @@ msgid "What is the measurement based on?"
 msgstr ""
 
 #: templates/quarantine.php:130
-msgid "When enabled, quarantine keeps selected fields from supported rejections. Messages already discarded cannot be recovered."
+msgid "When enabled, quarantine can keep selected fields from rejected contact form submissions. Messages already discarded cannot be recovered."
 msgstr ""
 
 #: templates/quarantine.php:109

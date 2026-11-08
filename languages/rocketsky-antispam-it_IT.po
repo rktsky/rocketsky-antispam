@@ -1294,8 +1294,8 @@ msgid "What is the measurement based on?"
 msgstr "Su cosa si basa la misurazione?"
 
 #: templates/quarantine.php:130
-msgid "When enabled, quarantine keeps selected fields from supported rejections. Messages already discarded cannot be recovered."
-msgstr "Quando la quarantena è attiva, conserva alcuni campi dei rifiuti supportati. I messaggi già scartati non possono essere recuperati."
+msgid "When enabled, quarantine can keep selected fields from rejected contact form submissions. Messages already discarded cannot be recovered."
+msgstr "Quando la quarantena è attiva, può conservare alcuni campi degli invii rifiutati dei moduli di contatto. I messaggi già scartati non possono essere recuperati."
 
 #: templates/quarantine.php:109
 msgid "Where to review spam"
