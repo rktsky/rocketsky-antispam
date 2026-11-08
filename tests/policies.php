@@ -202,7 +202,9 @@ try {
 	$document = new DOMDocument();
 	@$document->loadHTML( $dashboard );
 	$xpath = new DOMXPath( $document );
-	rktsky_antispam_policy_expect( 7 === $xpath->query( '//tbody/tr' )->length && str_contains( $dashboard, number_format_i18n( 40, 1 ) . '%' ), 'Dashboard must render seven UTC days and derive rejection rate from actual aggregate totals.' );
+	rktsky_antispam_policy_expect( 7 === $xpath->query( '//tbody/tr' )->length && '2' === $xpath->evaluate( 'string(//*[@id="rktsky-widget-stopped"])' ) && '3' === $xpath->evaluate( 'string(//*[@id="rktsky-widget-passed"])' ), 'Dashboard must retain seven UTC-day rows and display actual seven-day stopped/passed totals.' );
+	rktsky_antispam_policy_expect( str_contains( $dashboard, number_format_i18n( 40, 1 ) . '%' ), 'The operative rejection rate must derive from the actual two stopped and three passed checks.' );
+	rktsky_antispam_policy_expect( '2' === $xpath->evaluate( 'string(//*[@id="rktsky-widget-comments"])' ), 'The lifetime comment counter must remain separate from seven-day activity across all providers.' );
 	$store->clear();
 	rktsky_antispam_policy_expect( 0 === $store->blocked_comments(), 'Explicit statistics reset must also reset the lifetime comment counter.' );
 
@@ -216,7 +218,7 @@ try {
 	Maintenance::digest();
 	rktsky_antispam_policy_expect( 1 === count( $rktsky_policy_mail ) && false === get_option( 'rktsky_antispam_digest_status' )['accepted_by_mailer'], 'A failed native mail handoff must be recorded without reporting success.' );
 	$mail = $rktsky_policy_mail[0];
-	rktsky_antispam_policy_expect( str_contains( $mail['message'], $yesterday ) && str_contains( $mail['message'], '2 rejected' ) && ! str_contains( $mail['message'], 'Synthetic retention' ) && empty( $mail['attachments'] ), 'Digest must contain only the actual date/count and local review link, without form content or attachments.' );
+	rktsky_antispam_policy_expect( str_contains( $mail['message'], $yesterday ) && preg_match( '/\b2\b/', $mail['message'] ) && str_contains( $mail['message'], admin_url( 'options-general.php?page=rocketsky-antispam' ) ) && ! str_contains( $mail['message'], 'Synthetic retention' ) && empty( $mail['attachments'] ), 'Digest must contain only the actual date/count and local review link, without form content or attachments.' );
 	Maintenance::digest();
 	rktsky_antispam_policy_expect( 1 === count( $rktsky_policy_mail ), 'Failed mail must not be automatically resent by another digest invocation.' );
 	delete_option( 'rktsky_antispam_digest_claim' );

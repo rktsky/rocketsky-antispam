@@ -337,7 +337,7 @@ final class GravityForms extends Adapter {
 			unset( $this->gravity_content_spam[ $form_id ] );
 			$this->gravity_spam_confirmation[ $form_id ] = $current;
 			if ( ! $spam ) {
-				\GFCommon::set_spam_filter( (int) $form_id, 'Rocketsky Antispam', sprintf( /* translators: %s: fixed internal content-policy reason code. */ __( 'Local content policy: %s.', 'rocketsky-antispam' ), $pending['reason'] ) );
+				\GFCommon::set_spam_filter( (int) $form_id, 'Rocketsky Antispam', sprintf( /* translators: %s: fixed internal content-policy reason code. */ __( 'Content rule: %s.', 'rocketsky-antispam' ), $pending['reason'] ) );
 			}
 			$spam = true;
 		}

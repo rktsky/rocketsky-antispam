@@ -314,7 +314,7 @@ final class Installation {
 	 */
 	private function stop_removal(): void {
 		wp_die(
-			esc_html__( 'This copy shares data with another active installation of Rocketsky Antispam. Uninstalling it could delete shared settings and retained entries. Remove only the obsolete plugin files through your hosting file manager; do not run its WordPress Delete action.', 'rocketsky-antispam' ),
+			esc_html__( 'This plugin\'s data is still used by an active installation. For a name change, remove only the inactive old copy\'s files after completing the switch; keep active plugin files in place. To uninstall completely, first deactivate every copy on all sites and networks.', 'rocketsky-antispam' ),
 			'',
 			array(
 				'response'  => 409,
@@ -368,6 +368,6 @@ final class Installation {
 	 * @return string Localized plain-text instruction.
 	 */
 	private function conflict_message(): string {
-		return __( 'Deactivate the previous installation before activating Rocketsky Antispam. Do not delete it: the installations share settings and retained data. Network-active copies must be deactivated in Network Admin.', 'rocketsky-antispam' );
+		return __( 'Deactivate the previous plugin copy before activating Rocketsky Antispam. Do not delete it: both copies use the same data. Deactivate network-wide copies in Network Admin.', 'rocketsky-antispam' );
 	}
 }

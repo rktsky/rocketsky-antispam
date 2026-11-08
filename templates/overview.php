@@ -4,13 +4,15 @@
  *
  * @package RktskyAntispam
  * @since 0.4.0
+ * @since 0.5.2 Uses effective quarantine availability for the storage status.
  * @var array<string,mixed> $options Validated settings used only for status.
  * @var array $summary Anonymous seven-day totals and fixed reason counts.
- * @var array $days Seven complete UTC-day aggregate rows.
+ * @var array $days Seven UTC-day rows, including the current partial day.
  * @var array $quality Reviewed-outcome counts and nullable rates.
  * @var int $active_count Available, explicitly enabled provider integrations.
  * @var int $blocked_comments Lifetime operational comment rejection count.
  * @var float|null $rejection_rate Operational rejection fraction, never accuracy.
+ * @var string $quarantine_status Effective quarantine state, including encryption readiness.
  * @var array<string,string> $view_urls Fixed local section links.
  */
 
@@ -19,12 +21,12 @@ require __DIR__ . '/admin-header.php';
 ?>
 <header class="rktsky-antispam__page-heading">
 	<h2><?php esc_html_e( 'Overview', 'rocketsky-antispam' ); ?></h2>
-	<p><?php esc_html_e( 'Check protection status and recent activity. Review individual submissions under Review spam.', 'rocketsky-antispam' ); ?></p>
+	<p><?php esc_html_e( 'See protection status and recent activity. Open Review spam to check individual messages.', 'rocketsky-antispam' ); ?></p>
 </header>
 <section class="rktsky-antispam__status-grid" aria-label="<?php esc_attr_e( 'Protection status', 'rocketsky-antispam' ); ?>">
 	<div class="rktsky-antispam__status-item"><span><?php esc_html_e( 'Integrations', 'rocketsky-antispam' ); ?></span><strong><?php echo esc_html( sprintf( /* translators: %d: available, enabled integrations, not a form count. */ __( '%d enabled', 'rocketsky-antispam' ), $active_count ) ); ?></strong><a href="<?php echo esc_url( $view_urls['integrations'] ); ?>"><?php esc_html_e( 'Manage integrations', 'rocketsky-antispam' ); ?></a></div>
 	<div class="rktsky-antispam__status-item"><span><?php esc_html_e( 'Privacy-conscious mode', 'rocketsky-antispam' ); ?></span><strong><?php echo esc_html( $privacy_mode ? __( 'On', 'rocketsky-antispam' ) : __( 'Off', 'rocketsky-antispam' ) ); ?></strong><a href="<?php echo esc_url( $view_urls['settings'] . '#privacy' ); ?>"><?php esc_html_e( 'Privacy settings', 'rocketsky-antispam' ); ?></a></div>
-	<div class="rktsky-antispam__status-item"><span><?php esc_html_e( 'Quarantine', 'rocketsky-antispam' ); ?></span><strong><?php echo esc_html( ! empty( $options['quarantine_enabled'] ) ? __( 'Storing new rejections', 'rocketsky-antispam' ) : __( 'New storage is off', 'rocketsky-antispam' ) ); ?></strong><a href="<?php echo esc_url( $view_urls['quarantine'] ); ?>"><?php esc_html_e( 'Review spam', 'rocketsky-antispam' ); ?></a></div>
+	<div class="rktsky-antispam__status-item"><span><?php esc_html_e( 'Quarantine', 'rocketsky-antispam' ); ?></span><strong><?php echo esc_html( $quarantine_status ); ?></strong><a href="<?php echo esc_url( $view_urls['quarantine'] ); ?>"><?php esc_html_e( 'Review spam', 'rocketsky-antispam' ); ?></a></div>
 </section>
 <?php if ( 0 === $active_count ) : ?>
 	<p class="rktsky-antispam__help-note"><?php esc_html_e( 'Choose at least one integration to start checking submissions.', 'rocketsky-antispam' ); ?> <a href="<?php echo esc_url( $view_urls['integrations'] ); ?>"><?php esc_html_e( 'Set up protection', 'rocketsky-antispam' ); ?></a></p>
@@ -32,12 +34,12 @@ require __DIR__ . '/admin-header.php';
 <section class="rktsky-antispam__card rktsky-antispam__overview" aria-labelledby="rktsky-activity-heading">
 	<div class="rktsky-antispam__section-title"><h2 id="rktsky-activity-heading"><?php esc_html_e( 'Activity', 'rocketsky-antispam' ); ?></h2><span><?php esc_html_e( 'Last 7 days · UTC', 'rocketsky-antispam' ); ?></span></div>
 	<div class="rktsky-antispam__metrics">
-		<div class="rktsky-antispam__metric"><span><?php esc_html_e( 'Passed local checks', 'rocketsky-antispam' ); ?></span><strong><?php echo esc_html( number_format_i18n( (int) $summary['accepted'] ) ); ?></strong><p><?php esc_html_e( 'Other plugins may run additional checks.', 'rocketsky-antispam' ); ?></p></div>
-		<div class="rktsky-antispam__metric rktsky-antispam__metric--blocked"><span><?php esc_html_e( 'Stopped by Rocketsky Antispam', 'rocketsky-antispam' ); ?></span><strong><?php echo esc_html( number_format_i18n( (int) $summary['blocked'] ) ); ?></strong><p><?php esc_html_e( 'Includes expired tokens and technical failures.', 'rocketsky-antispam' ); ?></p></div>
-		<div class="rktsky-antispam__metric"><span><?php esc_html_e( 'Rejection rate', 'rocketsky-antispam' ); ?></span><strong><?php echo esc_html( null === $rejection_rate ? '—' : number_format_i18n( 100 * $rejection_rate, 1 ) . '%' ); ?></strong><p><?php esc_html_e( 'Share of checked submissions. This is not detection accuracy.', 'rocketsky-antispam' ); ?></p></div>
+		<div class="rktsky-antispam__metric"><span><?php esc_html_e( 'Passed checks', 'rocketsky-antispam' ); ?></span><strong><?php echo esc_html( number_format_i18n( (int) $summary['accepted'] ) ); ?></strong><p><?php esc_html_e( 'Other plugins may run additional checks.', 'rocketsky-antispam' ); ?></p></div>
+		<div class="rktsky-antispam__metric rktsky-antispam__metric--blocked"><span><?php esc_html_e( 'Stopped submissions', 'rocketsky-antispam' ); ?></span><strong><?php echo esc_html( number_format_i18n( (int) $summary['blocked'] ) ); ?></strong><p><?php esc_html_e( 'Includes failed verification checks.', 'rocketsky-antispam' ); ?></p></div>
+		<div class="rktsky-antispam__metric"><span><?php esc_html_e( 'Rejection rate', 'rocketsky-antispam' ); ?></span><strong><?php echo esc_html( null === $rejection_rate ? '—' : number_format_i18n( 100 * $rejection_rate, 1 ) . '%' ); ?></strong><p><?php esc_html_e( 'Share of checked submissions that were stopped.', 'rocketsky-antispam' ); ?></p></div>
 	</div>
 	<?php if ( 0 === $checked_count ) : ?>
-		<p class="rktsky-antispam__empty"><?php esc_html_e( 'No submissions checked in this period. Counts appear when a protected form is submitted.', 'rocketsky-antispam' ); ?></p>
+		<p class="rktsky-antispam__empty"><?php esc_html_e( 'No submissions have been checked in this period.', 'rocketsky-antispam' ); ?></p>
 	<?php endif; ?>
 	<details class="rktsky-antispam__disclosure">
 		<summary><span class="rktsky-antispam__disclosure-title"><?php esc_html_e( 'Daily activity', 'rocketsky-antispam' ); ?></span></summary>
@@ -54,7 +56,7 @@ require __DIR__ . '/admin-header.php';
 			<?php endforeach; ?>
 		</dl></details>
 	<?php endif; ?>
-	<p class="rktsky-antispam__help-note"><?php echo esc_html( sprintf( /* translators: %s: lifetime operational comment rejection total. */ __( 'Stopped WordPress comments since the last statistics reset: %s.', 'rocketsky-antispam' ), number_format_i18n( $blocked_comments ) ) ); ?></p>
+	<p class="rktsky-antispam__help-note"><?php echo esc_html( sprintf( /* translators: %s: lifetime operational comment rejection total. */ __( 'Comments stopped since the last statistics reset: %s.', 'rocketsky-antispam' ), number_format_i18n( $blocked_comments ) ) ); ?></p>
 </section>
 <?php require __DIR__ . '/quality.php'; ?>
 <div class="rktsky-antispam__quick-actions">

@@ -74,7 +74,7 @@ function rktsky_i18n_child( string $stage ): array {
 
 if ( '' === $rktsky_i18n_stage ) {
 	$rktsky_i18n_results = array();
-	foreach ( array( 'bundled', 'language-pack', 'conflict' ) as $rktsky_i18n_scenario ) {
+	foreach ( array( 'bundled', 'language-pack', 'conflict', 'localized-startup' ) as $rktsky_i18n_scenario ) {
 		$rktsky_i18n_result    = rktsky_i18n_child( $rktsky_i18n_scenario );
 		$rktsky_i18n_results[] = $rktsky_i18n_result;
 		echo 'PASS: ' . $rktsky_i18n_scenario . ' (' . $rktsky_i18n_result['assertions'] . " native translation assertions).\n";
@@ -82,7 +82,7 @@ if ( '' === $rktsky_i18n_stage ) {
 	echo 'RESULT: ' . json_encode( $rktsky_i18n_results, JSON_THROW_ON_ERROR ) . "\n";
 	return;
 }
-if ( ! in_array( $rktsky_i18n_stage, array( 'bundled', 'language-pack', 'conflict' ), true ) || defined( 'WP_LANG_DIR' ) ) {
+if ( ! in_array( $rktsky_i18n_stage, array( 'bundled', 'language-pack', 'conflict', 'localized-startup' ), true ) || defined( 'WP_LANG_DIR' ) ) {
 	throw new RuntimeException( 'Use only an internal scenario with an uninitialized native loader.' );
 }
 
@@ -147,7 +147,7 @@ add_action(
 	10,
 	2
 );
-add_filter( 'pre_option_WPLANG', static fn(): string => 'en_US' );
+add_filter( 'pre_option_WPLANG', static fn(): string => 'localized-startup' === $GLOBALS['rktsky_i18n_stage'] ? 'de_CH' : 'en_US' );
 $_SERVER['HTTP_HOST']      = '127.0.0.1:8877';
 $_SERVER['REQUEST_METHOD'] = 'GET';
 $_SERVER['REQUEST_URI']    = '/';
@@ -157,9 +157,21 @@ if ( ! defined( 'RKTSKY_ANTISPAM_TEST_FIXTURE' ) || true !== RKTSKY_ANTISPAM_TES
 	throw new RuntimeException( 'Refusing a site without explicit local fixture configuration.' );
 }
 
+if ( 'localized-startup' === $rktsky_i18n_stage ) {
+	// An English startup can hide an early translated lookup in a provider hook.
+	// Exercise a real localized boot while leaving every enabled provider loaded.
+	rktsky_i18n_expect( 'de_CH' === determine_locale(), 'The entire native loader must start in Swiss German.' );
+	rktsky_i18n_expect( 'Einstellungen' === __( 'Settings', 'rocketsky-antispam' ), 'A localized fresh boot must load the shipped catalogue without an English warmup.' );
+	rktsky_i18n_expect( array() === $rktsky_i18n_early, 'A localized startup must emit no owned early-loading diagnostics: ' . wp_json_encode( $rktsky_i18n_early ) );
+	echo 'RESULT: ' . wp_json_encode( array( 'stage' => $rktsky_i18n_stage, 'assertions' => $rktsky_i18n_assertions, 'wordpress' => $GLOBALS['wp_version'], 'other_plugin_early_loading' => array_values( array_unique( $rktsky_i18n_foreign ) ) ), JSON_THROW_ON_ERROR ) . "\n";
+	return;
+}
+
 $rktsky_i18n_entry     = WP_PLUGIN_DIR . '/rocketsky-antispam/rocketsky-antispam.php';
 $rktsky_i18n_instance  = new Installation( $rktsky_i18n_entry );
 $rktsky_i18n_directory = dirname( $rktsky_i18n_entry ) . '/languages/';
+require_once ABSPATH . 'wp-admin/includes/plugin.php';
+$rktsky_i18n_header = get_plugin_data( $rktsky_i18n_entry, false, false );
 rktsky_i18n_expect( ! is_textdomain_loaded( 'rocketsky-antispam' ), 'Registration must not eagerly load any catalogue.' );
 rktsky_i18n_expect( 'Settings' === __( 'Settings', 'rocketsky-antispam' ), 'An initial English lookup must use the source message.' );
 rktsky_i18n_expect( ! is_textdomain_loaded( 'rocketsky-antispam' ), 'An English miss must not load a foreign catalogue.' );
@@ -172,6 +184,17 @@ foreach ( $rktsky_i18n_expected as $rktsky_i18n_locale => $rktsky_i18n_translati
 	rktsky_i18n_expect( switch_to_locale( $rktsky_i18n_locale ), 'The native API must switch from English to each supported locale.' );
 	rktsky_i18n_expect( $rktsky_i18n_translation === __( 'Settings', 'rocketsky-antispam' ), 'Native just-in-time loading must use the expected bundled or language-pack translation: ' . $rktsky_i18n_locale );
 	rktsky_i18n_expect( is_textdomain_loaded( 'rocketsky-antispam' ), 'Core must report the requested catalogue as loaded.' );
+	$rktsky_i18n_catalogue = new MO();
+	rktsky_i18n_expect( $rktsky_i18n_catalogue->import_from_file( $rktsky_i18n_directory . 'rocketsky-antispam-' . $rktsky_i18n_locale . '.mo' ), 'Core must read the complete shipped catalogue for header verification.' );
+	$rktsky_i18n_description = $rktsky_i18n_catalogue->translate( $rktsky_i18n_header['Description'] );
+	rktsky_i18n_expect( $rktsky_i18n_description !== $rktsky_i18n_header['Description'], 'Each shipped catalogue must translate the human-readable plugin description.' );
+	// The synthetic native pack intentionally contains Settings only: Core must
+	// keep it authoritative rather than merge a second bundled catalogue into it.
+	if ( 'language-pack' === $rktsky_i18n_stage && 'de_CH' === $rktsky_i18n_locale ) {
+		$rktsky_i18n_description = $rktsky_i18n_header['Description'];
+	}
+	$rktsky_i18n_translated_header = get_plugin_data( $rktsky_i18n_entry, false, true );
+	rktsky_i18n_expect( $rktsky_i18n_description === $rktsky_i18n_translated_header['Description'] && 'Rocketsky Antispam' === $rktsky_i18n_translated_header['Name'], 'The real Plugins screen header must use the selected catalogue while preserving the product name.' );
 	rktsky_i18n_expect( 'en_US' === restore_previous_locale(), 'The native locale stack must restore English.' );
 	rktsky_i18n_expect( 'Settings' === __( 'Settings', 'rocketsky-antispam' ), 'Restoring English must remove the previous locale from message selection.' );
 }
@@ -183,11 +206,16 @@ rktsky_i18n_expect( $rktsky_i18n_expected['de_CH'] === __( 'Settings', 'rocketsk
 
 if ( 'conflict' === $rktsky_i18n_stage ) {
 	rktsky_i18n_expect( ! class_exists( Rktsky\Antispam\Guard::class, false ), 'An installation conflict must stop normal plugin services.' );
+	$rktsky_i18n_conflict_source = 'Deactivate the previous plugin copy before activating Rocketsky Antispam. Do not delete it: both copies use the same data. Deactivate network-wide copies in Network Admin.';
+	$rktsky_i18n_catalogue = new MO();
+	rktsky_i18n_expect( $rktsky_i18n_catalogue->import_from_file( $rktsky_i18n_directory . 'rocketsky-antispam-de_CH.mo' ), 'The conflict scenario must read the shipped Swiss German catalogue.' );
+	$rktsky_i18n_conflict = $rktsky_i18n_catalogue->translate( $rktsky_i18n_conflict_source );
+	rktsky_i18n_expect( $rktsky_i18n_conflict !== $rktsky_i18n_conflict_source, 'The conflict explanation must have a bundled translation.' );
 	add_filter( 'user_has_cap', static fn( array $caps ): array => array_merge( $caps, array( 'activate_plugins' => true ) ) );
 	ob_start();
 	$rktsky_i18n_instance->notice();
 	$rktsky_i18n_notice = (string) ob_get_clean();
-	rktsky_i18n_expect( str_contains( $rktsky_i18n_notice, 'Deaktiviere die bisherige Installation' ), 'A skipped boot must still produce the translated native conflict notice.' );
+	rktsky_i18n_expect( str_contains( $rktsky_i18n_notice, esc_html( $rktsky_i18n_conflict ) ), 'A skipped boot must still produce the translated native conflict notice.' );
 	$rktsky_i18n_die = static fn(): Closure => static function ( $message, $title, $args ): void {
 		throw new RuntimeException( wp_strip_all_tags( (string) $message ), (int) $args['response'] );
 	};
@@ -196,7 +224,7 @@ if ( 'conflict' === $rktsky_i18n_stage ) {
 		$rktsky_i18n_instance->activate();
 		throw new RuntimeException( 'A conflicting activation must stop before returning.' );
 	} catch ( RuntimeException $rktsky_i18n_error ) {
-		rktsky_i18n_expect( 409 === $rktsky_i18n_error->getCode() && str_contains( $rktsky_i18n_error->getMessage(), 'Deaktiviere die bisherige Installation' ), 'The native activation failure must be translated without an explicit textdomain load.' );
+		rktsky_i18n_expect( 409 === $rktsky_i18n_error->getCode() && $rktsky_i18n_conflict === $rktsky_i18n_error->getMessage(), 'The native activation failure must be translated without an explicit textdomain load.' );
 	}
 	remove_filter( 'wp_die_handler', $rktsky_i18n_die );
 }

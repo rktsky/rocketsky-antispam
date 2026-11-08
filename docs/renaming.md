@@ -14,7 +14,9 @@ is a separate activation identity. Upload the new directory, deactivate the old
 copy without uninstalling it, then activate the new copy in the same scope.
 Activation does not overwrite existing settings. No SQL data migration is needed.
 
-Keep a backup and verify retained data before removing the old directory through
+Clear page and CDN caches after activation, then load and test a protected form
+again. Cached pages can still refer to scripts in the old directory. Keep a backup
+and verify retained data before removing only the inactive old directory through
 the hosting file manager. Do not run the old copy's WordPress Delete action:
 its original uninstall script can delete the same six tables and settings.
 The active renamed plugin blocks native uninstall of another identified owned

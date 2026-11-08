@@ -4,67 +4,57 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Rocketsky Antispam 0.5.2\n"
-"POT-Creation-Date: 2026-11-08 09:22+0100\n"
-"PO-Revision-Date: 2026-11-08 09:27+0100\n"
+"POT-Creation-Date: 2026-11-08 10:47+0100\n"
+"PO-Revision-Date: 2026-11-08 10:47+0100\n"
 "Last-Translator: Rocketsky\n"
 "Language-Team: Rocketsky\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Domain: rocketsky-antispam\n"
-"Language: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: templates/dashboard.php:32 templates/quality.php:14
+#. translators: 1: reviewed records, 2: unreviewed records.
+#: templates/dashboard.php:66 templates/quality.php:14
 #, php-format
 msgid "%1$d reviewed · %2$d awaiting review"
 msgstr ""
 
-#: templates/overview.php:25
+#. translators: %d: available, enabled integrations, not a form count.
+#: templates/overview.php:27
 #, php-format
 msgid "%d enabled"
 msgstr ""
 
-#: templates/overview.php:46
+#. translators: %d: submissions passing local checks that day.
+#: templates/overview.php:48
 #, php-format
 msgid "%d passed"
 msgstr ""
 
-#: templates/overview.php:46
+#. translators: %d: operational rejections that day.
+#: templates/overview.php:48
 #, php-format
 msgid "%d stopped"
 msgstr ""
 
 #: templates/integrations.php:55
-msgid "0 disables the timing check. A delay can reject fast submissions made with autofill."
+msgid "0 turns this check off. A delay can reject fast submissions made with autofill."
 msgstr ""
 
-#: templates/settings.php:79
-msgid "0 leaves deletion to WordPress. When enabled, the scheduled task also deletes existing comments already marked as spam once they exceed this age. Deletion is permanent."
-msgstr ""
-
-#: templates/dashboard.php:30 templates/quality.php:24
+#: templates/dashboard.php:59 templates/quality.php:24
 msgid "Accuracy"
 msgstr ""
 
-#: templates/quarantine.php:126
+#: templates/quarantine.php:132
 msgid "Actions"
 msgstr ""
 
-#: templates/overview.php:33
+#: templates/overview.php:35
 msgid "Activity"
 msgstr ""
 
 #: templates/settings.php:28
-msgid "Activity statistics deleted. Used tokens remain protected against reuse."
-msgstr ""
-
-#: src/Admin.php:291
-msgid "Adds protection through the native form and spam hooks."
-msgstr ""
-
-#: templates/rules.php:49
-msgid "Advanced content patterns"
+msgid "Activity statistics deleted."
 msgstr ""
 
 #: templates/rules.php:64
@@ -96,38 +86,65 @@ msgid "Allowed"
 msgstr ""
 
 #: src/Settings.php:200
-msgid "An invalid or oversized regular expression was omitted. Enter pattern bodies without delimiters, one per line."
+msgid "An invalid or overlong regular expression was not saved. Enter one expression per line, without delimiters."
 msgstr ""
 
 #: templates/settings.php:44
 msgid "Anonymous daily counts"
 msgstr ""
 
-#: templates/settings.php:74
-msgid "Applies to Rocketsky Antispam counts. Your form plugin and server may keep their own records."
+#: templates/rules.php:35
+msgid "Applies to comments and contact forms, except Divi. Registration and checkout use technical checks."
 msgstr ""
 
-#: templates/delivered-review.php:16
-msgid "Assess a delivered submission"
+#: templates/settings.php:80
+msgid "Applies to existing and future WordPress comments marked as spam, based on the date they were submitted. 0 turns this cleanup off."
+msgstr ""
+
+#: templates/quarantine.php:82
+msgid "Assess this message"
 msgstr ""
 
 #: templates/delivered-review.php:28
 msgid "Assessment"
 msgstr ""
 
-#: src/Admin.php:407
+#: templates/quarantine.php:48
+msgid "Assessment saved."
+msgstr ""
+
+#: templates/quarantine.php:86
+msgid "Assessment: not spam"
+msgstr ""
+
+#: templates/quarantine.php:86
+msgid "Assessment: spam"
+msgstr ""
+
+#: src/Admin.php:411
 msgid "BBCode link markup"
 msgstr ""
 
-#: templates/quarantine.php:51
+#: templates/quarantine.php:54
 msgid "Back to rejected submissions"
+msgstr ""
+
+#: templates/dashboard.php:61
+msgid "Based on reviewed submissions only."
+msgstr ""
+
+#. translators: %d: number of days in the reviewed dataset.
+#. translators: %d: observation window for cases, independent of when a case was reviewed.
+#: templates/dashboard.php:46 templates/quality.php:15
+#, php-format
+msgid "Based on submissions recorded in the last %d days."
 msgstr ""
 
 #: templates/rules.php:84 templates/rules.php:96
 msgid "Block listed countries"
 msgstr ""
 
-#: src/Admin.php:406
+#: src/Admin.php:410
 msgid "Blocked keyword"
 msgstr ""
 
@@ -135,56 +152,49 @@ msgstr ""
 msgid "Blocked keywords"
 msgstr ""
 
-#: templates/quarantine.php:48
-msgid "Case reference forgotten. Reviewed counts retain their evaluation window."
+#: templates/settings.php:58
+msgid "Can store names, email addresses and message text. Include this storage in your privacy notice before enabling."
 msgstr ""
 
-#: templates/integrations.php:58 templates/rules.php:132 templates/settings.php:102
+#: templates/integrations.php:58 templates/rules.php:132
+#: templates/settings.php:103
 msgid "Changes apply after saving."
 msgstr ""
 
-#: templates/overview.php:22
-msgid "Check protection status and recent activity. Review individual submissions under Review spam."
+#: src/Admin.php:295
+msgid "Checks Contact Form 7 submissions for spam."
 msgstr ""
 
-#: src/Admin.php:323
-msgid "Checks classic and block checkout before final processing or payment. Content rules and quarantine are excluded."
+#: src/Admin.php:291
+msgid "Checks WordPress registration before an account is created. Rocketsky Antispam does not store account fields."
 msgstr ""
 
-#: src/Admin.php:287
-msgid "Checks native account registration before accounts or activation emails are created. No account fields are retained."
+#: src/Admin.php:327
+msgid "Checks classic and block checkout before payment. Order and payment fields are excluded from content filters and quarantine."
 msgstr ""
 
-#: src/Admin.php:299 src/Admin.php:303 src/Admin.php:307 src/Admin.php:311 src/Admin.php:315
-msgid "Checks submissions before the form is processed."
+#: src/Admin.php:319
+msgid "Checks forms built with Elementor Pro."
 msgstr ""
 
-#: templates/overview.php:30
+#: src/Admin.php:303 src/Admin.php:307 src/Admin.php:311 src/Admin.php:315
+msgid "Checks submissions for spam and keeps the form plugin's own validation."
+msgstr ""
+
+#: src/Admin.php:299
+msgid "Checks submissions while keeping Gravity Forms validation and spam handling."
+msgstr ""
+
+#: templates/quarantine.php:104
+msgid "Choose an integration to review its spam or activity, or open a quarantined message below."
+msgstr ""
+
+#: templates/overview.php:32
 msgid "Choose at least one integration to start checking submissions."
 msgstr ""
 
 #: templates/settings.php:25
 msgid "Choose what Rocketsky Antispam stores, how long it keeps records and whether it sends notifications."
-msgstr ""
-
-#: templates/quarantine.php:45
-msgid "Classification saved. Reusing the same reference updates the existing case."
-msgstr ""
-
-#: templates/rules.php:101
-msgid "Comma-separated ISO two-letter codes."
-msgstr ""
-
-#: templates/rules.php:84
-msgid "Comment countries"
-msgstr ""
-
-#: src/Admin.php:412
-msgid "Comment country rule"
-msgstr ""
-
-#: src/Admin.php:411
-msgid "Comment language rule"
 msgstr ""
 
 #: templates/rules.php:64
@@ -195,15 +205,21 @@ msgstr ""
 msgid "Comment not submitted"
 msgstr ""
 
-#: templates/provider.php:19
-msgid "Compatible plugin not available"
+#: templates/dashboard.php:42
+msgid "Comments stopped in total"
+msgstr ""
+
+#. translators: %s: lifetime operational comment rejection total.
+#: templates/overview.php:59
+#, php-format
+msgid "Comments stopped since the last statistics reset: %s."
 msgstr ""
 
 #: templates/rules.php:49
 msgid "Configured"
 msgstr ""
 
-#: templates/quarantine.php:84
+#: templates/quarantine.php:87
 msgid "Confirm spam"
 msgstr ""
 
@@ -215,28 +231,26 @@ msgstr ""
 msgid "Confirmed spam among reviewed rejections."
 msgstr ""
 
-#: templates/quality.php:27
-msgid "Confirmed spam caught"
-msgstr ""
-
 #: templates/rules.php:34
 msgid "Content filters"
 msgstr ""
 
-#: templates/rules.php:35
-msgid "Content filters do not apply to Divi, registration or checkout."
-msgstr ""
-
-#: src/Admin.php:409
+#: src/Admin.php:413
 msgid "Content rule processing limit"
 msgstr ""
 
-#: src/SpamHandling.php:168
-msgid "Content spam uses this native spam queue and its own retention settings."
+#. translators: %s: fixed internal content-policy reason code.
+#: src/Integrations/GravityForms.php:340
+#, php-format
+msgid "Content rule: %s."
 msgstr ""
 
 #: templates/quality.php:24
 msgid "Correct decisions among all reviewed cases."
+msgstr ""
+
+#: templates/quarantine.php:48
+msgid "Could not complete this action. Check the entry ID or reference and try again."
 msgstr ""
 
 #: templates/rules.php:92
@@ -245,6 +259,14 @@ msgstr ""
 
 #: templates/rules.php:99
 msgid "Country codes"
+msgstr ""
+
+#: src/Admin.php:416
+msgid "Country filter"
+msgstr ""
+
+#: templates/rules.php:84
+msgid "Country filter for comments"
 msgstr ""
 
 #: templates/rules.php:119
@@ -259,71 +281,75 @@ msgstr ""
 msgid "Country source"
 msgstr ""
 
-#: templates/quarantine.php:83
-msgid "Current assessment: normal message"
+#: templates/rules.php:109
+msgid "Country source available."
 msgstr ""
 
-#: templates/quarantine.php:83
-msgid "Current assessment: spam"
+#: templates/rules.php:109
+msgid "Country source unavailable. The unknown country setting applies."
 msgstr ""
 
-#: templates/overview.php:43
+#: templates/dashboard.php:27 templates/overview.php:45
 msgid "Daily activity"
 msgstr ""
 
-#: templates/dashboard.php:16
+#: templates/dashboard.php:29
 msgid "Daily activity · all integrations · UTC"
 msgstr ""
 
-#: templates/settings.php:84
-msgid "Daily administrator digest"
+#: templates/settings.php:85
+msgid "Daily email summary"
 msgstr ""
 
 #: src/Quarantine.php:379
 msgid "Date"
 msgstr ""
 
-#: templates/dashboard.php:17
+#: templates/dashboard.php:30
 msgid "Day"
 msgstr ""
 
-#: templates/settings.php:111
+#: src/Installation.php:371
+msgid "Deactivate the previous plugin copy before activating Rocketsky Antispam. Do not delete it: both copies use the same data. Deactivate network-wide copies in Network Admin."
+msgstr ""
+
+#: templates/settings.php:112
 msgid "Delete activity statistics"
 msgstr ""
 
-#: templates/settings.php:100
+#: templates/settings.php:101
 msgid "Delete plugin data when uninstalling"
 msgstr ""
 
-#: templates/settings.php:59
+#: templates/settings.php:60
 msgid "Delete quarantined records after"
 msgstr ""
 
-#: templates/settings.php:105
+#: templates/settings.php:106
 msgid "Delete statistics"
 msgstr ""
 
-#: templates/quarantine.php:93
+#: templates/quarantine.php:96
 msgid "Delete this record"
 msgstr ""
 
-#: templates/settings.php:110
-msgid "Deletes daily activity counts and the lifetime rejected-comment total. Reviewed detection results remain available for their 90-day window. This cannot be undone."
+#: templates/settings.php:111
+msgid "Deletes daily counts and the total rejected-comment count. Reviewed results keep their 90-day expiry. This cannot be undone."
 msgstr ""
 
-#: templates/quarantine.php:88
-msgid "Deleting this record is permanent. This screen cannot publish comments or resend forms."
+#: templates/settings.php:47
+msgid "Describe your enabled settings in your website's privacy notice."
 msgstr ""
 
 #: templates/quality.php:23
 msgid "Detected spam among reviewed spam cases."
 msgstr ""
 
-#: templates/sponsors.php:16
+#: templates/sponsors.php:24
 msgid "Developed and sponsored by"
 msgstr ""
 
-#: templates/settings.php:87
+#: templates/settings.php:88
 msgid "Digest email configuration"
 msgstr ""
 
@@ -331,7 +357,11 @@ msgstr ""
 msgid "Divi contact form"
 msgstr ""
 
-#: src/Admin.php:208
+#: templates/settings.php:75
+msgid "Does not change the total comment count or the 90-day review period."
+msgstr ""
+
+#: src/Admin.php:209
 msgid "Dutch"
 msgstr ""
 
@@ -339,39 +369,59 @@ msgstr ""
 msgid "Email address"
 msgstr ""
 
+#: templates/settings.php:85
+msgid "Emails the previous day's rejection counts through WordPress. No message contents are included."
+msgstr ""
+
 #: templates/provider.php:33
 msgid "Enable"
 msgstr ""
 
+#: templates/fields.php:18
+msgid "Enable JavaScript to submit this form."
+msgstr ""
+
 #: templates/integrations.php:18
-msgid "Enable protection for the providers you use. Each integration covers all of its forms; no form edits are needed."
+msgid "Enable the integrations you use. Protection is added to supported forms automatically."
 msgstr ""
 
 #: templates/provider.php:19
 msgid "Enabled"
 msgstr ""
 
-#: src/Admin.php:204
+#: templates/quarantine.php:127
+msgid "Encryption is unavailable, so new messages cannot be stored. Ask your hosting provider to check WordPress Sodium support."
+msgstr ""
+
+#: src/Admin.php:218
+msgid "Encryption unavailable"
+msgstr ""
+
+#: src/Admin.php:205
 msgid "English"
 msgstr ""
 
+#: templates/rules.php:125
+msgid "Enter one IPv4 or IPv6 network in CIDR notation per line, up to 20. Only listed, directly connected proxies are trusted. Configure them to replace country headers sent by visitors."
+msgstr ""
+
 #: templates/delivered-review.php:27 templates/delivered-review.php:47
-msgid "Entry ID or internal reference"
+msgid "Entry ID or reference"
 msgstr ""
 
 #: templates/settings.php:43
 msgid "Expire within 2 hours; removed by scheduled cleanup"
 msgstr ""
 
-#: src/Admin.php:398
+#: src/Admin.php:402
 msgid "Expired protection token"
 msgstr ""
 
-#: templates/settings.php:68
-msgid "Expired records are hidden immediately and removed by scheduled cleanup, which can run late. Disabling quarantine stops new storage; existing records remain until expiry. The local storage limit is 500 records."
+#: templates/quarantine.php:66
+msgid "Expires"
 msgstr ""
 
-#: templates/sponsors.php:25
+#: templates/sponsors.php:33
 msgid "Explore Speo"
 msgstr ""
 
@@ -379,55 +429,44 @@ msgstr ""
 msgid "False alarms"
 msgstr ""
 
-#: src/Plugin.php:191
-msgid "Feedback statistics use local metadata about the original decision and a later administrator classification for up to 90 days. References to native comments, quarantined entries and manually reported case identifiers are stored as site-keyed HMAC values, without copying their content into feedback records. These references remain locally linkable while the source exists. Reviewed records can be detached from deleted sources while preserving the 90-day evaluation window. Metrics apply to reviewed examples only; unreviewed submissions and unavailable external inbox classifications are not treated as confirmed outcomes. WordPress privacy requests and source deletion must also remove or detach related feedback references. No feedback metadata is sent to a third party."
-msgstr ""
-
-#: templates/quality.php:28
-msgid "Feedback uses local, linkable HMAC case references for up to 90 days, also in privacy-conscious mode. Scheduled cleanup may run late."
-msgstr ""
-
-#: src/Admin.php:176 templates/rules.php:26
+#: src/Admin.php:177 templates/rules.php:26
 msgid "Filter rules"
+msgstr ""
+
+#: src/SpamHandling.php:84
+msgid "Flamingo keeps spam when the form allows it. Otherwise, your quarantine settings apply, provided the form allows message storage."
 msgstr ""
 
 #: src/SpamHandling.php:82
 msgid "Flamingo spam"
 msgstr ""
 
-#: src/SpamHandling.php:84
-msgid "Flamingo stores spam when the form allows it; otherwise Rocketsky Antispam retention applies. A form's storage prohibition is respected."
-msgstr ""
-
 #: src/SpamHandling.php:77
 msgid "Fluent Forms entries"
-msgstr ""
-
-#: templates/delivered-review.php:49
-msgid "Forget case reference"
-msgstr ""
-
-#: templates/delivered-review.php:38
-msgid "Forgetting removes the link; reviewed counts keep their evaluation window. Provider entries remain in place."
 msgstr ""
 
 #: src/Quarantine.php:375
 msgid "Form"
 msgstr ""
 
-#: templates/quarantine.php:61 templates/quarantine.php:126 templates/quarantine.php:128
+#: templates/quarantine.php:64 templates/quarantine.php:132
+#: templates/quarantine.php:134
 msgid "Form ID"
 msgstr ""
 
-#: src/Admin.php:404
+#: src/Admin.php:408
 msgid "Form does not match token"
 msgstr ""
 
-#: templates/quarantine.php:57 templates/quarantine.php:128
+#: templates/quarantine.php:60 templates/quarantine.php:134
 msgid "Form integration"
 msgstr ""
 
-#: src/Admin.php:341
+#: src/Admin.php:414
+msgid "Form plugin's spam check"
+msgstr ""
+
+#: src/Admin.php:345
 msgid "Form plugins"
 msgstr ""
 
@@ -435,15 +474,19 @@ msgstr ""
 msgid "Form provider"
 msgstr ""
 
+#: src/Fields.php:98
+msgid "Form verification is unavailable. Reload the page and try again."
+msgstr ""
+
 #: src/SpamHandling.php:72
 msgid "Formidable spam"
 msgstr ""
 
-#: src/Admin.php:205
+#: src/Admin.php:206
 msgid "French"
 msgstr ""
 
-#: src/Admin.php:203
+#: src/Admin.php:204
 msgid "German"
 msgstr ""
 
@@ -451,23 +494,32 @@ msgstr ""
 msgid "Gravity Forms spam"
 msgstr ""
 
-#: src/Admin.php:395
-msgid "Honeypot filled"
+#: src/Admin.php:399
+msgid "Hidden field filled"
 msgstr ""
 
 #: src/Feedback.php:699
 msgid "Human review"
 msgstr ""
 
-#: templates/overview.php:36
+#: templates/sponsors.php:16
+msgid "If you’d like to support Rocketsky Antispam, you can buy us a coffee on Ko-fi."
+msgstr ""
+
+#: templates/dashboard.php:22
 msgid "Includes expired tokens and technical failures."
 msgstr ""
 
-#: templates/dashboard.php:24
-msgid "Includes technical failures. The rejection rate is not a measured spam detection accuracy. Counts refresh when this dashboard loads."
+#: templates/overview.php:38
+msgid "Includes failed verification checks."
 msgstr ""
 
-#: templates/delivered-review.php:22 templates/delivered-review.php:42 templates/quarantine.php:126 templates/quarantine.php:128
+#: templates/integrations.php:46
+msgid "Install or activate the required plugin or theme. Your saved choices are kept."
+msgstr ""
+
+#: templates/delivered-review.php:22 templates/delivered-review.php:42
+#: templates/quarantine.php:132 templates/quarantine.php:134
 msgid "Integration"
 msgstr ""
 
@@ -475,60 +527,72 @@ msgstr ""
 msgid "Integration settings"
 msgstr ""
 
-#: src/Admin.php:175 templates/integrations.php:18 templates/overview.php:25
+#: templates/provider.php:19
+msgid "Integration unavailable"
+msgstr ""
+
+#: src/Admin.php:176 templates/integrations.php:18 templates/overview.php:27
 msgid "Integrations"
 msgstr ""
 
-#: src/Admin.php:397
+#: src/Admin.php:401
 msgid "Invalid protection token"
 msgstr ""
 
-#: templates/quarantine.php:53
+#: templates/quarantine.php:56
 msgid "It may have expired or already been deleted."
 msgstr ""
 
-#: src/Admin.php:206
+#: src/Admin.php:207
 msgid "Italian"
 msgstr ""
 
-#: templates/settings.php:72
-msgid "Keep statistics for"
+#: templates/integrations.php:56
+msgid "JavaScript must be enabled. If verification fails, the visitor sees an error and can retry."
+msgstr ""
+
+#: templates/settings.php:73
+msgid "Keep daily activity for"
 msgstr ""
 
 #: templates/rules.php:66
-msgid "Language is estimated locally. Short or ambiguous comments may have an unknown language."
+msgid "Language detection runs on your website. Short or ambiguous comments may remain unrecognised."
 msgstr ""
 
-#: templates/overview.php:33
+#: src/Admin.php:415
+msgid "Language filter"
+msgstr ""
+
+#: templates/dashboard.php:16 templates/overview.php:35
 msgid "Last 7 days · UTC"
+msgstr ""
+
+#: templates/rules.php:74
+msgid "Leave all languages unchecked to allow any language."
 msgstr ""
 
 #: templates/rules.php:108
 msgid "Local PHP GeoIP extension"
 msgstr ""
 
-#: src/Integrations/GravityForms.php:340
-#, php-format
-msgid "Local content policy: %s."
-msgstr ""
-
-#: rocketsky-antispam.php:6
+#. Description of the plugin
+#: rocketsky-antispam.php
 msgid "Local spam protection for comments, registrations and forms. No external services."
 msgstr ""
 
-#: templates/settings.php:46
-msgid "Make sure your website privacy information describes the options you enable."
+#: templates/settings.php:45
+msgid "Local, linkable references for up to 90 days, including in privacy-conscious mode"
 msgstr ""
 
-#: src/Admin.php:403
+#: src/Admin.php:407
 msgid "Malformed protection fields"
 msgstr ""
 
-#: templates/overview.php:25
+#: templates/overview.php:27
 msgid "Manage integrations"
 msgstr ""
 
-#: src/Admin.php:408
+#: src/Admin.php:412
 msgid "Matched content pattern"
 msgstr ""
 
@@ -540,47 +604,35 @@ msgstr ""
 msgid "Missed spam"
 msgstr ""
 
-#: src/Admin.php:396
+#: src/Admin.php:400
 msgid "Missing protection token"
 msgstr ""
 
-#: src/Admin.php:410
-msgid "Native provider spam check"
-msgstr ""
-
-#: src/SpamHandling.php:91 src/SpamHandling.php:97
-msgid "Native spam storage depends on each form's settings. Other rejections follow Rocketsky Antispam retention settings."
-msgstr ""
-
-#: templates/quarantine.php:117
-msgid "Native spam storage follows the provider's privacy and retention settings, independently of privacy-conscious mode. Rocketsky Antispam quarantine is encrypted, with capture limits and automatic deletion."
-msgstr ""
-
-#: templates/overview.php:27 templates/quarantine.php:122
-msgid "New storage is off"
-msgstr ""
-
-#: templates/quarantine.php:141
+#: templates/quarantine.php:147
 msgid "Next"
 msgstr ""
 
-#: templates/quality.php:18
-msgid "No reviewed results yet. Assess rejected submissions or report missed spam to build the dataset."
+#: templates/dashboard.php:24
+msgid "No checks in this period."
 msgstr ""
 
-#: templates/quarantine.php:124
-msgid "No stored submissions"
-msgstr ""
-
-#: templates/overview.php:40
-msgid "No submissions checked in this period. Counts appear when a protected form is submitted."
+#: templates/dashboard.php:63
+msgid "No reviewed results yet."
 msgstr ""
 
 #: src/SpamHandling.php:115
-msgid "No supported review destination is available for this integration."
+msgid "No spam review page is available for this integration."
 msgstr ""
 
-#: templates/quarantine.php:70
+#: templates/quarantine.php:130
+msgid "No stored submissions"
+msgstr ""
+
+#: templates/overview.php:42
+msgid "No submissions have been checked in this period."
+msgstr ""
+
+#: templates/quarantine.php:73
 msgid "No text fields were retained for this submission."
 msgstr ""
 
@@ -588,60 +640,47 @@ msgstr ""
 msgid "Not reviewed"
 msgstr ""
 
-#: templates/delivered-review.php:28 templates/quarantine.php:84
+#: templates/delivered-review.php:28 templates/quarantine.php:87
 msgid "Not spam"
 msgstr ""
 
-#: templates/integrations.php:28 templates/overview.php:26 templates/provider.php:19 templates/rules.php:49 templates/rules.php:84 templates/rules.php:96
+#: templates/integrations.php:28 templates/overview.php:28
+#: templates/provider.php:19 templates/rules.php:49 templates/rules.php:84
+#: templates/rules.php:96
 msgid "Off"
 msgstr ""
 
-#: templates/overview.php:26
+#: templates/overview.php:28
 msgid "On"
 msgstr ""
 
+#. translators: 1: UTC date, 2: rejected submission count, 3: local settings URL.
 #: src/Maintenance.php:95
 #, php-format
-msgid "On %1$s (UTC), Rocketsky Antispam recorded %2$d rejected submissions. This includes technical verification failures and is not a measured spam detection accuracy. No visitor content is included in this email. Review the counts on your website: %3$s"
+msgid "On %1$s (UTC), Rocketsky Antispam stopped %2$d submissions. This includes failed verification checks. View the activity on your website: %3$s"
 msgstr ""
 
 #: templates/privacy-mode.php:22
-msgid "On by default. Keeps quarantine, country checks, administrator digest emails and native pingbacks/trackbacks off. Local content rules and anonymous statistics remain available."
-msgstr ""
-
-#: templates/rules.php:125
-msgid "One IPv4 or IPv6 CIDR network per line, at most 20. Only a directly connected proxy within these networks may supply the country header. Your proxy must replace client-supplied headers."
+msgid "On by default. Turns off new quarantine storage, country filters, summary emails and pingbacks/trackbacks. Content filters and statistics remain available."
 msgstr ""
 
 #: templates/rules.php:54
-msgid "One pattern body per line, without delimiters. At most 10 patterns of 256 characters each. Matching runs with bounded resources. Test patterns against ordinary messages before using them."
+msgid "One expression per line, without delimiters. Up to 10 expressions of 256 bytes each. Test them with normal messages before saving."
 msgstr ""
 
 #: templates/rules.php:40
-msgid "One word or phrase per line. Matching submissions are rejected. Leave empty to disable."
+msgid "One word or phrase per line. Matches ignore case and can occur within longer words. Leave empty to disable."
 msgstr ""
 
-#: templates/quality.php:27
-msgid "Only reviewed records from the period shown are included. Unreviewed submissions are excluded. These rates describe that reviewed subset and do not establish accuracy across all visitors or forms."
+#: templates/quarantine.php:69
+msgid "Only selected text fields are stored. Files and verification fields are excluded. Long values may be shortened."
 msgstr ""
 
-#: templates/quarantine.php:66
-msgid "Only selected text fields are kept. Files and technical security fields are excluded. Long values may be shortened."
-msgstr ""
-
-#: templates/dashboard.php:33
-msgid "Open Rocketsky Antispam"
-msgstr ""
-
-#: templates/quarantine.php:101
-msgid "Open each integration's spam queue or review locally retained rejections below."
-msgstr ""
-
-#: templates/overview.php:62
+#: templates/overview.php:64
 msgid "Open quarantine"
 msgstr ""
 
-#: templates/overview.php:35
+#: templates/overview.php:37
 msgid "Other plugins may run additional checks."
 msgstr ""
 
@@ -649,36 +688,41 @@ msgstr ""
 msgid "Other supported integrations"
 msgstr ""
 
-#: src/Plugin.php:190
-msgid "Our forms use Rocketsky Antispam for local spam protection. Signed tokens, hidden fields and configured content rules are checked on our server. The plugin uses no external spam or IP-lookup service, cookies, browser storage or fingerprints. Used random-token digests expire after two hours and are removed by scheduled cleanup. Daily aggregate counters are kept for the configured period (30 days by default); the total rejected-comment counter remains until statistics are reset. Optional quarantine stores selected rejected submission fields, including names, email addresses and messages, encrypted locally for the configured period (7 days by default, at most 30 days and 500 records). Password, hidden, payment and file fields are excluded. The privacy-conscious mode disables quarantine, country checks, administrator email digests and native pingbacks/trackbacks. If native pingbacks are explicitly allowed, WordPress requests the remote source page and may forward the sender IP address; native WordPress moderation still applies. Optional country checks use a local GeoIP source or explicitly trusted infrastructure metadata and do not store IP addresses. Optional daily administrator emails contain aggregate counts only. Optional cleanup permanently deletes WordPress spam comments after the configured age. Scheduled deletion may run late if WordPress cron is delayed. WordPress privacy export and erasure tools cover quarantine records associated with the submitted contact email. WordPress, form providers, hosting, email delivery and backups process data independently. Adapt this notice to the features actually enabled, retention, legal basis and infrastructure of your website; this mode is not a legal compliance certification."
-msgstr ""
-
-#: src/Admin.php:174 templates/overview.php:21
+#: src/Admin.php:175 templates/dashboard.php:69 templates/overview.php:23
 msgid "Overview"
 msgstr ""
 
-#: templates/quarantine.php:137
+#. translators: 1: current page number, 2: total pages.
+#: templates/quarantine.php:143
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr ""
 
-#: src/Admin.php:345
+#: src/Admin.php:349
 msgid "Page builders"
 msgstr ""
 
-#: templates/dashboard.php:17
+#: templates/dashboard.php:30
 msgid "Passed"
 msgstr ""
 
-#: templates/overview.php:35
+#: templates/overview.php:37
+msgid "Passed checks"
+msgstr ""
+
+#: templates/dashboard.php:20
 msgid "Passed local checks"
+msgstr ""
+
+#: templates/rules.php:52
+msgid "Patterns"
 msgstr ""
 
 #: src/Integrations/WooCommerceCheckout.php:167
 msgid "Payment not submitted"
 msgstr ""
 
-#: templates/settings.php:77
+#: templates/settings.php:78
 msgid "Permanently delete spam comments after"
 msgstr ""
 
@@ -686,11 +730,11 @@ msgstr ""
 msgid "Pingbacks and trackbacks"
 msgstr ""
 
-#: src/Admin.php:209
+#: src/Admin.php:210
 msgid "Portuguese"
 msgstr ""
 
-#: templates/dashboard.php:28 templates/quality.php:22
+#: templates/dashboard.php:51 templates/quality.php:22
 msgid "Precision"
 msgstr ""
 
@@ -698,19 +742,17 @@ msgstr ""
 msgid "Predicted spam"
 msgstr ""
 
-#: templates/quarantine.php:136
+#: templates/quarantine.php:142
 msgid "Previous"
 msgstr ""
 
-#: templates/integrations.php:32
-msgid "Privacy relevant: WordPress verifies pingbacks by requesting the remote source page and may forward the sender IP address. Native WordPress moderation still applies. These protocol requests do not use JavaScript tokens."
-msgstr ""
-
-#: templates/integrations.php:37 templates/overview.php:26 templates/privacy-status.php:17 templates/rules.php:88 templates/settings.php:34
+#: templates/integrations.php:37 templates/overview.php:28
+#: templates/privacy-status.php:17 templates/rules.php:88
+#: templates/settings.php:34
 msgid "Privacy settings"
 msgstr ""
 
-#: templates/overview.php:26 templates/privacy-mode.php:20
+#: templates/overview.php:28 templates/privacy-mode.php:20
 msgid "Privacy-conscious mode"
 msgstr ""
 
@@ -722,108 +764,108 @@ msgstr ""
 msgid "Privacy-conscious mode is on."
 msgstr ""
 
-#: templates/sponsors.php:14
-msgid "Project sponsorship"
+#: templates/integrations.php:32
+msgid "Privacy: WordPress requests the source website to verify pingbacks and may send it the sender's IP address. WordPress moderation still applies."
 msgstr ""
 
-#: templates/integrations.php:56
-msgid "Protected forms need JavaScript to obtain a fresh token. Visitors are shown an error when verification is unavailable."
-msgstr ""
-
-#: templates/overview.php:53 templates/quarantine.php:62 templates/quarantine.php:62 templates/quarantine.php:126 templates/quarantine.php:128 templates/quarantine.php:128
+#: templates/overview.php:55 templates/quarantine.php:65
+#: templates/quarantine.php:132 templates/quarantine.php:134
 msgid "Protection check"
 msgstr ""
 
-#: templates/overview.php:24
+#: templates/overview.php:26
 msgid "Protection status"
 msgstr ""
 
-#: src/Admin.php:402
-msgid "Protection storage unavailable"
+#: src/Admin.php:287
+msgid "Protects WordPress comments. Configure pingbacks and trackbacks below."
 msgstr ""
 
-#: src/Admin.php:283
-msgid "Protects native WordPress comments. Pingbacks and trackbacks have separate settings."
+#: src/Admin.php:331
+msgid "Protects registration on My Account. Registration during checkout is covered by checkout protection."
 msgstr ""
 
-#: src/Admin.php:327
-msgid "Protects registration on My Account. Account creation during checkout uses checkout protection. No account fields are retained."
-msgstr ""
-
-#: templates/overview.php:27
+#: templates/overview.php:29
 msgid "Quarantine"
 msgstr ""
 
-#: templates/quarantine.php:122
-msgid "Quarantine enabled"
+#: src/Admin.php:218
+msgid "Quarantine is off"
 msgstr ""
 
-#: templates/quarantine.php:132
+#: src/Admin.php:218
+msgid "Quarantine is on"
+msgstr ""
+
+#: templates/quarantine.php:138
 msgid "Quarantine pages"
 msgstr ""
 
-#: templates/quarantine.php:26
+#: templates/quarantine.php:29
 msgid "Quarantine record deleted."
 msgstr ""
 
-#: templates/settings.php:55
+#: src/SpamHandling.php:170
+msgid "Quarantine settings"
+msgstr ""
+
+#: templates/settings.php:56
 msgid "Quarantine storage configuration"
 msgstr ""
 
-#: src/Admin.php:218 src/Admin.php:450
+#: src/Admin.php:222 src/Admin.php:454
 msgid "Quarantine storage is unavailable."
 msgstr ""
 
-#: templates/dashboard.php:29 templates/quality.php:23
+#: templates/quarantine.php:59
+msgid "Quarantined message"
+msgstr ""
+
+#: templates/quarantine.php:125
+msgid "Quarantined messages"
+msgstr ""
+
+#: templates/quarantine.php:132
+msgid "Quarantined messages. Open a record to read its stored fields."
+msgstr ""
+
+#: templates/dashboard.php:55 templates/quality.php:23
 msgid "Recall"
 msgstr ""
 
-#: templates/quarantine.php:60 templates/quarantine.php:126 templates/quarantine.php:128
+#: templates/quarantine.php:63 templates/quarantine.php:132
+#: templates/quarantine.php:134
 msgid "Received"
 msgstr ""
 
-#: templates/settings.php:89
+#. translators: %s: configured WordPress administrator email address.
+#: templates/settings.php:90
 #, php-format
 msgid "Recipient: %s"
 msgstr ""
 
-#: templates/quarantine.php:124
-msgid "Records appear here when quarantine is enabled and Rocketsky Antispam rejects a new submission. Earlier rejections are not recovered."
+#: templates/delivered-review.php:18
+msgid "Record an assessment for a submission in your inbox or entries list. This updates the statistics. Use the original inbox or entry list to move or delete it."
 msgstr ""
 
-#: templates/rules.php:52
-msgid "Regular expression patterns"
+#: templates/quarantine.php:51
+msgid "Reference removed. Reviewed totals remain until their original expiry."
+msgstr ""
+
+#: templates/rules.php:49
+msgid "Regular expressions"
 msgstr ""
 
 #: templates/rules.php:43
 msgid "Reject BBCode link markup"
 msgstr ""
 
-#: templates/dashboard.php:17
-msgid "Rejected"
-msgstr ""
-
 #: src/Quarantine.php:396
-msgid "Rejected form submissions temporarily stored by this site."
+msgid "Rejected messages temporarily stored by this website."
 msgstr ""
 
-#: src/SpamHandling.php:170
-msgid "Rejected requests in Rocketsky Antispam"
-msgstr ""
-
-#: templates/quarantine.php:56
-msgid "Rejected submission"
-msgstr ""
-
-#: templates/quarantine.php:126
-msgid "Rejected submission metadata. Open a record to view its stored fields."
-msgstr ""
-
-#: templates/quarantine.php:122
-msgid "Rejected submissions"
-msgstr ""
-
-#: templates/dashboard.php:17 templates/overview.php:37
+#: templates/dashboard.php:19 templates/dashboard.php:35
+#: templates/overview.php:39
 msgid "Rejection rate"
 msgstr ""
 
@@ -832,10 +874,22 @@ msgid "Reload the form"
 msgstr ""
 
 #: templates/delivered-review.php:36
-msgid "Remove a saved case reference"
+msgid "Remove a saved reference"
 msgstr ""
 
-#: templates/settings.php:52
+#: templates/delivered-review.php:49
+msgid "Remove reference"
+msgstr ""
+
+#: templates/settings.php:44
+msgid "Removed by scheduled cleanup after this period"
+msgstr ""
+
+#: templates/delivered-review.php:38
+msgid "Removes this reference without deleting the original entry. Reviewed totals remain until their 90-day expiry."
+msgstr ""
+
+#: templates/settings.php:53
 msgid "Retention and quarantine"
 msgstr ""
 
@@ -843,41 +897,109 @@ msgstr ""
 msgid "Retention settings"
 msgstr ""
 
-#: templates/quality.php:27
-msgid "Review quarantined submissions and use supported native comment or form moderation to improve the dataset. A dash means no reviewed basis is available for that rate."
+#: templates/delivered-review.php:16
+msgid "Review a delivered submission"
 msgstr ""
 
-#: templates/settings.php:69
+#: templates/settings.php:45
+msgid "Review data"
+msgstr ""
+
+#: templates/settings.php:70
 msgid "Review rejected submissions"
 msgstr ""
 
-#: templates/quarantine.php:35
+#: templates/quarantine.php:38
 msgid "Review saved. The submission remains in quarantine."
 msgstr ""
 
-#: src/Admin.php:177 templates/overview.php:27 templates/quality.php:19 templates/quarantine.php:100
+#: src/Admin.php:178 templates/dashboard.php:69 templates/overview.php:29
+#: templates/quality.php:19 templates/quarantine.php:103
 msgid "Review spam"
 msgstr ""
 
-#: templates/overview.php:61
+#: templates/overview.php:63
 msgid "Review spam comments"
 msgstr ""
 
-#: templates/settings.php:47
+#: templates/quality.php:18
+msgid "Review spam or assess a delivered submission to see results here."
+msgstr ""
+
+#: templates/quality.php:28
+msgid "Review statistics keep local, linkable HMAC references for up to 90 days, also in privacy-conscious mode. Cleanup depends on WordPress cron."
+msgstr ""
+
+#: src/Plugin.php:180
+msgid "Review statistics store the original decision, a later moderator assessment and timestamps for up to 90 days, including in privacy-conscious mode. References to comments, form entries, quarantine records and manually reported cases are stored as site-keyed HMAC values. Their contents are not copied. These references remain locally linkable while the source exists. For supported sources, deletion and WordPress privacy workflows remove or detach related references. Reviewed totals may remain until the original expiry. Only reviewed cases contribute to precision, recall and accuracy; unreviewed cases are not assumed to be correct. No review data is sent to a third party."
+msgstr ""
+
+#: templates/settings.php:48
 msgid "Review the suggested privacy policy text"
 msgstr ""
 
-#: templates/quarantine.php:79
-msgid "Review this decision"
+#: templates/dashboard.php:44 templates/quality.php:14
+msgid "Reviewed results"
 msgstr ""
 
-#: templates/dashboard.php:25 templates/quality.php:14
-msgid "Reviewed detection results"
+#. Author of the plugin
+#: rocketsky-antispam.php
+msgid "Rocketsky"
 msgstr ""
 
-#: templates/dashboard.php:26 templates/quality.php:15
+#: src/Admin.php:113 src/Admin.php:114 src/Dashboard.php:27
+msgid "Rocketsky Antispam"
+msgstr ""
+
+#: src/SpamHandling.php:211
+msgid "Rocketsky Antispam activity"
+msgstr ""
+
+#: src/Plugin.php:178
+msgid "Rocketsky Antispam checks comments and supported forms on this website. Messages matched by content rules may be stored in WordPress or the form plugin's spam queue, under that provider's storage and retention settings. Failed verification checks stop a submission before a comment or form entry is saved. If the form allows storage and quarantine is enabled, selected fields from rejected submissions may be kept in Rocketsky Antispam quarantine. Forms that prohibit message storage are respected. Account, password, order and payment fields are excluded from quarantine."
+msgstr ""
+
+#: src/SpamHandling.php:104 src/SpamHandling.php:106
+msgid "Rocketsky Antispam does not store account fields or passwords."
+msgstr ""
+
+#: src/SpamHandling.php:108
+msgid "Rocketsky Antispam does not store order, payment or file contents."
+msgstr ""
+
+#. translators: %s: the active integration name.
+#: templates/context-notices.php:16
 #, php-format
-msgid "Reviewed entries from the last %d days."
+msgid "Rocketsky Antispam is enabled for %s."
+msgstr ""
+
+#: src/SpamHandling.php:110
+msgid "Rocketsky Antispam keeps no message copy for Divi forms."
+msgstr ""
+
+#: src/Quarantine.php:320 src/Quarantine.php:335 src/Quarantine.php:395
+#: src/SpamHandling.php:170 src/SpamHandling.php:188
+msgid "Rocketsky Antispam quarantine"
+msgstr ""
+
+#: src/SpamHandling.php:196
+msgid "Rocketsky Antispam quarantine is off."
+msgstr ""
+
+#: src/Feedback.php:611 src/Feedback.php:627 src/Feedback.php:691
+msgid "Rocketsky Antispam reviewed decisions"
+msgstr ""
+
+#: templates/admin-header.php:22
+msgid "Rocketsky Antispam sections"
+msgstr ""
+
+#: templates/settings.php:41
+msgid "Rocketsky Antispam stores no IP addresses, user agents or fingerprints in its own tables. Quarantine can keep names, email addresses and messages. Country filters use connection metadata. Email summaries use your WordPress mail setup. No cookies or external spam service are used. Form plugins control their own storage."
+msgstr ""
+
+#: src/Maintenance.php:94
+msgid "Rocketsky Antispam: daily rejection summary"
 msgstr ""
 
 #: templates/delivered-review.php:31
@@ -892,16 +1014,12 @@ msgstr ""
 msgid "Save rules"
 msgstr ""
 
-#: templates/settings.php:102
+#: templates/settings.php:103
 msgid "Save settings"
 msgstr ""
 
-#: templates/settings.php:44
-msgid "Scheduled deletion after the period below"
-msgstr ""
-
-#: templates/quarantine.php:63
-msgid "Scheduled for deletion"
+#: templates/overview.php:24
+msgid "See protection status and recent activity. Open Review spam to check individual messages."
 msgstr ""
 
 #: templates/delivered-review.php:28
@@ -909,35 +1027,31 @@ msgid "Select an assessment"
 msgstr ""
 
 #: src/SpamHandling.php:189
-msgid "Selected rejected message fields can be retained in Rocketsky Antispam quarantine."
+msgid "Selected fields from rejected messages can be kept here."
 msgstr ""
 
-#: templates/rules.php:74
-msgid "Selecting none disables the language restriction."
+#: templates/settings.php:89
+msgid "Send a daily summary when submissions were stopped"
 msgstr ""
 
-#: templates/settings.php:88
-msgid "Send a daily digest when submissions were blocked"
+#: templates/rules.php:27
+msgid "Set rules for comments and contact forms. Test new rules with legitimate messages."
 msgstr ""
 
-#: templates/settings.php:84
-msgid "Sends aggregate counts through your WordPress mail setup. Visitor content is excluded. Your mail provider handles delivery."
-msgstr ""
-
-#: templates/overview.php:30
+#: templates/overview.php:32
 msgid "Set up protection"
 msgstr ""
 
-#: src/Admin.php:153 src/Admin.php:178 templates/settings.php:24
+#: src/Admin.php:153 src/Admin.php:179 templates/settings.php:24
 msgid "Settings"
 msgstr ""
 
-#: templates/overview.php:37
-msgid "Share of checked submissions. This is not detection accuracy."
+#: templates/overview.php:39
+msgid "Share of checked submissions that were stopped."
 msgstr ""
 
 #: templates/integrations.php:54
-msgid "Signed form tokens, a hidden honeypot and one-use verification work without a puzzle."
+msgid "Signed tokens and a hidden field check submissions without a captcha."
 msgstr ""
 
 #: src/Quarantine.php:450
@@ -948,36 +1062,31 @@ msgstr ""
 msgid "Spam"
 msgstr ""
 
-#: templates/quarantine.php:106
-msgid "Spam review locations"
+#: templates/quality.php:27
+msgid "Spam caught"
 msgstr ""
 
-#: src/Admin.php:207
+#: src/Admin.php:208
 msgid "Spanish"
 msgstr ""
 
-#: templates/sponsors.php:21
+#: templates/sponsors.php:29
 msgid "Sponsored product"
 msgstr ""
 
-#: templates/settings.php:41
-msgid "Standard checks store no IP addresses, email addresses or message contents. Optional quarantine keeps selected rejected fields locally. Country rules process IP metadata. Digest emails use your mail provider. Rocketsky Antispam sets no cookies and calls no external spam service."
+#: templates/dashboard.php:19 templates/dashboard.php:30
+msgid "Stopped"
 msgstr ""
 
-#: templates/overview.php:57
-#, php-format
-msgid "Stopped WordPress comments since the last statistics reset: %s."
+#: templates/overview.php:38
+msgid "Stopped submissions"
 msgstr ""
 
-#: templates/overview.php:36
-msgid "Stopped by Rocketsky Antispam"
-msgstr ""
-
-#: templates/quarantine.php:124
+#: templates/quarantine.php:130
 msgid "Storage settings"
 msgstr ""
 
-#: templates/settings.php:56
+#: templates/settings.php:57
 msgid "Store rejected submissions in quarantine"
 msgstr ""
 
@@ -985,95 +1094,95 @@ msgstr ""
 msgid "Stored data and privacy information"
 msgstr ""
 
-#: templates/quarantine.php:65
+#: templates/quarantine.php:68
 msgid "Stored fields"
 msgstr ""
 
-#: templates/quarantine.php:68
-msgid "Stored fields could not be read. The record can still be deleted."
+#: templates/quarantine.php:71
+msgid "Stored fields could not be read. You can still delete this record."
 msgstr ""
 
-#: templates/settings.php:57
-msgid "Stored fields may include names, email addresses and messages. Update your privacy information before enabling this option. No data leaves your website."
-msgstr ""
-
-#: templates/overview.php:27
-msgid "Storing new rejections"
-msgstr ""
-
-#: src/Admin.php:400
+#: src/Admin.php:404
 msgid "Submitted too quickly"
+msgstr ""
+
+#: templates/sponsors.php:14
+msgid "Support and sponsors"
+msgstr ""
+
+#: templates/sponsors.php:16
+msgid "Support development"
+msgstr ""
+
+#: templates/sponsors.php:18
+msgid "Support on Ko-fi"
 msgstr ""
 
 #: templates/integrations.php:54
 msgid "Technical checks"
 msgstr ""
 
-#: templates/quarantine.php:45
-msgid "The case action could not be completed. Check the reference and try again."
+#: src/SpamHandling.php:91 src/SpamHandling.php:97
+msgid "The form's spam storage settings apply. Other rejections follow your quarantine settings."
 msgstr ""
 
-#: templates/rules.php:109
-msgid "The configured source is available."
+#: src/Plugin.php:179
+msgid "The plugin sets no cookies and uses no browser storage, fingerprints, external spam service or external IP lookup. It stores digests of used random tokens for up to two hours; scheduled cleanup removes expired digests. Daily aggregate counts are kept for the configured period (30 days by default). The total rejected-comment count stays until the statistics are reset. Optional quarantine encrypts selected names, email addresses and message fields on this website, for seven days by default, up to 30 days and 500 records. Password, hidden, payment and file fields are excluded. Privacy-conscious mode prevents new quarantine capture, country filters, administrator summary emails and pingbacks/trackbacks; it does not delete existing records. If pingbacks are allowed, WordPress requests the source page and may send it the sender's IP address. Optional country filters use local GeoIP data or metadata from explicitly trusted infrastructure; Rocketsky Antispam does not store the IP address. Optional daily administrator emails contain counts only. Optional cleanup permanently deletes WordPress spam comments older than the configured age. Scheduled cleanup depends on WordPress cron and can run late. WordPress privacy tools export or erase quarantine records matching the contact email address. WordPress, form plugins, hosting, mail delivery and backups have their own data handling. Adapt this notice to your enabled settings, retention, infrastructure and legal basis."
 msgstr ""
 
-#: templates/rules.php:109
-msgid "The configured source is unavailable. Unknown-country handling applies."
-msgstr ""
-
-#: src/Fields.php:98
-msgid "The form protection is unavailable. Please reload the page."
-msgstr ""
-
-#: src/Admin.php:446 src/Admin.php:485
+#: src/Admin.php:450 src/Admin.php:489
 msgid "The quarantine record is unavailable."
 msgstr ""
 
-#: templates/quarantine.php:30
+#: templates/quarantine.php:33
 msgid "The record is no longer available or could not be deleted."
-msgstr ""
-
-#: src/Guard.php:199
-msgid "The spam protection could not verify this submission. Please wait a moment and try again. If it still fails, reload the page. JavaScript must be enabled."
 msgstr ""
 
 #: src/Guard.php:148
 msgid "The spam protection rejected this submission. Please check your message and try again."
 msgstr ""
 
-#: templates/integrations.php:46
-msgid "These providers are not currently available. Install or activate a compatible provider to use its integration. Earlier saved choices are kept."
+#: templates/quality.php:27
+msgid "These rates use reviewed cases only. They do not measure every submission to your website."
 msgstr ""
 
-#: src/Admin.php:442 src/Admin.php:480 src/Admin.php:519 src/Admin.php:558
+#: src/Admin.php:446 src/Admin.php:484 src/Admin.php:523 src/Admin.php:562
 msgid "This action requires a form submission."
 msgstr ""
 
-#: templates/fields.php:18
-msgid "This form uses local spam protection. Please enable JavaScript to submit it."
+#: templates/quarantine.php:42
+msgid "This message cannot be assessed because its saved decision is unavailable or has expired."
+msgstr ""
+
+#: templates/quarantine.php:61
+msgid "This message was rejected by a protection check. Review its contents before marking it as spam."
 msgstr ""
 
 #: templates/settings.php:37
 msgid "This mode limits optional processing. It does not certify compliance with the GDPR or the Swiss FADP."
 msgstr ""
 
-#: templates/quarantine.php:39
-msgid "This record could not be reviewed. It may have expired or have no tracked prediction."
+#: templates/quarantine.php:91
+msgid "This permanently deletes the quarantined message."
 msgstr ""
 
-#: templates/quarantine.php:53
+#: src/Installation.php:317
+msgid "This plugin's data is still used by an active installation. For a name change, remove only the inactive old copy's files after completing the switch; keep active plugin files in place. To uninstall completely, first deactivate every copy on all sites and networks."
+msgstr ""
+
+#: templates/quarantine.php:56
 msgid "This record is unavailable"
 msgstr ""
 
-#: templates/quarantine.php:58
-msgid "This submission was stopped by a local protection check. A failed check does not confirm that its contents are spam."
+#: templates/quarantine.php:82
+msgid "This updates the reviewed results. The message stays in quarantine."
 msgstr ""
 
-#: src/Admin.php:399
+#: src/Admin.php:403
 msgid "Token already used"
 msgstr ""
 
-#: src/Admin.php:401
+#: src/Admin.php:405
 msgid "Trackback or pingback"
 msgstr ""
 
@@ -1097,118 +1206,74 @@ msgstr ""
 msgid "Turn off privacy-conscious mode to configure country checks."
 msgstr ""
 
-#: templates/settings.php:95
+#: templates/settings.php:96
 msgid "Turn off privacy-conscious mode to enable digest email."
 msgstr ""
 
-#: templates/settings.php:67
+#: templates/settings.php:68
 msgid "Turn off privacy-conscious mode to enable quarantine."
 msgstr ""
 
-#: templates/settings.php:98
+#: templates/rules.php:101
+msgid "Two-letter country codes, separated by commas, e.g. CH, DE, FR."
+msgstr ""
+
+#: templates/settings.php:99
 msgid "Uninstalling"
 msgstr ""
 
-#: src/Admin.php:405
+#: src/Admin.php:409
 msgid "Unprotected comment request"
 msgstr ""
 
+#: templates/settings.php:69
+msgid "Up to 500 records. Expired records are hidden immediately and deleted by scheduled cleanup, which can run late. Turning quarantine off stops new storage; existing records keep their expiry."
+msgstr ""
+
+#: templates/quality.php:27
+msgid "Use Review spam to assess stored messages. Changes in supported WordPress or form plugin spam lists also update these results. A dash means there is no reviewed basis for that rate."
+msgstr ""
+
 #: templates/delivered-review.php:30
-msgid "Use an existing native entry ID or a stable internal case reference without personal content. Provider entries remain in place."
-msgstr ""
-
-#: templates/rules.php:27
-msgid "Use rules that fit your forms. Narrow rules reduce the risk of rejecting legitimate messages."
-msgstr ""
-
-#: templates/delivered-review.php:18
-msgid "Use this for submissions that reached your inbox or entries list. Use the list above for quarantined submissions."
+msgid "Use the ID from the original comment or form entry, or reuse an internal reference. Do not include names, email addresses or message text."
 msgstr ""
 
 #: templates/settings.php:43
 msgid "Used token digests"
 msgstr ""
 
+#: src/SpamHandling.php:168
+msgid "Uses this spam queue and its retention settings for content matches."
+msgstr ""
+
+#: src/Admin.php:323
+msgid "Uses token and hidden field checks for Divi 4 and 5 contact forms."
+msgstr ""
+
 #: templates/rules.php:86
-msgid "Uses a local GeoIP extension or an explicitly trusted proxy header. No external country lookup is made. Network country does not establish where a person lives."
+msgid "Uses your local GeoIP extension or a trusted proxy to determine the connection's country. VPNs and proxies can affect the result. No external lookup service is used."
 msgstr ""
 
-#: src/Admin.php:319
-msgid "Uses technical checks for Divi 4 and 5 contact forms. Content rules and quarantine are excluded."
+#: src/ContextNotices.php:187
+msgid "Verification failures do not create an entry."
 msgstr ""
 
-#: src/Admin.php:295
-msgid "Validates submissions before entries, drafts and notifications are created."
+#: src/Admin.php:406
+msgid "Verification storage unavailable"
 msgstr ""
 
-#: src/Plugin.php:189
-msgid "Verified content matches can be retained in WordPress or the form provider's native spam queue. Native retention and privacy settings apply independently of Rocketsky Antispam quarantine and privacy-conscious mode. Invalid technical proofs stop before native entry creation; selected rejected message fields may instead be retained in the optional Rocketsky Antispam quarantine. Forms that explicitly prohibit message storage are respected. Account, password, order and payment contents are not quarantined."
-msgstr ""
-
-#: templates/quarantine.php:128
+#: templates/quarantine.php:134
 msgid "View"
 msgstr ""
 
-#: templates/quarantine.php:128
+#. translators: %d: local quarantine record ID.
+#: templates/quarantine.php:134
 #, php-format
 msgid "View quarantine record %d"
 msgstr ""
 
-#: templates/overview.php:51
+#: templates/overview.php:53
 msgid "View stopped submissions by check"
-msgstr ""
-
-#: src/Admin.php:113 src/Admin.php:114 src/Dashboard.php:27
-msgid "Rocketsky Antispam"
-msgstr ""
-
-#: src/SpamHandling.php:211
-msgid "Rocketsky Antispam activity"
-msgstr ""
-
-#: src/SpamHandling.php:104 src/SpamHandling.php:106
-msgid "Rocketsky Antispam does not retain account fields or passwords."
-msgstr ""
-
-#: src/SpamHandling.php:110
-msgid "Rocketsky Antispam does not retain message or file contents."
-msgstr ""
-
-#: src/SpamHandling.php:108
-msgid "Rocketsky Antispam does not retain order, payment or file contents."
-msgstr ""
-
-#: src/SpamHandling.php:196
-msgid "Rocketsky Antispam does not retain rejected message contents."
-msgstr ""
-
-#: templates/context-notices.php:16
-#, php-format
-msgid "Rocketsky Antispam is enabled for %s."
-msgstr ""
-
-#: src/ContextNotices.php:187
-msgid "Rocketsky Antispam keeps no content copy of requests stopped before native storage."
-msgstr ""
-
-#: src/Quarantine.php:320 src/Quarantine.php:335 src/Quarantine.php:395 src/SpamHandling.php:188
-msgid "Rocketsky Antispam quarantine"
-msgstr ""
-
-#: src/SpamHandling.php:170
-msgid "Rocketsky Antispam retention settings"
-msgstr ""
-
-#: src/Feedback.php:611 src/Feedback.php:627 src/Feedback.php:691
-msgid "Rocketsky Antispam reviewed decisions"
-msgstr ""
-
-#: templates/admin-header.php:19
-msgid "Rocketsky Antispam sections"
-msgstr ""
-
-#: src/Maintenance.php:94
-msgid "Rocketsky Antispam: daily rejection summary"
 msgstr ""
 
 #: src/SpamHandling.php:95
@@ -1219,12 +1284,20 @@ msgstr ""
 msgid "WS Form submissions"
 msgstr ""
 
-#: templates/sponsors.php:23
+#: templates/sponsors.php:31
 msgid "Website analytics by Rocketsky."
 msgstr ""
 
 #: templates/quality.php:27
 msgid "What is the measurement based on?"
+msgstr ""
+
+#: templates/quarantine.php:130
+msgid "When enabled, quarantine keeps selected fields from supported rejections. Messages already discarded cannot be recovered."
+msgstr ""
+
+#: templates/quarantine.php:109
+msgid "Where to review spam"
 msgstr ""
 
 #: src/Providers.php:105
@@ -1251,6 +1324,10 @@ msgstr ""
 msgid "WordPress registration"
 msgstr ""
 
+#: templates/admin-header.php:18 templates/sponsors.php:19
+msgid "Write a review"
+msgstr ""
+
 #: src/Feedback.php:778 src/Quarantine.php:420
 msgid "You cannot erase this personal data."
 msgstr ""
@@ -1259,34 +1336,37 @@ msgstr ""
 msgid "You cannot export this personal data."
 msgstr ""
 
-#: src/Admin.php:439 src/Admin.php:477 src/Admin.php:516 src/Admin.php:555
-msgid "You do not have permission to change these settings."
+#: src/Admin.php:443 src/Admin.php:481 src/Admin.php:520 src/Admin.php:559
+msgid "You do not have permission to perform this action."
 msgstr ""
 
-#: templates/quarantine.php:79
-msgid "Your assessment updates the reviewed metrics and keeps this quarantined entry in place."
+#: templates/quarantine.php:120
+msgid "Your form plugin controls its own spam storage and retention, including in privacy-conscious mode."
+msgstr ""
+
+#: src/Guard.php:199
+msgid "Your submission could not be verified. Try again. If the error persists, reload the page and check that JavaScript is enabled."
 msgstr ""
 
 #: templates/admin-header.php:16
 msgid "by Rocketsky"
 msgstr ""
 
-#: templates/dashboard.php:14
-msgid "comments rejected since installation or the last statistics reset."
+#: templates/settings.php:61 templates/settings.php:74
+#: templates/settings.php:79
+msgid "days"
 msgstr ""
 
-#: templates/settings.php:60 templates/settings.php:73 templates/settings.php:78
-msgid "days"
+#. Plugin URI of the plugin
+#: rocketsky-antispam.php
+msgid "https://github.com/rktsky/rocketsky-antispam"
+msgstr ""
+
+#. Author URI of the plugin
+#: rocketsky-antispam.php
+msgid "https://www.rocketsky.ch/"
 msgstr ""
 
 #: templates/integrations.php:55
 msgid "seconds"
-msgstr ""
-
-#: src/Installation.php:209
-msgid "Deactivate the previous installation before activating Rocketsky Antispam. Do not delete it: the installations share settings and retained data. Network-active copies must be deactivated in Network Admin."
-msgstr ""
-
-#: src/Installation.php:188
-msgid "This copy shares data with another active installation of Rocketsky Antispam. Uninstalling it could delete shared settings and retained entries. Remove only the obsolete plugin files through your hosting file manager; do not run its WordPress Delete action."
 msgstr ""

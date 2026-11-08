@@ -16,7 +16,7 @@ $rktsky_antispam_integration = $integrations[ $rktsky_antispam_provider ];
 	<span class="rktsky-antispam__provider-mark" aria-hidden="true"><?php echo esc_html( $rktsky_antispam_integration['mark'] ); ?></span>
 	<div class="rktsky-antispam__provider-copy">
 		<label for="rktsky-<?php echo esc_attr( $rktsky_antispam_provider ); ?>"><?php echo esc_html( $rktsky_antispam_integration['name'] ); ?></label>
-		<span class="rktsky-antispam__provider-state"><?php echo esc_html( ! $rktsky_antispam_integration['available'] ? __( 'Compatible plugin not available', 'rocketsky-antispam' ) : ( $rktsky_antispam_integration['configured'] ? __( 'Enabled', 'rocketsky-antispam' ) : __( 'Off', 'rocketsky-antispam' ) ) ); ?></span>
+		<span class="rktsky-antispam__provider-state"><?php echo esc_html( ! $rktsky_antispam_integration['available'] ? __( 'Integration unavailable', 'rocketsky-antispam' ) : ( $rktsky_antispam_integration['configured'] ? __( 'Enabled', 'rocketsky-antispam' ) : __( 'Off', 'rocketsky-antispam' ) ) ); ?></span>
 		<p id="rktsky-<?php echo esc_attr( $rktsky_antispam_provider ); ?>-help"><?php echo esc_html( $rktsky_antispam_integration['detail'] ); ?></p>
 		<?php if ( $rktsky_antispam_integration['available'] && $rktsky_antispam_integration['configured'] ) : ?>
 			<?php $rktsky_antispam_route = $spam_handling->describe( $rktsky_antispam_provider ); ?>

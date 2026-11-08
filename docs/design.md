@@ -107,6 +107,23 @@ Both external destinations use a new tab with `noopener noreferrer`. The logo
 retains its BSD-3-Clause attribution in `assets/branding/LICENSE`; no advertising
 script, remote font or tracking request is added.
 
+Since 0.5.2, the same footer groups a voluntary Ko-fi contribution and a neutral
+WordPress.org review link above the sponsor row. A compact review link in the
+plugin header keeps that action visible on long screens. The fixed destinations
+carry no tracking parameters or submitted data. Nothing is embedded from those
+services, and viewing the screen records no support or review state. The links
+do not gate features or ask for a particular rating. The directory review link
+is prepared for the proposed slug and becomes usable when its listing is
+published. It is not an indication that the listing is already available.
+
+The native WordPress dashboard widget has its own scoped stylesheet, loaded
+only on the site dashboard for administrators. A seven-day summary precedes
+collapsible daily activity; the rejection rate includes verification failures.
+The cumulative comment total and later-reviewed results are distinct. Empty
+review data has one explanatory state rather than three undefined metrics.
+Body labels and buttons use 16 pixels, secondary details at least 14 pixels.
+The widget contains no sponsor or donation block and loads no JavaScript.
+
 ## Sources and applied decisions
 
 The following primary sources were checked on 2026-11-07. They inform the design;

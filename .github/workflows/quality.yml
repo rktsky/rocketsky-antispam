@@ -32,8 +32,15 @@ jobs:
       - run: composer install --no-interaction --no-progress
       - run: composer lint
       - run: composer standards
+      - name: Install verified WP-CLI for native catalogue extraction
+        run: bash tools/setup-wp-cli.sh
+      - name: Compare every shipped language with native WordPress string extraction
+        run: |
+          wp i18n make-pot . "$RUNNER_TEMP/rocketsky-antispam-native.pot" --slug=rocketsky-antispam --domain=rocketsky-antispam --exclude=vendor,tests,tools,docs,.git,node_modules --package-name='Rocketsky Antispam'
+          python3 tools/check-translations.py --pot "$RUNNER_TEMP/rocketsky-antispam-native.pot" --languages languages
       - name: Check JavaScript syntax
         run: |
+          node --check assets/admin.js
           node --check assets/protection.js
           node --check assets/woocommerce-checkout.js
 
@@ -109,6 +116,7 @@ jobs:
       - run: php tests/native-pings.php
       - run: php tests/quarantine.php
       - run: php tests/policies.php
+      - run: php tests/dashboard.php
       - run: php tests/pattern-limits.php
       - run: php tests/feedback.php
       - run: php tests/gravity-feedback.php

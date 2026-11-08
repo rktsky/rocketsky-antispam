@@ -96,6 +96,33 @@ function rktsky_antispam_admin_view( Admin $admin, $tab ): array {
 }
 
 /**
+ * Reads the visible quarantine state from the actual monitoring or review view.
+ *
+ * The translated field label identifies Overview's state without depending on
+ * column order. Review uses its stable list heading, shared with native links.
+ *
+ * @since 0.5.2
+ * @param array  $view Actual controller output and native DOM query service.
+ * @param string $tab Allowlisted overview or quarantine view.
+ * @return string Visible state, or empty if the expected status is absent.
+ */
+function rktsky_antispam_admin_quarantine_status( array $view, string $tab ): string {
+	$xpath = $view['xpath'];
+	if ( 'overview' === $tab ) {
+		foreach ( $xpath->query( '//div[contains(concat(" ",normalize-space(@class)," ")," rktsky-antispam__status-item ")]' ) as $row ) {
+			$label = $xpath->query( './span', $row )->item( 0 );
+			if ( null !== $label && __( 'Quarantine', 'rocketsky-antispam' ) === trim( $label->textContent ) ) {
+				$status = $xpath->query( './strong', $row )->item( 0 );
+				return null !== $status ? trim( $status->textContent ) : '';
+			}
+		}
+		return '';
+	}
+	$status = $xpath->query( '//*[@id="rktsky-quarantine-list-heading"]/../span' )->item( 0 );
+	return null !== $status ? trim( $status->textContent ) : '';
+}
+
+/**
  * Inspects raw form tokens before a DOM parser can repair invalid nesting.
  *
  * @since 0.4.0
@@ -244,9 +271,10 @@ try {
 	}
 	add_settings_error( Settings::OPTION, 'rktsky_admin_notice_test', 'rktsky_native_admin_notice_sentinel', 'success' );
 	foreach ( $tabs as $tab => $label ) {
-		$view       = rktsky_antispam_admin_view( $admin, $tab );
-		$xpath      = $view['xpath'];
-		$navigation = $xpath->query( '//nav[contains(@class,"rktsky-antispam__tabs")]/a' );
+		$view_options = get_option( Settings::OPTION, null );
+		$view         = rktsky_antispam_admin_view( $admin, $tab );
+		$xpath        = $view['xpath'];
+		$navigation   = $xpath->query( '//nav[contains(@class,"rktsky-antispam__tabs")]/a' );
 		rktsky_antispam_admin_expect( 5 === $navigation->length, 'Every view must expose five ordinary navigation links.' );
 		$seen = array();
 		foreach ( $navigation as $link ) {
@@ -290,7 +318,55 @@ try {
 			rktsky_antispam_admin_expect( ! empty( $view['queries']['quarantine'] ) && empty( $view['queries']['stats'] ) && empty( $view['queries']['feedback'] ), 'The quarantine list must not load overview aggregates.' );
 			rktsky_antispam_admin_expect( 1 === $xpath->query( '//*[@id="rktsky-delivered-reference"]' )->length && 1 === $xpath->query( '//*[@id="rktsky-forget-reference"]' )->length, 'Classification and forgetting need distinct unique controls.' );
 		}
+		foreach ( array(
+			'https://wordpress.org/support/plugin/rocketsky-antispam/reviews/#new-post',
+			'https://ko-fi.com/rocketsky',
+			'https://www.rocketsky.ch/',
+			'https://www.speo.ch',
+		) as $support_url ) {
+			$links = $xpath->query( '//a[@href="' . $support_url . '"]' );
+			rktsky_antispam_admin_expect( $links->length > 0, 'Each plugin view must expose its fixed, voluntary support or sponsor destination: ' . $support_url );
+			foreach ( $links as $link ) {
+				$rel = preg_split( '/\s+/', trim( $link->getAttribute( 'rel' ) ) );
+				rktsky_antispam_admin_expect( '_blank' === $link->getAttribute( 'target' ) && in_array( 'noopener', $rel, true ) && in_array( 'noreferrer', $rel, true ), 'Support links must open safely in a new tab without a referrer: ' . $support_url );
+				rktsky_antispam_admin_expect( 0 === $xpath->query( 'ancestor::form', $link )->length, 'Support and review links must not submit settings or gate a form: ' . $support_url );
+			}
+		}
+		rktsky_antispam_admin_expect( 0 === $xpath->query( '//footer//form | //footer//input | //footer//select | //footer//textarea | //footer//iframe' )->length, 'Voluntary support must contain no submission form, embedded service or gating controls.' );
+		rktsky_antispam_admin_expect( $view_options === get_option( Settings::OPTION, null ), 'Viewing support or sponsor links must leave all saved settings unchanged: ' . $tab );
 	}
+
+	// Model a legacy stored preference through Core's option API, before the
+	// current sanitizer enforces privacy mode. Rendering must not rewrite it.
+	$capture                       = $settings->defaults();
+	$capture['privacy_mode']       = true;
+	$capture['quarantine_enabled'] = true;
+	remove_filter( 'sanitize_option_' . Settings::OPTION, array( $settings, 'sanitize' ) );
+	try {
+		update_option( Settings::OPTION, $capture, false );
+	} finally {
+		add_filter( 'sanitize_option_' . Settings::OPTION, array( $settings, 'sanitize' ) );
+	}
+	$stored_capture = get_option( Settings::OPTION );
+	rktsky_antispam_admin_expect( ! empty( $stored_capture['privacy_mode'] ) && ! empty( $stored_capture['quarantine_enabled'] ), 'The privacy regression must retain an actual conflicting saved preference.' );
+	foreach ( array( 'overview', 'quarantine' ) as $tab ) {
+		$view = rktsky_antispam_admin_view( $admin, $tab );
+		rktsky_antispam_admin_expect( __( 'Quarantine is off', 'rocketsky-antispam' ) === rktsky_antispam_admin_quarantine_status( $view, $tab ), 'Privacy mode must report capture off even when the raw saved checkbox is on: ' . $tab );
+		rktsky_antispam_admin_expect( $stored_capture === get_option( Settings::OPTION ), 'Reading effective privacy state must not discard the stored quarantine preference: ' . $tab );
+	}
+	$capture['privacy_mode'] = false;
+	update_option( Settings::OPTION, $capture, false );
+	$stored_capture = get_option( Settings::OPTION );
+	rktsky_antispam_admin_expect( $quarantine->encryption_ready() && $quarantine->enabled(), 'The original WordPress fixture must provide actual Sodium support for enabled-capture coverage.' );
+	foreach ( array( 'overview', 'quarantine' ) as $tab ) {
+		$view = rktsky_antispam_admin_view( $admin, $tab );
+		rktsky_antispam_admin_expect( __( 'Quarantine is on', 'rocketsky-antispam' ) === rktsky_antispam_admin_quarantine_status( $view, $tab ), 'Enabled capture with real encryption must have the same visible status in both views: ' . $tab );
+		rktsky_antispam_admin_expect( $stored_capture === get_option( Settings::OPTION ), 'Viewing enabled quarantine must not change its saved configuration: ' . $tab );
+	}
+	$without_quarantine = new Admin( $settings, $store, null, new Feedback() );
+	$view               = rktsky_antispam_admin_view( $without_quarantine, 'overview' );
+	rktsky_antispam_admin_expect( __( 'Encryption unavailable', 'rocketsky-antispam' ) === rktsky_antispam_admin_quarantine_status( $view, 'overview' ), 'Overview must not promise capture when the quarantine service is unavailable.' );
+	rktsky_antispam_admin_expect( $stored_capture === get_option( Settings::OPTION ), 'Unavailable capture must preserve the saved enabled preference for a repaired runtime.' );
 	foreach ( array( 'unknown', 'not-a-view', array( 'settings' ) ) as $invalid_tab ) {
 		$view    = rktsky_antispam_admin_view( $admin, $invalid_tab );
 		$current = $view['xpath']->query( '//nav//a[@aria-current="page"]' )->item( 0 );

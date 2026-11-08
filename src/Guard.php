@@ -196,6 +196,6 @@ final class Guard {
 	 * @return string Localized public error.
 	 */
 	public function message(): string {
-		return __( 'The spam protection could not verify this submission. Please wait a moment and try again. If it still fails, reload the page. JavaScript must be enabled.', 'rocketsky-antispam' );
+		return __( 'Your submission could not be verified. Try again. If the error persists, reload the page and check that JavaScript is enabled.', 'rocketsky-antispam' );
 	}
 }

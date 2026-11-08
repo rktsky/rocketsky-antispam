@@ -393,7 +393,7 @@ final class Quarantine {
 			$data[] = array(
 				'group_id'          => 'rktsky-antispam-quarantine',
 				'group_label'       => __( 'Rocketsky Antispam quarantine', 'rocketsky-antispam' ),
-				'group_description' => __( 'Rejected form submissions temporarily stored by this site.', 'rocketsky-antispam' ),
+				'group_description' => __( 'Rejected messages temporarily stored by this website.', 'rocketsky-antispam' ),
 				'item_id'           => 'rktsky-antispam-quarantine-' . (int) $row['id'],
 				'data'              => $items,
 			);

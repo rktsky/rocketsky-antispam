@@ -13,9 +13,9 @@
 defined( 'ABSPATH' ) || exit;
 ?>
 <details class="rktsky-antispam__disclosure">
-	<summary><span class="rktsky-antispam__disclosure-title"><?php esc_html_e( 'Assess a delivered submission', 'rocketsky-antispam' ); ?></span></summary>
+	<summary><span class="rktsky-antispam__disclosure-title"><?php esc_html_e( 'Review a delivered submission', 'rocketsky-antispam' ); ?></span></summary>
 	<div class="rktsky-antispam__disclosure-body">
-		<p><?php esc_html_e( 'Use this for submissions that reached your inbox or entries list. Use the list above for quarantined submissions.', 'rocketsky-antispam' ); ?></p>
+		<p><?php esc_html_e( 'Record an assessment for a submission in your inbox or entries list. This updates the statistics. Use the original inbox or entry list to move or delete it.', 'rocketsky-antispam' ); ?></p>
 		<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" class="rktsky-antispam__delivered-report">
 			<input type="hidden" name="action" value="rktsky_antispam_classify_delivered" /><?php wp_nonce_field( 'rktsky_antispam_classify_delivered' ); ?>
 			<div class="rktsky-antispam__report-fields">
@@ -24,18 +24,18 @@ defined( 'ABSPATH' ) || exit;
 				foreach ( $provider_labels as $rktsky_antispam_provider => $rktsky_antispam_label ) :
 					?>
 					<option value="<?php echo esc_attr( $rktsky_antispam_provider ); ?>"><?php echo esc_html( $rktsky_antispam_label ); ?></option><?php endforeach; ?></select></div>
-				<div class="rktsky-antispam__field"><label for="rktsky-delivered-reference"><?php esc_html_e( 'Entry ID or internal reference', 'rocketsky-antispam' ); ?></label><input type="text" id="rktsky-delivered-reference" name="reference" maxlength="128" required aria-describedby="rktsky-delivered-help" autocomplete="off" /></div>
+				<div class="rktsky-antispam__field"><label for="rktsky-delivered-reference"><?php esc_html_e( 'Entry ID or reference', 'rocketsky-antispam' ); ?></label><input type="text" id="rktsky-delivered-reference" name="reference" maxlength="128" required aria-describedby="rktsky-delivered-help" autocomplete="off" /></div>
 				<div class="rktsky-antispam__field"><label for="rktsky-delivered-assessment"><?php esc_html_e( 'Assessment', 'rocketsky-antispam' ); ?></label><select id="rktsky-delivered-assessment" name="assessment" required><option value=""><?php esc_html_e( 'Select an assessment', 'rocketsky-antispam' ); ?></option><option value="spam"><?php esc_html_e( 'Spam', 'rocketsky-antispam' ); ?></option><option value="normal"><?php esc_html_e( 'Not spam', 'rocketsky-antispam' ); ?></option></select></div>
 			</div>
-			<p class="description" id="rktsky-delivered-help"><?php esc_html_e( 'Use an existing native entry ID or a stable internal case reference without personal content. Provider entries remain in place.', 'rocketsky-antispam' ); ?></p>
+			<p class="description" id="rktsky-delivered-help"><?php esc_html_e( 'Use the ID from the original comment or form entry, or reuse an internal reference. Do not include names, email addresses or message text.', 'rocketsky-antispam' ); ?></p>
 			<button type="submit" class="button"><?php esc_html_e( 'Save assessment', 'rocketsky-antispam' ); ?></button>
 		</form>
 	</div>
 </details>
 <details class="rktsky-antispam__disclosure">
-	<summary><span class="rktsky-antispam__disclosure-title"><?php esc_html_e( 'Remove a saved case reference', 'rocketsky-antispam' ); ?></span></summary>
+	<summary><span class="rktsky-antispam__disclosure-title"><?php esc_html_e( 'Remove a saved reference', 'rocketsky-antispam' ); ?></span></summary>
 	<div class="rktsky-antispam__disclosure-body">
-		<p><?php esc_html_e( 'Forgetting removes the link; reviewed counts keep their evaluation window. Provider entries remain in place.', 'rocketsky-antispam' ); ?></p>
+		<p><?php esc_html_e( 'Removes this reference without deleting the original entry. Reviewed totals remain until their 90-day expiry.', 'rocketsky-antispam' ); ?></p>
 		<form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post">
 			<input type="hidden" name="action" value="rktsky_antispam_classify_delivered" /><input type="hidden" name="assessment" value="forget" /><?php wp_nonce_field( 'rktsky_antispam_classify_delivered' ); ?>
 			<div class="rktsky-antispam__report-fields">
@@ -44,9 +44,9 @@ defined( 'ABSPATH' ) || exit;
 				foreach ( $provider_labels as $rktsky_antispam_provider => $rktsky_antispam_label ) :
 					?>
 					<option value="<?php echo esc_attr( $rktsky_antispam_provider ); ?>"><?php echo esc_html( $rktsky_antispam_label ); ?></option><?php endforeach; ?></select></div>
-				<div class="rktsky-antispam__field"><label for="rktsky-forget-reference"><?php esc_html_e( 'Entry ID or internal reference', 'rocketsky-antispam' ); ?></label><input type="text" id="rktsky-forget-reference" name="reference" maxlength="128" required autocomplete="off" /></div>
+				<div class="rktsky-antispam__field"><label for="rktsky-forget-reference"><?php esc_html_e( 'Entry ID or reference', 'rocketsky-antispam' ); ?></label><input type="text" id="rktsky-forget-reference" name="reference" maxlength="128" required autocomplete="off" /></div>
 			</div>
-			<button type="submit" class="button"><?php esc_html_e( 'Forget case reference', 'rocketsky-antispam' ); ?></button>
+			<button type="submit" class="button"><?php esc_html_e( 'Remove reference', 'rocketsky-antispam' ); ?></button>
 		</form>
 	</div>
 </details>

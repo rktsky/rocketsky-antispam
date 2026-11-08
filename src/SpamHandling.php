@@ -81,38 +81,38 @@ final class SpamHandling {
 				if ( is_callable( array( Integrations\ContactForm7::class, 'native_available' ) ) && Integrations\ContactForm7::native_available() ) {
 					$route                = $this->native_route( __( 'Flamingo spam', 'rocketsky-antispam' ), admin_url( 'admin.php?page=flamingo_inbound&post_status=spam' ) );
 					$route['mode']        = 'conditional';
-					$route['description'] = __( 'Flamingo stores spam when the form allows it; otherwise Rocketsky Antispam retention applies. A form\'s storage prohibition is respected.', 'rocketsky-antispam' );
+					$route['description'] = __( 'Flamingo keeps spam when the form allows it. Otherwise, your quarantine settings apply, provided the form allows message storage.', 'rocketsky-antispam' );
 					return $route;
 				}
 				return $this->quarantine_route();
 			case 'wsform':
 				$route                = $this->native_route( __( 'WS Form submissions', 'rocketsky-antispam' ), admin_url( 'admin.php?page=ws-form-submit&ws-form-status=spam' ) );
 				$route['mode']        = 'conditional';
-				$route['description'] = __( 'Native spam storage depends on each form\'s settings. Other rejections follow Rocketsky Antispam retention settings.', 'rocketsky-antispam' );
+				$route['description'] = __( 'The form\'s spam storage settings apply. Other rejections follow your quarantine settings.', 'rocketsky-antispam' );
 				return $route;
 			case 'wpforms':
 				if ( is_callable( array( Integrations\WpForms::class, 'native_available' ) ) && Integrations\WpForms::native_available() ) {
 					$route                = $this->native_route( __( 'WPForms spam', 'rocketsky-antispam' ), admin_url( 'admin.php?page=wpforms-entries&view=list&status=spam' ) );
 					$route['mode']        = 'conditional';
-					$route['description'] = __( 'Native spam storage depends on each form\'s settings. Other rejections follow Rocketsky Antispam retention settings.', 'rocketsky-antispam' );
+					$route['description'] = __( 'The form\'s spam storage settings apply. Other rejections follow your quarantine settings.', 'rocketsky-antispam' );
 					return $route;
 				}
 				return $this->quarantine_route();
 			case 'elementor':
 				return $this->quarantine_route();
 			case 'registration':
-				return $this->blocked_route( __( 'Rocketsky Antispam does not retain account fields or passwords.', 'rocketsky-antispam' ) );
+				return $this->blocked_route( __( 'Rocketsky Antispam does not store account fields or passwords.', 'rocketsky-antispam' ) );
 			case 'wc_registration':
-				return $this->blocked_route( __( 'Rocketsky Antispam does not retain account fields or passwords.', 'rocketsky-antispam' ) );
+				return $this->blocked_route( __( 'Rocketsky Antispam does not store account fields or passwords.', 'rocketsky-antispam' ) );
 			case 'wc_checkout':
-				return $this->blocked_route( __( 'Rocketsky Antispam does not retain order, payment or file contents.', 'rocketsky-antispam' ) );
+				return $this->blocked_route( __( 'Rocketsky Antispam does not store order, payment or file contents.', 'rocketsky-antispam' ) );
 			case 'divi':
-				return $this->blocked_route( __( 'Rocketsky Antispam does not retain message or file contents.', 'rocketsky-antispam' ) );
+				return $this->blocked_route( __( 'Rocketsky Antispam keeps no message copy for Divi forms.', 'rocketsky-antispam' ) );
 			default:
 				return array(
 					'mode'        => 'unavailable',
 					'label'       => __( 'Integration settings', 'rocketsky-antispam' ),
-					'description' => __( 'No supported review destination is available for this integration.', 'rocketsky-antispam' ),
+					'description' => __( 'No spam review page is available for this integration.', 'rocketsky-antispam' ),
 					'url'         => admin_url( 'options-general.php?page=rocketsky-antispam&tab=integrations' ),
 				);
 		}
@@ -165,9 +165,9 @@ final class SpamHandling {
 		return array(
 			'mode'            => 'native',
 			'label'           => $label,
-			'description'     => __( 'Content spam uses this native spam queue and its own retention settings.', 'rocketsky-antispam' ),
+			'description'     => __( 'Uses this spam queue and its retention settings for content matches.', 'rocketsky-antispam' ),
 			'url'             => $url,
-			'secondary_label' => 'quarantine' === $fallback['mode'] ? __( 'Rejected requests in Rocketsky Antispam', 'rocketsky-antispam' ) : __( 'Rocketsky Antispam retention settings', 'rocketsky-antispam' ),
+			'secondary_label' => 'quarantine' === $fallback['mode'] ? __( 'Rocketsky Antispam quarantine', 'rocketsky-antispam' ) : __( 'Quarantine settings', 'rocketsky-antispam' ),
 			'secondary_url'   => $fallback['url'],
 		);
 	}
@@ -186,14 +186,14 @@ final class SpamHandling {
 			return array(
 				'mode'        => 'quarantine',
 				'label'       => __( 'Rocketsky Antispam quarantine', 'rocketsky-antispam' ),
-				'description' => __( 'Selected rejected message fields can be retained in Rocketsky Antispam quarantine.', 'rocketsky-antispam' ),
+				'description' => __( 'Selected fields from rejected messages can be kept here.', 'rocketsky-antispam' ),
 				'url'         => admin_url( 'options-general.php?page=rocketsky-antispam&tab=quarantine#rktsky-quarantine-list-heading' ),
 			);
 		}
 		return array(
 			'mode'        => 'discard',
 			'label'       => __( 'Retention settings', 'rocketsky-antispam' ),
-			'description' => __( 'Rocketsky Antispam does not retain rejected message contents.', 'rocketsky-antispam' ),
+			'description' => __( 'Rocketsky Antispam quarantine is off.', 'rocketsky-antispam' ),
 			'url'         => admin_url( 'options-general.php?page=rocketsky-antispam&tab=settings#retention' ),
 		);
 	}
