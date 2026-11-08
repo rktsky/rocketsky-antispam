@@ -96,12 +96,14 @@ The German support-footer preview is separate. All temporary users and records
 are removed, options and all six owned tables restored, and private servers,
 proxy and fault helpers stopped or removed.
 
-The initial CI failure in one Formidable fixture was traced to random UUID
-fragments matching its unchanged native denylist. A fixed UUID containing
-`777-` reproduces that rejection; separated hex pairs with the same bits pass.
-The positive fixture now uses those pairs. Spam status and the prohibition of
-undeclared metadata are asserted separately; the provider's spam checks and
-all existing metadata restrictions remain enabled.
+The Formidable CI failure concerned an unexpected native spam status; its
+combined assertion did not establish an undeclared-metadata leak. A denylist
+conflict in the positive UUID fixture was reproduced: a fixed UUID containing
+`777-` is rejected by the unchanged provider, while separated hex pairs with
+the same bits pass. The original failed marker was not logged, so its specific
+trigger cannot be reconstructed. The positive fixture now uses those pairs.
+Spam status and the prohibition of undeclared metadata are asserted separately;
+the provider's spam checks and all existing metadata restrictions remain enabled.
 
 Artifacts are under `outputs/rocketsky-antispam/submission-0.5.3/`: ZIP, manifest,
 checksum, complete Plugin Check output, native package report, final CI result,
