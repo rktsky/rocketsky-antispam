@@ -342,3 +342,77 @@ Verwaltungsprüfungen. Deaktivierung und Deinstallation über die WordPress-API
 entfernen anschliessend alle sechs eigenen Tabellen, Einstellungen und den
 Bereinigungstermin. Die Aktualisierung dieses Nachweises ändert keine
 Produktionsdatei.
+
+## Namenswechsel und Datenbewahrung 0.5.1
+
+Name, Installationsordner, Haupteinstieg, Textdomain, Sprachdateinamen,
+Composer-Paket und GitHub-Repository verwenden jetzt Rocketsky Antispam /
+`rocketsky-antispam`. Der [Übergangsvertrag](renaming.md) beschreibt den Wechsel
+ohne Deinstallation der bisherigen Kopie. Speicherkennungen, kryptografische
+Zwecke und das bestehende Protokoll bleiben erhalten. Historische Nachweise
+behalten ihre ursprünglichen Dateinamen.
+
+Der [Workflowlauf 42463761084](https://github.com/rktsky/rocketsky-antispam/actions/runs/42463761084)
+prüft Commit `d6155376a6664e9cba28569551ef85ebb39d417e` mit **18 erfolgreichen Jobs**.
+Vier neue Jobs prüfen den tatsächlichen Wechsel aus dem eigenen alten
+0.5.0-Commit `674f4c55713e5f14377ece3f49bfe72f4feefd82`: PHP 8.2 / WordPress 6.6
+und PHP 8.5 / aktuelles WordPress, jeweils als Einzelinstallation und Multisite
+mit MySQL 8.0. Die alte Version wird aus diesem Commit wiederhergestellt, nicht
+aus umbenanntem aktuellem Code nachgebildet. Die neuen CI-Prüfungen bestehen
+mit 55/72 Assertions auf WordPress 6.6 und 56/73 auf aktuellem WordPress.
+
+`tests/native-rename.php` besteht lokal auf WordPress 7.1.4, PHP 8.3.26 und
+SQLite Database Integration 3.1.3 mit 56 Assertions in der Einzelinstallation
+und 73 in Multisite. Beide normalen Deaktivierungs-/Aktivierungspfade verwenden
+frische PHP-Prozesse und bestehen ohne PHP-Diagnostik. Die zusätzlich getrennt
+geprüften stillen Upgrader-Pfade bestehen ebenfalls. Nachgewiesen sind:
+
+- Vollständiger Erhalt individueller Einstellungen, Schema und aller sechs
+  eigenen Tabellen einschliesslich identischem Quarantäne-Ciphertext.
+- Entschlüsselung alter Inhalte, Zuordnung bestehender HMAC-Bewertungen,
+  fortbestehende Replay-Sperren und einmalige Verwendung unbenutzter alter
+  Tokens. Alte Formularbezüge funktionieren am unveränderten REST-Endpunkt.
+- Getrennte Daten und Schlüssel zweier Sites, korrekte Netzwerkaktivierung und
+  weiterhin ungültige sitefremde Tokens.
+- Sichtbare Ablehnung beider Aktivierungsrichtungen und beider versehentlichen
+  Deinstallationsrichtungen vor Datenänderungen. Native Aktivierungsrechte
+  gelten auch auf WordPress 6.6; der zusätzliche direkte Requirements-Filter
+  wird nur dort erwartet, wo Core ihn ab 6.9 anbietet.
+- Schutz bei einem auf einer anderen Site noch aktiven identischen Basename,
+  erneuerte Assetpfade und unveränderte Cron-Hooks, Argumente und Intervalle
+  ohne zusätzliche Termine. Der stille Übergang bewahrt darüber hinaus die
+  ursprünglichen Fälligkeiten.
+
+Die lokalen bestehenden Prüfungen bestehen erneut: 227 Verwaltungsassertions,
+54 Kernprüfungen, 52 Feedback-, 59 Quarantäne-, 54 Policy- und
+38 Registrierungsassertions, 22 native Pingback-/Trackbackfälle, 33 kontextuelle
+Menü-/Rollenprüfungen sowie die 20 Inhalts- und 69/25 Adapterassertions.
+96 eigene PHP-Dateien bestehen die Syntaxprüfung; die 52 produktiven PHP-Dateien
+bestehen WordPress Coding Standards ohne Fehler oder Warnungen.
+
+Alle fünf mitgelieferten Sprachkataloge enthalten 316 vollständige Nachrichten.
+Quelltextsatz, Platzhalter, GNU msgfmt/msgcmp und jeder kompilierte MO-Eintrag
+wurden geprüft. Die bisherigen Übersetzungen bleiben bis auf die Namensänderung
+erhalten. Die echte WordPress-Ladung der neuen Schweizer Sprachdatei ist Teil
+der nativen Übergangsprüfung.
+
+Die Browserprüfung mit Firefox unter macOS umfasst 50 Ansichten: fünf Aufgaben,
+fünf Sprachen und 390/1440 CSS-Pixel. Titel, Navigation, aufgeklappte Bereiche,
+Schriftuntergrenzen und kanonische Assetantworten bestehen. Der zusätzliche
+deutsche Titel-/Navigationslauf bei 320 Pixeln passt ebenfalls. Ein unspezifisches
+Object-Ereignis beim ersten zusätzlichen Login-/Navigationslauf war im
+instrumentierten Wiederholungslauf nicht reproduzierbar. Die 50 Hauptansichten
+und der wiederholte schmale Lauf enthalten keine JavaScript-Fehler. Alle externen
+Browseranfragen blieben blockiert; Testkonto, URLs und temporärer Server wurden
+bereinigt. Lokale Belege: `outputs/rocketsky-antispam/rename-0.5.1/`.
+Dies ist keine erneute reale Safari-, Windows- oder Mobilgeräteabnahme.
+
+Plugin Check 2.2.0 meldet lokal und in CI für die getrennte
+WordPress.org-Prüfkopie **keine Fehler und drei Warnungen** zu
+`load_plugin_textdomain`. Diese Aufrufe registrieren die gebündelten
+GitHub-Sprachen im normalen Start sowie bei Aktivierungs-/Konflikthinweisen;
+die früheren Namens-/Slugwarnungen sind entfallen. Die GitHub-Distribution
+behält ihre Update URI und zeigt im vollständigen lokalen Verzeichnisreport
+zusätzlich den erwarteten `plugin_updater_detected`-Befund. Kein Befund wird
+ausgeblendet. Eine WordPress.org-Einreichung oder Veröffentlichung wurde nicht
+vorgenommen.
