@@ -69,8 +69,10 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: mysqli, dom, curl, mbstring
-          tools: wp-cli
+          tools: none
           coverage: none
+      - name: Install verified WP-CLI
+        run: bash tools/setup-wp-cli.sh
       - name: Install a disposable native WordPress site
         env:
           ANTISPAM_TEST_WP_VERSION: ${{ matrix.wordpress }}
@@ -148,8 +150,10 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: mysqli, dom, curl, mbstring
-          tools: wp-cli
+          tools: none
           coverage: none
+      - name: Install verified WP-CLI
+        run: bash tools/setup-wp-cli.sh
       - name: Install original WooCommerce on a disposable native WordPress site
         run: |
           wp core download --path="$RKTSKY_ANTISPAM_WP_ROOT"
@@ -196,8 +200,10 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: mysqli, dom, curl, mbstring
-          tools: wp-cli
+          tools: none
           coverage: none
+      - name: Install verified WP-CLI
+        run: bash tools/setup-wp-cli.sh
       - name: Install original free form providers on a disposable native WordPress site
         run: |
           wp core download --path="$RKTSKY_ANTISPAM_WP_ROOT"
@@ -300,8 +306,10 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: mysqli, dom, curl, mbstring
-          tools: wp-cli
+          tools: none
           coverage: none
+      - name: Install verified WP-CLI
+        run: bash tools/setup-wp-cli.sh
       - name: Install a disposable native multisite network
         env:
           ANTISPAM_TEST_WP_VERSION: ${{ matrix.wordpress }}
@@ -363,8 +371,10 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: mysqli, dom, curl, mbstring
-          tools: wp-cli
+          tools: none
           coverage: none
+      - name: Install verified WP-CLI
+        run: bash tools/setup-wp-cli.sh
       - name: Restore the actual previous owned release for upgrade tests
         run: |
           git fetch --depth=1 origin 674f4c55713e5f14377ece3f49bfe72f4feefd82

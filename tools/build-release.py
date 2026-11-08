@@ -32,6 +32,7 @@ class ReleaseBuilder:
 		if self.git("status", "--porcelain").strip():
 			raise ValueError("Commit the reviewed source before building a release.")
 		self.commit = self.git("rev-parse", "HEAD").decode().strip()
+		self.production_commit = self.git("log", "-1", "--format=%H", self.commit, "--", *sorted(self.ROOT_FILES), *sorted(self.DIRECTORIES)).decode().strip()
 
 	def git(self, *arguments: str) -> bytes:
 		"""Read Git using structured arguments without a shell. Since 0.5.2."""
@@ -61,7 +62,7 @@ class ReleaseBuilder:
 
 	def archive(self, files: dict[str, bytes]) -> bytes:
 		"""Create deterministic ZIP bytes and verify their complete readback. Since 0.5.2."""
-		epoch = max(315532800, int(self.git("show", "-s", "--format=%ct", self.commit)))
+		epoch = max(315532800, int(self.git("show", "-s", "--format=%ct", self.production_commit)))
 		stamp = time.gmtime(epoch)[:6]
 		stream = io.BytesIO()
 		with zipfile.ZipFile(stream, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
@@ -103,7 +104,7 @@ class ReleaseBuilder:
 		name = f"{self.SLUG}-{version}-{self.channel}"
 		manifest = {
 			"plugin": "Rocketsky Antispam", "slug": self.SLUG, "version": version,
-			"channel": self.channel, "source_commit": self.commit,
+			"channel": self.channel, "source_commit": self.commit, "production_commit": self.production_commit,
 			"archive": name + ".zip", "bytes": len(payload), "sha256": digest,
 			"transformations": ["Remove GitHub-specific Update URI header"] if self.channel == "wordpress-org" else [],
 			"files": {self.SLUG + "/" + path: hashlib.sha256(content).hexdigest() for path, content in files.items()},
