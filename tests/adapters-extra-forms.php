@@ -484,7 +484,7 @@ namespace {
 	$count              = count( $quarantine->captured );
 	$ws->validate( array(), 'submit', $submission );
 	rktsky_extra_expect( count( $quarantine->captured ) === $count, 'Shared retention opt-out must remain authoritative.' );
-	$wp_root = getenv( 'WP_ANTISPAM_WP_ROOT' ) ?: '/tmp/rktsky-antispam-runtime/site/wordpress';
+	$wp_root = getenv( 'RKTSKY_ANTISPAM_WP_ROOT' ) ?: '/tmp/rktsky-antispam-runtime/site/wordpress';
 	if ( is_file( $wp_root . '/wp-includes/html-api/class-wp-html-tag-processor.php' ) ) {
 		if ( is_file( $wp_root . '/wp-includes/utf8.php' ) ) {
 			require_once $wp_root . '/wp-includes/utf8.php';}

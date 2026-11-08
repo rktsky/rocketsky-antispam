@@ -521,7 +521,7 @@ final class NativeFeedback {
 	 */
 	public function ws_export( string $email, int $page = 1 ) {
 		if ( ! is_callable( $this->ws_exporter ) || ! current_user_can( 'export_others_personal_data' ) ) {
-			return new \WP_Error( 'rktsky_antispam_feedback_permission', __( 'You cannot export this personal data.', 'wp-antispam' ) );
+			return new \WP_Error( 'rktsky_antispam_feedback_permission', __( 'You cannot export this personal data.', 'rocketsky-antispam' ) );
 		}
 		$result = call_user_func( $this->ws_exporter, $email, $page );
 		if ( ! is_array( $result ) || ! isset( $result['data'] ) || ! is_array( $result['data'] ) ) {

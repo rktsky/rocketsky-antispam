@@ -317,7 +317,7 @@ final class Quarantine {
 	 */
 	public function exporters( array $exporters ): array {
 		$exporters['rktsky-antispam-quarantine'] = array(
-			'exporter_friendly_name' => __( 'WP Antispam quarantine', 'wp-antispam' ),
+			'exporter_friendly_name' => __( 'Rocketsky Antispam quarantine', 'rocketsky-antispam' ),
 			'callback'               => array( $this, 'export' ),
 		);
 		return $exporters;
@@ -332,7 +332,7 @@ final class Quarantine {
 	 */
 	public function erasers( array $erasers ): array {
 		$erasers['rktsky-antispam-quarantine'] = array(
-			'eraser_friendly_name' => __( 'WP Antispam quarantine', 'wp-antispam' ),
+			'eraser_friendly_name' => __( 'Rocketsky Antispam quarantine', 'rocketsky-antispam' ),
 			'callback'             => array( $this, 'erase' ),
 		);
 		return $erasers;
@@ -351,7 +351,7 @@ final class Quarantine {
 	 */
 	public function export( string $email_address, int $page = 1 ) {
 		if ( ! current_user_can( 'export_others_personal_data' ) ) {
-			return new \WP_Error( 'rktsky_antispam_privacy_permission', __( 'You cannot export this personal data.', 'wp-antispam' ) );
+			return new \WP_Error( 'rktsky_antispam_privacy_permission', __( 'You cannot export this personal data.', 'rocketsky-antispam' ) );
 		}
 		$email = $this->email( $email_address );
 		$data  = array();
@@ -368,19 +368,19 @@ final class Quarantine {
 			}
 			$items = array(
 				array(
-					'name'  => __( 'Form provider', 'wp-antispam' ),
+					'name'  => __( 'Form provider', 'rocketsky-antispam' ),
 					'value' => $row['provider'],
 				),
 				array(
-					'name'  => __( 'Form', 'wp-antispam' ),
+					'name'  => __( 'Form', 'rocketsky-antispam' ),
 					'value' => $row['form_id'],
 				),
 				array(
-					'name'  => __( 'Date', 'wp-antispam' ),
+					'name'  => __( 'Date', 'rocketsky-antispam' ),
 					'value' => gmdate( 'c', (int) $row['created'] ),
 				),
 				array(
-					'name'  => __( 'Email address', 'wp-antispam' ),
+					'name'  => __( 'Email address', 'rocketsky-antispam' ),
 					'value' => $plain['email'],
 				),
 			);
@@ -392,8 +392,8 @@ final class Quarantine {
 			}
 			$data[] = array(
 				'group_id'          => 'rktsky-antispam-quarantine',
-				'group_label'       => __( 'WP Antispam quarantine', 'wp-antispam' ),
-				'group_description' => __( 'Rejected form submissions temporarily stored by this site.', 'wp-antispam' ),
+				'group_label'       => __( 'Rocketsky Antispam quarantine', 'rocketsky-antispam' ),
+				'group_description' => __( 'Rejected form submissions temporarily stored by this site.', 'rocketsky-antispam' ),
 				'item_id'           => 'rktsky-antispam-quarantine-' . (int) $row['id'],
 				'data'              => $items,
 			);
@@ -417,7 +417,7 @@ final class Quarantine {
 	 */
 	public function erase( string $email_address, int $page = 1 ) {
 		if ( ! current_user_can( 'erase_others_personal_data' ) ) {
-			return new \WP_Error( 'rktsky_antispam_privacy_permission', __( 'You cannot erase this personal data.', 'wp-antispam' ) );
+			return new \WP_Error( 'rktsky_antispam_privacy_permission', __( 'You cannot erase this personal data.', 'rocketsky-antispam' ) );
 		}
 		$result = array(
 			'items_removed'  => false,
@@ -447,7 +447,7 @@ final class Quarantine {
 			}
 		}
 		if ( $result['items_retained'] ) {
-			$result['messages'][] = __( 'Some quarantine data could not be erased automatically. An administrator must review unreadable or unavailable records.', 'wp-antispam' );
+			$result['messages'][] = __( 'Some quarantine data could not be erased automatically. An administrator must review unreadable or unavailable records.', 'rocketsky-antispam' );
 		}
 		return $result;
 	}

@@ -52,7 +52,7 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: disposable-test-password
-          MYSQL_DATABASE: wp_antispam_test
+          MYSQL_DATABASE: rocketsky_antispam_test
         ports:
           - 3306:3306
         options: >-
@@ -61,8 +61,8 @@ jobs:
           --health-timeout=5s
           --health-retries=10
     env:
-      WP_ANTISPAM_ALLOW_TESTS: '1'
-      WP_ANTISPAM_WP_ROOT: /tmp/wp-antispam-wordpress
+      RKTSKY_ANTISPAM_ALLOW_TESTS: '1'
+      RKTSKY_ANTISPAM_WP_ROOT: /tmp/rocketsky-antispam-wordpress
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: shivammathur/setup-php@d52fc211a0436f8839a587b3b5b8efddab4744ea # v2
@@ -76,26 +76,26 @@ jobs:
           ANTISPAM_TEST_WP_VERSION: ${{ matrix.wordpress }}
           ANTISPAM_TEST_PHP_VERSION: ${{ matrix.php }}
         run: |
-          wp core download --path="$WP_ANTISPAM_WP_ROOT" --version="$ANTISPAM_TEST_WP_VERSION"
-          wp config create --path="$WP_ANTISPAM_WP_ROOT" --dbname=wp_antispam_test --dbuser=root --dbpass=disposable-test-password --dbhost=127.0.0.1:3306
-          wp config set WP_ENVIRONMENT_TYPE local --path="$WP_ANTISPAM_WP_ROOT"
-          wp config set WP_ANTISPAM_TEST_FIXTURE true --raw --path="$WP_ANTISPAM_WP_ROOT"
-          wp config set DISABLE_WP_CRON true --raw --path="$WP_ANTISPAM_WP_ROOT"
-          printf '%s\n' rktsky-antispam-disposable > "$WP_ANTISPAM_WP_ROOT/.rktsky-antispam-fixture"
-          mkdir -p "$WP_ANTISPAM_WP_ROOT/wp-content/mu-plugins"
-          printf '%s\n' '<?php add_filter( "pre_wp_mail", "__return_false", PHP_INT_MAX );' > "$WP_ANTISPAM_WP_ROOT/wp-content/mu-plugins/fixture-mail.php"
-          wp core install --path="$WP_ANTISPAM_WP_ROOT" --url=http://127.0.0.1:8877 --title='Synthetic WP Antispam tests' --admin_user=antispam-fixture --admin_password=disposable-test-password --admin_email=fixture@example.invalid --skip-email
+          wp core download --path="$RKTSKY_ANTISPAM_WP_ROOT" --version="$ANTISPAM_TEST_WP_VERSION"
+          wp config create --path="$RKTSKY_ANTISPAM_WP_ROOT" --dbname=rocketsky_antispam_test --dbuser=root --dbpass=disposable-test-password --dbhost=127.0.0.1:3306
+          wp config set WP_ENVIRONMENT_TYPE local --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          wp config set RKTSKY_ANTISPAM_TEST_FIXTURE true --raw --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          wp config set DISABLE_WP_CRON true --raw --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          printf '%s\n' rktsky-antispam-disposable > "$RKTSKY_ANTISPAM_WP_ROOT/.rktsky-antispam-fixture"
+          mkdir -p "$RKTSKY_ANTISPAM_WP_ROOT/wp-content/mu-plugins"
+          printf '%s\n' '<?php add_filter( "pre_wp_mail", "__return_false", PHP_INT_MAX );' > "$RKTSKY_ANTISPAM_WP_ROOT/wp-content/mu-plugins/fixture-mail.php"
+          wp core install --path="$RKTSKY_ANTISPAM_WP_ROOT" --url=http://127.0.0.1:8877 --title='Synthetic Rocketsky Antispam tests' --admin_user=antispam-fixture --admin_password=disposable-test-password --admin_email=fixture@example.invalid --skip-email
           if [ "$ANTISPAM_TEST_WP_VERSION" = latest ]; then
-            wp plugin install wpforms-lite --activate --path="$WP_ANTISPAM_WP_ROOT"
+            wp plugin install wpforms-lite --activate --path="$RKTSKY_ANTISPAM_WP_ROOT"
             if [ "$ANTISPAM_TEST_PHP_VERSION" != '8.2' ]; then
-              wp plugin install contact-form-7 --activate --path="$WP_ANTISPAM_WP_ROOT"
-              wp plugin install flamingo --activate --path="$WP_ANTISPAM_WP_ROOT"
+              wp plugin install contact-form-7 --activate --path="$RKTSKY_ANTISPAM_WP_ROOT"
+              wp plugin install flamingo --activate --path="$RKTSKY_ANTISPAM_WP_ROOT"
             fi
           fi
-          ln -s "$GITHUB_WORKSPACE" "$WP_ANTISPAM_WP_ROOT/wp-content/plugins/wp-antispam"
-          wp plugin activate wp-antispam --path="$WP_ANTISPAM_WP_ROOT"
-          wp config set WP_HTTP_BLOCK_EXTERNAL true --raw --path="$WP_ANTISPAM_WP_ROOT"
-          printf '%s\n' '<?php add_filter( "pre_wp_mail", "__return_false", PHP_INT_MAX ); add_filter( "pre_http_request", static function () { return new WP_Error( "test_http_blocked", "Disposable fixture." ); }, PHP_INT_MAX );' > "$WP_ANTISPAM_WP_ROOT/wp-content/mu-plugins/fixture-mail.php"
+          ln -s "$GITHUB_WORKSPACE" "$RKTSKY_ANTISPAM_WP_ROOT/wp-content/plugins/rocketsky-antispam"
+          wp plugin activate rocketsky-antispam --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          wp config set WP_HTTP_BLOCK_EXTERNAL true --raw --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          printf '%s\n' '<?php add_filter( "pre_wp_mail", "__return_false", PHP_INT_MAX ); add_filter( "pre_http_request", static function () { return new WP_Error( "test_http_blocked", "Disposable fixture." ); }, PHP_INT_MAX );' > "$RKTSKY_ANTISPAM_WP_ROOT/wp-content/mu-plugins/fixture-mail.php"
       - run: php tests/native.php
       - run: php tests/native-admin.php
       - run: php tests/context-notices.php
@@ -130,7 +130,7 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: disposable-test-password
-          MYSQL_DATABASE: wp_antispam_woocommerce
+          MYSQL_DATABASE: rocketsky_antispam_woocommerce
         ports:
           - 3306:3306
         options: >-
@@ -139,8 +139,8 @@ jobs:
           --health-timeout=5s
           --health-retries=10
     env:
-      WP_ANTISPAM_ALLOW_TESTS: '1'
-      WP_ANTISPAM_WP_ROOT: /tmp/wp-antispam-woocommerce
+      RKTSKY_ANTISPAM_ALLOW_TESTS: '1'
+      RKTSKY_ANTISPAM_WP_ROOT: /tmp/rocketsky-antispam-woocommerce
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: shivammathur/setup-php@d52fc211a0436f8839a587b3b5b8efddab4744ea # v2
@@ -151,19 +151,19 @@ jobs:
           coverage: none
       - name: Install original WooCommerce on a disposable native WordPress site
         run: |
-          wp core download --path="$WP_ANTISPAM_WP_ROOT"
-          wp config create --path="$WP_ANTISPAM_WP_ROOT" --dbname=wp_antispam_woocommerce --dbuser=root --dbpass=disposable-test-password --dbhost=127.0.0.1:3306
-          wp config set WP_ENVIRONMENT_TYPE local --path="$WP_ANTISPAM_WP_ROOT"
-          wp config set WP_ANTISPAM_TEST_FIXTURE true --raw --path="$WP_ANTISPAM_WP_ROOT"
-          wp config set DISABLE_WP_CRON true --raw --path="$WP_ANTISPAM_WP_ROOT"
-          printf '%s\n' rktsky-antispam-disposable > "$WP_ANTISPAM_WP_ROOT/.rktsky-antispam-fixture"
-          mkdir -p "$WP_ANTISPAM_WP_ROOT/wp-content/mu-plugins"
-          printf '%s\n' '<?php add_filter( "pre_wp_mail", "__return_false", PHP_INT_MAX );' > "$WP_ANTISPAM_WP_ROOT/wp-content/mu-plugins/fixture-mail.php"
-          wp core install --path="$WP_ANTISPAM_WP_ROOT" --url=http://127.0.0.1:8877 --title='Synthetic WooCommerce tests' --admin_user=antispam-fixture --admin_password=disposable-test-password --admin_email=fixture@example.invalid --skip-email
-          wp plugin install woocommerce --activate --path="$WP_ANTISPAM_WP_ROOT"
-          ln -s "$GITHUB_WORKSPACE" "$WP_ANTISPAM_WP_ROOT/wp-content/plugins/wp-antispam"
-          wp plugin activate wp-antispam --path="$WP_ANTISPAM_WP_ROOT"
-          wp config set WP_HTTP_BLOCK_EXTERNAL true --raw --path="$WP_ANTISPAM_WP_ROOT"
+          wp core download --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          wp config create --path="$RKTSKY_ANTISPAM_WP_ROOT" --dbname=rocketsky_antispam_woocommerce --dbuser=root --dbpass=disposable-test-password --dbhost=127.0.0.1:3306
+          wp config set WP_ENVIRONMENT_TYPE local --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          wp config set RKTSKY_ANTISPAM_TEST_FIXTURE true --raw --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          wp config set DISABLE_WP_CRON true --raw --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          printf '%s\n' rktsky-antispam-disposable > "$RKTSKY_ANTISPAM_WP_ROOT/.rktsky-antispam-fixture"
+          mkdir -p "$RKTSKY_ANTISPAM_WP_ROOT/wp-content/mu-plugins"
+          printf '%s\n' '<?php add_filter( "pre_wp_mail", "__return_false", PHP_INT_MAX );' > "$RKTSKY_ANTISPAM_WP_ROOT/wp-content/mu-plugins/fixture-mail.php"
+          wp core install --path="$RKTSKY_ANTISPAM_WP_ROOT" --url=http://127.0.0.1:8877 --title='Synthetic WooCommerce tests' --admin_user=antispam-fixture --admin_password=disposable-test-password --admin_email=fixture@example.invalid --skip-email
+          wp plugin install woocommerce --activate --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          ln -s "$GITHUB_WORKSPACE" "$RKTSKY_ANTISPAM_WP_ROOT/wp-content/plugins/rocketsky-antispam"
+          wp plugin activate rocketsky-antispam --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          wp config set WP_HTTP_BLOCK_EXTERNAL true --raw --path="$RKTSKY_ANTISPAM_WP_ROOT"
       - run: php tests/prepare-woocommerce.php
       - run: php tests/native-woocommerce.php
 
@@ -178,7 +178,7 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: disposable-test-password
-          MYSQL_DATABASE: wp_antispam_extra_forms
+          MYSQL_DATABASE: rocketsky_antispam_extra_forms
         ports:
           - 3306:3306
         options: >-
@@ -187,8 +187,8 @@ jobs:
           --health-timeout=5s
           --health-retries=10
     env:
-      WP_ANTISPAM_ALLOW_TESTS: '1'
-      WP_ANTISPAM_WP_ROOT: /tmp/wp-antispam-extra-forms
+      RKTSKY_ANTISPAM_ALLOW_TESTS: '1'
+      RKTSKY_ANTISPAM_WP_ROOT: /tmp/rocketsky-antispam-extra-forms
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: shivammathur/setup-php@d52fc211a0436f8839a587b3b5b8efddab4744ea # v2
@@ -199,21 +199,21 @@ jobs:
           coverage: none
       - name: Install original free form providers on a disposable native WordPress site
         run: |
-          wp core download --path="$WP_ANTISPAM_WP_ROOT"
-          wp config create --path="$WP_ANTISPAM_WP_ROOT" --dbname=wp_antispam_extra_forms --dbuser=root --dbpass=disposable-test-password --dbhost=127.0.0.1:3306
-          wp config set WP_ENVIRONMENT_TYPE local --path="$WP_ANTISPAM_WP_ROOT"
-          wp config set WP_ANTISPAM_TEST_FIXTURE true --raw --path="$WP_ANTISPAM_WP_ROOT"
-          wp config set DISABLE_WP_CRON true --raw --path="$WP_ANTISPAM_WP_ROOT"
-          printf '%s\n' rktsky-antispam-disposable > "$WP_ANTISPAM_WP_ROOT/.rktsky-antispam-fixture"
-          mkdir -p "$WP_ANTISPAM_WP_ROOT/wp-content/mu-plugins"
-          printf '%s\n' '<?php add_filter( "pre_wp_mail", "__return_false", PHP_INT_MAX );' > "$WP_ANTISPAM_WP_ROOT/wp-content/mu-plugins/fixture-mail.php"
-          wp core install --path="$WP_ANTISPAM_WP_ROOT" --url=http://127.0.0.1:8877 --title='Synthetic form provider tests' --admin_user=antispam-fixture --admin_password=disposable-test-password --admin_email=fixture@example.invalid --skip-email
-          wp plugin install formidable fluentform ws-form --path="$WP_ANTISPAM_WP_ROOT"
-          printf '%s\n' '<?php add_filter( "pre_wp_mail", "__return_false", PHP_INT_MAX ); add_filter( "pre_http_request", static function () { return new WP_Error( "test_http_blocked", "Disposable fixture." ); }, PHP_INT_MAX );' > "$WP_ANTISPAM_WP_ROOT/wp-content/mu-plugins/fixture-mail.php"
-          wp plugin activate formidable fluentform ws-form --path="$WP_ANTISPAM_WP_ROOT"
-          ln -s "$GITHUB_WORKSPACE" "$WP_ANTISPAM_WP_ROOT/wp-content/plugins/wp-antispam"
-          wp plugin activate wp-antispam --path="$WP_ANTISPAM_WP_ROOT"
-          wp config set WP_HTTP_BLOCK_EXTERNAL true --raw --path="$WP_ANTISPAM_WP_ROOT"
+          wp core download --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          wp config create --path="$RKTSKY_ANTISPAM_WP_ROOT" --dbname=rocketsky_antispam_extra_forms --dbuser=root --dbpass=disposable-test-password --dbhost=127.0.0.1:3306
+          wp config set WP_ENVIRONMENT_TYPE local --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          wp config set RKTSKY_ANTISPAM_TEST_FIXTURE true --raw --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          wp config set DISABLE_WP_CRON true --raw --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          printf '%s\n' rktsky-antispam-disposable > "$RKTSKY_ANTISPAM_WP_ROOT/.rktsky-antispam-fixture"
+          mkdir -p "$RKTSKY_ANTISPAM_WP_ROOT/wp-content/mu-plugins"
+          printf '%s\n' '<?php add_filter( "pre_wp_mail", "__return_false", PHP_INT_MAX );' > "$RKTSKY_ANTISPAM_WP_ROOT/wp-content/mu-plugins/fixture-mail.php"
+          wp core install --path="$RKTSKY_ANTISPAM_WP_ROOT" --url=http://127.0.0.1:8877 --title='Synthetic form provider tests' --admin_user=antispam-fixture --admin_password=disposable-test-password --admin_email=fixture@example.invalid --skip-email
+          wp plugin install formidable fluentform ws-form --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          printf '%s\n' '<?php add_filter( "pre_wp_mail", "__return_false", PHP_INT_MAX ); add_filter( "pre_http_request", static function () { return new WP_Error( "test_http_blocked", "Disposable fixture." ); }, PHP_INT_MAX );' > "$RKTSKY_ANTISPAM_WP_ROOT/wp-content/mu-plugins/fixture-mail.php"
+          wp plugin activate formidable fluentform ws-form --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          ln -s "$GITHUB_WORKSPACE" "$RKTSKY_ANTISPAM_WP_ROOT/wp-content/plugins/rocketsky-antispam"
+          wp plugin activate rocketsky-antispam --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          wp config set WP_HTTP_BLOCK_EXTERNAL true --raw --path="$RKTSKY_ANTISPAM_WP_ROOT"
       - run: php tests/setup-extra-forms.php
       - run: php tests/native-extra-forms.php
       - run: php tests/native-provider-spam.php
@@ -226,24 +226,24 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Prepare the distribution tree
         run: |
-          mkdir -p /tmp/wp-antispam-distribution/wp-antispam
-          rsync -a --exclude-from=.distignore ./ /tmp/wp-antispam-distribution/wp-antispam/
+          mkdir -p /tmp/rocketsky-antispam-distribution/rocketsky-antispam
+          rsync -a --exclude-from=.distignore ./ /tmp/rocketsky-antispam-distribution/rocketsky-antispam/
           # Directory validation excludes the GitHub-only update identity header.
           # The shipped GitHub source/archive retains collision protection.
           python3 - <<'PY'
           from pathlib import Path
-          plugin = Path('/tmp/wp-antispam-distribution/wp-antispam/wp-antispam.php')
+          plugin = Path('/tmp/rocketsky-antispam-distribution/rocketsky-antispam/rocketsky-antispam.php')
           source = plugin.read_text()
-          header = ' * Update URI: https://github.com/rktsky/wp-antispam\n'
+          header = ' * Update URI: https://github.com/rktsky/rocketsky-antispam\n'
           if source.count(header) != 1:
               raise SystemExit('The exact GitHub-only update identity is required.')
           plugin.write_text(source.replace(header, '', 1))
           PY
       - uses: WordPress/plugin-check-action@10857da14b6c2246d15402b3e69f777edcf8c12e # v1
         with:
-          build-dir: /tmp/wp-antispam-distribution/wp-antispam
-          slug: wp-antispam
-          # Expected name and bundled-translation warnings remain visible annotations.
+          build-dir: /tmp/rocketsky-antispam-distribution/rocketsky-antispam
+          slug: rocketsky-antispam
+          # Bundled-translation loading warnings remain visible annotations.
           strict: false
 
   browser-bridge:
@@ -253,11 +253,11 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Install isolated browser test tools
         run: |
-          npm install --prefix /tmp/wp-antispam-browser --no-audit --no-fund --ignore-scripts playwright@1.62.1
-          /tmp/wp-antispam-browser/node_modules/.bin/playwright install --with-deps firefox
+          npm install --prefix /tmp/rocketsky-antispam-browser --no-audit --no-fund --ignore-scripts playwright@1.62.1
+          /tmp/rocketsky-antispam-browser/node_modules/.bin/playwright install --with-deps firefox
       - name: Verify native browser challenge and retry behavior
         env:
-          WP_ANTISPAM_PLAYWRIGHT: /tmp/wp-antispam-browser/node_modules/playwright/index.mjs
+          RKTSKY_ANTISPAM_PLAYWRIGHT: /tmp/rocketsky-antispam-browser/node_modules/playwright/index.mjs
         run: node tests/browser-bridge.mjs
 
   multisite:
@@ -275,7 +275,7 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: disposable-test-password
-          MYSQL_DATABASE: wp_antispam_multisite
+          MYSQL_DATABASE: rocketsky_antispam_multisite
         ports:
           - 3306:3306
         options: >-
@@ -284,8 +284,8 @@ jobs:
           --health-timeout=5s
           --health-retries=10
     env:
-      WP_ANTISPAM_ALLOW_TESTS: '1'
-      WP_ANTISPAM_WP_ROOT: /tmp/wp-antispam-multisite
+      RKTSKY_ANTISPAM_ALLOW_TESTS: '1'
+      RKTSKY_ANTISPAM_WP_ROOT: /tmp/rocketsky-antispam-multisite
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - uses: shivammathur/setup-php@d52fc211a0436f8839a587b3b5b8efddab4744ea # v2
@@ -298,16 +298,91 @@ jobs:
         env:
           ANTISPAM_TEST_WP_VERSION: ${{ matrix.wordpress }}
         run: |
-          wp core download --path="$WP_ANTISPAM_WP_ROOT" --version="$ANTISPAM_TEST_WP_VERSION"
-          wp config create --path="$WP_ANTISPAM_WP_ROOT" --dbname=wp_antispam_multisite --dbuser=root --dbpass=disposable-test-password --dbhost=127.0.0.1:3306
-          wp config set WP_ENVIRONMENT_TYPE local --path="$WP_ANTISPAM_WP_ROOT"
-          wp config set WP_ANTISPAM_TEST_FIXTURE true --raw --path="$WP_ANTISPAM_WP_ROOT"
-          wp config set DISABLE_WP_CRON true --raw --path="$WP_ANTISPAM_WP_ROOT"
-          wp config set WP_HTTP_BLOCK_EXTERNAL true --raw --path="$WP_ANTISPAM_WP_ROOT"
-          printf '%s\n' rktsky-antispam-disposable > "$WP_ANTISPAM_WP_ROOT/.rktsky-antispam-fixture"
-          mkdir -p "$WP_ANTISPAM_WP_ROOT/wp-content/mu-plugins"
-          printf '%s\n' '<?php add_filter( "pre_wp_mail", "__return_false", PHP_INT_MAX );' > "$WP_ANTISPAM_WP_ROOT/wp-content/mu-plugins/fixture-mail.php"
-          wp core multisite-install --path="$WP_ANTISPAM_WP_ROOT" --url=http://127.0.0.1:8877 --title='Synthetic WP Antispam network' --admin_user=antispam-fixture --admin_password=disposable-test-password --admin_email=fixture@example.invalid --skip-email
-          ln -s "$GITHUB_WORKSPACE" "$WP_ANTISPAM_WP_ROOT/wp-content/plugins/wp-antispam"
-          wp plugin activate wp-antispam --network --path="$WP_ANTISPAM_WP_ROOT"
+          wp core download --path="$RKTSKY_ANTISPAM_WP_ROOT" --version="$ANTISPAM_TEST_WP_VERSION"
+          wp config create --path="$RKTSKY_ANTISPAM_WP_ROOT" --dbname=rocketsky_antispam_multisite --dbuser=root --dbpass=disposable-test-password --dbhost=127.0.0.1:3306
+          wp config set WP_ENVIRONMENT_TYPE local --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          wp config set RKTSKY_ANTISPAM_TEST_FIXTURE true --raw --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          wp config set DISABLE_WP_CRON true --raw --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          wp config set WP_HTTP_BLOCK_EXTERNAL true --raw --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          printf '%s\n' rktsky-antispam-disposable > "$RKTSKY_ANTISPAM_WP_ROOT/.rktsky-antispam-fixture"
+          mkdir -p "$RKTSKY_ANTISPAM_WP_ROOT/wp-content/mu-plugins"
+          printf '%s\n' '<?php add_filter( "pre_wp_mail", "__return_false", PHP_INT_MAX );' > "$RKTSKY_ANTISPAM_WP_ROOT/wp-content/mu-plugins/fixture-mail.php"
+          wp core multisite-install --path="$RKTSKY_ANTISPAM_WP_ROOT" --url=http://127.0.0.1:8877 --title='Synthetic Rocketsky Antispam network' --admin_user=antispam-fixture --admin_password=disposable-test-password --admin_email=fixture@example.invalid --skip-email
+          ln -s "$GITHUB_WORKSPACE" "$RKTSKY_ANTISPAM_WP_ROOT/wp-content/plugins/rocketsky-antispam"
+          wp plugin activate rocketsky-antispam --network --path="$RKTSKY_ANTISPAM_WP_ROOT"
       - run: php tests/multisite.php
+
+  native-rename:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php: '8.2'
+            wordpress: '6.6'
+            mode: single
+          - php: '8.5'
+            wordpress: 'latest'
+            mode: single
+          - php: '8.2'
+            wordpress: '6.6'
+            mode: multisite
+          - php: '8.5'
+            wordpress: 'latest'
+            mode: multisite
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: disposable-test-password
+          MYSQL_DATABASE: rocketsky_antispam_rename
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+    env:
+      RKTSKY_ANTISPAM_ALLOW_TESTS: '1'
+      RKTSKY_ANTISPAM_WP_ROOT: /tmp/rocketsky-antispam-rename-wordpress
+      RKTSKY_ANTISPAM_RENAME_OLD_ROOT: /tmp/rocketsky-antispam-rename-original
+      RKTSKY_ANTISPAM_RENAME_STATE: /tmp/rocketsky-antispam-rename-private/state.json
+      RKTSKY_ANTISPAM_TEST_URL: http://127.0.0.1:8877
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: shivammathur/setup-php@d52fc211a0436f8839a587b3b5b8efddab4744ea # v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mysqli, dom, curl, mbstring
+          tools: wp-cli
+          coverage: none
+      - name: Restore the actual previous owned release for upgrade tests
+        run: |
+          git fetch --depth=1 origin 674f4c55713e5f14377ece3f49bfe72f4feefd82
+          mkdir -p "$RKTSKY_ANTISPAM_RENAME_OLD_ROOT"
+          git archive 674f4c55713e5f14377ece3f49bfe72f4feefd82 | tar -x -C "$RKTSKY_ANTISPAM_RENAME_OLD_ROOT"
+          mkdir -m 700 /tmp/rocketsky-antispam-rename-private
+      - name: Install an isolated previous-name upgrade fixture
+        env:
+          ANTISPAM_TEST_WP_VERSION: ${{ matrix.wordpress }}
+          ANTISPAM_TEST_MODE: ${{ matrix.mode }}
+        run: |
+          wp core download --path="$RKTSKY_ANTISPAM_WP_ROOT" --version="$ANTISPAM_TEST_WP_VERSION"
+          wp config create --path="$RKTSKY_ANTISPAM_WP_ROOT" --dbname=rocketsky_antispam_rename --dbuser=root --dbpass=disposable-test-password --dbhost=127.0.0.1:3306
+          wp config set WP_ENVIRONMENT_TYPE local --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          wp config set RKTSKY_ANTISPAM_TEST_FIXTURE true --raw --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          wp config set DISABLE_WP_CRON true --raw --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          wp config set WP_HTTP_BLOCK_EXTERNAL true --raw --path="$RKTSKY_ANTISPAM_WP_ROOT"
+          printf '%s\n' rktsky-antispam-disposable > "$RKTSKY_ANTISPAM_WP_ROOT/.rktsky-antispam-fixture"
+          mkdir -p "$RKTSKY_ANTISPAM_WP_ROOT/wp-content/mu-plugins"
+          printf '%s\n' '<?php add_filter( "pre_wp_mail", "__return_false", PHP_INT_MAX ); add_filter( "pre_http_request", static function () { return new WP_Error( "test_http_blocked", "Disposable fixture." ); }, PHP_INT_MAX );' > "$RKTSKY_ANTISPAM_WP_ROOT/wp-content/mu-plugins/fixture-mail.php"
+          if [ "$ANTISPAM_TEST_MODE" = multisite ]; then
+            wp core multisite-install --path="$RKTSKY_ANTISPAM_WP_ROOT" --url="$RKTSKY_ANTISPAM_TEST_URL" --title='Synthetic name transition network' --admin_user=antispam-fixture --admin_password=disposable-test-password --admin_email=fixture@example.invalid --skip-email
+          else
+            wp core install --path="$RKTSKY_ANTISPAM_WP_ROOT" --url="$RKTSKY_ANTISPAM_TEST_URL" --title='Synthetic name transition site' --admin_user=antispam-fixture --admin_password=disposable-test-password --admin_email=fixture@example.invalid --skip-email
+          fi
+      - name: Verify native data preservation and lifecycle conflicts
+        env:
+          RKTSKY_ANTISPAM_RENAME_NEW_ROOT: ${{ github.workspace }}
+        run: php tests/native-rename.php

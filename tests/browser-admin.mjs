@@ -3,8 +3,8 @@
  *
  * Requires explicit disposable-site authorization, a marked loopback WordPress
  * fixture with mail/HTTP blocked, and synthetic administrator credentials in
- * WP_ANTISPAM_ADMIN_USER / WP_ANTISPAM_ADMIN_PASSWORD. Configure PHP_BINARY,
- * WP_ANTISPAM_PHP_ICONV, WP_ANTISPAM_PHP_SIMPLEXML, PLAYWRIGHT_MODULE and
+ * RKTSKY_ANTISPAM_ADMIN_USER / RKTSKY_ANTISPAM_ADMIN_PASSWORD. Configure PHP_BINARY,
+ * RKTSKY_ANTISPAM_PHP_ICONV, RKTSKY_ANTISPAM_PHP_SIMPLEXML, PLAYWRIGHT_MODULE and
  * PLAYWRIGHT_FIREFOX only when the local test runtime needs them. All browser
  * requests outside the exact fixture origin are denied. Original options stay
  * in memory and are restored through the native Options API in finally.
@@ -18,10 +18,10 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 if (
-	process.env.WP_ANTISPAM_ALLOW_TESTS !== '1' ||
-	!process.env.WP_ANTISPAM_WP_ROOT ||
-	!process.env.WP_ANTISPAM_ADMIN_USER ||
-	!process.env.WP_ANTISPAM_ADMIN_PASSWORD
+	process.env.RKTSKY_ANTISPAM_ALLOW_TESTS !== '1' ||
+	!process.env.RKTSKY_ANTISPAM_WP_ROOT ||
+	!process.env.RKTSKY_ANTISPAM_ADMIN_USER ||
+	!process.env.RKTSKY_ANTISPAM_ADMIN_PASSWORD
 ) {
 	throw new Error(
 		'Explicit disposable fixture authorization and synthetic administrator credentials are required.'
@@ -30,7 +30,7 @@ if (
 const php = process.env.PHP_BINARY || 'php';
 const helper = fileURLToPath(new URL('./admin-browser-state.php', import.meta.url));
 const phpArgs = [];
-for (const key of ['WP_ANTISPAM_PHP_ICONV', 'WP_ANTISPAM_PHP_SIMPLEXML']) {
+for (const key of ['RKTSKY_ANTISPAM_PHP_ICONV', 'RKTSKY_ANTISPAM_PHP_SIMPLEXML']) {
 	if (process.env[key]) phpArgs.push('-d', 'extension=' + process.env[key]);
 }
 
@@ -116,8 +116,8 @@ try {
 		await (dialogMode === 'dismiss' ? dialog.dismiss() : dialog.accept());
 	});
 	await page.goto(identity.login);
-	await page.locator('#user_login').fill(process.env.WP_ANTISPAM_ADMIN_USER);
-	await page.locator('#user_pass').fill(process.env.WP_ANTISPAM_ADMIN_PASSWORD);
+	await page.locator('#user_login').fill(process.env.RKTSKY_ANTISPAM_ADMIN_USER);
+	await page.locator('#user_pass').fill(process.env.RKTSKY_ANTISPAM_ADMIN_PASSWORD);
 	await Promise.all([page.waitForURL(/wp-admin/), page.locator('#wp-submit').click()]);
 	/** Saves the actual form and checks native notice/redirect behavior. @since 0.4.0 @param {string} tab Current task view. @return {Promise<void>} Completed native navigation. */
 	const save = async (tab) => {
@@ -320,8 +320,8 @@ try {
 	} finally {
 		if (seeded) results.restore = state('restore', JSON.stringify(originalSettings));
 		const report =
-			process.env.WP_ANTISPAM_ADMIN_REPORT ||
-			join(tmpdir(), 'wp-antispam-admin-browser-results.json');
+			process.env.RKTSKY_ANTISPAM_ADMIN_REPORT ||
+			join(tmpdir(), 'rocketsky-antispam-admin-browser-results.json');
 		writeFileSync(report, JSON.stringify(results, null, 2) + '\n');
 		if (results.restore)
 			expect(results.restore.restored, 'Original fixture settings were not restored exactly.');

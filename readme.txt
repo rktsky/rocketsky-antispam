@@ -1,9 +1,9 @@
-=== WP Antispam ===
+=== Rocketsky Antispam ===
 Tags: antispam, spam, contact form 7, gravity forms, wpforms
 Requires at least: 6.6
 Requires PHP: 8.2
 Tested up to: 7.1
-Stable tag: 0.5.0
+Stable tag: 0.5.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -11,7 +11,7 @@ Local spam protection for comments and forms. No external spam service, tracking
 
 == Description ==
 
-WP Antispam adds local checks to WordPress comments and registration, Contact Form 7, Gravity Forms, WPForms, Formidable Forms, Fluent Forms, WS Form, Elementor Forms, Divi contact forms and WooCommerce checkout and registration. Choose integrations under Settings → WP Antispam. Form integrations are off by default; existing saved choices are kept. No form edits are needed.
+Rocketsky Antispam adds local checks to WordPress comments and registration, Contact Form 7, Gravity Forms, WPForms, Formidable Forms, Fluent Forms, WS Form, Elementor Forms, Divi contact forms and WooCommerce checkout and registration. Choose integrations under Settings → Rocketsky Antispam. Form integrations are off by default; existing saved choices are kept. No form edits are needed.
 
 Signed tokens, a dynamically named honeypot and atomic one-use checks protect submissions. An optional minimum completion time is disabled by default to accommodate autofill and fast users. Provider validation and existing spam decisions remain in place.
 
@@ -19,7 +19,7 @@ All functionality is included. No account, API key, paid plan or external spam s
 
 = Privacy =
 
-WP Antispam never stores IP addresses, user agents or fingerprints. Its default privacy-conscious mode disables new content storage in its own quarantine, country checks and administrator mail. Native provider spam storage follows that provider's separate settings and retention. Optional local content rules inspect allowlisted fields. With explicit opt-in and privacy-conscious mode disabled, encrypted quarantine can retain selected contact fields for 1–30 days, up to 500 records, with WordPress privacy export and erasure. Password, hidden, payment and file fields are excluded. It sets no cookies and uses no browser storage or telemetry. Its challenge request goes only to the same website and contains a provider ID, form ID and signed public form descriptor.
+Rocketsky Antispam never stores IP addresses, user agents or fingerprints. Its default privacy-conscious mode disables new content storage in its own quarantine, country checks and administrator mail. Native provider spam storage follows that provider's separate settings and retention. Optional local content rules inspect allowlisted fields. With explicit opt-in and privacy-conscious mode disabled, encrypted quarantine can retain selected contact fields for 1–30 days, up to 500 records, with WordPress privacy export and erasure. Password, hidden, payment and file fields are excluded. It sets no cookies and uses no browser storage or telemetry. Its challenge request goes only to the same website and contains a provider ID, form ID and signed public form descriptor.
 
 The plugin stores digests of used random tokens and their expiry timestamps. Tokens expire after two hours. Expired digests are removed by hourly WordPress cron in bounded batches; delayed cron execution can extend physical storage. Local keyword, BBCode and bounded regular-expression rules can protect supported forms. Comment language checks use a local heuristic with an explicit unknown-language policy. Country checks need a local GeoIP source or a header from configured trusted infrastructure; no external IP lookup is performed.
 
@@ -35,15 +35,19 @@ A suggested privacy-policy paragraph is available through WordPress's privacy-po
 
 Protected forms require JavaScript and a working local REST API. REST comment creation requires protection tokens too. Native pingbacks and trackbacks are off by default and can be explicitly allowed outside privacy-conscious mode. WordPress may request the remote source and forward the sender IP for pingback verification. Multisite supports individual and network activation with separate site settings and storage.
 
-This is a 0.5.0 development candidate. Browser-capable bots can obtain valid tokens; this plugin cannot guarantee human submissions or prevent volumetric attacks. See the source repository's verification and integration documentation before production use.
+This is a 0.5.1 development candidate. Browser-capable bots can obtain valid tokens; this plugin cannot guarantee human submissions or prevent volumetric attacks. See the source repository's verification and integration documentation before production use.
 
-Source and verification: https://github.com/rktsky/wp-antispam
+Source and verification: https://github.com/rktsky/rocketsky-antispam
 
 == Installation ==
 
-1. Install the wp-antispam directory in wp-content/plugins and activate WP Antispam.
-2. Open Settings → WP Antispam → Integrations and choose the providers you use.
+1. Install the rocketsky-antispam directory in wp-content/plugins and activate Rocketsky Antispam.
+2. Open Settings → Rocketsky Antispam → Integrations and choose the providers you use.
 3. Save and test a normal submission and an error/retry case on your website.
+
+= Updating from the previous name =
+
+For the 0.5.1 name change, install the rocketsky-antispam directory, deactivate the previous WP Antispam installation without deleting or uninstalling it, then activate Rocketsky Antispam in the same scope. Existing settings, statistics, encrypted quarantine and reviewed decisions are reused. In Multisite, deactivate all previous individual activations before switching to network activation. Remove obsolete plugin files through the hosting file manager after verifying the switch; an older copy's WordPress Delete action can erase shared data. Do not rename database tables or change WordPress salts for this transition. Custom language files outside the plugin need the new rocketsky-antispam text domain.
 
 == Frequently Asked Questions ==
 
@@ -53,7 +57,7 @@ No. Supported native forms receive protection through their provider's hooks.
 
 = Where can I review rejected submissions? =
 
-Open Settings → WP Antispam → Review spam. Each active integration links to its native spam queue or to WP Antispam quarantine. Relevant provider administration pages also show local protection and storage guidance. Quarantine must be enabled before it can retain selected rejected message fields; earlier discarded submissions cannot be recovered. Invalid technical proofs stop before native entry creation. Account and checkout contents are not quarantined.
+Open Settings → Rocketsky Antispam → Review spam. Each active integration links to its native spam queue or to Rocketsky Antispam quarantine. Relevant provider administration pages also show local protection and storage guidance. Quarantine must be enabled before it can retain selected rejected message fields; earlier discarded submissions cannot be recovered. Invalid technical proofs stop before native entry creation. Account and checkout contents are not quarantined.
 
 = Are other plugins' external services disabled? =
 
@@ -68,6 +72,11 @@ No. Used tokens remain protected until expiry.
 Own tables and options are removed by default. You can opt to keep plugin data before uninstalling.
 
 == Changelog ==
+
+= 0.5.1 =
+* Rename the plugin, installation slug, text domain and bundled translations to Rocketsky Antispam.
+* Preserve settings, retained entries, statistics, encryption and feedback references.
+* Prevent conflicting activation and destructive removal of a previous installation sharing the same data.
 
 = 0.5.0 =
 * Use native spam queues for verified content rejections where supported, with direct review links and contextual protection notices.

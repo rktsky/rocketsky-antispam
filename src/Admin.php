@@ -110,10 +110,10 @@ final class Admin {
 	 */
 	public function menu(): void {
 		$this->screen_hook = (string) add_options_page(
-			__( 'WP Antispam', 'wp-antispam' ),
-			__( 'WP Antispam', 'wp-antispam' ),
+			__( 'Rocketsky Antispam', 'rocketsky-antispam' ),
+			__( 'Rocketsky Antispam', 'rocketsky-antispam' ),
 			'manage_options',
-			'wp-antispam',
+			'rocketsky-antispam',
 			array( $this, 'render' )
 		);
 	}
@@ -150,7 +150,7 @@ final class Admin {
 	 * @return string[] Existing links with the local settings link prepended.
 	 */
 	public function action_links( array $links ): array {
-		array_unshift( $links, '<a href="' . esc_url( admin_url( 'options-general.php?page=wp-antispam&tab=settings' ) ) . '">' . esc_html__( 'Settings', 'wp-antispam' ) . '</a>' );
+		array_unshift( $links, '<a href="' . esc_url( admin_url( 'options-general.php?page=rocketsky-antispam&tab=settings' ) ) . '">' . esc_html__( 'Settings', 'rocketsky-antispam' ) . '</a>' );
 		return $links;
 	}
 
@@ -171,15 +171,15 @@ final class Admin {
 		}
 		$options       = $this->settings->all();
 		$tabs          = array(
-			'overview'     => __( 'Overview', 'wp-antispam' ),
-			'integrations' => __( 'Integrations', 'wp-antispam' ),
-			'rules'        => __( 'Filter rules', 'wp-antispam' ),
-			'quarantine'   => __( 'Review spam', 'wp-antispam' ),
-			'settings'     => __( 'Settings', 'wp-antispam' ),
+			'overview'     => __( 'Overview', 'rocketsky-antispam' ),
+			'integrations' => __( 'Integrations', 'rocketsky-antispam' ),
+			'rules'        => __( 'Filter rules', 'rocketsky-antispam' ),
+			'quarantine'   => __( 'Review spam', 'rocketsky-antispam' ),
+			'settings'     => __( 'Settings', 'rocketsky-antispam' ),
 		);
 		$requested_tab = isset( $_GET['tab'] ) && is_string( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only allowlisted navigation.
 		$tab           = isset( $tabs[ $requested_tab ] ) ? $requested_tab : 'overview';
-		$base_url      = admin_url( 'options-general.php?page=wp-antispam' );
+		$base_url      = admin_url( 'options-general.php?page=rocketsky-antispam' );
 		$view_urls     = array();
 		foreach ( array_keys( $tabs ) as $view ) {
 			$view_urls[ $view ] = add_query_arg( 'tab', $view, $base_url );
@@ -200,13 +200,13 @@ final class Admin {
 				$rule_lists[ $key ] = is_array( $value ) ? implode( 'countries' === $key ? ', ' : "\n", $value ) : (string) $value;
 			}
 			$languages         = array(
-				'de' => __( 'German', 'wp-antispam' ),
-				'en' => __( 'English', 'wp-antispam' ),
-				'fr' => __( 'French', 'wp-antispam' ),
-				'it' => __( 'Italian', 'wp-antispam' ),
-				'es' => __( 'Spanish', 'wp-antispam' ),
-				'nl' => __( 'Dutch', 'wp-antispam' ),
-				'pt' => __( 'Portuguese', 'wp-antispam' ),
+				'de' => __( 'German', 'rocketsky-antispam' ),
+				'en' => __( 'English', 'rocketsky-antispam' ),
+				'fr' => __( 'French', 'rocketsky-antispam' ),
+				'it' => __( 'Italian', 'rocketsky-antispam' ),
+				'es' => __( 'Spanish', 'rocketsky-antispam' ),
+				'nl' => __( 'Dutch', 'rocketsky-antispam' ),
+				'pt' => __( 'Portuguese', 'rocketsky-antispam' ),
 			);
 			$country_available = class_exists( Country::class ) && ( new Country( $this->settings ) )->available();
 			require dirname( RKTSKY_ANTISPAM_FILE ) . '/templates/rules.php';
@@ -215,7 +215,7 @@ final class Admin {
 		$reason_labels = $this->reason_labels();
 		if ( 'quarantine' === $tab ) {
 			if ( null === $this->quarantine ) {
-				wp_die( esc_html__( 'Quarantine storage is unavailable.', 'wp-antispam' ), '', array( 'response' => 503 ) );
+				wp_die( esc_html__( 'Quarantine storage is unavailable.', 'rocketsky-antispam' ), '', array( 'response' => 503 ) );
 			}
 			$entry_id        = $this->query_id( 'entry' );
 			$entry           = $entry_id > 0 ? $this->quarantine->read( $entry_id ) : null;
@@ -280,51 +280,51 @@ final class Admin {
 		$labels       = Providers::labels();
 		$integrations = array(
 			'comments'        => array(
-				'detail' => __( 'Protects native WordPress comments. Pingbacks and trackbacks have separate settings.', 'wp-antispam' ),
+				'detail' => __( 'Protects native WordPress comments. Pingbacks and trackbacks have separate settings.', 'rocketsky-antispam' ),
 				'mark'   => 'W',
 			),
 			'registration'    => array(
-				'detail' => __( 'Checks native account registration before accounts or activation emails are created. No account fields are retained.', 'wp-antispam' ),
+				'detail' => __( 'Checks native account registration before accounts or activation emails are created. No account fields are retained.', 'rocketsky-antispam' ),
 				'mark'   => 'W',
 			),
 			'cf7'             => array(
-				'detail' => __( 'Adds protection through the native form and spam hooks.', 'wp-antispam' ),
+				'detail' => __( 'Adds protection through the native form and spam hooks.', 'rocketsky-antispam' ),
 				'mark'   => 'C7',
 			),
 			'gravityforms'    => array(
-				'detail' => __( 'Validates submissions before entries, drafts and notifications are created.', 'wp-antispam' ),
+				'detail' => __( 'Validates submissions before entries, drafts and notifications are created.', 'rocketsky-antispam' ),
 				'mark'   => 'G',
 			),
 			'wpforms'         => array(
-				'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ),
+				'detail' => __( 'Checks submissions before the form is processed.', 'rocketsky-antispam' ),
 				'mark'   => 'WP',
 			),
 			'formidable'      => array(
-				'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ),
+				'detail' => __( 'Checks submissions before the form is processed.', 'rocketsky-antispam' ),
 				'mark'   => 'F',
 			),
 			'fluentforms'     => array(
-				'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ),
+				'detail' => __( 'Checks submissions before the form is processed.', 'rocketsky-antispam' ),
 				'mark'   => 'FF',
 			),
 			'wsform'          => array(
-				'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ),
+				'detail' => __( 'Checks submissions before the form is processed.', 'rocketsky-antispam' ),
 				'mark'   => 'WS',
 			),
 			'elementor'       => array(
-				'detail' => __( 'Checks submissions before the form is processed.', 'wp-antispam' ),
+				'detail' => __( 'Checks submissions before the form is processed.', 'rocketsky-antispam' ),
 				'mark'   => 'E',
 			),
 			'divi'            => array(
-				'detail' => __( 'Uses technical checks for Divi 4 and 5 contact forms. Content rules and quarantine are excluded.', 'wp-antispam' ),
+				'detail' => __( 'Uses technical checks for Divi 4 and 5 contact forms. Content rules and quarantine are excluded.', 'rocketsky-antispam' ),
 				'mark'   => 'D',
 			),
 			'wc_checkout'     => array(
-				'detail' => __( 'Checks classic and block checkout before final processing or payment. Content rules and quarantine are excluded.', 'wp-antispam' ),
+				'detail' => __( 'Checks classic and block checkout before final processing or payment. Content rules and quarantine are excluded.', 'rocketsky-antispam' ),
 				'mark'   => 'WC',
 			),
 			'wc_registration' => array(
-				'detail' => __( 'Protects registration on My Account. Account creation during checkout uses checkout protection. No account fields are retained.', 'wp-antispam' ),
+				'detail' => __( 'Protects registration on My Account. Account creation during checkout uses checkout protection. No account fields are retained.', 'rocketsky-antispam' ),
 				'mark'   => 'WC',
 			),
 		);
@@ -338,11 +338,11 @@ final class Admin {
 				'providers' => array( 'comments', 'registration' ),
 			),
 			array(
-				'label'     => __( 'Form plugins', 'wp-antispam' ),
+				'label'     => __( 'Form plugins', 'rocketsky-antispam' ),
 				'providers' => array( 'cf7', 'gravityforms', 'wpforms', 'formidable', 'fluentforms', 'wsform' ),
 			),
 			array(
-				'label'     => __( 'Page builders', 'wp-antispam' ),
+				'label'     => __( 'Page builders', 'rocketsky-antispam' ),
 				'providers' => array( 'elementor', 'divi' ),
 			),
 			array(
@@ -392,24 +392,24 @@ final class Admin {
 	 */
 	private function reason_labels(): array {
 		return array(
-			'honeypot'      => __( 'Honeypot filled', 'wp-antispam' ),
-			'missing'       => __( 'Missing protection token', 'wp-antispam' ),
-			'invalid'       => __( 'Invalid protection token', 'wp-antispam' ),
-			'expired'       => __( 'Expired protection token', 'wp-antispam' ),
-			'replay'        => __( 'Token already used', 'wp-antispam' ),
-			'too_fast'      => __( 'Submitted too quickly', 'wp-antispam' ),
-			'pingback'      => __( 'Trackback or pingback', 'wp-antispam' ),
-			'storage'       => __( 'Protection storage unavailable', 'wp-antispam' ),
-			'malformed'     => __( 'Malformed protection fields', 'wp-antispam' ),
-			'context'       => __( 'Form does not match token', 'wp-antispam' ),
-			'rest'          => __( 'Unprotected comment request', 'wp-antispam' ),
-			'keyword'       => __( 'Blocked keyword', 'wp-antispam' ),
-			'bbcode'        => __( 'BBCode link markup', 'wp-antispam' ),
-			'pattern'       => __( 'Matched content pattern', 'wp-antispam' ),
-			'pattern_limit' => __( 'Content rule processing limit', 'wp-antispam' ),
-			'native_spam'   => __( 'Native provider spam check', 'wp-antispam' ),
-			'language'      => __( 'Comment language rule', 'wp-antispam' ),
-			'country'       => __( 'Comment country rule', 'wp-antispam' ),
+			'honeypot'      => __( 'Honeypot filled', 'rocketsky-antispam' ),
+			'missing'       => __( 'Missing protection token', 'rocketsky-antispam' ),
+			'invalid'       => __( 'Invalid protection token', 'rocketsky-antispam' ),
+			'expired'       => __( 'Expired protection token', 'rocketsky-antispam' ),
+			'replay'        => __( 'Token already used', 'rocketsky-antispam' ),
+			'too_fast'      => __( 'Submitted too quickly', 'rocketsky-antispam' ),
+			'pingback'      => __( 'Trackback or pingback', 'rocketsky-antispam' ),
+			'storage'       => __( 'Protection storage unavailable', 'rocketsky-antispam' ),
+			'malformed'     => __( 'Malformed protection fields', 'rocketsky-antispam' ),
+			'context'       => __( 'Form does not match token', 'rocketsky-antispam' ),
+			'rest'          => __( 'Unprotected comment request', 'rocketsky-antispam' ),
+			'keyword'       => __( 'Blocked keyword', 'rocketsky-antispam' ),
+			'bbcode'        => __( 'BBCode link markup', 'rocketsky-antispam' ),
+			'pattern'       => __( 'Matched content pattern', 'rocketsky-antispam' ),
+			'pattern_limit' => __( 'Content rule processing limit', 'rocketsky-antispam' ),
+			'native_spam'   => __( 'Native provider spam check', 'rocketsky-antispam' ),
+			'language'      => __( 'Comment language rule', 'rocketsky-antispam' ),
+			'country'       => __( 'Comment country rule', 'rocketsky-antispam' ),
 		);
 	}
 
@@ -436,24 +436,24 @@ final class Admin {
 	 */
 	public function delete_quarantine(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to change these settings.', 'wp-antispam' ), '', array( 'response' => 403 ) );
+			wp_die( esc_html__( 'You do not have permission to change these settings.', 'rocketsky-antispam' ), '', array( 'response' => 403 ) );
 		}
 		if ( ! isset( $_SERVER['REQUEST_METHOD'] ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
-			wp_die( esc_html__( 'This action requires a form submission.', 'wp-antispam' ), '', array( 'response' => 405 ) );
+			wp_die( esc_html__( 'This action requires a form submission.', 'rocketsky-antispam' ), '', array( 'response' => 405 ) );
 		}
 		$entry_id = isset( $_POST['entry'] ) && is_string( $_POST['entry'] ) ? sanitize_text_field( wp_unslash( $_POST['entry'] ) ) : '';
 		if ( ! preg_match( '/^[1-9][0-9]{0,8}$/D', $entry_id ) ) {
-			wp_die( esc_html__( 'The quarantine record is unavailable.', 'wp-antispam' ), '', array( 'response' => 400 ) );
+			wp_die( esc_html__( 'The quarantine record is unavailable.', 'rocketsky-antispam' ), '', array( 'response' => 400 ) );
 		}
 		check_admin_referer( 'rktsky_antispam_quarantine_delete_' . $entry_id );
 		if ( null === $this->quarantine ) {
-			wp_die( esc_html__( 'Quarantine storage is unavailable.', 'wp-antispam' ), '', array( 'response' => 503 ) );
+			wp_die( esc_html__( 'Quarantine storage is unavailable.', 'rocketsky-antispam' ), '', array( 'response' => 503 ) );
 		}
 		$deleted = $this->quarantine->delete( (int) $entry_id );
 		wp_safe_redirect(
 			add_query_arg(
 				array(
-					'page'           => 'wp-antispam',
+					'page'           => 'rocketsky-antispam',
 					'tab'            => 'quarantine',
 					'record-deleted' => $deleted ? '1' : '0',
 				),
@@ -474,15 +474,15 @@ final class Admin {
 	 */
 	public function review(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to change these settings.', 'wp-antispam' ), '', array( 'response' => 403 ) );
+			wp_die( esc_html__( 'You do not have permission to change these settings.', 'rocketsky-antispam' ), '', array( 'response' => 403 ) );
 		}
 		if ( ! isset( $_SERVER['REQUEST_METHOD'] ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
-			wp_die( esc_html__( 'This action requires a form submission.', 'wp-antispam' ), '', array( 'response' => 405 ) );
+			wp_die( esc_html__( 'This action requires a form submission.', 'rocketsky-antispam' ), '', array( 'response' => 405 ) );
 		}
 		$entry_id   = isset( $_POST['entry'] ) && is_string( $_POST['entry'] ) ? sanitize_text_field( wp_unslash( $_POST['entry'] ) ) : '';
 		$assessment = isset( $_POST['assessment'] ) && is_string( $_POST['assessment'] ) ? sanitize_key( wp_unslash( $_POST['assessment'] ) ) : '';
 		if ( ! preg_match( '/^[1-9][0-9]{0,8}$/D', $entry_id ) || ! in_array( $assessment, array( 'spam', 'normal' ), true ) ) {
-			wp_die( esc_html__( 'The quarantine record is unavailable.', 'wp-antispam' ), '', array( 'response' => 400 ) );
+			wp_die( esc_html__( 'The quarantine record is unavailable.', 'rocketsky-antispam' ), '', array( 'response' => 400 ) );
 		}
 		check_admin_referer( 'rktsky_antispam_review_' . $entry_id );
 		$entry    = $this->quarantine ? $this->quarantine->read( (int) $entry_id ) : null;
@@ -490,7 +490,7 @@ final class Admin {
 		wp_safe_redirect(
 			add_query_arg(
 				array(
-					'page'           => 'wp-antispam',
+					'page'           => 'rocketsky-antispam',
 					'tab'            => 'quarantine',
 					'entry'          => $entry_id,
 					'review-updated' => $reviewed ? '1' : '0',
@@ -513,10 +513,10 @@ final class Admin {
 	 */
 	public function classify_delivered(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to change these settings.', 'wp-antispam' ), '', array( 'response' => 403 ) );
+			wp_die( esc_html__( 'You do not have permission to change these settings.', 'rocketsky-antispam' ), '', array( 'response' => 403 ) );
 		}
 		if ( ! isset( $_SERVER['REQUEST_METHOD'] ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
-			wp_die( esc_html__( 'This action requires a form submission.', 'wp-antispam' ), '', array( 'response' => 405 ) );
+			wp_die( esc_html__( 'This action requires a form submission.', 'rocketsky-antispam' ), '', array( 'response' => 405 ) );
 		}
 		check_admin_referer( 'rktsky_antispam_classify_delivered' );
 		$provider   = isset( $_POST['provider'] ) && is_string( $_POST['provider'] ) ? sanitize_key( wp_unslash( $_POST['provider'] ) ) : '';
@@ -531,7 +531,7 @@ final class Admin {
 		wp_safe_redirect(
 			add_query_arg(
 				array(
-					'page'  => 'wp-antispam',
+					'page'  => 'rocketsky-antispam',
 					'tab'   => 'quarantine',
 					$notice => $recorded ? '1' : '0',
 				),
@@ -552,14 +552,14 @@ final class Admin {
 	 */
 	public function clear(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to change these settings.', 'wp-antispam' ), '', array( 'response' => 403 ) );
+			wp_die( esc_html__( 'You do not have permission to change these settings.', 'rocketsky-antispam' ), '', array( 'response' => 403 ) );
 		}
 		if ( ! isset( $_SERVER['REQUEST_METHOD'] ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
-			wp_die( esc_html__( 'This action requires a form submission.', 'wp-antispam' ), '', array( 'response' => 405 ) );
+			wp_die( esc_html__( 'This action requires a form submission.', 'rocketsky-antispam' ), '', array( 'response' => 405 ) );
 		}
 		check_admin_referer( 'rktsky_antispam_clear' );
 		$this->store->clear();
-		wp_safe_redirect( admin_url( 'options-general.php?page=wp-antispam&tab=settings&statistics-cleared=1' ) );
+		wp_safe_redirect( admin_url( 'options-general.php?page=rocketsky-antispam&tab=settings&statistics-cleared=1' ) );
 		exit;
 	}
 }

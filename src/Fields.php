@@ -95,7 +95,7 @@ final class Fields {
 		$form_id  = (string) $request->get_param( 'form' );
 		$intent   = (string) $request->get_param( 'intent' );
 		if ( ! $this->settings->enabled( $provider ) || ! $this->token->valid_intent( $intent, $provider, $form_id ) ) {
-			return new \WP_Error( 'rktsky_antispam_scope', __( 'The form protection is unavailable. Please reload the page.', 'wp-antispam' ), array( 'status' => 403 ) );
+			return new \WP_Error( 'rktsky_antispam_scope', __( 'The form protection is unavailable. Please reload the page.', 'rocketsky-antispam' ), array( 'status' => 403 ) );
 		}
 		$proof            = $this->token->issue( $provider, $form_id );
 		$proof['minimum'] = $this->settings->all()['minimum_seconds'];

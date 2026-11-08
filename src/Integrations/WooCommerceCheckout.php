@@ -164,7 +164,7 @@ final class WooCommerceCheckout extends Adapter {
 		if ( '' !== $this->guard->check( 'wc_checkout', 'pay_' . $order->get_id(), $this->protection_controls(), array(), true ) ) {
 			wp_die(
 				esc_html( $this->guard->message() ),
-				esc_html__( 'Payment not submitted', 'wp-antispam' ),
+				esc_html__( 'Payment not submitted', 'rocketsky-antispam' ),
 				array(
 					'response'  => 403,
 					'back_link' => true,

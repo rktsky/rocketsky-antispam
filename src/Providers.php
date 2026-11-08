@@ -92,8 +92,8 @@ final class Providers {
 	 */
 	public static function labels(): array {
 		return array(
-			'comments'        => __( 'WordPress comments', 'wp-antispam' ),
-			'registration'    => __( 'WordPress registration', 'wp-antispam' ),
+			'comments'        => __( 'WordPress comments', 'rocketsky-antispam' ),
+			'registration'    => __( 'WordPress registration', 'rocketsky-antispam' ),
 			'cf7'             => 'Contact Form 7',
 			'gravityforms'    => 'Gravity Forms',
 			'wpforms'         => 'WPForms',
@@ -101,9 +101,9 @@ final class Providers {
 			'fluentforms'     => 'Fluent Forms',
 			'wsform'          => 'WS Form',
 			'elementor'       => 'Elementor Forms',
-			'divi'            => __( 'Divi contact form', 'wp-antispam' ),
-			'wc_checkout'     => __( 'WooCommerce checkout', 'wp-antispam' ),
-			'wc_registration' => __( 'WooCommerce registration', 'wp-antispam' ),
+			'divi'            => __( 'Divi contact form', 'rocketsky-antispam' ),
+			'wc_checkout'     => __( 'WooCommerce checkout', 'rocketsky-antispam' ),
+			'wc_registration' => __( 'WooCommerce registration', 'rocketsky-antispam' ),
 		);
 	}
 }

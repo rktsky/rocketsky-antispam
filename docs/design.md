@@ -1,6 +1,6 @@
 # Administration experience
 
-WP Antispam has one entry under WordPress Settings and five linked views. Each
+Rocketsky Antispam has one entry under WordPress Settings and five linked views. Each
 view has a specific task; opening one does not require a client-side router.
 Core navigation, notices and authorization remain native. The plugin stylesheet
 is scoped to its own screen, uses system fonts and requests no external assets.
@@ -51,7 +51,7 @@ discovery of an actual form or a guarantee that every rejected request is spam.
 
 The current native menu capability controls visibility, including customized
 provider roles. Comment moderators use `moderate_comments`. Native inbox links
-also require that destination's menu capability. WP Antispam settings, activity
+also require that destination's menu capability. Rocketsky Antispam settings, activity
 and encrypted quarantine links remain limited to `manage_options`; a form
 manager without that permission receives explanatory text without an inaccessible
 link. No entries, contents or spam counts are queried. Only a small scoped
@@ -66,7 +66,7 @@ provider's notice-filtering policy or its original files.
 One shared presentation service supplies integration rows, the review directory
 and notices. It distinguishes native spam handling, per-form WS Form retention,
 optional local quarantine and technical-only rejections. With quarantine off,
-the interface explicitly states that WP Antispam retains no rejected message
+the interface explicitly states that Rocketsky Antispam retains no rejected message
 contents. Native provider storage remains independent of privacy-conscious mode.
 Integration rows use a short destination-specific explanation; encryption,
 capture limits and retention policy are explained once on the review page.

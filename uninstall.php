@@ -8,6 +8,11 @@
 
 defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 
+if ( ! class_exists( Rktsky\Antispam\Installation::class, false ) ) {
+	require_once __DIR__ . '/src/Installation.php';
+}
+( new Rktsky\Antispam\Installation( __DIR__ . '/rocketsky-antispam.php' ) )->uninstall();
+
 /**
  * Drops owned tables and options, preserving sites that opted to retain their data.
  *

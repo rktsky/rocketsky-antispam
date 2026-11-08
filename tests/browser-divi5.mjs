@@ -10,18 +10,18 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { randomBytes } from 'node:crypto';
 
-const root = process.env.WP_ANTISPAM_WP_ROOT;
+const root = process.env.RKTSKY_ANTISPAM_WP_ROOT;
 if (
-	process.env.WP_ANTISPAM_ALLOW_TESTS !== '1' ||
+	process.env.RKTSKY_ANTISPAM_ALLOW_TESTS !== '1' ||
 	!root ||
 	readFileSync(root + '/.rktsky-antispam-fixture', 'utf8').trim() !== 'rktsky-antispam-disposable'
 ) {
 	throw new Error('Explicit disposable native fixture authorization is required.');
 }
 const php = process.env.PHP_BINARY || 'php';
-const cli = process.env.WP_ANTISPAM_WP_CLI;
+const cli = process.env.RKTSKY_ANTISPAM_WP_CLI;
 const phpArgs = [];
-for (const name of ['WP_ANTISPAM_PHP_ICONV', 'WP_ANTISPAM_PHP_SIMPLEXML']) {
+for (const name of ['RKTSKY_ANTISPAM_PHP_ICONV', 'RKTSKY_ANTISPAM_PHP_SIMPLEXML']) {
 	if (process.env[name]) {
 		phpArgs.push('-d', 'extension=' + process.env[name]);
 	}
@@ -46,7 +46,7 @@ if (base !== 'http://127.0.0.1:8885') {
 const safety = JSON.parse(
 	wp(
 		'eval',
-		'echo wp_json_encode(array("local"=>wp_get_environment_type(),"fixture"=>defined("WP_ANTISPAM_TEST_FIXTURE")&&WP_ANTISPAM_TEST_FIXTURE,"observer"=>function_exists("rktsky_divi5_event"),"mail"=>false!==has_filter("pre_wp_mail","__return_true")&&false!==has_filter("pre_wp_mail","rktsky_divi5_fixture_mail"),"http"=>false!==has_filter("pre_http_request","rktsky_divi5_fixture_http"),"log"=>defined("RKTSKY_DIVI5_FIXTURE_LOG")?RKTSKY_DIVI5_FIXTURE_LOG:null));'
+		'echo wp_json_encode(array("local"=>wp_get_environment_type(),"fixture"=>defined("RKTSKY_ANTISPAM_TEST_FIXTURE")&&RKTSKY_ANTISPAM_TEST_FIXTURE,"observer"=>function_exists("rktsky_divi5_event"),"mail"=>false!==has_filter("pre_wp_mail","__return_true")&&false!==has_filter("pre_wp_mail","rktsky_divi5_fixture_mail"),"http"=>false!==has_filter("pre_http_request","rktsky_divi5_fixture_http"),"log"=>defined("RKTSKY_DIVI5_FIXTURE_LOG")?RKTSKY_DIVI5_FIXTURE_LOG:null));'
 	)
 );
 if (
@@ -185,7 +185,7 @@ async function accepted(page, label, mail = 1) {
 }
 
 try {
-	for (const minimum of process.env.WP_ANTISPAM_DIVI5_EXTENDED_ONLY === '1' ? [] : [0, 2]) {
+	for (const minimum of process.env.RKTSKY_ANTISPAM_DIVI5_EXTENDED_ONLY === '1' ? [] : [0, 2]) {
 		wp(
 			'option',
 			'update',
@@ -566,8 +566,8 @@ try {
 		cases: results
 	};
 	writeFileSync(
-		process.env.WP_ANTISPAM_BROWSER_REPORT ||
-			(process.env.WP_ANTISPAM_DIVI5_EXTENDED_ONLY === '1'
+		process.env.RKTSKY_ANTISPAM_BROWSER_REPORT ||
+			(process.env.RKTSKY_ANTISPAM_DIVI5_EXTENDED_ONLY === '1'
 				? '/tmp/rktsky-antispam-divi/browser-divi5-extended-results.json'
 				: '/tmp/rktsky-antispam-divi/browser-divi5-results.json'),
 		JSON.stringify(report, null, 2) + '\n'

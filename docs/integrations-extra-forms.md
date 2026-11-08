@@ -57,8 +57,8 @@ Die nativen Pfade sind Formidables vollständiges `FrmEntriesController::process
 Zusätzlich geprüft in echtem Headless-Firefox 153 auf der separaten lokalen Testseite: Alle drei Originalrenderer besitzen je einen befüllten Schutzcontainer. WS Forms tatsächliches `form_reload()` baut den Canvas neu auf; danach existieren genau ein Container und ein frischer Token. Eine gefüllte Trap führt zu sichtbarer nativer Ablehnung, der anschliessende frische Retry wird angenommen. Die Fehleraktion verwendet ausdrücklich den booleschen Wert `form_hide=false`; ein String wie `off` wäre im nativen Client wahr und würde das Formular verbergen. Fluent zeigt seine native Fehlermeldung mit Status 423 und nimmt den frischen Retry mit Status 200 an. Dabei bleibt Fluents eigene Submitdrossel von 1'500 ms unverändert. In diesen Browserfällen traten keine JavaScript-Ausnahmen auf.
 
 ```sh
-WP_ANTISPAM_ALLOW_TESTS=1 WP_ANTISPAM_WP_ROOT=/path/to/disposable/wordpress php tests/setup-extra-forms.php
-WP_ANTISPAM_ALLOW_TESTS=1 WP_ANTISPAM_WP_ROOT=/path/to/disposable/wordpress php tests/native-extra-forms.php
+RKTSKY_ANTISPAM_ALLOW_TESTS=1 RKTSKY_ANTISPAM_WP_ROOT=/path/to/disposable/wordpress php tests/setup-extra-forms.php
+RKTSKY_ANTISPAM_ALLOW_TESTS=1 RKTSKY_ANTISPAM_WP_ROOT=/path/to/disposable/wordpress php tests/native-extra-forms.php
 ```
 
 Diese neuen Adapter beobachten nicht automatisch nachträgliche native Spamklassifikationen gespeicherter Anbieterobjekte. Für Qualitätskennzahlen bleiben ausdrücklich bewertete eigene Quarantänefälle und die im Interface angebotenen manuellen Fallzuordnungen massgeblich. Andere Anbieter speichern Inhalte unabhängig von unseren Einstellungen und Löschfristen.

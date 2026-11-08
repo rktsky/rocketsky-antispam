@@ -4,11 +4,11 @@
  * Every request is intercepted on a synthetic loopback origin. No WordPress,
  * message delivery, visitor payload or external network service is involved.
  * Install Playwright in a temporary development directory and set
- * WP_ANTISPAM_PLAYWRIGHT to its index.mjs when it is not locally resolvable.
+ * RKTSKY_ANTISPAM_PLAYWRIGHT to its index.mjs when it is not locally resolvable.
  *
  * @since 0.3.0
  */
-const { firefox } = await import(process.env.WP_ANTISPAM_PLAYWRIGHT || 'playwright');
+const { firefox } = await import(process.env.RKTSKY_ANTISPAM_PLAYWRIGHT || 'playwright');
 import { readFileSync } from 'node:fs';
 const asset = readFileSync(new URL('../assets/protection.js', import.meta.url), 'utf8');
 const browser = await firefox.launch({ headless: true });

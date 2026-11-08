@@ -23,51 +23,51 @@ require __DIR__ . '/admin-header.php';
 	<?php
 	if ( isset( $_GET['record-deleted'] ) && '1' === $_GET['record-deleted'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only fixed success notice, never a mutation.
 		?>
-		<div class="notice notice-success inline"><p><?php esc_html_e( 'Quarantine record deleted.', 'wp-antispam' ); ?></p></div>
+		<div class="notice notice-success inline"><p><?php esc_html_e( 'Quarantine record deleted.', 'rocketsky-antispam' ); ?></p></div>
 		<?php
 	elseif ( isset( $_GET['record-deleted'] ) && '0' === $_GET['record-deleted'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only fixed failure notice, never a mutation.
 		?>
-		<div class="notice notice-error inline"><p><?php esc_html_e( 'The record is no longer available or could not be deleted.', 'wp-antispam' ); ?></p></div>
+		<div class="notice notice-error inline"><p><?php esc_html_e( 'The record is no longer available or could not be deleted.', 'rocketsky-antispam' ); ?></p></div>
 	<?php endif; ?>
 	<?php
 	if ( isset( $_GET['review-updated'] ) && '1' === $_GET['review-updated'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only fixed review notice.
 		?>
-		<div class="notice notice-success inline"><p><?php esc_html_e( 'Review saved. The submission remains in quarantine.', 'wp-antispam' ); ?></p></div>
+		<div class="notice notice-success inline"><p><?php esc_html_e( 'Review saved. The submission remains in quarantine.', 'rocketsky-antispam' ); ?></p></div>
 		<?php
 	elseif ( isset( $_GET['review-updated'] ) && '0' === $_GET['review-updated'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only fixed failure notice.
 		?>
-		<div class="notice notice-error inline"><p><?php esc_html_e( 'This record could not be reviewed. It may have expired or have no tracked prediction.', 'wp-antispam' ); ?></p></div>
+		<div class="notice notice-error inline"><p><?php esc_html_e( 'This record could not be reviewed. It may have expired or have no tracked prediction.', 'rocketsky-antispam' ); ?></p></div>
 	<?php endif; ?>
 	<?php
 	if ( isset( $_GET['classification-saved'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Fixed read-only action result; query input is never reflected.
 		$rktsky_antispam_classification_saved = '1' === $_GET['classification-saved']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Strict comparison selects static read-only text only.
 		?>
-		<div class="notice <?php echo $rktsky_antispam_classification_saved ? 'notice-success' : 'notice-error'; ?> inline"><p><?php echo esc_html( $rktsky_antispam_classification_saved ? __( 'Classification saved. Reusing the same reference updates the existing case.', 'wp-antispam' ) : __( 'The case action could not be completed. Check the reference and try again.', 'wp-antispam' ) ); ?></p></div>
+		<div class="notice <?php echo $rktsky_antispam_classification_saved ? 'notice-success' : 'notice-error'; ?> inline"><p><?php echo esc_html( $rktsky_antispam_classification_saved ? __( 'Classification saved. Reusing the same reference updates the existing case.', 'rocketsky-antispam' ) : __( 'The case action could not be completed. Check the reference and try again.', 'rocketsky-antispam' ) ); ?></p></div>
 	<?php endif; ?>
 	<?php if ( isset( $_GET['reference-forgotten'] ) && '1' === $_GET['reference-forgotten'] ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Static read-only success notice. ?>
-		<div class="notice notice-success inline"><p><?php esc_html_e( 'Case reference forgotten. Reviewed counts retain their evaluation window.', 'wp-antispam' ); ?></p></div>
+		<div class="notice notice-success inline"><p><?php esc_html_e( 'Case reference forgotten. Reviewed counts retain their evaluation window.', 'rocketsky-antispam' ); ?></p></div>
 	<?php endif; ?>
 	<?php if ( $entry_id > 0 ) : ?>
-		<a href="<?php echo esc_url( $quarantine_url ); ?>" class="rktsky-antispam__back-link">← <?php esc_html_e( 'Back to rejected submissions', 'wp-antispam' ); ?></a>
+		<a href="<?php echo esc_url( $quarantine_url ); ?>" class="rktsky-antispam__back-link">← <?php esc_html_e( 'Back to rejected submissions', 'rocketsky-antispam' ); ?></a>
 		<?php if ( null === $entry ) : ?>
-			<section class="rktsky-antispam__card rktsky-antispam__quarantine-empty"><h2><?php esc_html_e( 'This record is unavailable', 'wp-antispam' ); ?></h2><p><?php esc_html_e( 'It may have expired or already been deleted.', 'wp-antispam' ); ?></p></section>
+			<section class="rktsky-antispam__card rktsky-antispam__quarantine-empty"><h2><?php esc_html_e( 'This record is unavailable', 'rocketsky-antispam' ); ?></h2><p><?php esc_html_e( 'It may have expired or already been deleted.', 'rocketsky-antispam' ); ?></p></section>
 		<?php else : ?>
 			<section class="rktsky-antispam__card rktsky-antispam__record" aria-labelledby="rktsky-record-heading">
-				<p class="rktsky-antispam__eyebrow"><?php esc_html_e( 'Rejected submission', 'wp-antispam' ); ?></p>
-				<h2 id="rktsky-record-heading"><?php echo esc_html( $provider_labels[ $entry['provider'] ] ?? __( 'Form integration', 'wp-antispam' ) ); ?></h2>
-				<p><?php esc_html_e( 'This submission was stopped by a local protection check. A failed check does not confirm that its contents are spam.', 'wp-antispam' ); ?></p>
+				<p class="rktsky-antispam__eyebrow"><?php esc_html_e( 'Rejected submission', 'rocketsky-antispam' ); ?></p>
+				<h2 id="rktsky-record-heading"><?php echo esc_html( $provider_labels[ $entry['provider'] ] ?? __( 'Form integration', 'rocketsky-antispam' ) ); ?></h2>
+				<p><?php esc_html_e( 'This submission was stopped by a local protection check. A failed check does not confirm that its contents are spam.', 'rocketsky-antispam' ); ?></p>
 				<dl class="rktsky-antispam__record-meta">
-					<div><dt><?php esc_html_e( 'Received', 'wp-antispam' ); ?></dt><dd><?php echo esc_html( gmdate( 'Y-m-d H:i', (int) $entry['created'] ) ); ?> UTC</dd></div>
-					<div><dt><?php esc_html_e( 'Form ID', 'wp-antispam' ); ?></dt><dd><?php echo esc_html( $entry['form_id'] ); ?></dd></div>
-					<div><dt><?php esc_html_e( 'Protection check', 'wp-antispam' ); ?></dt><dd><?php echo esc_html( $reason_labels[ $entry['reason'] ] ?? __( 'Protection check', 'wp-antispam' ) ); ?></dd></div>
-					<div><dt><?php esc_html_e( 'Scheduled for deletion', 'wp-antispam' ); ?></dt><dd><?php echo esc_html( gmdate( 'Y-m-d H:i', (int) $entry['expires'] ) ); ?> UTC</dd></div>
+					<div><dt><?php esc_html_e( 'Received', 'rocketsky-antispam' ); ?></dt><dd><?php echo esc_html( gmdate( 'Y-m-d H:i', (int) $entry['created'] ) ); ?> UTC</dd></div>
+					<div><dt><?php esc_html_e( 'Form ID', 'rocketsky-antispam' ); ?></dt><dd><?php echo esc_html( $entry['form_id'] ); ?></dd></div>
+					<div><dt><?php esc_html_e( 'Protection check', 'rocketsky-antispam' ); ?></dt><dd><?php echo esc_html( $reason_labels[ $entry['reason'] ] ?? __( 'Protection check', 'rocketsky-antispam' ) ); ?></dd></div>
+					<div><dt><?php esc_html_e( 'Scheduled for deletion', 'rocketsky-antispam' ); ?></dt><dd><?php echo esc_html( gmdate( 'Y-m-d H:i', (int) $entry['expires'] ) ); ?> UTC</dd></div>
 				</dl>
-				<h3><?php esc_html_e( 'Stored fields', 'wp-antispam' ); ?></h3>
-				<p class="rktsky-antispam__record-note"><?php esc_html_e( 'Only selected text fields are kept. Files and technical security fields are excluded. Long values may be shortened.', 'wp-antispam' ); ?></p>
+				<h3><?php esc_html_e( 'Stored fields', 'rocketsky-antispam' ); ?></h3>
+				<p class="rktsky-antispam__record-note"><?php esc_html_e( 'Only selected text fields are kept. Files and technical security fields are excluded. Long values may be shortened.', 'rocketsky-antispam' ); ?></p>
 				<?php if ( ! empty( $entry['unreadable'] ) ) : ?>
-					<p class="rktsky-antispam__quarantine-disclosure"><?php esc_html_e( 'Stored fields could not be read. The record can still be deleted.', 'wp-antispam' ); ?></p>
+					<p class="rktsky-antispam__quarantine-disclosure"><?php esc_html_e( 'Stored fields could not be read. The record can still be deleted.', 'rocketsky-antispam' ); ?></p>
 				<?php elseif ( empty( $entry['fields'] ) ) : ?>
-					<p class="rktsky-antispam__empty"><?php esc_html_e( 'No text fields were retained for this submission.', 'wp-antispam' ); ?></p>
+					<p class="rktsky-antispam__empty"><?php esc_html_e( 'No text fields were retained for this submission.', 'rocketsky-antispam' ); ?></p>
 				<?php else : ?>
 					<dl class="rktsky-antispam__record-fields">
 						<?php foreach ( $entry['fields'] as $rktsky_antispam_field => $rktsky_antispam_value ) : ?>
@@ -76,34 +76,34 @@ require __DIR__ . '/admin-header.php';
 					</dl>
 				<?php endif; ?>
 				<?php if ( null !== $review_status ) : ?>
-					<section class="rktsky-antispam__review" aria-labelledby="rktsky-review-heading"><h3 id="rktsky-review-heading"><?php esc_html_e( 'Review this decision', 'wp-antispam' ); ?></h3><p><?php esc_html_e( 'Your assessment updates the reviewed metrics and keeps this quarantined entry in place.', 'wp-antispam' ); ?></p>
+					<section class="rktsky-antispam__review" aria-labelledby="rktsky-review-heading"><h3 id="rktsky-review-heading"><?php esc_html_e( 'Review this decision', 'rocketsky-antispam' ); ?></h3><p><?php esc_html_e( 'Your assessment updates the reviewed metrics and keeps this quarantined entry in place.', 'rocketsky-antispam' ); ?></p>
 						<?php
 						if ( ! empty( $review_status['reviewed'] ) ) :
 							?>
-							<p class="rktsky-antispam__review-status"><?php echo esc_html( ! empty( $review_status['actual_spam'] ) ? __( 'Current assessment: spam', 'wp-antispam' ) : __( 'Current assessment: normal message', 'wp-antispam' ) ); ?></p><?php endif; ?>
-						<form action="<?php echo esc_url( $delete_url ); ?>" method="post"><input type="hidden" name="action" value="rktsky_antispam_review" /><input type="hidden" name="entry" value="<?php echo esc_attr( (string) $entry['id'] ); ?>" /><?php wp_nonce_field( 'rktsky_antispam_review_' . (int) $entry['id'] ); ?><div class="rktsky-antispam__review-buttons"><button type="submit" name="assessment" value="spam" class="button"><?php esc_html_e( 'Confirm spam', 'wp-antispam' ); ?></button><button type="submit" name="assessment" value="normal" class="button"><?php esc_html_e( 'Not spam', 'wp-antispam' ); ?></button></div></form>
+							<p class="rktsky-antispam__review-status"><?php echo esc_html( ! empty( $review_status['actual_spam'] ) ? __( 'Current assessment: spam', 'rocketsky-antispam' ) : __( 'Current assessment: normal message', 'rocketsky-antispam' ) ); ?></p><?php endif; ?>
+						<form action="<?php echo esc_url( $delete_url ); ?>" method="post"><input type="hidden" name="action" value="rktsky_antispam_review" /><input type="hidden" name="entry" value="<?php echo esc_attr( (string) $entry['id'] ); ?>" /><?php wp_nonce_field( 'rktsky_antispam_review_' . (int) $entry['id'] ); ?><div class="rktsky-antispam__review-buttons"><button type="submit" name="assessment" value="spam" class="button"><?php esc_html_e( 'Confirm spam', 'rocketsky-antispam' ); ?></button><button type="submit" name="assessment" value="normal" class="button"><?php esc_html_e( 'Not spam', 'rocketsky-antispam' ); ?></button></div></form>
 					</section>
 				<?php endif; ?>
 				<div class="rktsky-antispam__record-actions">
-					<p><?php esc_html_e( 'Deleting this record is permanent. This screen cannot publish comments or resend forms.', 'wp-antispam' ); ?></p>
+					<p><?php esc_html_e( 'Deleting this record is permanent. This screen cannot publish comments or resend forms.', 'rocketsky-antispam' ); ?></p>
 					<form action="<?php echo esc_url( $delete_url ); ?>" method="post">
 						<input type="hidden" name="action" value="rktsky_antispam_quarantine_delete" />
 						<input type="hidden" name="entry" value="<?php echo esc_attr( (string) $entry['id'] ); ?>" />
 						<?php wp_nonce_field( 'rktsky_antispam_quarantine_delete_' . (int) $entry['id'] ); ?>
-						<button type="submit" class="button rktsky-antispam__danger-button"><?php esc_html_e( 'Delete this record', 'wp-antispam' ); ?></button>
+						<button type="submit" class="button rktsky-antispam__danger-button"><?php esc_html_e( 'Delete this record', 'rocketsky-antispam' ); ?></button>
 					</form>
 				</div>
 			</section>
 		<?php endif; ?>
 	<?php else : ?>
 		<header class="rktsky-antispam__page-heading">
-			<h2><?php esc_html_e( 'Review spam', 'wp-antispam' ); ?></h2>
-			<p><?php esc_html_e( 'Open each integration\'s spam queue or review locally retained rejections below.', 'wp-antispam' ); ?></p>
+			<h2><?php esc_html_e( 'Review spam', 'rocketsky-antispam' ); ?></h2>
+			<p><?php esc_html_e( 'Open each integration\'s spam queue or review locally retained rejections below.', 'rocketsky-antispam' ); ?></p>
 		</header>
 		<?php $rktsky_antispam_directory = $spam_handling->directory(); ?>
 		<?php if ( ! empty( $rktsky_antispam_directory ) ) : ?>
 			<section class="rktsky-antispam__card rktsky-antispam__spam-directory" aria-labelledby="rktsky-spam-directory-heading">
-				<h3 id="rktsky-spam-directory-heading"><?php esc_html_e( 'Spam review locations', 'wp-antispam' ); ?></h3>
+				<h3 id="rktsky-spam-directory-heading"><?php esc_html_e( 'Spam review locations', 'rocketsky-antispam' ); ?></h3>
 				<dl>
 					<?php foreach ( $rktsky_antispam_directory as $rktsky_antispam_provider => $rktsky_antispam_route ) : ?>
 						<div><dt><?php echo esc_html( $provider_labels[ $rktsky_antispam_provider ] ); ?></dt><dd><a href="<?php echo esc_url( $rktsky_antispam_route['url'] ); ?>"><?php echo esc_html( $rktsky_antispam_route['label'] ); ?></a>
@@ -114,31 +114,31 @@ require __DIR__ . '/admin-header.php';
 						</dd></div>
 					<?php endforeach; ?>
 				</dl>
-				<p class="rktsky-antispam__help-note"><?php esc_html_e( 'Native spam storage follows the provider\'s privacy and retention settings, independently of privacy-conscious mode. WP Antispam quarantine is encrypted, with capture limits and automatic deletion.', 'wp-antispam' ); ?> <?php echo esc_html( $spam_handling->local_retention()['description'] ); ?></p>
+				<p class="rktsky-antispam__help-note"><?php esc_html_e( 'Native spam storage follows the provider\'s privacy and retention settings, independently of privacy-conscious mode. Rocketsky Antispam quarantine is encrypted, with capture limits and automatic deletion.', 'rocketsky-antispam' ); ?> <?php echo esc_html( $spam_handling->local_retention()['description'] ); ?></p>
 			</section>
 		<?php endif; ?>
 
 		<section class="rktsky-antispam__quarantine-list" aria-labelledby="rktsky-quarantine-list-heading">
-			<div class="rktsky-antispam__section-title"><h2 id="rktsky-quarantine-list-heading"><?php esc_html_e( 'Rejected submissions', 'wp-antispam' ); ?></h2><span><?php echo esc_html( ! empty( $options['quarantine_enabled'] ) ? __( 'Quarantine enabled', 'wp-antispam' ) : __( 'New storage is off', 'wp-antispam' ) ); ?></span></div>
+			<div class="rktsky-antispam__section-title"><h2 id="rktsky-quarantine-list-heading"><?php esc_html_e( 'Rejected submissions', 'rocketsky-antispam' ); ?></h2><span><?php echo esc_html( ! empty( $options['quarantine_enabled'] ) ? __( 'Quarantine enabled', 'rocketsky-antispam' ) : __( 'New storage is off', 'rocketsky-antispam' ) ); ?></span></div>
 			<?php if ( empty( $listing['items'] ) ) : ?>
-				<div class="rktsky-antispam__card rktsky-antispam__quarantine-empty"><h3><?php esc_html_e( 'No stored submissions', 'wp-antispam' ); ?></h3><p><?php esc_html_e( 'Records appear here when quarantine is enabled and WP Antispam rejects a new submission. Earlier rejections are not recovered.', 'wp-antispam' ); ?></p><a class="button" href="<?php echo esc_url( $view_urls['settings'] . '#retention' ); ?>"><?php esc_html_e( 'Storage settings', 'wp-antispam' ); ?></a></div>
+				<div class="rktsky-antispam__card rktsky-antispam__quarantine-empty"><h3><?php esc_html_e( 'No stored submissions', 'rocketsky-antispam' ); ?></h3><p><?php esc_html_e( 'Records appear here when quarantine is enabled and Rocketsky Antispam rejects a new submission. Earlier rejections are not recovered.', 'rocketsky-antispam' ); ?></p><a class="button" href="<?php echo esc_url( $view_urls['settings'] . '#retention' ); ?>"><?php esc_html_e( 'Storage settings', 'rocketsky-antispam' ); ?></a></div>
 			<?php else : ?>
-				<div class="rktsky-antispam__quarantine-table-wrap"><table class="rktsky-antispam__quarantine-table" role="table"><caption class="screen-reader-text"><?php esc_html_e( 'Rejected submission metadata. Open a record to view its stored fields.', 'wp-antispam' ); ?></caption><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader"><?php esc_html_e( 'Received', 'wp-antispam' ); ?></th><th scope="col" role="columnheader"><?php esc_html_e( 'Integration', 'wp-antispam' ); ?></th><th scope="col" role="columnheader"><?php esc_html_e( 'Form ID', 'wp-antispam' ); ?></th><th scope="col" role="columnheader"><?php esc_html_e( 'Protection check', 'wp-antispam' ); ?></th><th scope="col" role="columnheader"><span class="screen-reader-text"><?php esc_html_e( 'Actions', 'wp-antispam' ); ?></span></th></tr></thead><tbody role="rowgroup">
+				<div class="rktsky-antispam__quarantine-table-wrap"><table class="rktsky-antispam__quarantine-table" role="table"><caption class="screen-reader-text"><?php esc_html_e( 'Rejected submission metadata. Open a record to view its stored fields.', 'rocketsky-antispam' ); ?></caption><thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader"><?php esc_html_e( 'Received', 'rocketsky-antispam' ); ?></th><th scope="col" role="columnheader"><?php esc_html_e( 'Integration', 'rocketsky-antispam' ); ?></th><th scope="col" role="columnheader"><?php esc_html_e( 'Form ID', 'rocketsky-antispam' ); ?></th><th scope="col" role="columnheader"><?php esc_html_e( 'Protection check', 'rocketsky-antispam' ); ?></th><th scope="col" role="columnheader"><span class="screen-reader-text"><?php esc_html_e( 'Actions', 'rocketsky-antispam' ); ?></span></th></tr></thead><tbody role="rowgroup">
 					<?php foreach ( $listing['items'] as $rktsky_antispam_row ) : ?>
-						<tr role="row"><td role="cell"><span class="rktsky-antispam__mobile-label" aria-hidden="true"><?php esc_html_e( 'Received', 'wp-antispam' ); ?></span><?php echo esc_html( gmdate( 'Y-m-d H:i', (int) $rktsky_antispam_row['created'] ) ); ?> UTC</td><td role="cell"><span class="rktsky-antispam__mobile-label" aria-hidden="true"><?php esc_html_e( 'Integration', 'wp-antispam' ); ?></span><?php echo esc_html( $provider_labels[ $rktsky_antispam_row['provider'] ] ?? __( 'Form integration', 'wp-antispam' ) ); ?></td><td role="cell"><span class="rktsky-antispam__mobile-label" aria-hidden="true"><?php esc_html_e( 'Form ID', 'wp-antispam' ); ?></span><?php echo esc_html( $rktsky_antispam_row['form_id'] ); ?></td><td role="cell"><span class="rktsky-antispam__mobile-label" aria-hidden="true"><?php esc_html_e( 'Protection check', 'wp-antispam' ); ?></span><?php echo esc_html( $reason_labels[ $rktsky_antispam_row['reason'] ] ?? __( 'Protection check', 'wp-antispam' ) ); ?></td><td role="cell"><a class="button" href="<?php echo esc_url( add_query_arg( 'entry', (int) $rktsky_antispam_row['id'], $quarantine_url ) ); ?>" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: local quarantine record ID. */ __( 'View quarantine record %d', 'wp-antispam' ), (int) $rktsky_antispam_row['id'] ) ); ?>"><?php esc_html_e( 'View', 'wp-antispam' ); ?></a></td></tr>
+						<tr role="row"><td role="cell"><span class="rktsky-antispam__mobile-label" aria-hidden="true"><?php esc_html_e( 'Received', 'rocketsky-antispam' ); ?></span><?php echo esc_html( gmdate( 'Y-m-d H:i', (int) $rktsky_antispam_row['created'] ) ); ?> UTC</td><td role="cell"><span class="rktsky-antispam__mobile-label" aria-hidden="true"><?php esc_html_e( 'Integration', 'rocketsky-antispam' ); ?></span><?php echo esc_html( $provider_labels[ $rktsky_antispam_row['provider'] ] ?? __( 'Form integration', 'rocketsky-antispam' ) ); ?></td><td role="cell"><span class="rktsky-antispam__mobile-label" aria-hidden="true"><?php esc_html_e( 'Form ID', 'rocketsky-antispam' ); ?></span><?php echo esc_html( $rktsky_antispam_row['form_id'] ); ?></td><td role="cell"><span class="rktsky-antispam__mobile-label" aria-hidden="true"><?php esc_html_e( 'Protection check', 'rocketsky-antispam' ); ?></span><?php echo esc_html( $reason_labels[ $rktsky_antispam_row['reason'] ] ?? __( 'Protection check', 'rocketsky-antispam' ) ); ?></td><td role="cell"><a class="button" href="<?php echo esc_url( add_query_arg( 'entry', (int) $rktsky_antispam_row['id'], $quarantine_url ) ); ?>" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: local quarantine record ID. */ __( 'View quarantine record %d', 'rocketsky-antispam' ), (int) $rktsky_antispam_row['id'] ) ); ?>"><?php esc_html_e( 'View', 'rocketsky-antispam' ); ?></a></td></tr>
 					<?php endforeach; ?>
 				</tbody></table></div>
 				<?php if ( (int) $listing['pages'] > 1 ) : ?>
-					<nav class="rktsky-antispam__pagination" aria-label="<?php esc_attr_e( 'Quarantine pages', 'wp-antispam' ); ?>">
+					<nav class="rktsky-antispam__pagination" aria-label="<?php esc_attr_e( 'Quarantine pages', 'rocketsky-antispam' ); ?>">
 						<?php
 						if ( (int) $listing['page'] > 1 ) :
 							?>
-							<a class="button" href="<?php echo esc_url( add_query_arg( 'paged', (int) $listing['page'] - 1, $quarantine_url ) ); ?>"><?php esc_html_e( 'Previous', 'wp-antispam' ); ?></a><?php endif; ?>
-						<span><?php echo esc_html( sprintf( /* translators: 1: current page number, 2: total pages. */ __( 'Page %1$d of %2$d', 'wp-antispam' ), (int) $listing['page'], (int) $listing['pages'] ) ); ?></span>
+							<a class="button" href="<?php echo esc_url( add_query_arg( 'paged', (int) $listing['page'] - 1, $quarantine_url ) ); ?>"><?php esc_html_e( 'Previous', 'rocketsky-antispam' ); ?></a><?php endif; ?>
+						<span><?php echo esc_html( sprintf( /* translators: 1: current page number, 2: total pages. */ __( 'Page %1$d of %2$d', 'rocketsky-antispam' ), (int) $listing['page'], (int) $listing['pages'] ) ); ?></span>
 						<?php
 						if ( (int) $listing['page'] < (int) $listing['pages'] ) :
 							?>
-							<a class="button" href="<?php echo esc_url( add_query_arg( 'paged', (int) $listing['page'] + 1, $quarantine_url ) ); ?>"><?php esc_html_e( 'Next', 'wp-antispam' ); ?></a><?php endif; ?>
+							<a class="button" href="<?php echo esc_url( add_query_arg( 'paged', (int) $listing['page'] + 1, $quarantine_url ) ); ?>"><?php esc_html_e( 'Next', 'rocketsky-antispam' ); ?></a><?php endif; ?>
 					</nav>
 				<?php endif; ?>
 			<?php endif; ?>

@@ -300,8 +300,8 @@ if ( '' === $case ) {
 			)
 		);
 		rktsky_routing_expect( ! is_wp_error( $subscriber ), 'The native REST fixture account must be created.' );
-		putenv( 'WP_ANTISPAM_ROUTING_USER=' . $subscriber );
-		putenv( 'WP_ANTISPAM_ROUTING_CHILD=1' );
+		putenv( 'RKTSKY_ANTISPAM_ROUTING_USER=' . $subscriber );
+		putenv( 'RKTSKY_ANTISPAM_ROUTING_CHILD=1' );
 		$cases = array( 'comment_valid', 'comment_keyword', 'comment_bbcode', 'comment_pattern', 'comment_language', 'comment_country', 'rest_keyword', 'rest_bbcode', 'rest_pattern', 'rest_language', 'rest_country', 'comment_missing', 'comment_trap', 'comment_wrong_scope', 'comment_replay', 'comment_storage', 'comment_pattern_limit', 'rest_missing', 'rest_trap', 'rest_wrong_scope', 'rest_replay', 'rest_storage', 'comment_keyword_q', 'rest_keyword_q', 'comment_missing_q', 'rest_missing_q', 'comment_unspam', 'rest_unspam' );
 		if ( class_exists( 'GFAPI' ) ) {
 			$cases = array_merge( $cases, array( 'gf_valid', 'gf_keyword', 'gf_bbcode', 'gf_pattern', 'gf_keyword_q', 'gf_keyword_async', 'gf_missing', 'gf_trap', 'gf_wrong_scope', 'gf_replay', 'gf_storage', 'gf_pattern_limit', 'gf_missing_q', 'gf_unspam', 'gf_prior_spam', 'gf_multi_next', 'gf_multi_content', 'gf_multi_final_spam', 'gf_save_normal', 'gf_save_content', 'gf_save_missing', 'gf_api_validate_content', 'gf_api_validate_then_submit', 'gf_api_final_spam', 'gf_same_request_replay_content', 'gf_same_request_cached_false', 'gf_resume_valid', 'gf_resume_missing', 'gf_resume_trap', 'gf_resume_wrong_scope', 'gf_resume_replay', 'gf_resume_bad_email', 'gf_resume_multiple', 'gf_resume_storage', 'gf_resume_fallback_missing', 'gf_resume_fallback_valid' ) );
@@ -309,7 +309,7 @@ if ( '' === $case ) {
 			echo "SKIP: native Gravity Forms routing requires its licensed unchanged package.\n"; }
 		foreach ( $cases as $name ) {
 			$command = array( PHP_BINARY );
-			foreach ( array( 'WP_ANTISPAM_PHP_ICONV', 'WP_ANTISPAM_PHP_SIMPLEXML' ) as $extension ) {
+			foreach ( array( 'RKTSKY_ANTISPAM_PHP_ICONV', 'RKTSKY_ANTISPAM_PHP_SIMPLEXML' ) as $extension ) {
 				if ( getenv( $extension ) ) {
 					$command[] = '-d';
 					$command[] = 'extension=' . getenv( $extension ); }
@@ -351,8 +351,8 @@ if ( '' === $case ) {
 			} else {
 				update_option( $key, $value, false ); }
 		}
-		putenv( 'WP_ANTISPAM_ROUTING_USER' );
-		putenv( 'WP_ANTISPAM_ROUTING_CHILD' );
+		putenv( 'RKTSKY_ANTISPAM_ROUTING_USER' );
+		putenv( 'RKTSKY_ANTISPAM_ROUTING_CHILD' );
 	}
 	return;
 }
@@ -377,7 +377,7 @@ add_filter(
 );
 $child_original       = get_option( Settings::OPTION, null );
 $standalone_snapshots = array();
-if ( '1' !== getenv( 'WP_ANTISPAM_ROUTING_CHILD' ) ) {
+if ( '1' !== getenv( 'RKTSKY_ANTISPAM_ROUTING_CHILD' ) ) {
 	foreach ( array( 'tokens', 'stats', 'totals', 'quarantine', 'feedback', 'jobs' ) as $suffix ) {
 		$standalone_snapshots[ $suffix ] = rktsky_routing_snapshot( $suffix ); }
 }
@@ -458,7 +458,7 @@ try {
 		);
 		$submit = static function ( array $controls ) use ( $rest, $post, &$native_data ) {
 			if ( $rest ) {
-				wp_set_current_user( (int) getenv( 'WP_ANTISPAM_ROUTING_USER' ) );
+				wp_set_current_user( (int) getenv( 'RKTSKY_ANTISPAM_ROUTING_USER' ) );
 				$_POST   = array();
 				$request = new WP_REST_Request( 'POST', '/wp/v2/comments' );
 				$request->set_body_params(
@@ -648,7 +648,7 @@ try {
 					if ( '' !== $kind ) {
 						rktsky_routing_expect( empty( $result['confirmation_redirect'] ) && str_contains( (string) ( $result['confirmation_message'] ?? '' ), 'spam protection rejected' ), 'Owned native spam must return a visible rejection instead of a success redirect.' );
 						$notes = GFAPI::get_notes( array( 'entry_id' => $id ) );
-						rktsky_routing_expect( count( array_filter( $notes, static fn( $note ) => 'WP Antispam' === $note->user_name ) ) === 1, 'The original provider must create one WP Antispam spam note.' ); }
+						rktsky_routing_expect( count( array_filter( $notes, static fn( $note ) => 'Rocketsky Antispam' === $note->user_name ) ) === 1, 'The original provider must create one Rocketsky Antispam spam note.' ); }
 					if ( 'gf_unspam' === $case ) {
 						GFAPI::update_entry_property( $id, 'status', 'active' );
 						$status = $feedback->status( 'gravityforms', $id );

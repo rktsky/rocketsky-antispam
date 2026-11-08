@@ -304,7 +304,7 @@ final class Network {
 	 * @return void
 	 */
 	private static function report_failure( int $network_id, int $site_id ): void {
-		error_log( sprintf( 'WP Antispam network maintenance failed for network %d, site %d; the next cycle will retry.', $network_id, $site_id ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Operational diagnostics contain only native IDs; swallowing a failure would hide missed retention work.
+		error_log( sprintf( 'Rocketsky Antispam network maintenance failed for network %d, site %d; the next cycle will retry.', $network_id, $site_id ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Operational diagnostics contain only native IDs; swallowing a failure would hide missed retention work.
 	}
 
 	/**

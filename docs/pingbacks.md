@@ -1,14 +1,14 @@
 # Native pingbacks and trackbacks
 
-Introduced in WP Antispam 0.3.0. The option is part of the WordPress comments integration and is off by default. Privacy-conscious mode forces it off in validated settings and disables its administration control. Disabling the comments integration also removes its protocol protection hooks.
+Introduced in Rocketsky Antispam 0.3.0. The option is part of the WordPress comments integration and is off by default. Privacy-conscious mode forces it off in validated settings and disables its administration control. Disabling the comments integration also removes its protocol protection hooks.
 
-When the option is enabled outside privacy-conscious mode, native protocol requests continue through WordPress's existing target, duplicate, ping-status and moderation checks. They cannot obtain a JavaScript form token. WP Antispam therefore accepts only the server-side native protocol intent described below; a submitted `comment_type` does not grant an exception. Ordinary comments, custom comment types and frontend comments by administrators still need their normal protection proof.
+When the option is enabled outside privacy-conscious mode, native protocol requests continue through WordPress's existing target, duplicate, ping-status and moderation checks. They cannot obtain a JavaScript form token. Rocketsky Antispam therefore accepts only the server-side native protocol intent described below; a submitted `comment_type` does not grant an exception. Ordinary comments, custom comment types and frontend comments by administrators still need their normal protection proof.
 
 ## Privacy and retention
 
 Enabling native pingbacks allows WordPress to request the remote source page. Current Core includes the requester's address in the verification user agent and `X-Pingback-Forwarded-For` header. The remote site therefore receives data directly from WordPress's protocol verification. Trackbacks use the submitted source information without this pingback verification fetch.
 
-Core owns the resulting native comment, including any source URL, excerpt and address it normally retains. Native moderation and the site's comment retention rules remain authoritative. Permitted protocols bypass WP Antispam's form-token and additional content rules. They do not create a second quarantine copy, a successful token-check count or an automatic quality prediction. Protocol requests rejected by WP Antispam receive the existing `pingback` policy count without retaining their contents.
+Core owns the resulting native comment, including any source URL, excerpt and address it normally retains. Native moderation and the site's comment retention rules remain authoritative. Permitted protocols bypass Rocketsky Antispam's form-token and additional content rules. They do not create a second quarantine copy, a successful token-check count or an automatic quality prediction. Protocol requests rejected by Rocketsky Antispam receive the existing `pingback` policy count without retaining their contents.
 
 The option does not disable the entire XML-RPC API, change the site's native ping-status settings or override another plugin's protocol rejection. Core 7.1's default rejection of pings in non-production environments remains effective.
 
@@ -31,7 +31,7 @@ The suite covers default settings and malformed values; privacy-mode enforcement
 Run only on a disposable, isolated fixture:
 
 ```sh
-WP_ANTISPAM_ALLOW_TESTS=1 WP_ANTISPAM_WP_ROOT=/path/to/disposable-wordpress php tests/native-pings.php
+RKTSKY_ANTISPAM_ALLOW_TESTS=1 RKTSKY_ANTISPAM_WP_ROOT=/path/to/disposable-wordpress php tests/native-pings.php
 ```
 
 The Comments adapter passes the project's WordPress coding standard. The recorded native run uses WordPress 7.1.4 and PHP 8.3.26. It does not establish compatibility for a replacement XML-RPC implementation that omits Core's hooks or another trackback endpoint that does not use Core's native boundary.

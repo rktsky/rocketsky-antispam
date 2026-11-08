@@ -193,7 +193,7 @@ final class WpForms extends Adapter {
 			);
 		}
 		$native                  = $form;
-		$native['spam_reason']   = 'WP Antispam';
+		$native['spam_reason']   = 'Rocketsky Antispam';
 		$native['post_data_raw'] = array();
 		// Respect the documented policy before calling the public saver. Native
 		// Pro 1.9.7.3 does not stop its saver when preparation is vetoed. Its
@@ -217,7 +217,7 @@ final class WpForms extends Adapter {
 			array(),
 			array(
 				'id'            => absint( $form['id'] ),
-				'spam_reason'   => 'WP Antispam',
+				'spam_reason'   => 'Rocketsky Antispam',
 				'post_data_raw' => array(),
 			),
 			$id

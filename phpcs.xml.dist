@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
-<ruleset name="WP Antispam">
+<ruleset name="Rocketsky Antispam">
 	<description>WordPress coding, documentation, and security standards for owned plugin source.</description>
 	<arg name="extensions" value="php"/>
 	<arg value="sp"/>
 	<config name="minimum_supported_wp_version" value="6.6"/>
 	<config name="testVersion" value="8.2-"/>
-	<file>wp-antispam.php</file>
+	<file>rocketsky-antispam.php</file>
 	<file>uninstall.php</file>
 	<file>src</file>
 	<file>templates</file>
@@ -21,7 +21,7 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="wp-antispam"/>
+				<element value="rocketsky-antispam"/>
 			</property>
 		</properties>
 	</rule>

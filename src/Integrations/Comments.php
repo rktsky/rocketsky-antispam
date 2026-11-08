@@ -112,7 +112,7 @@ final class Comments extends Adapter {
 			$this->guard->reject( 'comments', 'pingback' );
 			wp_die(
 				esc_html( $this->guard->message() ),
-				esc_html__( 'Comment not submitted', 'wp-antispam' ),
+				esc_html__( 'Comment not submitted', 'rocketsky-antispam' ),
 				array(
 					'response'  => 403,
 					'back_link' => true,
@@ -144,7 +144,7 @@ final class Comments extends Adapter {
 
 			wp_die(
 				esc_html( $this->guard->message() ),
-				esc_html__( 'Comment not submitted', 'wp-antispam' ),
+				esc_html__( 'Comment not submitted', 'rocketsky-antispam' ),
 				array(
 					'response'  => 403,
 					'back_link' => true,

@@ -184,7 +184,7 @@ final class ContextNotices {
 			if ( ! empty( $options[ $provider ] ) && ! empty( $detected[ $provider ] ) ) {
 				$route = $this->handling->describe( $provider );
 				if ( in_array( $route['mode'], array( 'native', 'conditional' ), true ) && 'discard' === $this->handling->local_retention()['mode'] ) {
-					$route['description'] .= ' ' . __( 'WP Antispam keeps no content copy of requests stopped before native storage.', 'wp-antispam' );
+					$route['description'] .= ' ' . __( 'Rocketsky Antispam keeps no content copy of requests stopped before native storage.', 'rocketsky-antispam' );
 				}
 				$notices[] = array(
 					'name'     => $labels[ $provider ],

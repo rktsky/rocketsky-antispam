@@ -1,6 +1,6 @@
 # Lokaler Performance-Nachweis
 
-**Aktueller Stand 0.2.0**, gemessen am 7. November 2026 um 15:38:42 UTC (16:38:42 MEZ) in der isolierten WordPress-Testinstallation. Das Plugin blieb aktiv; Einstellungen wurden weder geändert noch zurückgesetzt. Mailversand und ausgehende WordPress-HTTP-Aufrufe blieben durch die Fixture blockiert.
+**Stand des Messlaufs 0.2.0**, gemessen am 7. November 2026 um 15:38:42 UTC (16:38:42 MEZ) in der isolierten WordPress-Testinstallation. Das Plugin blieb aktiv; Einstellungen wurden weder geändert noch zurückgesetzt. Mailversand und ausgehende WordPress-HTTP-Aufrufe blieben durch die Fixture blockiert. Die folgenden Messwerte gelten für ihre jeweils genannte Version; aktuelle Prüfungen stehen in [verification.md](verification.md).
 
 ## Bedingungen und Verfahren
 
@@ -36,7 +36,7 @@ Dateigrössen beim aktuellen Messlauf; Gzip ist lokale Kompression mit Stufe 9 u
 
 Lesende HTTP-Abrufe gegen den lokalen Testserver bestätigten die tatsächliche Einbindung mit Pluginversion 0.2.0:
 
-| Route | Status | Schutzcontainer | WP-Antispam-Scripts | WP-Antispam-Styles |
+| Route | Status | Schutzcontainer | Plugin-Scripts | Plugin-Styles |
 | --- | ---: | ---: | ---: | ---: |
 | Startseite ohne Formular, `/` | 200 | 0 | 0 | 0 |
 | Formular-Fixture, `/?page_id=5` | 200 | 4 | 1 | 0 |

@@ -60,7 +60,7 @@ final class Formidable extends Adapter {
 	 */
 	public function spam_source( array $sources ): array {
 		$sources['rktsky_antispam'] = array(
-			'label'   => 'WP Antispam',
+			'label'   => 'Rocketsky Antispam',
 			'default' => 'save',
 		);
 		return $sources;

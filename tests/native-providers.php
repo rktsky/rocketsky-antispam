@@ -67,7 +67,7 @@ if ( '' === $case ) {
 	return;
 }
 
-$_SERVER['HTTP_USER_AGENT'] = 'WP Antispam disposable native test browser';
+$_SERVER['HTTP_USER_AGENT'] = 'Rocketsky Antispam disposable native test browser';
 $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
 $_SERVER['REQUEST_METHOD'] = 'POST';
 $_POST = array();

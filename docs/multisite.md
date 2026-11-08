@@ -1,6 +1,6 @@
 # WordPress Multisite
 
-WP Antispam unterstützt ab 0.3.0 die einzelne Aktivierung pro Website und die Netzwerkaktivierung. Jede Website verwaltet ihre Einstellungen im eigenen WordPress-Backend. Anbieterfreigaben, Tabellen, Aufbewahrung, Quarantäneschlüssel und Tokenbezüge bleiben pro Website getrennt. Die Netzwerkaktivierung übernimmt keine pauschalen Inhalts- oder Länderregeln für andere Websites.
+Rocketsky Antispam unterstützt ab 0.3.0 die einzelne Aktivierung pro Website und die Netzwerkaktivierung. Jede Website verwaltet ihre Einstellungen im eigenen WordPress-Backend. Anbieterfreigaben, Tabellen, Aufbewahrung, Quarantäneschlüssel und Tokenbezüge bleiben pro Website getrennt. Die Netzwerkaktivierung übernimmt keine pauschalen Inhalts- oder Länderregeln für andere Websites.
 
 Die zentrale Netzwerkwartung startet stündlich auf der Hauptwebsite. Ein Aufruf bearbeitet höchstens 20 Websites und berücksichtigt ein weiches Zeitbudget von fünf Sekunden. Offene Arbeit wird mit einem nativen einmaligen Cron-Ereignis nach frühestens einer Minute fortgesetzt. WordPress-Cron hängt weiterhin von der tatsächlichen Ausführung ab. Normale Frontendbesuche durchlaufen keinen vollständigen Netzwerkloop.
 

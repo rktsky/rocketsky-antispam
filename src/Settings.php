@@ -197,7 +197,7 @@ final class Settings {
 				}
 				if ( 'spam_patterns' === $key && null === self::regex( $line ) ) {
 					if ( $submitted ) {
-						add_settings_error( self::OPTION, 'pattern', __( 'An invalid or oversized regular expression was omitted. Enter pattern bodies without delimiters, one per line.', 'wp-antispam' ) );
+						add_settings_error( self::OPTION, 'pattern', __( 'An invalid or oversized regular expression was omitted. Enter pattern bodies without delimiters, one per line.', 'rocketsky-antispam' ) );
 					}
 					continue;
 				}

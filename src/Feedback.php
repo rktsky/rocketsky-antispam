@@ -608,7 +608,7 @@ final class Feedback {
 	 */
 	public function exporters( array $exporters ): array {
 		$exporters['rktsky-antispam-feedback'] = array(
-			'exporter_friendly_name' => __( 'WP Antispam reviewed decisions', 'wp-antispam' ),
+			'exporter_friendly_name' => __( 'Rocketsky Antispam reviewed decisions', 'rocketsky-antispam' ),
 			'callback'               => array( $this, 'export' ),
 		);
 		return $exporters;
@@ -624,7 +624,7 @@ final class Feedback {
 	public function erasers( array $erasers ): array {
 		return array(
 			'rktsky-antispam-feedback' => array(
-				'eraser_friendly_name' => __( 'WP Antispam reviewed decisions', 'wp-antispam' ),
+				'eraser_friendly_name' => __( 'Rocketsky Antispam reviewed decisions', 'rocketsky-antispam' ),
 				'callback'             => array( $this, 'erase' ),
 			),
 		) + $erasers;
@@ -643,7 +643,7 @@ final class Feedback {
 	 */
 	public function export( string $email_address, int $page = 1 ) {
 		if ( ! current_user_can( 'export_others_personal_data' ) ) {
-			return new \WP_Error( 'rktsky_antispam_feedback_permission', __( 'You cannot export this personal data.', 'wp-antispam' ) );
+			return new \WP_Error( 'rktsky_antispam_feedback_permission', __( 'You cannot export this personal data.', 'rocketsky-antispam' ) );
 		}
 		$sources = array(
 			'comments'     => $this->subject_comments( $email_address, $page ),
@@ -688,16 +688,16 @@ final class Feedback {
 		}
 		return array(
 			'group_id'    => 'rktsky-antispam-feedback',
-			'group_label' => __( 'WP Antispam reviewed decisions', 'wp-antispam' ),
+			'group_label' => __( 'Rocketsky Antispam reviewed decisions', 'rocketsky-antispam' ),
 			'item_id'     => $source . '-' . (string) $id,
 			'data'        => array(
 				array(
-					'name'  => __( 'Predicted spam', 'wp-antispam' ),
+					'name'  => __( 'Predicted spam', 'rocketsky-antispam' ),
 					'value' => (string) (int) $row['predicted_spam'],
 				),
 				array(
-					'name'  => __( 'Human review', 'wp-antispam' ),
-					'value' => null === $row['actual_spam'] ? __( 'Not reviewed', 'wp-antispam' ) : (string) (int) $row['actual_spam'],
+					'name'  => __( 'Human review', 'rocketsky-antispam' ),
+					'value' => null === $row['actual_spam'] ? __( 'Not reviewed', 'rocketsky-antispam' ) : (string) (int) $row['actual_spam'],
 				),
 			),
 		);
@@ -775,7 +775,7 @@ final class Feedback {
 	 */
 	public function erase( string $email_address, int $page = 1 ) {
 		if ( ! current_user_can( 'erase_others_personal_data' ) ) {
-			return new \WP_Error( 'rktsky_antispam_feedback_permission', __( 'You cannot erase this personal data.', 'wp-antispam' ) );
+			return new \WP_Error( 'rktsky_antispam_feedback_permission', __( 'You cannot erase this personal data.', 'rocketsky-antispam' ) );
 		}
 		$sources  = array(
 			'comments'     => $this->subject_comments( $email_address, $page ),

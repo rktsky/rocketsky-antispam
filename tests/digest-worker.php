@@ -7,7 +7,7 @@
  */
 require __DIR__ . '/bootstrap.php';
 
-$rktsky_digest_directory = realpath( (string) getenv( 'WP_ANTISPAM_MAIL_DIR' ) );
+$rktsky_digest_directory = realpath( (string) getenv( 'RKTSKY_ANTISPAM_MAIL_DIR' ) );
 if ( false === $rktsky_digest_directory || ! preg_match( '/^rktsky-antispam-mail-[a-f0-9]{32}$/D', basename( $rktsky_digest_directory ) ) || ! preg_match( '/^[1-4]$/D', $argv[1] ?? '' ) ) {
 	throw new RuntimeException( 'Explicit synthetic mail capture directory is required.' );
 }

@@ -101,7 +101,7 @@ try {
 	rktsky_notice_expect( 'native' === $rktsky_notice_native['mode'] && str_contains( $rktsky_notice_native['url'], 'comment_status=spam' ), 'Comments must retain their native spam destination.' );
 	foreach ( array( 'elementor' ) as $rktsky_notice_provider ) {
 		$rktsky_notice_route = $rktsky_notice_handling->describe( $rktsky_notice_provider );
-		rktsky_notice_expect( 'discard' === $rktsky_notice_route['mode'] && str_contains( $rktsky_notice_route['description'], 'does not retain' ), 'Disabled quarantine must explicitly disclose no WP Antispam content storage.' );
+		rktsky_notice_expect( 'discard' === $rktsky_notice_route['mode'] && str_contains( $rktsky_notice_route['description'], 'does not retain' ), 'Disabled quarantine must explicitly disclose no Rocketsky Antispam content storage.' );
 	}
 	foreach ( array( 'divi', 'registration', 'wc_checkout', 'wc_registration' ) as $rktsky_notice_provider ) {
 		rktsky_notice_expect( 'blocked' === $rktsky_notice_handling->describe( $rktsky_notice_provider )['mode'], 'Technical-only scopes must never promise a content quarantine.' );
@@ -148,7 +148,7 @@ try {
 		'moderate_comments' => true,
 	);
 	$rktsky_notice_html   = rktsky_notice_html( $rktsky_notice_service, 'edit-comments' );
-	rktsky_notice_expect( str_contains( $rktsky_notice_html, 'comment_status=spam' ) && ! str_contains( $rktsky_notice_html, 'page=wp-antispam' ), 'A comment moderator must receive the native queue without inaccessible WP Antispam links.' );
+	rktsky_notice_expect( str_contains( $rktsky_notice_html, 'comment_status=spam' ) && ! str_contains( $rktsky_notice_html, 'page=rocketsky-antispam' ), 'A comment moderator must receive the native queue without inaccessible Rocketsky Antispam links.' );
 	$rktsky_notice_grants = array( 'read' => true );
 	rktsky_notice_expect( '' === rktsky_notice_html( $rktsky_notice_service, 'edit-comments' ), 'A read-only subscriber must receive no protection notice on a forged comment screen.' );
 	$rktsky_notice_grants = array(
@@ -157,11 +157,11 @@ try {
 	);
 	if ( ! empty( Providers::detected()['wpforms'] ) ) {
 		$rktsky_notice_html = rktsky_notice_html( $rktsky_notice_service, $rktsky_notice_hooks['wpforms-overview'] );
-		rktsky_notice_expect( str_contains( $rktsky_notice_html, 'WP Antispam is enabled' ) && ! str_contains( $rktsky_notice_html, '<a ' ), 'An authorized WPForms manager must receive text without privileged local links.' );
+		rktsky_notice_expect( str_contains( $rktsky_notice_html, 'Rocketsky Antispam is enabled' ) && ! str_contains( $rktsky_notice_html, '<a ' ), 'An authorized WPForms manager must receive text without privileged local links.' );
 	}
 	if ( ! empty( Providers::detected()['gravityforms'] ) ) {
 		$rktsky_notice_html = rktsky_notice_html( $rktsky_notice_service, $rktsky_notice_hooks['gf_entries'] );
-		rktsky_notice_expect( str_contains( $rktsky_notice_html, 'page=gf_entries' ) && ! str_contains( $rktsky_notice_html, 'page=wp-antispam' ), 'A native Gravity Forms entry manager must receive only the authorized native destination.' );
+		rktsky_notice_expect( str_contains( $rktsky_notice_html, 'page=gf_entries' ) && ! str_contains( $rktsky_notice_html, 'page=rocketsky-antispam' ), 'A native Gravity Forms entry manager must receive only the authorized native destination.' );
 		$rktsky_notice_options['gravityforms'] = false;
 		rktsky_notice_expect( '' === rktsky_notice_html( $rktsky_notice_service, $rktsky_notice_hooks['gf_entries'] ), 'An available but disabled provider must make no protection claim.' );
 		$rktsky_notice_options['gravityforms']    = true;

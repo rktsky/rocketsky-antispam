@@ -1,17 +1,17 @@
 <?php
 /**
- * Plugin Name: WP Antispam
- * Plugin URI: https://github.com/rktsky/wp-antispam
- * Update URI: https://github.com/rktsky/wp-antispam
+ * Plugin Name: Rocketsky Antispam
+ * Plugin URI: https://github.com/rktsky/rocketsky-antispam
+ * Update URI: https://github.com/rktsky/rocketsky-antispam
  * Description: Local spam protection for comments, registrations and forms. No external services.
- * Version: 0.5.0
+ * Version: 0.5.1
  * Requires at least: 6.6
  * Requires PHP: 8.2
  * Author: Rocketsky
  * Author URI: https://www.rocketsky.ch/
  * License: GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: wp-antispam
+ * Text Domain: rocketsky-antispam
  * Domain Path: /languages
  *
  * Boots the plugin services without runtime dependencies.
@@ -22,7 +22,15 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'RKTSKY_ANTISPAM_VERSION', '0.5.0' );
+// The renamed copy must not redefine services while a legacy copy is still active.
+if ( ! class_exists( Rktsky\Antispam\Installation::class, false ) ) {
+	require_once __DIR__ . '/src/Installation.php';
+}
+if ( ! ( new Rktsky\Antispam\Installation( __FILE__ ) )->register() ) {
+	return;
+}
+
+define( 'RKTSKY_ANTISPAM_VERSION', '0.5.1' );
 define( 'RKTSKY_ANTISPAM_FILE', __FILE__ );
 
 // Explicit local includes avoid filesystem discovery and third-party autoloaders.

@@ -81,7 +81,7 @@ foreach ( $option_names as $name ) {
 $post_id = 0;
 $comments = array();
 $mail_directory = '';
-$old_mail_directory = getenv( 'WP_ANTISPAM_MAIL_DIR' );
+$old_mail_directory = getenv( 'RKTSKY_ANTISPAM_MAIL_DIR' );
 add_filter( 'pre_wp_mail', 'rktsky_antispam_policy_mail', PHP_INT_MAX, 2 );
 add_filter( 'pre_http_request', 'rktsky_antispam_policy_http', PHP_INT_MAX, 1 );
 
@@ -229,7 +229,7 @@ try {
 	update_option( Settings::OPTION, $digest_settings, false );
 	$mail_directory = sys_get_temp_dir() . '/rktsky-antispam-mail-' . bin2hex( random_bytes( 16 ) );
 	mkdir( $mail_directory, 0700 );
-	putenv( 'WP_ANTISPAM_MAIL_DIR=' . $mail_directory );
+	putenv( 'RKTSKY_ANTISPAM_MAIL_DIR=' . $mail_directory );
 	$workers = array();
 	foreach ( range( 1, 4 ) as $index ) {
 		$pipes = array();
@@ -280,7 +280,7 @@ try {
 		}
 		rmdir( $mail_directory );
 	}
-	putenv( false === $old_mail_directory ? 'WP_ANTISPAM_MAIL_DIR' : 'WP_ANTISPAM_MAIL_DIR=' . $old_mail_directory );
+	putenv( false === $old_mail_directory ? 'RKTSKY_ANTISPAM_MAIL_DIR' : 'RKTSKY_ANTISPAM_MAIL_DIR=' . $old_mail_directory );
 	update_option( Settings::OPTION, $original, false );
 	$_SERVER = $server;
 	wp_set_current_user( 0 );

@@ -13,10 +13,10 @@ defined( 'ABSPATH' ) || exit;
 ?>
 <div class="wrap rktsky-antispam">
 	<div class="rktsky-antispam__masthead">
-		<div class="rktsky-antispam__identity"><span class="rktsky-antispam__symbol" aria-hidden="true">a.</span><h1>WP Antispam</h1><a class="rktsky-antispam__byline" href="https://www.rocketsky.ch/" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'by Rocketsky', 'wp-antispam' ); ?></a></div>
+		<div class="rktsky-antispam__identity"><span class="rktsky-antispam__symbol" aria-hidden="true">a.</span><h1>Rocketsky Antispam</h1><a class="rktsky-antispam__byline" href="https://www.rocketsky.ch/" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'by Rocketsky', 'rocketsky-antispam' ); ?></a></div>
 		<span class="rktsky-antispam__version"><?php echo esc_html( RKTSKY_ANTISPAM_VERSION ); ?></span>
 	</div>
-	<nav class="rktsky-antispam__tabs" aria-label="<?php esc_attr_e( 'WP Antispam sections', 'wp-antispam' ); ?>">
+	<nav class="rktsky-antispam__tabs" aria-label="<?php esc_attr_e( 'Rocketsky Antispam sections', 'rocketsky-antispam' ); ?>">
 		<?php foreach ( $tabs as $rktsky_antispam_tab => $rktsky_antispam_label ) : ?>
 			<a href="<?php echo esc_url( add_query_arg( 'tab', $rktsky_antispam_tab, $base_url ) ); ?>"
 			<?php

@@ -56,7 +56,7 @@ Die während eines Aufrufs gegen einen zweiten Distribution-Pfad bei gleichzeiti
 
 ## Wiederholbare Prüfungen
 
-Die nativen Tests starten nur als CLI-Programm mit `WP_ANTISPAM_ALLOW_TESTS=1`, einem `WP_ANTISPAM_WP_ROOT`, dem exakten Marker `.rktsky-antispam-fixture` mit Inhalt `rktsky-antispam-disposable`, der Konstante `WP_ANTISPAM_TEST_FIXTURE=true` und `WP_ENVIRONMENT_TYPE=local`. Sie schreiben und löschen bewusst synthetische Daten und dürfen nicht auf einer produktiven Installation ausgeführt werden.
+Die nativen Tests starten nur als CLI-Programm mit `RKTSKY_ANTISPAM_ALLOW_TESTS=1`, einem `RKTSKY_ANTISPAM_WP_ROOT`, dem exakten Marker `.rktsky-antispam-fixture` mit Inhalt `rktsky-antispam-disposable`, der Konstante `RKTSKY_ANTISPAM_TEST_FIXTURE=true` und `WP_ENVIRONMENT_TYPE=local`. Sie schreiben und löschen bewusst synthetische Daten und dürfen nicht auf einer produktiven Installation ausgeführt werden.
 
 Die GitHub-Workflowdatei wurde als YAML gelesen; die siebzehn enthaltenen Shellskripte bestehen die Syntaxprüfung und alle referenzierten PHP-Testdateien existieren. Die CI verwendet PHP 8.2, 8.3, 8.4 und 8.5 mit aktuellem WordPress und echtem MySQL 8.0. Das aktuelle Contact Form 7 setzt PHP 8.3 voraus und wird deshalb nur in den 8.3-/8.4-/8.5-Jobs installiert; WPForms Lite wird auch mit PHP 8.2 geprüft. WordPress 6.6 wird getrennt für die Plugin-/Coreverträge geprüft, ohne aktuelle Formularanbieter mit möglicherweise höheren Mindestversionen zu aktivieren. Gravity Forms ist keine öffentlich herunterladbare CI-Abhängigkeit und wird ohne separat verfügbares lizenziertes Originalpaket nicht als in GitHub getestet ausgewiesen.
 
@@ -64,7 +64,7 @@ Der Workflow läuft bei Push, Pull Request, manuell und montags um 05:23 UTC. Er
 
 ## Ausgeführter GitHub-Abschlusslauf
 
-[GitHub Actions, Lauf 42387775511](https://github.com/rktsky/wp-antispam/actions/runs/42387775511) prüfte Commit `6fb2ebec167256f3f0936aa44811d692f6c7188c`. Alle sieben Jobs bestanden: WordPress Coding Standards und JavaScript-Syntax, offizielles Plugin Check sowie fünf native MySQL-Jobs. Getestet wurden PHP 8.2, 8.3, 8.4 und 8.5 mit WordPress 7.1.4 und zusätzlich PHP 8.2 mit WordPress 6.6. Der 8.5-Job bestätigt PHP 8.5.12 und echten MySQL 8.0.46 ohne SQLite-Drop-in.
+[GitHub Actions, Lauf 42387775511](https://github.com/rktsky/rocketsky-antispam/actions/runs/42387775511) prüfte Commit `6fb2ebec167256f3f0936aa44811d692f6c7188c`. Alle sieben Jobs bestanden: WordPress Coding Standards und JavaScript-Syntax, offizielles Plugin Check sowie fünf native MySQL-Jobs. Getestet wurden PHP 8.2, 8.3, 8.4 und 8.5 mit WordPress 7.1.4 und zusätzlich PHP 8.2 mit WordPress 6.6. Der 8.5-Job bestätigt PHP 8.5.12 und echten MySQL 8.0.46 ohne SQLite-Drop-in.
 
 Die verfügbaren nativen Programme für Token, Quarantäne, Maintenance, Feedback, Datenschutz, Parallelität und Deinstallation bestanden auf der Matrix. Contact Form 7 wurde mit PHP 8.3–8.5, WPForms Lite auch mit PHP 8.2 nativ geprüft. Der lizenzpflichtige Gravity-Forms-Test meldet in der öffentlichen CI ausdrücklich SKIP; seine 130 nativen Assertions wurden separat lokal mit dem unveränderten Originalpaket bestanden. Plugin Check bestand mit den vier oben dokumentierten Hinweisen. Eine Bestätigung durch das WordPress-Pluginteam wird daraus nicht abgeleitet.
 
@@ -83,7 +83,7 @@ Quellen für die Prüfmethode: [WordPress Plugin Check](https://wordpress.org/pl
 ## Erweiterung 0.3.0
 
 
-Der abschliessende [GitHub-Lauf 42407222571](https://github.com/rktsky/wp-antispam/actions/runs/42407222571) prüfte Commit `1938c38185cc5d18d8f4f2087b7737ac22f91a7a` am 7. November 2026. Alle 14 Jobs bestanden: Standards, fünf native Basisjobs, zwei WooCommerce-Jobs, zwei zusätzliche Formularanbieter-Jobs, zwei Multisite-Jobs, Browserprotokoll und offizielles Plugin Check. Die Datenbankjobs verwendeten echten MySQL 8.0.46. Die Matrix umfasst PHP 8.2–8.5 mit aktueller WordPress-Version und zusätzlich WordPress 6.6; Multisite wurde gesondert mit WordPress 6.6/PHP 8.2 und WordPress 7.1.4/PHP 8.5 geprüft.
+Der abschliessende [GitHub-Lauf 42407222571](https://github.com/rktsky/rocketsky-antispam/actions/runs/42407222571) prüfte Commit `1938c38185cc5d18d8f4f2087b7737ac22f91a7a` am 7. November 2026. Alle 14 Jobs bestanden: Standards, fünf native Basisjobs, zwei WooCommerce-Jobs, zwei zusätzliche Formularanbieter-Jobs, zwei Multisite-Jobs, Browserprotokoll und offizielles Plugin Check. Die Datenbankjobs verwendeten echten MySQL 8.0.46. Die Matrix umfasst PHP 8.2–8.5 mit aktueller WordPress-Version und zusätzlich WordPress 6.6; Multisite wurde gesondert mit WordPress 6.6/PHP 8.2 und WordPress 7.1.4/PHP 8.5 geprüft.
 
 Plugin Check 2.2.0: keine Fehler und vier bekannte Hinweise. Drei Hinweise betreffen den gewünschten `WP`-Namen/Slug, einer die lokale Sprachdatei-Ladung für GitHub-Installationen. Die originalen Gravity-Forms-Lizenzpakete stehen der öffentlichen CI nicht zur Verfügung; diese Fälle werden dort ausdrücklich übersprungen und bleiben durch die tatsächliche lokale Prüfung mit Gravity Forms 3.2.2 belegt.
 
@@ -142,13 +142,13 @@ Die reproduzierbaren Programme sind `tests/native-divi4.php`, `tests/native-divi
 
 ## GitHub-Abschluss 0.3.1
 
-Der [vollständige Workflowlauf 42412221642](https://github.com/rktsky/wp-antispam/actions/runs/42412221642) auf Commit `e5e3417d63be0503e703f2146158a68b4512f00f` bestand im ersten Versuch alle 14 Jobs. Der geprüfte Stand enthält die Divi-Korrekturen, die überarbeiteten Integrationszustände und die Backendgestaltung mit den vollständigen Sprachkatalogen. Logik, reine Testformatierung und Optik sind getrennt committet.
+Der [vollständige Workflowlauf 42412221642](https://github.com/rktsky/rocketsky-antispam/actions/runs/42412221642) auf Commit `e5e3417d63be0503e703f2146158a68b4512f00f` bestand im ersten Versuch alle 14 Jobs. Der geprüfte Stand enthält die Divi-Korrekturen, die überarbeiteten Integrationszustände und die Backendgestaltung mit den vollständigen Sprachkatalogen. Logik, reine Testformatierung und Optik sind getrennt committet.
 
 Die fünf nativen Basisjobs verwenden PHP 8.2.35, 8.3.36, 8.4.27 und 8.5.12 mit WordPress 7.1.4 sowie WordPress 6.6 mit PHP 8.2.35. Beide WooCommerce-Jobs bestehen je 33 Originalfälle, beide zusätzlichen Formularanbieter-Jobs je 30 und beide Multisite-Jobs je 94 Assertions. Der Browser-Bridge-Job besteht 12 Prüfungen. Alle elf Datenbankjobs verwenden nach den tatsächlichen Containerlogs MySQL 8.0.46. Die 61 Divi-Adapterverträge laufen in der nativen Matrix; die oben dokumentierten kommerziellen Originaltests bleiben getrennte lokale Nachweise. Der lizenzabhängige Gravity-Forms-Test ist in der öffentlichen CI ausdrücklich übersprungen.
 
 Die Syntaxprüfung besteht für 75 eigene PHP-Dateien; WordPress Coding Standards melden keine Befunde im produktiven Quellcode. Plugin Check 2.2.0 mit Laufzeitinitialisierung meldet keine Fehler und vier bekannte sichtbare Warnungen: drei zum gewünschten Namen beziehungsweise Slug mit `wp`, eine zur lokalen Sprachdateiladung. Die Verzeichnisfreigabe wird daraus nicht abgeleitet.
 
-Das separat erstellte Installationspaket `wp-antispam-0.3.1.zip` enthält 60 Produktionsdateien und stimmt dateiweise mit diesem Quellstand überein. SHA-256: `b02ecaa44f6f78fcd23e147ac7994dccaf953de21b8544bee801ed9620813ff8`. Originalanbieter, Tests und Entwicklungsabhängigkeiten sind nicht Teil der Auslieferung. Die anschliessende Aktualisierung dieses Prüfnachweises ändert keinen produktiven Code.
+Das separat erstellte Installationspaket `rocketsky-antispam-0.3.1.zip` enthält 60 Produktionsdateien und stimmt dateiweise mit diesem Quellstand überein. SHA-256: `b02ecaa44f6f78fcd23e147ac7994dccaf953de21b8544bee801ed9620813ff8`. Originalanbieter, Tests und Entwicklungsabhängigkeiten sind nicht Teil der Auslieferung. Die anschliessende Aktualisierung dieses Prüfnachweises ändert keinen produktiven Code.
 
 
 ## Verwaltungsstruktur 0.4.0
@@ -182,7 +182,7 @@ Desktop-Browseremulation ersetzt keine physischen Geräte oder Screenreader.
 
 ### Abgeschlossener CI- und Distributionsnachweis
 
-Der [Workflowlauf 42416956097](https://github.com/rktsky/wp-antispam/actions/runs/42416956097)
+Der [Workflowlauf 42416956097](https://github.com/rktsky/rocketsky-antispam/actions/runs/42416956097)
 auf Commit `acd0fa84d6f7eb87a457e2577800767bfbedb415` besteht im ersten Versuch
 alle 14 Jobs. Die neuen 227 Verwaltungsprüfungen bestehen in allen fünf nativen
 Basisjobs: PHP 8.2.35, 8.3.36, 8.4.27 und 8.5.12 mit WordPress 7.1.4 sowie
@@ -200,7 +200,7 @@ bekannten sichtbaren Hinweisen zum Namen/Slug und zur lokalen Sprachdateiladung.
 Die 286 verwendeten Nachrichten sind vollständig in den mitgelieferten
 Sprachkatalogen enthalten und mit GNU msgfmt sowie vollständigem MO-Readback geprüft.
 
-Das Installationspaket `wp-antispam-0.4.0.zip` enthält 65 Produktionsdateien,
+Das Installationspaket `rocketsky-antispam-0.4.0.zip` enthält 65 Produktionsdateien,
 stimmt dateiweise mit diesem Quellstand überein und enthält keine Tests oder
 Originalanbieterpakete. SHA-256:
 `8e109dbff0e867fa6275fd1a5cfcc9261572e1e4efc19c920b22e8d003b02a30`.
@@ -310,7 +310,7 @@ weitere als die aufgeführten Versionen benötigen weiterhin ihre eigene Abnahme
 
 ### Abschliessender CI- und Paketnachweis 0.5.0
 
-Der [Workflowlauf 42425665645](https://github.com/rktsky/wp-antispam/actions/runs/42425665645)
+Der [Workflowlauf 42425665645](https://github.com/rktsky/rocketsky-antispam/actions/runs/42425665645)
 auf Commit `536788c23e53dfce2bbf91073f01553b466fef7a` besteht alle 14 Jobs.
 Die Matrix umfasst PHP 8.2 bis 8.5, aktuelles WordPress und WordPress 6.6 sowie
 separate WooCommerce-, Formular-, Multisite-, Browser- und Standardsprüfungen.

@@ -13,7 +13,7 @@
 defined( 'ABSPATH' ) || exit;
 ?>
 <?php foreach ( $notices as $rktsky_antispam_notice ) : ?>
-	<p><strong><?php echo esc_html( sprintf( /* translators: %s: the active integration name. */ __( 'WP Antispam is enabled for %s.', 'wp-antispam' ), $rktsky_antispam_notice['name'] ) ); ?></strong>
+	<p><strong><?php echo esc_html( sprintf( /* translators: %s: the active integration name. */ __( 'Rocketsky Antispam is enabled for %s.', 'rocketsky-antispam' ), $rktsky_antispam_notice['name'] ) ); ?></strong>
 		<?php echo esc_html( $rktsky_antispam_notice['handling']['description'] ); ?>
 		<?php if ( ! empty( $rktsky_antispam_notice['handling']['url'] ) ) : ?>
 			<a href="<?php echo esc_url( $rktsky_antispam_notice['handling']['url'] ); ?>"><?php echo esc_html( $rktsky_antispam_notice['handling']['label'] ); ?></a>

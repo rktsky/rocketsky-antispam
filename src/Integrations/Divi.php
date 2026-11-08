@@ -218,11 +218,11 @@ final class Divi extends Adapter {
 		if ( ! is_string( $reload ) || '' === $reload ) {
 			$reload = home_url( '/' );
 		}
-		$html = '<div id="' . esc_attr( $container ) . '"><div class="et-pb-contact-message"><p class="et_pb_contact_error_text" role="alert">' . esc_html( $this->guard->message() ) . '</p><p><a href="' . esc_url( $reload ) . '">' . esc_html__( 'Reload the form', 'wp-antispam' ) . '</a></p></div></div>';
+		$html = '<div id="' . esc_attr( $container ) . '"><div class="et-pb-contact-message"><p class="et_pb_contact_error_text" role="alert">' . esc_html( $this->guard->message() ) . '</p><p><a href="' . esc_url( $reload ) . '">' . esc_html__( 'Reload the form', 'rocketsky-antispam' ) . '</a></p></div></div>';
 		nocache_headers();
 		wp_die(
 			$html, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Every dynamic fragment is escaped for its HTML context above.
-			'WP Antispam',
+			'Rocketsky Antispam',
 			array(
 				'response'  => $ajax ? 200 : 403,
 				'back_link' => false,

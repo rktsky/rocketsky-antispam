@@ -145,7 +145,7 @@ final class Guard {
 	 * @return string Localized visible rejection suitable for native confirmations.
 	 */
 	public function spam_message(): string {
-		return __( 'The spam protection rejected this submission. Please check your message and try again.', 'wp-antispam' );
+		return __( 'The spam protection rejected this submission. Please check your message and try again.', 'rocketsky-antispam' );
 	}
 
 	/**
@@ -196,6 +196,6 @@ final class Guard {
 	 * @return string Localized public error.
 	 */
 	public function message(): string {
-		return __( 'The spam protection could not verify this submission. Please wait a moment and try again. If it still fails, reload the page. JavaScript must be enabled.', 'wp-antispam' );
+		return __( 'The spam protection could not verify this submission. Please wait a moment and try again. If it still fails, reload the page. JavaScript must be enabled.', 'rocketsky-antispam' );
 	}
 }

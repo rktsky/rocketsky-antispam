@@ -22,14 +22,14 @@ if ( ! empty( $forms ) ) {
 $forms = array();
 if ( class_exists( 'WPCF7_ContactForm' ) ) {
 	$form = WPCF7_ContactForm::get_template();
-	$form->set_title( 'Synthetic WP Antispam CF7 fixture' );
+	$form->set_title( 'Synthetic Rocketsky Antispam CF7 fixture' );
 	$form->set_properties( array( 'form' => '<label>Name [text* your-name]</label><label>Email [email* your-email]</label><label>Message [textarea your-message]</label>[submit "Submit synthetic CF7"]', 'additional_settings' => 'skip_mail: on' ) );
 	$forms['cf7'] = $form->save();
 }
 
 if ( class_exists( 'GFAPI' ) ) {
 	$forms['gravityforms'] = GFAPI::add_form( array(
-		'title' => 'Synthetic WP Antispam GF fixture',
+		'title' => 'Synthetic Rocketsky Antispam GF fixture',
 		'description' => 'Disposable local test data only.',
 		'fields' => array( new GF_Field_Text( array( 'id' => 1, 'label' => 'Name', 'isRequired' => true, 'formId' => 0 ) ) ),
 		'button' => array( 'type' => 'text', 'text' => 'Submit synthetic GF' ),
@@ -39,7 +39,7 @@ if ( class_exists( 'GFAPI' ) ) {
 		'enableHoneypot' => true,
 	) );
 	$forms['gravityforms_multi'] = GFAPI::add_form( array(
-		'title' => 'Synthetic WP Antispam GF multipage fixture',
+		'title' => 'Synthetic Rocketsky Antispam GF multipage fixture',
 		'fields' => array(
 			new GF_Field_Text( array( 'id' => 1, 'label' => 'First page name', 'isRequired' => true, 'pageNumber' => 1 ) ),
 			new GF_Field_Page( array( 'id' => 2, 'label' => 'Second page', 'pageNumber' => 2, 'nextButton' => array( 'type' => 'text', 'text' => 'Next' ), 'previousButton' => array( 'type' => 'text', 'text' => 'Previous' ) ) ),
@@ -54,10 +54,10 @@ if ( class_exists( 'GFAPI' ) ) {
 }
 
 if ( function_exists( 'wpforms' ) ) {
-	$forms['wpforms'] = wpforms()->obj( 'form' )->add( 'Synthetic WP Antispam WPForms fixture', array( 'post_content' => wp_json_encode( array(
+	$forms['wpforms'] = wpforms()->obj( 'form' )->add( 'Synthetic Rocketsky Antispam WPForms fixture', array( 'post_content' => wp_json_encode( array(
 		'field_id' => 2,
 		'fields' => array( 1 => array( 'id' => '1', 'type' => 'text', 'label' => 'Name', 'required' => '1', 'size' => 'medium' ) ),
-		'settings' => array( 'form_title' => 'Synthetic WP Antispam WPForms fixture', 'submit_text' => 'Submit synthetic WPForms', 'notification_enable' => '0', 'ajax_submit' => '0', 'antispam_v3' => '1', 'confirmations' => array( 1 => array( 'type' => 'message', 'message' => 'Synthetic WPForms accepted.' ) ) ),
+		'settings' => array( 'form_title' => 'Synthetic Rocketsky Antispam WPForms fixture', 'submit_text' => 'Submit synthetic WPForms', 'notification_enable' => '0', 'ajax_submit' => '0', 'antispam_v3' => '1', 'confirmations' => array( 1 => array( 'type' => 'message', 'message' => 'Synthetic WPForms accepted.' ) ) ),
 	) ) ) );
 	if ( $forms['wpforms'] ) {
 		$definition = wpforms_decode( get_post_field( 'post_content', $forms['wpforms'] ) );
@@ -66,7 +66,7 @@ if ( function_exists( 'wpforms' ) ) {
 	}
 }
 
-$content = '<h1>WP Antispam synthetic forms</h1>';
+$content = '<h1>Rocketsky Antispam synthetic forms</h1>';
 foreach ( $forms as $provider => $id ) {
 	if ( is_wp_error( $id ) || ! $id ) {
 		throw new RuntimeException( 'Synthetic form creation failed for ' . $provider );
@@ -80,6 +80,6 @@ foreach ( $forms as $provider => $id ) {
 		$content .= '[wpforms id="' . (int) $id . '" title="false"]';
 	}
 }
-$forms['page'] = wp_insert_post( array( 'post_title' => 'Synthetic WP Antispam forms', 'post_content' => $content, 'post_status' => 'publish', 'post_type' => 'page', 'comment_status' => 'open' ) );
+$forms['page'] = wp_insert_post( array( 'post_title' => 'Synthetic Rocketsky Antispam forms', 'post_content' => $content, 'post_status' => 'publish', 'post_type' => 'page', 'comment_status' => 'open' ) );
 update_option( 'rktsky_antispam_test_forms', $forms, false );
 echo wp_json_encode( $forms ) . "\n";

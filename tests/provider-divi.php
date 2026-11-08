@@ -314,7 +314,7 @@ namespace {
 		if ( ! $condition ) {
 			throw new RuntimeException( $message ); } }
 
-	$wp_root = getenv( 'WP_ANTISPAM_WP_ROOT' ) ?: '/tmp/rktsky-antispam-runtime/site/wordpress';
+	$wp_root = getenv( 'RKTSKY_ANTISPAM_WP_ROOT' ) ?: '/tmp/rktsky-antispam-runtime/site/wordpress';
 	if ( ! is_file( $wp_root . '/wp-includes/html-api/class-wp-html-tag-processor.php' ) ) {
 		throw new RuntimeException( 'An unchanged WordPress HTML API source directory is required for these contracts.' ); }
 	if ( is_file( $wp_root . '/wp-includes/utf8.php' ) ) {

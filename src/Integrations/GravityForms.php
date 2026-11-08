@@ -186,7 +186,7 @@ final class GravityForms extends Adapter {
 		$form_id = isset( $form['id'] ) ? (string) absint( $form['id'] ) : '0';
 
 		if ( ! empty( $this->gravity_errors[ $form_id ] ) ) {
-			$message .= '<p class="wp-antispam-form-error" role="alert">' . esc_html( $this->failure_message( (string) $this->gravity_errors[ $form_id ] ) ) . '</p>';
+			$message .= '<p class="rocketsky-antispam-form-error" role="alert">' . esc_html( $this->failure_message( (string) $this->gravity_errors[ $form_id ] ) ) . '</p>';
 		}
 
 		return $message;
@@ -287,7 +287,7 @@ final class GravityForms extends Adapter {
 	 */
 	private function confirmation_error( array $form, string $message ): string {
 		$form_id = isset( $form['id'] ) ? (string) absint( $form['id'] ) : '0';
-		$markup  = '<p class="wp-antispam-form-error" role="alert">' . esc_html( $message ) . '</p>';
+		$markup  = '<p class="rocketsky-antispam-form-error" role="alert">' . esc_html( $message ) . '</p>';
 		if ( is_callable( array( '\\GFFormDisplay', 'get_confirmation_message' ) ) ) {
 			$form['id'] = $form_id;
 			return \GFFormDisplay::get_confirmation_message(
@@ -337,7 +337,7 @@ final class GravityForms extends Adapter {
 			unset( $this->gravity_content_spam[ $form_id ] );
 			$this->gravity_spam_confirmation[ $form_id ] = $current;
 			if ( ! $spam ) {
-				\GFCommon::set_spam_filter( (int) $form_id, 'WP Antispam', sprintf( /* translators: %s: fixed internal content-policy reason code. */ __( 'Local content policy: %s.', 'wp-antispam' ), $pending['reason'] ) );
+				\GFCommon::set_spam_filter( (int) $form_id, 'Rocketsky Antispam', sprintf( /* translators: %s: fixed internal content-policy reason code. */ __( 'Local content policy: %s.', 'rocketsky-antispam' ), $pending['reason'] ) );
 			}
 			$spam = true;
 		}

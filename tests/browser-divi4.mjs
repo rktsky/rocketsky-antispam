@@ -6,9 +6,9 @@
  * responses and local challenges are never mocked. Fault routes simulate only
  * explicit challenge outages, network loss and a cached original HTML document.
  *
- * Required: WP_ANTISPAM_ALLOW_TESTS=1 and WP_ANTISPAM_WP_ROOT. Optional:
- * WP_ANTISPAM_PLAYWRIGHT, WP_ANTISPAM_PHP, WP_ANTISPAM_PHP_ARGS (JSON array),
- * WP_ANTISPAM_DIVI4_CASES (comma-separated), WP_ANTISPAM_BROWSER_OUTPUT (JSON).
+ * Required: RKTSKY_ANTISPAM_ALLOW_TESTS=1 and RKTSKY_ANTISPAM_WP_ROOT. Optional:
+ * RKTSKY_ANTISPAM_PLAYWRIGHT, RKTSKY_ANTISPAM_PHP, RKTSKY_ANTISPAM_PHP_ARGS (JSON array),
+ * RKTSKY_ANTISPAM_DIVI4_CASES (comma-separated), RKTSKY_ANTISPAM_BROWSER_OUTPUT (JSON).
  *
  * @since 0.3.1
  */
@@ -16,15 +16,15 @@ import { readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
-if (process.env.WP_ANTISPAM_ALLOW_TESTS !== '1')
+if (process.env.RKTSKY_ANTISPAM_ALLOW_TESTS !== '1')
 	throw Error('Explicit disposable-test authorization is required.');
-const root = realpathSync(process.env.WP_ANTISPAM_WP_ROOT || '');
+const root = realpathSync(process.env.RKTSKY_ANTISPAM_WP_ROOT || '');
 if (
 	readFileSync(root + '/.rktsky-antispam-fixture', 'utf8').trim() !== 'rktsky-antispam-disposable'
 )
 	throw Error('A disposable fixture marker is required.');
-const php = process.env.WP_ANTISPAM_PHP || 'php';
-const phpArgs = JSON.parse(process.env.WP_ANTISPAM_PHP_ARGS || '[]');
+const php = process.env.RKTSKY_ANTISPAM_PHP || 'php';
+const phpArgs = JSON.parse(process.env.RKTSKY_ANTISPAM_PHP_ARGS || '[]');
 if (!Array.isArray(phpArgs) || !phpArgs.every((arg) => typeof arg === 'string'))
 	throw Error('PHP arguments must be a JSON array of strings.');
 const helper = fileURLToPath(new URL('./prepare-divi4.php', import.meta.url));
@@ -44,8 +44,8 @@ const initial = fixture('state');
 const origin = new URL(initial.origin).origin;
 if (!/^http:\/\/127\.0\.0\.1:(8884|8886)$/.test(origin))
 	throw Error('Only the assigned Divi4 fixture origins are allowed.');
-const selected = new Set((process.env.WP_ANTISPAM_DIVI4_CASES || '').split(',').filter(Boolean));
-const { firefox } = await import(process.env.WP_ANTISPAM_PLAYWRIGHT || 'playwright');
+const selected = new Set((process.env.RKTSKY_ANTISPAM_DIVI4_CASES || '').split(',').filter(Boolean));
+const { firefox } = await import(process.env.RKTSKY_ANTISPAM_PLAYWRIGHT || 'playwright');
 const browser = await firefox.launch({ headless: true });
 const results = [];
 const run = 'browser-' + Date.now().toString(36);
@@ -522,8 +522,8 @@ const output = {
 	viewport: '1280x900 CSS pixels, headless desktop; no device emulation',
 	results
 };
-if (process.env.WP_ANTISPAM_BROWSER_OUTPUT)
-	writeFileSync(process.env.WP_ANTISPAM_BROWSER_OUTPUT, JSON.stringify(output, null, 2) + '\n');
+if (process.env.RKTSKY_ANTISPAM_BROWSER_OUTPUT)
+	writeFileSync(process.env.RKTSKY_ANTISPAM_BROWSER_OUTPUT, JSON.stringify(output, null, 2) + '\n');
 console.log(
 	JSON.stringify({
 		origin,

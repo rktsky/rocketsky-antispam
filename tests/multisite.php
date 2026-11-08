@@ -3,19 +3,19 @@
  * Verifies native multisite lifecycle and storage isolation on a disposable network.
  *
  * This creates/removes synthetic sites through Core APIs. The native network must
- * already have WP Antispam network activated and block mail/external HTTP.
+ * already have Rocketsky Antispam network activated and block mail/external HTTP.
  *
  * @package RktskyAntispamTests
  * @since 0.3.0
  */
-if ( PHP_SAPI !== 'cli' || '1' !== getenv( 'WP_ANTISPAM_ALLOW_TESTS' ) ) {
+if ( PHP_SAPI !== 'cli' || '1' !== getenv( 'RKTSKY_ANTISPAM_ALLOW_TESTS' ) ) {
 	throw new RuntimeException( 'Explicit CLI test authorization is required.' );
 }
-$root = realpath( (string) getenv( 'WP_ANTISPAM_WP_ROOT' ) );
+$root = realpath( (string) getenv( 'RKTSKY_ANTISPAM_WP_ROOT' ) );
 if ( ! $root || ! is_file( $root . '/.rktsky-antispam-fixture' ) || 'rktsky-antispam-disposable' !== trim( file_get_contents( $root . '/.rktsky-antispam-fixture' ) ) ) {
 	throw new RuntimeException( 'A disposable native fixture marker is required.' );
 }
-$url = parse_url( getenv( 'WP_ANTISPAM_TEST_URL' ) ?: 'http://127.0.0.1:8877' );
+$url = parse_url( getenv( 'RKTSKY_ANTISPAM_TEST_URL' ) ?: 'http://127.0.0.1:8877' );
 if ( ! in_array( $url['host'] ?? '', array( '127.0.0.1', 'localhost', '[::1]' ), true ) ) {
 	throw new RuntimeException( 'The native multisite fixture must use a loopback origin.' );
 }
@@ -36,11 +36,11 @@ register_shutdown_function(
 );
 require $root . '/wp-load.php';
 $rktsky_multisite_booted = true;
-if ( ! is_multisite() || ! defined( 'WP_ANTISPAM_TEST_FIXTURE' ) || true !== WP_ANTISPAM_TEST_FIXTURE || 'local' !== wp_get_environment_type() || false !== apply_filters( 'pre_wp_mail', null, array() ) || ! defined( 'WP_HTTP_BLOCK_EXTERNAL' ) || ! WP_HTTP_BLOCK_EXTERNAL ) {
+if ( ! is_multisite() || ! defined( 'RKTSKY_ANTISPAM_TEST_FIXTURE' ) || true !== RKTSKY_ANTISPAM_TEST_FIXTURE || 'local' !== wp_get_environment_type() || false !== apply_filters( 'pre_wp_mail', null, array() ) || ! defined( 'WP_HTTP_BLOCK_EXTERNAL' ) || ! WP_HTTP_BLOCK_EXTERNAL ) {
 	throw new RuntimeException( 'A local disposable network with mail/HTTP disabled is required.' );
 }
 if ( ! class_exists( '\Rktsky\Antispam\Network' ) ) {
-	throw new RuntimeException( 'Network activate WP Antispam before running this test.' );
+	throw new RuntimeException( 'Network activate Rocketsky Antispam before running this test.' );
 }
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 require_once ABSPATH . 'wp-admin/includes/user.php';

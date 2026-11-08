@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
 	<input type="hidden" name="<?php echo esc_attr( \Rktsky\Antispam\Settings::OPTION ); ?>[privacy_mode]" value="0" />
 	<label class="rktsky-antispam__inline-check" for="rktsky-privacy-mode">
 		<input type="checkbox" id="rktsky-privacy-mode" name="<?php echo esc_attr( \Rktsky\Antispam\Settings::OPTION ); ?>[privacy_mode]" value="1" data-rk-privacy-mode aria-describedby="rktsky-mode-help" <?php checked( $privacy_mode ); ?> />
-		<span><?php esc_html_e( 'Privacy-conscious mode', 'wp-antispam' ); ?></span>
+		<span><?php esc_html_e( 'Privacy-conscious mode', 'rocketsky-antispam' ); ?></span>
 	</label>
-	<p class="description" id="rktsky-mode-help"><?php esc_html_e( 'On by default. Keeps quarantine, country checks, administrator digest emails and native pingbacks/trackbacks off. Local content rules and anonymous statistics remain available.', 'wp-antispam' ); ?></p>
+	<p class="description" id="rktsky-mode-help"><?php esc_html_e( 'On by default. Keeps quarantine, country checks, administrator digest emails and native pingbacks/trackbacks off. Local content rules and anonymous statistics remain available.', 'rocketsky-antispam' ); ?></p>
 </div>

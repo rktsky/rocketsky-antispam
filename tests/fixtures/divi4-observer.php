@@ -10,7 +10,7 @@
  * @since 0.3.1
  */
 
-if ( ! defined( 'WP_ANTISPAM_TEST_FIXTURE' ) || true !== WP_ANTISPAM_TEST_FIXTURE || 'local' !== wp_get_environment_type() || ! defined( 'RKTSKY_DIVI4_FIXTURE_LOG' ) || ! is_file( ABSPATH . '.rktsky-antispam-fixture' ) || 'rktsky-antispam-disposable' !== trim( file_get_contents( ABSPATH . '.rktsky-antispam-fixture' ) ) ) {
+if ( ! defined( 'RKTSKY_ANTISPAM_TEST_FIXTURE' ) || true !== RKTSKY_ANTISPAM_TEST_FIXTURE || 'local' !== wp_get_environment_type() || ! defined( 'RKTSKY_DIVI4_FIXTURE_LOG' ) || ! is_file( ABSPATH . '.rktsky-antispam-fixture' ) || 'rktsky-antispam-disposable' !== trim( file_get_contents( ABSPATH . '.rktsky-antispam-fixture' ) ) ) {
 	return;
 }
 

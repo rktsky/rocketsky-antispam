@@ -92,7 +92,7 @@ try {
 		$cases = array( 'valid', 'keyword', 'bbcode', 'pattern', 'language', 'country', 'keyword_q', 'missing', 'trap', 'wrong_scope', 'replay', 'storage', 'pattern_limit', 'technical_q', 'store_off', 'store_off_q', 'disabled_entries', 'disabled_entries_zero', 'native_error', 'native_spam', 'storage_filter', 'storage_filter_q', 'same_request', 'unspam', 'stripe', 'square', 'sensitive', 'feedback' );
 		foreach ( $cases as $name ) {
 			$command = array( PHP_BINARY );
-			foreach ( array( 'WP_ANTISPAM_PHP_ICONV', 'WP_ANTISPAM_PHP_SIMPLEXML' ) as $key ) {
+			foreach ( array( 'RKTSKY_ANTISPAM_PHP_ICONV', 'RKTSKY_ANTISPAM_PHP_SIMPLEXML' ) as $key ) {
 				if ( getenv( $key ) ) {
 					$command[] = '-d';
 					$command[] = 'extension=' . getenv( $key ); }
@@ -363,7 +363,7 @@ try {
 					'type'     => 'spam',
 				)
 			);
-			rktsky_wpf_expect( ! empty( $meta ) && ( 'native_spam' === $case || 'WP Antispam' === $meta[0]->data ), 'The native spam detail must retain the fixed protection reason.' );
+			rktsky_wpf_expect( ! empty( $meta ) && ( 'native_spam' === $case || 'Rocketsky Antispam' === $meta[0]->data ), 'The native spam detail must retain the fixed protection reason.' );
 			if ( 'native_spam' !== $case ) {
 				$raw = wpforms()->obj( 'entry_meta' )->get_meta(
 					array(

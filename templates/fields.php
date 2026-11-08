@@ -15,4 +15,4 @@ defined( 'ABSPATH' ) || exit;
 <span hidden data-rk-antispam data-provider="<?php echo esc_attr( $provider ); ?>" data-form="<?php echo esc_attr( $form_id ); ?>" data-intent="<?php echo esc_attr( $intent ); ?>" data-endpoint="<?php echo esc_url( $endpoint ); ?>">
 	<input type="hidden" name="rktsky_antispam_token" value="" autocomplete="off">
 </span>
-<noscript><p><?php esc_html_e( 'This form uses local spam protection. Please enable JavaScript to submit it.', 'wp-antispam' ); ?></p></noscript>
+<noscript><p><?php esc_html_e( 'This form uses local spam protection. Please enable JavaScript to submit it.', 'rocketsky-antispam' ); ?></p></noscript>

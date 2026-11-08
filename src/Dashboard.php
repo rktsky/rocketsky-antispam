@@ -24,7 +24,7 @@ final class Dashboard {
 	 */
 	public static function register(): void {
 		if ( current_user_can( 'manage_options' ) ) {
-			wp_add_dashboard_widget( 'rktsky_antispam_dashboard', __( 'WP Antispam', 'wp-antispam' ), array( self::class, 'render' ) );
+			wp_add_dashboard_widget( 'rktsky_antispam_dashboard', __( 'Rocketsky Antispam', 'rocketsky-antispam' ), array( self::class, 'render' ) );
 		}
 	}
 

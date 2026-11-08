@@ -386,7 +386,7 @@ try {
 	$temporary->db_delete( true );
 	rktsky_provider_feedback_expect( null === $feedback->status( 'wsform', $entry_hash ), 'Native WS whole-form deletion must detach classification before removing native field definitions.' );
 	$ws_temporary_form = 0;
-	$only_owned        = array_values( array_filter( $original_plugins, static fn( string $plugin ): bool => 'wp-antispam.php' === basename( $plugin ) ) );
+	$only_owned        = array_values( array_filter( $original_plugins, static fn( string $plugin ): bool => 'rocketsky-antispam.php' === basename( $plugin ) ) );
 	rktsky_provider_feedback_expect( 1 === count( $only_owned ), 'The Core-only subprocess must retain exactly the owned plugin.' );
 	update_option( 'active_plugins', $only_owned, false );
 	$command = array( PHP_BINARY, __FILE__, 'core_only' );

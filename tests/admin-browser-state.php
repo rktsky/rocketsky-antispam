@@ -24,7 +24,7 @@ if ( 'identity' === $rktsky_admin_mode ) {
 	echo wp_json_encode(
 		array(
 			'origin'       => $rktsky_admin_origin,
-			'admin'        => admin_url( 'options-general.php?page=wp-antispam' ),
+			'admin'        => admin_url( 'options-general.php?page=rocketsky-antispam' ),
 			'login'        => wp_login_url(),
 			'wordpress'    => get_bloginfo( 'version' ),
 			'mail_blocked' => false !== has_filter( 'pre_wp_mail' ),

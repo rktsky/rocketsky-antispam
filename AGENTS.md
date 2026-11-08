@@ -1,8 +1,9 @@
-# WP Antispam development
+# Rocketsky Antispam development
 
 - Apply the user's wordpress-plugin-development skill and global original-package/editorial rules.
 - This is independently authored plugin source; WordPress and form providers stay unchanged.
 - Namespace `Rktsky\Antispam`; prefix persistent names, handles and public routes with `rktsky_antispam`.
+- Public name, distribution slug and text domain are Rocketsky Antispam / `rocketsky-antispam` since 0.5.1. Keep the existing `rktsky` storage, cryptographic purpose strings, native provider source IDs and protocol stable; the name change must not reset retained data. Legacy identifiers in the installation guard, upgrade tests and historical evidence are intentional compatibility inputs.
 - Logic lives in src/, read-only escaped markup in templates/, assets in assets/.
 - Full English WordPress PHPDoc, genuine first-version @since values, tabs and LF. No runtime dependencies.
 - Logic, appearance and formatting use separate commits. No credentials, vendor or runtimes in Git.

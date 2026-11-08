@@ -6,11 +6,11 @@
  * @since 0.1.0
  */
 
-if ( PHP_SAPI !== 'cli' || '1' !== getenv( 'WP_ANTISPAM_ALLOW_TESTS' ) ) {
+if ( PHP_SAPI !== 'cli' || '1' !== getenv( 'RKTSKY_ANTISPAM_ALLOW_TESTS' ) ) {
 	throw new RuntimeException( 'Explicit CLI test authorization is required.' );
 }
 
-$rktsky_test_root = realpath( (string) getenv( 'WP_ANTISPAM_WP_ROOT' ) );
+$rktsky_test_root = realpath( (string) getenv( 'RKTSKY_ANTISPAM_WP_ROOT' ) );
 if ( false === $rktsky_test_root || ! is_file( $rktsky_test_root . '/.rktsky-antispam-fixture' ) || 'rktsky-antispam-disposable' !== trim( file_get_contents( $rktsky_test_root . '/.rktsky-antispam-fixture' ) ) ) {
 	throw new RuntimeException( 'A disposable WordPress fixture marker is required.' );
 }
@@ -31,10 +31,10 @@ register_shutdown_function(
 );
 require $rktsky_test_root . '/wp-load.php';
 $rktsky_test_booted = true;
-if ( ! defined( 'WP_ANTISPAM_TEST_FIXTURE' ) || true !== WP_ANTISPAM_TEST_FIXTURE || 'local' !== wp_get_environment_type() ) {
+if ( ! defined( 'RKTSKY_ANTISPAM_TEST_FIXTURE' ) || true !== RKTSKY_ANTISPAM_TEST_FIXTURE || 'local' !== wp_get_environment_type() ) {
 	throw new RuntimeException( 'Refusing to modify a site without the explicit local fixture configuration.' );
 }
 
 if ( ! class_exists( '\Rktsky\Antispam\Guard' ) ) {
-	throw new RuntimeException( 'Activate WP Antispam on the disposable site before running native tests.' );
+	throw new RuntimeException( 'Activate Rocketsky Antispam on the disposable site before running native tests.' );
 }

@@ -69,10 +69,10 @@ function rktsky_antispam_admin_query( string $query ): string {
  */
 function rktsky_antispam_admin_view( Admin $admin, $tab ): array {
 	$_GET                            = array(
-		'page' => 'wp-antispam',
+		'page' => 'rocketsky-antispam',
 		'tab'  => $tab,
 	);
-	$_SERVER['REQUEST_URI']          = '/wp-admin/options-general.php?page=wp-antispam&tab=' . ( is_string( $tab ) ? rawurlencode( $tab ) : 'overview' );
+	$_SERVER['REQUEST_URI']          = '/wp-admin/options-general.php?page=rocketsky-antispam&tab=' . ( is_string( $tab ) ? rawurlencode( $tab ) : 'overview' );
 	$GLOBALS['rktsky_admin_queries'] = array();
 	add_filter( 'query', 'rktsky_antispam_admin_query', PHP_INT_MAX );
 	ob_start();
@@ -188,7 +188,7 @@ function rktsky_antispam_admin_redirect( array $response, string $tab ): void {
 	$parts    = wp_parse_url( $response['location'] );
 	$expected = wp_parse_url( admin_url( 'options-general.php' ) );
 	parse_str( $parts['query'] ?? '', $query );
-	rktsky_antispam_admin_expect( 302 === $response['status'] && ( $parts['host'] ?? '' ) === ( $expected['host'] ?? '' ) && ( $parts['path'] ?? '' ) === $expected['path'] && 'wp-antispam' === ( $query['page'] ?? '' ) && $tab === ( $query['tab'] ?? '' ), 'An action redirect must return to its local plugin view.' );
+	rktsky_antispam_admin_expect( 302 === $response['status'] && ( $parts['host'] ?? '' ) === ( $expected['host'] ?? '' ) && ( $parts['path'] ?? '' ) === $expected['path'] && 'rocketsky-antispam' === ( $query['page'] ?? '' ) && $tab === ( $query['tab'] ?? '' ), 'An action redirect must return to its local plugin view.' );
 }
 
 $settings         = new Settings();
@@ -253,7 +253,7 @@ try {
 			parse_str( (string) wp_parse_url( $link->getAttribute( 'href' ), PHP_URL_QUERY ), $query );
 			$key    = $query['tab'] ?? '';
 			$seen[] = $key;
-			rktsky_antispam_admin_expect( isset( $tabs[ $key ] ) && 'wp-antispam' === ( $query['page'] ?? '' ), 'Navigation must use fixed native page and tab values.' );
+			rktsky_antispam_admin_expect( isset( $tabs[ $key ] ) && 'rocketsky-antispam' === ( $query['page'] ?? '' ), 'Navigation must use fixed native page and tab values.' );
 			if ( 'page' === $link->getAttribute( 'aria-current' ) ) {
 				rktsky_antispam_admin_expect( $tab === $key, 'The requested allowlisted view must be selected.' );
 			}

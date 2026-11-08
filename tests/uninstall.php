@@ -30,11 +30,15 @@ $before_tables = $wpdb->get_col( 'SHOW TABLES' );
 $owned_tables = array( $wpdb->prefix . 'rktsky_antispam_tokens', $wpdb->prefix . 'rktsky_antispam_stats', $wpdb->prefix . 'rktsky_antispam_totals', $wpdb->prefix . 'rktsky_antispam_quarantine', $wpdb->prefix . 'rktsky_antispam_feedback', $wpdb->prefix . 'rktsky_antispam_jobs' );
 $foreign_before = array_values( array_diff( $before_tables, $owned_tables ) );
 sort( $foreign_before );
+require_once ABSPATH . 'wp-admin/includes/plugin.php';
+$plugin = plugin_basename( RKTSKY_ANTISPAM_FILE );
+// Core only uninstalls inactive plugins; exercise that native lifecycle boundary.
+deactivate_plugins( $plugin );
 try {
 	$retain = $original;
 	$retain['delete_on_uninstall'] = false;
 	update_option( \Rktsky\Antispam\Settings::OPTION, $retain, false );
-	define( 'WP_UNINSTALL_PLUGIN', 'wp-antispam/wp-antispam.php' );
+	define( 'WP_UNINSTALL_PLUGIN', 'rocketsky-antispam/rocketsky-antispam.php' );
 	require dirname( __DIR__ ) . '/uninstall.php';
 	$after_retain = $wpdb->get_col( 'SHOW TABLES' );
 	rktsky_antispam_uninstall_expect( count( array_intersect( $owned_tables, $after_retain ) ) === count( $owned_tables ), 'Retain mode must preserve every owned table.' );
@@ -53,6 +57,6 @@ try {
 	rktsky_antispam_uninstall_expect( $foreign_before === $foreign_after, 'Core and original provider table inventories must remain unchanged.' );
 	echo "PASS: 6 native uninstall assertions (retain, delete, cron, provider isolation).\n";
 } finally {
-	\Rktsky\Antispam\Plugin::activate();
+	activate_plugin( $plugin );
 	update_option( \Rktsky\Antispam\Settings::OPTION, $original, false );
 }

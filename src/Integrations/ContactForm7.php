@@ -146,7 +146,7 @@ final class ContactForm7 extends Adapter {
 		if ( $submission ) {
 			$submission->add_spam_log(
 				array(
-					'agent'  => 'wp-antispam',
+					'agent'  => 'rocketsky-antispam',
 					'reason' => 'Local protection check failed.',
 				)
 			);

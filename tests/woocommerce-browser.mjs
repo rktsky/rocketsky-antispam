@@ -1,8 +1,8 @@
 /**
  * Exercises native classic/block checkout retries in an explicitly disposable site.
  *
- * Run after prepare-woocommerce.php with WP_ANTISPAM_ALLOW_TESTS=1, the fixture root,
- * WP_ANTISPAM_WP_CLI and optional PHP_BINARY/PLAYWRIGHT_MODULE/PLAYWRIGHT_FIREFOX set.
+ * Run after prepare-woocommerce.php with RKTSKY_ANTISPAM_ALLOW_TESTS=1, the fixture root,
+ * RKTSKY_ANTISPAM_WP_CLI and optional PHP_BINARY/PLAYWRIGHT_MODULE/PLAYWRIGHT_FIREFOX set.
  * Browser delivery is restricted to the fixture origin and native offline BACS.
  *
  * @since 0.3.0
@@ -10,21 +10,21 @@
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 
-const root = process.env.WP_ANTISPAM_WP_ROOT;
+const root = process.env.RKTSKY_ANTISPAM_WP_ROOT;
 if (
-	process.env.WP_ANTISPAM_ALLOW_TESTS !== '1' ||
+	process.env.RKTSKY_ANTISPAM_ALLOW_TESTS !== '1' ||
 	!root ||
 	readFileSync(root + '/.rktsky-antispam-fixture', 'utf8').trim() !== 'rktsky-antispam-disposable'
 ) {
 	throw new Error('An explicitly authorized disposable WordPress fixture is required.');
 }
 const php = process.env.PHP_BINARY || 'php';
-const cli = process.env.WP_ANTISPAM_WP_CLI;
+const cli = process.env.RKTSKY_ANTISPAM_WP_CLI;
 if (!cli) {
-	throw new Error('Set WP_ANTISPAM_WP_CLI to the original WP-CLI phar.');
+	throw new Error('Set RKTSKY_ANTISPAM_WP_CLI to the original WP-CLI phar.');
 }
-const phpArgs = process.env.WP_ANTISPAM_PHP_ICONV
-	? ['-d', 'extension=' + process.env.WP_ANTISPAM_PHP_ICONV]
+const phpArgs = process.env.RKTSKY_ANTISPAM_PHP_ICONV
+	? ['-d', 'extension=' + process.env.RKTSKY_ANTISPAM_PHP_ICONV]
 	: [];
 
 /**
@@ -42,7 +42,7 @@ function wp(...args) {
 const safety = JSON.parse(
 	wp(
 		'eval',
-		'echo wp_json_encode(array("environment"=>wp_get_environment_type(),"fixture"=>defined("WP_ANTISPAM_TEST_FIXTURE")&&WP_ANTISPAM_TEST_FIXTURE,"mail_blocked"=>false===apply_filters("pre_wp_mail",null,array()),"http_blocked"=>defined("WP_HTTP_BLOCK_EXTERNAL")&&WP_HTTP_BLOCK_EXTERNAL));'
+		'echo wp_json_encode(array("environment"=>wp_get_environment_type(),"fixture"=>defined("RKTSKY_ANTISPAM_TEST_FIXTURE")&&RKTSKY_ANTISPAM_TEST_FIXTURE,"mail_blocked"=>false===apply_filters("pre_wp_mail",null,array()),"http_blocked"=>defined("WP_HTTP_BLOCK_EXTERNAL")&&WP_HTTP_BLOCK_EXTERNAL));'
 	)
 );
 if (
@@ -241,8 +241,8 @@ try {
 		platform: process.platform + '/' + process.arch,
 		cases: results
 	};
-	if (process.env.WP_ANTISPAM_BROWSER_REPORT) {
-		writeFileSync(process.env.WP_ANTISPAM_BROWSER_REPORT, JSON.stringify(report, null, 2) + '\n');
+	if (process.env.RKTSKY_ANTISPAM_BROWSER_REPORT) {
+		writeFileSync(process.env.RKTSKY_ANTISPAM_BROWSER_REPORT, JSON.stringify(report, null, 2) + '\n');
 	}
 	console.log('PASS:', results.length, 'native WooCommerce browser retry cases.');
 } finally {

@@ -91,8 +91,8 @@ final class Maintenance {
 		update_option( $name, $day, false );
 		$sent = wp_mail(
 			get_option( 'admin_email' ),
-			__( 'WP Antispam: daily rejection summary', 'wp-antispam' ),
-			sprintf( /* translators: 1: UTC date, 2: rejected submission count, 3: local settings URL. */ __( 'On %1$s (UTC), WP Antispam recorded %2$d rejected submissions. This includes technical verification failures and is not a measured spam detection accuracy. No visitor content is included in this email. Review the counts on your website: %3$s', 'wp-antispam' ), $day, $blocked, admin_url( 'options-general.php?page=wp-antispam' ) )
+			__( 'Rocketsky Antispam: daily rejection summary', 'rocketsky-antispam' ),
+			sprintf( /* translators: 1: UTC date, 2: rejected submission count, 3: local settings URL. */ __( 'On %1$s (UTC), Rocketsky Antispam recorded %2$d rejected submissions. This includes technical verification failures and is not a measured spam detection accuracy. No visitor content is included in this email. Review the counts on your website: %3$s', 'rocketsky-antispam' ), $day, $blocked, admin_url( 'options-general.php?page=rocketsky-antispam' ) )
 		);
 		update_option(
 			'rktsky_antispam_digest_status',

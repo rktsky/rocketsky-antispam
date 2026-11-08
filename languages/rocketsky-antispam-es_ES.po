@@ -1,17 +1,17 @@
-# WP Antispam translation catalog.
+# Rocketsky Antispam translation catalog.
 # Copyright (C) 2026 Rocketsky
 # This file is distributed under the GPL-2.0-or-later license.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Antispam 0.5.0\n"
-"POT-Creation-Date: 2026-11-07 15:00+0100\n"
-"PO-Revision-Date: 2026-11-08 00:15+0100\n"
+"Project-Id-Version: Rocketsky Antispam 0.5.1\n"
+"POT-Creation-Date: 2026-11-08 09:22+0100\n"
+"PO-Revision-Date: 2026-11-08 09:27+0100\n"
 "Last-Translator: Rocketsky\n"
 "Language-Team: Rocketsky\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Domain: wp-antispam\n"
+"X-Domain: rocketsky-antispam\n"
 "Language: es_ES\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
@@ -104,8 +104,8 @@ msgid "Anonymous daily counts"
 msgstr "Contadores diarios anónimos"
 
 #: templates/settings.php:74
-msgid "Applies to WP Antispam counts. Your form plugin and server may keep their own records."
-msgstr "Se aplica a los contadores de WP Antispam. Tu plugin de formularios y tu servidor pueden conservar sus propios datos."
+msgid "Applies to Rocketsky Antispam counts. Your form plugin and server may keep their own records."
+msgstr "Se aplica a los contadores de Rocketsky Antispam. Tu plugin de formularios y tu servidor pueden conservar sus propios datos."
 
 #: templates/delivered-review.php:16
 msgid "Assess a delivered submission"
@@ -164,8 +164,8 @@ msgid "Choose at least one integration to start checking submissions."
 msgstr "Activa al menos una integración para empezar a comprobar los envíos."
 
 #: templates/settings.php:25
-msgid "Choose what WP Antispam stores, how long it keeps records and whether it sends notifications."
-msgstr "Elige qué datos guarda WP Antispam, durante cuánto tiempo y si envía notificaciones."
+msgid "Choose what Rocketsky Antispam stores, how long it keeps records and whether it sends notifications."
+msgstr "Elige qué datos guarda Rocketsky Antispam, durante cuánto tiempo y si envía notificaciones."
 
 #: templates/quarantine.php:45
 msgid "Classification saved. Reusing the same reference updates the existing case."
@@ -396,8 +396,8 @@ msgid "Flamingo spam"
 msgstr "Spam de Flamingo"
 
 #: src/SpamHandling.php:84
-msgid "Flamingo stores spam when the form allows it; otherwise WP Antispam retention applies. A form's storage prohibition is respected."
-msgstr "Flamingo guarda spam si el formulario lo permite; en caso contrario, se aplica la conservación de WP Antispam. Se respeta la prohibición de almacenamiento del formulario."
+msgid "Flamingo stores spam when the form allows it; otherwise Rocketsky Antispam retention applies. A form's storage prohibition is respected."
+msgstr "Flamingo guarda spam si el formulario lo permite; en caso contrario, se aplica la conservación de Rocketsky Antispam. Se respeta la prohibición de almacenamiento del formulario."
 
 #: src/SpamHandling.php:77
 msgid "Fluent Forms entries"
@@ -512,7 +512,7 @@ msgstr "Extensión PHP GeoIP local"
 msgid "Local content policy: %s."
 msgstr "Regla local de contenido: %s."
 
-#: wp-antispam.php:6
+#: rocketsky-antispam.php:6
 msgid "Local spam protection for comments, registrations and forms. No external services."
 msgstr "Protección local contra spam en comentarios, registros y formularios. Sin servicios externos."
 
@@ -549,12 +549,12 @@ msgid "Native provider spam check"
 msgstr "Comprobación antispam nativa del proveedor"
 
 #: src/SpamHandling.php:91 src/SpamHandling.php:97
-msgid "Native spam storage depends on each form's settings. Other rejections follow WP Antispam retention settings."
-msgstr "La conservación nativa de spam depende de los ajustes de cada formulario. Los demás rechazos siguen los ajustes de conservación de WP Antispam."
+msgid "Native spam storage depends on each form's settings. Other rejections follow Rocketsky Antispam retention settings."
+msgstr "La conservación nativa de spam depende de los ajustes de cada formulario. Los demás rechazos siguen los ajustes de conservación de Rocketsky Antispam."
 
 #: templates/quarantine.php:117
-msgid "Native spam storage follows the provider's privacy and retention settings, independently of privacy-conscious mode. WP Antispam quarantine is encrypted, with capture limits and automatic deletion."
-msgstr "El almacenamiento nativo de spam sigue los ajustes de privacidad y conservación del proveedor, independientemente del modo de minimización de datos. La cuarentena de WP Antispam está cifrada, con límites de captura y borrado automático."
+msgid "Native spam storage follows the provider's privacy and retention settings, independently of privacy-conscious mode. Rocketsky Antispam quarantine is encrypted, with capture limits and automatic deletion."
+msgstr "El almacenamiento nativo de spam sigue los ajustes de privacidad y conservación del proveedor, independientemente del modo de minimización de datos. La cuarentena de Rocketsky Antispam está cifrada, con límites de captura y borrado automático."
 
 #: templates/overview.php:27 templates/quarantine.php:122
 msgid "New storage is off"
@@ -602,8 +602,8 @@ msgstr "Activado"
 
 #: src/Maintenance.php:95
 #, php-format
-msgid "On %1$s (UTC), WP Antispam recorded %2$d rejected submissions. This includes technical verification failures and is not a measured spam detection accuracy. No visitor content is included in this email. Review the counts on your website: %3$s"
-msgstr "El %1$s (UTC), WP Antispam registró %2$d envíos rechazados. Esto incluye fallos técnicos de verificación y no mide la precisión de detección de spam. Este correo no contiene contenido de visitantes. Revisa los contadores en tu web: %3$s"
+msgid "On %1$s (UTC), Rocketsky Antispam recorded %2$d rejected submissions. This includes technical verification failures and is not a measured spam detection accuracy. No visitor content is included in this email. Review the counts on your website: %3$s"
+msgstr "El %1$s (UTC), Rocketsky Antispam registró %2$d envíos rechazados. Esto incluye fallos técnicos de verificación y no mide la precisión de detección de spam. Este correo no contiene contenido de visitantes. Revisa los contadores en tu web: %3$s"
 
 #: templates/privacy-mode.php:22
 msgid "On by default. Keeps quarantine, country checks, administrator digest emails and native pingbacks/trackbacks off. Local content rules and anonymous statistics remain available."
@@ -630,8 +630,8 @@ msgid "Only selected text fields are kept. Files and technical security fields a
 msgstr "Solo se conservan los campos de texto seleccionados. Se excluyen archivos y campos técnicos de seguridad. Los valores largos pueden acortarse."
 
 #: templates/dashboard.php:33
-msgid "Open WP Antispam"
-msgstr "Abrir WP Antispam"
+msgid "Open Rocketsky Antispam"
+msgstr "Abrir Rocketsky Antispam"
 
 #: templates/quarantine.php:101
 msgid "Open each integration's spam queue or review locally retained rejections below."
@@ -650,8 +650,8 @@ msgid "Other supported integrations"
 msgstr "Otras integraciones compatibles"
 
 #: src/Plugin.php:190
-msgid "Our forms use WP Antispam for local spam protection. Signed tokens, hidden fields and configured content rules are checked on our server. The plugin uses no external spam or IP-lookup service, cookies, browser storage or fingerprints. Used random-token digests expire after two hours and are removed by scheduled cleanup. Daily aggregate counters are kept for the configured period (30 days by default); the total rejected-comment counter remains until statistics are reset. Optional quarantine stores selected rejected submission fields, including names, email addresses and messages, encrypted locally for the configured period (7 days by default, at most 30 days and 500 records). Password, hidden, payment and file fields are excluded. The privacy-conscious mode disables quarantine, country checks, administrator email digests and native pingbacks/trackbacks. If native pingbacks are explicitly allowed, WordPress requests the remote source page and may forward the sender IP address; native WordPress moderation still applies. Optional country checks use a local GeoIP source or explicitly trusted infrastructure metadata and do not store IP addresses. Optional daily administrator emails contain aggregate counts only. Optional cleanup permanently deletes WordPress spam comments after the configured age. Scheduled deletion may run late if WordPress cron is delayed. WordPress privacy export and erasure tools cover quarantine records associated with the submitted contact email. WordPress, form providers, hosting, email delivery and backups process data independently. Adapt this notice to the features actually enabled, retention, legal basis and infrastructure of your website; this mode is not a legal compliance certification."
-msgstr "Nuestros formularios usan WP Antispam para la protección local contra el spam. Los tokens firmados, los campos ocultos y las reglas de contenido configuradas se comprueban en nuestro servidor. El plugin no utiliza servicios externos antispam o de consulta de IP, cookies, almacenamiento del navegador ni huellas digitales. Los resúmenes criptográficos de los tokens aleatorios usados caducan tras dos horas y se eliminan en la limpieza programada. Los contadores diarios agregados se conservan durante el periodo configurado, 30 días por defecto; el contador total de comentarios rechazados permanece hasta que se restablecen las estadísticas. La cuarentena opcional guarda localmente, de forma cifrada, ciertos campos de los envíos rechazados, incluidos nombres, direcciones de correo y mensajes, durante el periodo configurado: 7 días por defecto, como máximo 30 días y 500 registros. Se excluyen los campos de contraseña, ocultos, de pago y de archivos. El modo de minimización de datos desactiva la cuarentena, la comprobación de países, los resúmenes por correo a la administración y los pingbacks/trackbacks nativos. Si se permiten expresamente los pingbacks nativos, WordPress consulta la página de origen remota y puede transmitir la dirección IP del remitente; la moderación nativa de WordPress sigue activa. Las comprobaciones opcionales de países usan una fuente GeoIP local o metadatos de infraestructura de confianza explícita y no guardan direcciones IP. Los correos diarios opcionales a la administración solo contienen contadores agregados. La limpieza opcional elimina permanentemente los comentarios de spam de WordPress tras la antigüedad configurada. La eliminación programada puede retrasarse si WordPress Cron se ejecuta con retraso. Las herramientas de exportación y borrado de datos personales de WordPress abarcan los registros en cuarentena asociados a la dirección de contacto proporcionada. WordPress, los proveedores de formularios, el alojamiento, la entrega de correo y las copias de seguridad procesan los datos de forma independiente. Adapta este aviso a las funciones realmente activadas, los plazos de conservación, la base jurídica y la infraestructura de tu web; este modo no es una certificación de cumplimiento legal."
+msgid "Our forms use Rocketsky Antispam for local spam protection. Signed tokens, hidden fields and configured content rules are checked on our server. The plugin uses no external spam or IP-lookup service, cookies, browser storage or fingerprints. Used random-token digests expire after two hours and are removed by scheduled cleanup. Daily aggregate counters are kept for the configured period (30 days by default); the total rejected-comment counter remains until statistics are reset. Optional quarantine stores selected rejected submission fields, including names, email addresses and messages, encrypted locally for the configured period (7 days by default, at most 30 days and 500 records). Password, hidden, payment and file fields are excluded. The privacy-conscious mode disables quarantine, country checks, administrator email digests and native pingbacks/trackbacks. If native pingbacks are explicitly allowed, WordPress requests the remote source page and may forward the sender IP address; native WordPress moderation still applies. Optional country checks use a local GeoIP source or explicitly trusted infrastructure metadata and do not store IP addresses. Optional daily administrator emails contain aggregate counts only. Optional cleanup permanently deletes WordPress spam comments after the configured age. Scheduled deletion may run late if WordPress cron is delayed. WordPress privacy export and erasure tools cover quarantine records associated with the submitted contact email. WordPress, form providers, hosting, email delivery and backups process data independently. Adapt this notice to the features actually enabled, retention, legal basis and infrastructure of your website; this mode is not a legal compliance certification."
+msgstr "Nuestros formularios usan Rocketsky Antispam para la protección local contra el spam. Los tokens firmados, los campos ocultos y las reglas de contenido configuradas se comprueban en nuestro servidor. El plugin no utiliza servicios externos antispam o de consulta de IP, cookies, almacenamiento del navegador ni huellas digitales. Los resúmenes criptográficos de los tokens aleatorios usados caducan tras dos horas y se eliminan en la limpieza programada. Los contadores diarios agregados se conservan durante el periodo configurado, 30 días por defecto; el contador total de comentarios rechazados permanece hasta que se restablecen las estadísticas. La cuarentena opcional guarda localmente, de forma cifrada, ciertos campos de los envíos rechazados, incluidos nombres, direcciones de correo y mensajes, durante el periodo configurado: 7 días por defecto, como máximo 30 días y 500 registros. Se excluyen los campos de contraseña, ocultos, de pago y de archivos. El modo de minimización de datos desactiva la cuarentena, la comprobación de países, los resúmenes por correo a la administración y los pingbacks/trackbacks nativos. Si se permiten expresamente los pingbacks nativos, WordPress consulta la página de origen remota y puede transmitir la dirección IP del remitente; la moderación nativa de WordPress sigue activa. Las comprobaciones opcionales de países usan una fuente GeoIP local o metadatos de infraestructura de confianza explícita y no guardan direcciones IP. Los correos diarios opcionales a la administración solo contienen contadores agregados. La limpieza opcional elimina permanentemente los comentarios de spam de WordPress tras la antigüedad configurada. La eliminación programada puede retrasarse si WordPress Cron se ejecuta con retraso. Las herramientas de exportación y borrado de datos personales de WordPress abarcan los registros en cuarentena asociados a la dirección de contacto proporcionada. WordPress, los proveedores de formularios, el alojamiento, la entrega de correo y las copias de seguridad procesan los datos de forma independiente. Adapta este aviso a las funciones realmente activadas, los plazos de conservación, la base jurídica y la infraestructura de tu web; este modo no es una certificación de cumplimiento legal."
 
 #: src/Admin.php:174 templates/overview.php:21
 msgid "Overview"
@@ -788,8 +788,8 @@ msgid "Recipient: %s"
 msgstr "Destinatario: %s"
 
 #: templates/quarantine.php:124
-msgid "Records appear here when quarantine is enabled and WP Antispam rejects a new submission. Earlier rejections are not recovered."
-msgstr "Los registros aparecen aquí cuando la cuarentena está activada y WP Antispam rechaza un nuevo envío. Los rechazos anteriores no se recuperan."
+msgid "Records appear here when quarantine is enabled and Rocketsky Antispam rejects a new submission. Earlier rejections are not recovered."
+msgstr "Los registros aparecen aquí cuando la cuarentena está activada y Rocketsky Antispam rechaza un nuevo envío. Los rechazos anteriores no se recuperan."
 
 #: templates/rules.php:52
 msgid "Regular expression patterns"
@@ -808,8 +808,8 @@ msgid "Rejected form submissions temporarily stored by this site."
 msgstr "Envíos de formularios rechazados guardados temporalmente por este sitio."
 
 #: src/SpamHandling.php:170
-msgid "Rejected requests in WP Antispam"
-msgstr "Solicitudes rechazadas en WP Antispam"
+msgid "Rejected requests in Rocketsky Antispam"
+msgstr "Solicitudes rechazadas en Rocketsky Antispam"
 
 #: templates/quarantine.php:56
 msgid "Rejected submission"
@@ -909,8 +909,8 @@ msgid "Select an assessment"
 msgstr "Elige una evaluación"
 
 #: src/SpamHandling.php:189
-msgid "Selected rejected message fields can be retained in WP Antispam quarantine."
-msgstr "Algunos campos de los mensajes rechazados pueden conservarse en la cuarentena de WP Antispam."
+msgid "Selected rejected message fields can be retained in Rocketsky Antispam quarantine."
+msgstr "Algunos campos de los mensajes rechazados pueden conservarse en la cuarentena de Rocketsky Antispam."
 
 #: templates/rules.php:74
 msgid "Selecting none disables the language restriction."
@@ -961,8 +961,8 @@ msgid "Sponsored product"
 msgstr "Producto patrocinado"
 
 #: templates/settings.php:41
-msgid "Standard checks store no IP addresses, email addresses or message contents. Optional quarantine keeps selected rejected fields locally. Country rules process IP metadata. Digest emails use your mail provider. WP Antispam sets no cookies and calls no external spam service."
-msgstr "Las comprobaciones estándar no guardan direcciones IP, direcciones de correo ni mensajes. La cuarentena opcional conserva localmente ciertos campos rechazados. Las reglas de países procesan metadatos IP. Los resúmenes por correo usan tu proveedor de correo. WP Antispam no establece cookies ni contacta con servicios antispam externos."
+msgid "Standard checks store no IP addresses, email addresses or message contents. Optional quarantine keeps selected rejected fields locally. Country rules process IP metadata. Digest emails use your mail provider. Rocketsky Antispam sets no cookies and calls no external spam service."
+msgstr "Las comprobaciones estándar no guardan direcciones IP, direcciones de correo ni mensajes. La cuarentena opcional conserva localmente ciertos campos rechazados. Las reglas de países procesan metadatos IP. Los resúmenes por correo usan tu proveedor de correo. Rocketsky Antispam no establece cookies ni contacta con servicios antispam externos."
 
 #: templates/overview.php:57
 #, php-format
@@ -970,8 +970,8 @@ msgid "Stopped WordPress comments since the last statistics reset: %s."
 msgstr "Comentarios de WordPress bloqueados desde el último reinicio de las estadísticas: %s."
 
 #: templates/overview.php:36
-msgid "Stopped by WP Antispam"
-msgstr "Bloqueados por WP Antispam"
+msgid "Stopped by Rocketsky Antispam"
+msgstr "Bloqueados por Rocketsky Antispam"
 
 #: templates/quarantine.php:124
 msgid "Storage settings"
@@ -1142,8 +1142,8 @@ msgid "Validates submissions before entries, drafts and notifications are create
 msgstr "Comprueba los envíos antes de crear registros, borradores y notificaciones."
 
 #: src/Plugin.php:189
-msgid "Verified content matches can be retained in WordPress or the form provider's native spam queue. Native retention and privacy settings apply independently of WP Antispam quarantine and privacy-conscious mode. Invalid technical proofs stop before native entry creation; selected rejected message fields may instead be retained in the optional WP Antispam quarantine. Forms that explicitly prohibit message storage are respected. Account, password, order and payment contents are not quarantined."
-msgstr "Los envíos con una comprobación técnica válida cuyo contenido coincida con una regla pueden conservarse en WordPress o en la bandeja nativa de spam del proveedor de formularios. Los ajustes nativos de conservación y privacidad se aplican independientemente de la cuarentena y del modo de minimización de datos de WP Antispam. Las pruebas técnicas inválidas detienen el proceso antes de crear un registro nativo; algunos campos de los mensajes rechazados pueden conservarse en la cuarentena opcional de WP Antispam. Se respetan los formularios que prohíben expresamente guardar mensajes. No se ponen en cuarentena contenidos de cuentas, contraseñas, pedidos ni pagos."
+msgid "Verified content matches can be retained in WordPress or the form provider's native spam queue. Native retention and privacy settings apply independently of Rocketsky Antispam quarantine and privacy-conscious mode. Invalid technical proofs stop before native entry creation; selected rejected message fields may instead be retained in the optional Rocketsky Antispam quarantine. Forms that explicitly prohibit message storage are respected. Account, password, order and payment contents are not quarantined."
+msgstr "Los envíos con una comprobación técnica válida cuyo contenido coincida con una regla pueden conservarse en WordPress o en la bandeja nativa de spam del proveedor de formularios. Los ajustes nativos de conservación y privacidad se aplican independientemente de la cuarentena y del modo de minimización de datos de Rocketsky Antispam. Las pruebas técnicas inválidas detienen el proceso antes de crear un registro nativo; algunos campos de los mensajes rechazados pueden conservarse en la cuarentena opcional de Rocketsky Antispam. Se respetan los formularios que prohíben expresamente guardar mensajes. No se ponen en cuarentena contenidos de cuentas, contraseñas, pedidos ni pagos."
 
 #: templates/quarantine.php:128
 msgid "View"
@@ -1159,57 +1159,57 @@ msgid "View stopped submissions by check"
 msgstr "Ver envíos bloqueados por comprobación"
 
 #: src/Admin.php:113 src/Admin.php:114 src/Dashboard.php:27
-msgid "WP Antispam"
-msgstr "WP Antispam"
+msgid "Rocketsky Antispam"
+msgstr "Rocketsky Antispam"
 
 #: src/SpamHandling.php:211
-msgid "WP Antispam activity"
-msgstr "Actividad de WP Antispam"
+msgid "Rocketsky Antispam activity"
+msgstr "Actividad de Rocketsky Antispam"
 
 #: src/SpamHandling.php:104 src/SpamHandling.php:106
-msgid "WP Antispam does not retain account fields or passwords."
-msgstr "WP Antispam no conserva campos de cuenta ni contraseñas."
+msgid "Rocketsky Antispam does not retain account fields or passwords."
+msgstr "Rocketsky Antispam no conserva campos de cuenta ni contraseñas."
 
 #: src/SpamHandling.php:110
-msgid "WP Antispam does not retain message or file contents."
-msgstr "WP Antispam no conserva contenidos de mensajes ni archivos."
+msgid "Rocketsky Antispam does not retain message or file contents."
+msgstr "Rocketsky Antispam no conserva contenidos de mensajes ni archivos."
 
 #: src/SpamHandling.php:108
-msgid "WP Antispam does not retain order, payment or file contents."
-msgstr "WP Antispam no conserva contenidos de pedidos, pagos ni archivos."
+msgid "Rocketsky Antispam does not retain order, payment or file contents."
+msgstr "Rocketsky Antispam no conserva contenidos de pedidos, pagos ni archivos."
 
 #: src/SpamHandling.php:196
-msgid "WP Antispam does not retain rejected message contents."
-msgstr "WP Antispam no conserva el contenido de los mensajes rechazados."
+msgid "Rocketsky Antispam does not retain rejected message contents."
+msgstr "Rocketsky Antispam no conserva el contenido de los mensajes rechazados."
 
 #: templates/context-notices.php:16
 #, php-format
-msgid "WP Antispam is enabled for %s."
-msgstr "WP Antispam está activado para %s."
+msgid "Rocketsky Antispam is enabled for %s."
+msgstr "Rocketsky Antispam está activado para %s."
 
 #: src/ContextNotices.php:187
-msgid "WP Antispam keeps no content copy of requests stopped before native storage."
-msgstr "WP Antispam no conserva una copia del contenido de las solicitudes bloqueadas antes del almacenamiento nativo."
+msgid "Rocketsky Antispam keeps no content copy of requests stopped before native storage."
+msgstr "Rocketsky Antispam no conserva una copia del contenido de las solicitudes bloqueadas antes del almacenamiento nativo."
 
 #: src/Quarantine.php:320 src/Quarantine.php:335 src/Quarantine.php:395 src/SpamHandling.php:188
-msgid "WP Antispam quarantine"
-msgstr "Cuarentena de WP Antispam"
+msgid "Rocketsky Antispam quarantine"
+msgstr "Cuarentena de Rocketsky Antispam"
 
 #: src/SpamHandling.php:170
-msgid "WP Antispam retention settings"
-msgstr "Conservación de WP Antispam"
+msgid "Rocketsky Antispam retention settings"
+msgstr "Conservación de Rocketsky Antispam"
 
 #: src/Feedback.php:611 src/Feedback.php:627 src/Feedback.php:691
-msgid "WP Antispam reviewed decisions"
-msgstr "Decisiones evaluadas de WP Antispam"
+msgid "Rocketsky Antispam reviewed decisions"
+msgstr "Decisiones evaluadas de Rocketsky Antispam"
 
 #: templates/admin-header.php:19
-msgid "WP Antispam sections"
-msgstr "Secciones de WP Antispam"
+msgid "Rocketsky Antispam sections"
+msgstr "Secciones de Rocketsky Antispam"
 
 #: src/Maintenance.php:94
-msgid "WP Antispam: daily rejection summary"
-msgstr "WP Antispam: resumen diario de rechazos"
+msgid "Rocketsky Antispam: daily rejection summary"
+msgstr "Rocketsky Antispam: resumen diario de rechazos"
 
 #: src/SpamHandling.php:95
 msgid "WPForms spam"
@@ -1282,3 +1282,11 @@ msgstr "días"
 #: templates/integrations.php:55
 msgid "seconds"
 msgstr "segundos"
+
+#: src/Installation.php:209
+msgid "Deactivate the previous installation before activating Rocketsky Antispam. Do not delete it: the installations share settings and retained data. Network-active copies must be deactivated in Network Admin."
+msgstr "Desactiva la instalación anterior antes de activar Rocketsky Antispam. No la borres: ambas instalaciones comparten ajustes y datos conservados. Las copias activadas para toda la red deben desactivarse desde la administración de la red."
+
+#: src/Installation.php:188
+msgid "This copy shares data with another active installation of Rocketsky Antispam. Uninstalling it could delete shared settings and retained entries. Remove only the obsolete plugin files through your hosting file manager; do not run its WordPress Delete action."
+msgstr "Esta copia comparte datos con otra instalación activa de Rocketsky Antispam. Al desinstalarla podrías borrar los ajustes y registros conservados que comparten ambas instalaciones. Elimina solo los archivos obsoletos del plugin mediante el gestor de archivos de tu alojamiento; no uses la acción «Borrar» de WordPress."

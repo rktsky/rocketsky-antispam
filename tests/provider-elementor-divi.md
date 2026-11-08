@@ -19,7 +19,7 @@ Scope: the classic Elementor Pro Form widget. Atomic Form, third-party Elementor
 Run the native assertions only with an unchanged, active provider in the explicitly marked disposable fixture:
 
 ```sh
-WP_ANTISPAM_ALLOW_TESTS=1 WP_ANTISPAM_WP_ROOT=/absolute/disposable/wordpress php tests/provider-elementor.php
+RKTSKY_ANTISPAM_ALLOW_TESTS=1 RKTSKY_ANTISPAM_WP_ROOT=/absolute/disposable/wordpress php tests/provider-elementor.php
 ```
 
 ## Divi
@@ -59,8 +59,8 @@ The commercial originals are private fixture inputs. They are not distributed in
 Native programs require the explicit disposable fixture marker, local configuration, active unchanged provider and private side-effect observer. Configure `RKTSKY_DIVI4_FIXTURE_LOG` or `RKTSKY_DIVI5_FIXTURE_LOG` as a private log path outside the public site root, with an existing parent directory. Install the owned observer using the corresponding `prepare-divi4.php observer` or `prepare-divi5.php observer` command before preparing synthetic content. The D5 installer rejects public or symlinked log paths; a configured local observer with missing safety configuration terminates bootstrap before delivery. Both D5 runners read this configured path. The isolated fixtures use loopback ports 8884/8886 for D4 and 8885 for D5. For an already prepared fixture:
 
 ```sh
-WP_ANTISPAM_ALLOW_TESTS=1 WP_ANTISPAM_WP_ROOT=/absolute/disposable/divi4 php tests/native-divi4.php
-WP_ANTISPAM_ALLOW_TESTS=1 WP_ANTISPAM_WP_ROOT=/absolute/disposable/divi5 php tests/native-divi5.php
+RKTSKY_ANTISPAM_ALLOW_TESTS=1 RKTSKY_ANTISPAM_WP_ROOT=/absolute/disposable/divi4 php tests/native-divi4.php
+RKTSKY_ANTISPAM_ALLOW_TESTS=1 RKTSKY_ANTISPAM_WP_ROOT=/absolute/disposable/divi5 php tests/native-divi5.php
 ```
 
 The browser runners are `tests/browser-divi4.mjs` and `tests/browser-divi5.mjs`. Their real original engines must remain available in the marked fixtures; fault injection is confined to deliberate network-error cases. Local JSON results are recorded under `outputs/wp-antispam/` and the private fixture directory. No licence keys or original packages belong in test artifacts.
