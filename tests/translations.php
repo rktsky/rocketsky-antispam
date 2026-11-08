@@ -129,13 +129,23 @@ if ( 'conflict' === $rktsky_i18n_stage ) {
 	define( 'RKTSKY_ANTISPAM_FILE', __FILE__ );
 }
 $rktsky_i18n_early = array();
+$rktsky_i18n_foreign = array();
 add_action(
 	'doing_it_wrong_run',
-	static function ( string $function ) use ( &$rktsky_i18n_early ): void {
+	static function ( string $function, string $message ) use ( &$rktsky_i18n_early, &$rktsky_i18n_foreign ): void {
 		if ( '_load_textdomain_just_in_time' === $function ) {
-			$rktsky_i18n_early[] = $function;
+			if ( str_contains( $message, 'rocketsky-antispam' ) ) {
+				$rktsky_i18n_early[] = $message;
+			} else {
+				// Providers remain loaded. Report their diagnostics without attributing
+				// a different text domain's early lookup to this plugin's fallback.
+				preg_match( '~<code>([^<]+)</code>~', $message, $domain );
+				$rktsky_i18n_foreign[] = $domain[1] ?? 'other-domain';
+			}
 		}
-	}
+	},
+	10,
+	2
 );
 add_filter( 'pre_option_WPLANG', static fn(): string => 'en_US' );
 $_SERVER['HTTP_HOST']      = '127.0.0.1:8877';
@@ -191,5 +201,5 @@ if ( 'conflict' === $rktsky_i18n_stage ) {
 	remove_filter( 'wp_die_handler', $rktsky_i18n_die );
 }
 restore_previous_locale();
-rktsky_i18n_expect( array() === $rktsky_i18n_early, 'Translation discovery must emit no early-loading diagnostics.' );
-echo 'RESULT: ' . wp_json_encode( array( 'stage' => $rktsky_i18n_stage, 'assertions' => $rktsky_i18n_assertions, 'wordpress' => $GLOBALS['wp_version'] ), JSON_THROW_ON_ERROR ) . "\n";
+rktsky_i18n_expect( array() === $rktsky_i18n_early, 'This plugin must emit no early-loading diagnostics: ' . wp_json_encode( $rktsky_i18n_early ) );
+echo 'RESULT: ' . wp_json_encode( array( 'stage' => $rktsky_i18n_stage, 'assertions' => $rktsky_i18n_assertions, 'wordpress' => $GLOBALS['wp_version'], 'other_plugin_early_loading' => array_values( array_unique( $rktsky_i18n_foreign ) ) ), JSON_THROW_ON_ERROR ) . "\n";
