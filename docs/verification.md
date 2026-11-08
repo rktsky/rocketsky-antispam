@@ -426,3 +426,17 @@ exakte installierbare ZIP einschliesslich Laufzeitprüfung keine Fehler und
 keine Warnungen. Die früheren Reports oben bleiben historische Nachweise.
 Die Einreichungsdateien, Sprachprüfung, 361 nativen Paketprüfungen und sechs
 Verzeichnisbilder sind im aktuellen Nachweis beschrieben.
+
+## Zeitzonen und Updatepfad 0.5.3
+
+Der [abschliessende Nachweis für 0.5.3](submission-0.5.3.md) dokumentiert den
+Produktionscommit `59be913873c313bb847235acad6717ca4b887894`. Alle 18 Jobs des
+finalen CI-Laufs bestehen. Das identische installierbare ZIP besteht Plugin
+Check 2.2.0 einschliesslich Laufzeitprüfung ohne Fehler und Warnungen sowie
+515 native Paketassertions in sechs frischen Fixtures. Darin enthalten sind
+die tatsächlichen ZIP-Updates von 0.5.2 auf Einzelinstallation und Netzwerk.
+80 neue native Zeitzonenassertions prüfen die lokalen Tagesgrenzen, Migration,
+Fehlerzustände und Sommerzeit. Der reproduzierte Assetcachefehler, die geöffneten
+Oberflächenzustände und die aktualisierten Directory-Bilder sind dort mit ihrem
+konkreten Prüfumfang beschrieben. Die älteren Abschnitte bleiben historische
+Nachweise; ihre damaligen UTC-Tageswerte werden nicht nachträglich umgedeutet.

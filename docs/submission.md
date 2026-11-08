@@ -4,7 +4,7 @@
 | --- | --- |
 | Plugin name | Rocketsky Antispam |
 | Proposed slug | `rocketsky-antispam` |
-| Version | 0.5.2 |
+| Version | 0.5.3 |
 | Publisher | Rocketsky |
 | Confirmed WordPress.org contributors | `rocketsky`, `theacki`, `chrigu99` |
 | Licence | GPL-2.0-or-later; bundled Speo vector asset under BSD-3-Clause |
@@ -12,14 +12,14 @@
 | Minimum PHP | 8.2 |
 | Tested WordPress series | 7.1, with additional minimum-version tests on 6.6 |
 | Source | https://github.com/rktsky/rocketsky-antispam |
-| Installable archive | `rocketsky-antispam-0.5.2-wordpress-org.zip` |
+| Installable archive | `rocketsky-antispam-0.5.3-wordpress-org.zip` |
 
 The actual checksum and Plugin Check evidence belong in the final verification
 record and external package manifest. The readme contributor names were
 explicitly confirmed by the publisher; the account used for the actual upload
 still determines the submission owner.
 
-The [final 0.5.2 verification](submission-0.5.2.md) records the exact package,
+The [final 0.5.3 verification](submission-0.5.3.md) records the exact package,
 successful CI run, Plugin Check result, native lifecycle tests and six prepared
 directory screenshots. The FAQ and screenshot captions are in `readme.txt`.
 

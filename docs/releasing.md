@@ -1,6 +1,6 @@
 # Release and submission process
 
-Rocketsky Antispam 0.5.2 is a WordPress.org submission candidate. Preparing a
+Rocketsky Antispam 0.5.3 is a WordPress.org submission candidate. Preparing a
 package does not submit it, reserve its slug or establish directory approval.
 The proposed name is **Rocketsky Antispam**, with slug `rocketsky-antispam`.
 
@@ -44,10 +44,10 @@ exakten Git-Commit. Tests, Werkzeuge, Vendor-Pakete, Git-Metadaten und interne
 Dokumentation gelangen nicht ins ZIP.
 
 ```sh
-python3 tools/build-release.py --channel wordpress-org --output ../outputs/rocketsky-antispam/submission-0.5.2
+python3 tools/build-release.py --channel wordpress-org --output ../outputs/rocketsky-antispam/submission-0.5.3
 ```
 
-Das erzeugt `rocketsky-antispam-0.5.2-wordpress-org.zip`, eine SHA-256-Datei und
+Das erzeugt `rocketsky-antispam-0.5.3-wordpress-org.zip`, eine SHA-256-Datei und
 ein Manifest mit Quellcommit und Prüfsummen jeder archivierten Datei. Das ZIP
 enthält genau einen obersten Ordner `rocketsky-antispam/`. Der Paketbauer prüft
 CRC, vollständigen Inhalts-Readback, Versionskonsistenz und reproduzierbare
