@@ -134,7 +134,11 @@ if ( 'replay_prime' === $case ) {
 	update_option( 'rktsky_antispam_extra_replay', $proof, false ); }
 $missing = in_array( $case, array( 'missing', 'retry_missing', 'content_missing' ), true );
 $pass    = in_array( $case, array( 'valid', 'replay_prime', 'retry_fresh' ), true );
-$body    = ( in_array( $case, array_merge( $policy_cases, array( 'pattern' ) ), true ) ? 'blocked-content-check ' : '' ) . 'Synthetic body ' . $provider . ' ' . $case . ' ' . wp_generate_uuid4();
+// Native Formidable denylists include UUID fragments such as "777-" and "-b2b".
+// Separate hex pairs keep the full request uniqueness without introducing words
+// that can accidentally turn a positive fixture into native provider spam.
+$fixture_marker = implode( ' ', str_split( str_replace( '-', '', wp_generate_uuid4() ), 2 ) );
+$body           = ( in_array( $case, array_merge( $policy_cases, array( 'pattern' ) ), true ) ? 'blocked-content-check ' : '' ) . 'Synthetic body ' . $provider . ' ' . $case . ' ' . $fixture_marker;
 if ( 'bbcode' === $case ) {
 	$body .= ' [url=https://example.invalid]Synthetic link[/url]';
 }
@@ -279,7 +283,13 @@ $verify = static function ( array $result ) use ( &$actions, &$mails, &$native_i
 		rktsky_extra_native_expect( 1 === count( $native_ids ), 'A content verdict must create exactly one native spam object.' );
 		if ( 'formidable' === $provider ) {
 			$entry = FrmEntry::getOne( $native_ids[0], true );
-			rktsky_extra_native_expect( FrmSpamEntriesHelper::is_spam( $entry ) === $native_spam && ( ! $native_spam || ! isset( $entry->metas[999999] ) ), 'Native Formidable spam must contain no undeclared metadata.' );
+			$description = $entry->description ?? array();
+			FrmAppHelper::unserialize_or_decode( $description );
+			$source = is_array( $description ) && is_string( $description['spam_source'] ?? null ) ? $description['spam_source'] : '';
+			rktsky_extra_native_expect( is_object( $entry ) && FrmSpamEntriesHelper::is_spam( $entry ) === $native_spam, sprintf( 'Native Formidable status differs (%s, expected_spam=%d, actual_spam=%d, source=%s).', $case, (int) $native_spam, (int) FrmSpamEntriesHelper::is_spam( $entry ), $source ) );
+			if ( $native_spam ) {
+				rktsky_extra_native_expect( ! isset( $entry->metas[999999] ), 'Native Formidable spam must contain no undeclared metadata.' );
+			}
 		} elseif ( 'wsform' === $provider ) {
 			$reader = new WS_Form_Submit();
 			$reader->id = $native_ids[0];
