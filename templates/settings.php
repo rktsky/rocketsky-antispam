@@ -72,7 +72,7 @@ require __DIR__ . '/admin-header.php';
 				<div class="rktsky-antispam__field">
 					<label for="rktsky-retention"><?php esc_html_e( 'Keep daily activity for', 'rocketsky-antispam' ); ?></label>
 					<div class="rktsky-antispam__number"><input type="number" id="rktsky-retention" name="<?php echo esc_attr( \Rktsky\Antispam\Settings::OPTION ); ?>[retention_days]" value="<?php echo esc_attr( (string) $options['retention_days'] ); ?>" min="1" max="90" step="1" aria-describedby="rktsky-retention-help" /><span><?php esc_html_e( 'days', 'rocketsky-antispam' ); ?></span></div>
-					<p id="rktsky-retention-help" class="description"><?php esc_html_e( 'Does not change the total comment count or the 90-day review period.', 'rocketsky-antispam' ); ?></p>
+					<p id="rktsky-retention-help" class="description"><?php esc_html_e( 'Does not change the total rejected-comment count or the 90-day review period.', 'rocketsky-antispam' ); ?></p>
 				</div>
 				<div class="rktsky-antispam__field">
 					<label for="rktsky-comment-spam-days"><?php esc_html_e( 'Permanently delete spam comments after', 'rocketsky-antispam' ); ?></label>

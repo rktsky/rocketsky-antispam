@@ -43,7 +43,7 @@ defined( 'ABSPATH' ) || exit;
 	<section class="rktsky-antispam-widget__quality" aria-labelledby="rktsky-widget-quality-heading">
 		<h3 id="rktsky-widget-quality-heading"><?php esc_html_e( 'Reviewed results', 'rocketsky-antispam' ); ?></h3>
 		<?php if ( $quality['reviewed'] > 0 ) : ?>
-			<p class="rktsky-antispam-widget__note"><?php echo esc_html( sprintf( /* translators: %d: number of days in the reviewed dataset. */ __( 'Based on submissions recorded in the last %d days.', 'rocketsky-antispam' ), (int) $quality['period_days'] ) ); ?></p>
+			<p class="rktsky-antispam-widget__note"><?php echo esc_html( sprintf( /* translators: %d: observation window for cases, independent of when a case was reviewed. */ __( 'Based on submissions recorded in the last %d days.', 'rocketsky-antispam' ), (int) $quality['period_days'] ) ); ?></p>
 			<dl class="rktsky-antispam-widget__rates">
 				<?php
 				if ( null !== $quality['precision'] ) :

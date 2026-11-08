@@ -135,7 +135,6 @@ msgstr "Volver a los envíos rechazados"
 msgid "Based on reviewed submissions only."
 msgstr "Se basa solo en los envíos evaluados."
 
-#. translators: %d: number of days in the reviewed dataset.
 #. translators: %d: observation window for cases, independent of when a case was reviewed.
 #: templates/dashboard.php:46 templates/quality.php:15
 #, php-format
@@ -360,7 +359,7 @@ msgid "Divi contact form"
 msgstr "Formulario de contacto de Divi"
 
 #: templates/settings.php:75
-msgid "Does not change the total comment count or the 90-day review period."
+msgid "Does not change the total rejected-comment count or the 90-day review period."
 msgstr "No cambia el total de comentarios rechazados ni el periodo de evaluación de 90 días."
 
 #: src/Admin.php:209
