@@ -377,7 +377,7 @@ final class Quarantine {
 				),
 				array(
 					'name'  => __( 'Date', 'rocketsky-antispam' ),
-					'value' => gmdate( 'c', (int) $row['created'] ),
+					'value' => wp_date( 'c', (int) $row['created'] ),
 				),
 				array(
 					'name'  => __( 'Email address', 'rocketsky-antispam' ),

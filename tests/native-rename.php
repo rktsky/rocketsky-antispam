@@ -405,8 +405,17 @@ if ( 'activate-old' === $stage || 'activate-new' === $stage ) {
 		rktsky_rename_in(
 			(int) $site,
 			static function () use ( $before ): void {
-				rktsky_rename_expect( get_option( Settings::OPTION ) === $before['option'] && get_option( 'rktsky_antispam_schema' ) === $before['schema'], 'Native upgrade must preserve each site\'s complete settings and schema marker.' );
-				rktsky_rename_expect( rktsky_rename_rows() === $before['rows'], 'All replay/counter/ciphertext/feedback/job rows must survive without remapping identifiers.' );
+				Plugin::upgrade();
+				rktsky_rename_expect( get_option( Settings::OPTION ) === $before['option'] && Plugin::SCHEMA === get_option( 'rktsky_antispam_schema' ), 'Native upgrade must preserve each site\'s complete settings and finish the current owned schema.' );
+				$expected_rows = $before['rows'];
+				// Pre-calendar aggregate rows gain UTC provenance; their dates and counts stay unchanged.
+				foreach ( $expected_rows['stats'] as &$expected_row ) {
+					if ( ! array_key_exists( 'calendar', $expected_row ) ) {
+						$expected_row['calendar'] = 'UTC';
+					}
+				}
+				unset( $expected_row );
+				rktsky_rename_expect( rktsky_rename_rows() === $expected_rows, 'All replay/counter/ciphertext/feedback/job values must survive; legacy daily counts gain only explicit UTC provenance.' );
 				$cron           = rktsky_rename_cron();
 				$preserved_cron = '1' === getenv( 'RKTSKY_ANTISPAM_RENAME_SILENT' ) ? $cron === $before['cron'] : rktsky_rename_cron_shape( $cron ) === rktsky_rename_cron_shape( $before['cron'] );
 				rktsky_rename_expect( $preserved_cron, 'The native handover must retain exactly one matching maintenance schedule per original event; silent upgrades also preserve due times.' );

@@ -31,6 +31,13 @@ Quelle: [öffentlicher Sprachpfadfilter](https://developer.wordpress.org/referen
 
 ## Installierbares Paket bauen
 
+Eine bereits ausgelieferte Versionsnummer darf nicht für geänderte
+Produktionsdateien wiederverwendet werden. Neue Markups müssen die dazugehörigen
+Styles über die neue native Assetversion anfordern. Den Updatepfad mit einem
+Browser prüfen, der die vorige Version bereits im Cache hat; ein ausschliesslich
+frischer Browser reicht dafür nicht. Der konkrete 0.5.3-Fall und die
+[Zeitzonenumstellung](timezones.md) sind dokumentiert.
+
 Den geprüften Stand zuerst committen. Der Paketbauer verweigert einen
 veränderten Checkout und liest nur versionierte Produktionsdateien aus dem
 exakten Git-Commit. Tests, Werkzeuge, Vendor-Pakete, Git-Metadaten und interne

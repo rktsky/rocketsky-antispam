@@ -11,6 +11,7 @@
  */
 
 use Rktsky\Antispam\Dashboard;
+use Rktsky\Antispam\Dates;
 use Rktsky\Antispam\Store;
 
 require __DIR__ . '/bootstrap.php';
@@ -42,14 +43,18 @@ function rktsky_widget_expect( bool $condition, string $message ): void {
  * @param array $summary Seven-day accepted and blocked totals.
  * @param int   $total Independent lifetime comment rejection count.
  * @param array $quality Reviewed counts and nullable fractional rates.
+ * @param bool  $statistics_available Whether native storage readback completed.
  * @return string Escaped owned widget markup.
  */
-function rktsky_widget_case( array $summary, int $total, array $quality ): string {
-	$days = array();
-	for ( $offset = 6; $offset >= 0; --$offset ) {
-		$day    = gmdate( 'Y-m-d', time() - $offset * DAY_IN_SECONDS );
-		$days[] = array( 'day' => $day, 'label' => gmdate( 'j M', strtotime( $day . ' UTC' ) ), 'accepted' => 0 === $offset ? $summary['accepted'] : 0, 'blocked' => 0 === $offset ? $summary['blocked'] : 0 );
+function rktsky_widget_case( array $summary, int $total, array $quality, bool $statistics_available = true ): string {
+	$days = Dates::days();
+	foreach ( $days as $index => &$row ) {
+		$row['accepted'] = 6 === $index ? $summary['accepted'] : 0;
+		$row['blocked']  = 6 === $index ? $summary['blocked'] : 0;
 	}
+	unset( $row );
+	$calendar = Dates::calendar();
+	$history  = array();
 	ob_start();
 	include dirname( __DIR__ ) . '/templates/dashboard.php';
 	return (string) ob_get_clean();
@@ -106,25 +111,62 @@ try {
 	$rktsky_widget_style = wp_styles()->registered['rktsky-antispam-dashboard'];
 	rktsky_widget_expect( plugins_url( 'assets/dashboard.css', RKTSKY_ANTISPAM_FILE ) === $rktsky_widget_style->src && RKTSKY_ANTISPAM_VERSION === $rktsky_widget_style->ver && array() === $rktsky_widget_style->deps, 'The widget must use only its versioned local stylesheet, without extra dependencies.' );
 
-	$rktsky_widget_quality = array( 'reviewed' => 0, 'pending' => 0, 'period_days' => 90, 'precision' => null, 'recall' => null, 'accuracy' => null );
-	$rktsky_widget_empty   = rktsky_widget_case( array( 'accepted' => 0, 'blocked' => 0 ), 12, $rktsky_widget_quality );
+	$rktsky_widget_quality = array(
+		'reviewed'    => 0,
+		'pending'     => 0,
+		'period_days' => 90,
+		'precision'   => null,
+		'recall'      => null,
+		'accuracy'    => null,
+	);
+	$rktsky_widget_empty   = rktsky_widget_case(
+		array(
+			'accepted' => 0,
+			'blocked'  => 0,
+		),
+		12,
+		$rktsky_widget_quality
+	);
 	$rktsky_widget_xpath   = rktsky_widget_document( $rktsky_widget_empty );
 	rktsky_widget_expect( 0 === $rktsky_widget_xpath->query( '//*[@id="rktsky-widget-stopped" or @id="rktsky-widget-passed"]' )->length, 'Empty activity must show an explanation instead of two unqualified zero cards.' );
 	rktsky_widget_expect( 0 === $rktsky_widget_xpath->query( '//dl[contains(@class,"__rates")]' )->length && ! str_contains( $rktsky_widget_empty, '—' ), 'An unreviewed dataset must not display undefined quality metrics.' );
 	rktsky_widget_expect( 0 === $rktsky_widget_xpath->query( '//*[contains(@class,"__rate") or contains(@class,"__daily-rate")]' )->length, 'Zero checked submissions must not produce a percentage.' );
 	rktsky_widget_expect( '12' === $rktsky_widget_xpath->evaluate( 'string(//*[@id="rktsky-widget-comments"])' ), 'An empty seven-day series must preserve its independently accumulated lifetime comment total.' );
-	rktsky_widget_expect( 7 === $rktsky_widget_xpath->query( '//details[not(@open)]//tbody/tr' )->length, 'Seven UTC-day rows must remain available in a closed native disclosure.' );
+	rktsky_widget_expect( 7 === $rktsky_widget_xpath->query( '//details[not(@open)]//tbody/tr' )->length, 'Seven website-calendar rows must remain available in a closed native disclosure.' );
 	rktsky_widget_expect( 2 === $rktsky_widget_xpath->query( '//a[contains(@href,"page=rocketsky-antispam")]' )->length, 'Both overview and review destinations must remain available in the empty widget.' );
 
-	$rktsky_widget_quality = array( 'reviewed' => 10, 'pending' => 2, 'period_days' => 90, 'precision' => 0.75, 'recall' => 0.6, 'accuracy' => 0.7 );
-	$rktsky_widget_filled  = rktsky_widget_case( array( 'accepted' => 18, 'blocked' => 2 ), 500, $rktsky_widget_quality );
+	$rktsky_widget_quality = array(
+		'reviewed'    => 10,
+		'pending'     => 2,
+		'period_days' => 90,
+		'precision'   => 0.75,
+		'recall'      => 0.6,
+		'accuracy'    => 0.7,
+	);
+	$rktsky_widget_filled  = rktsky_widget_case(
+		array(
+			'accepted' => 18,
+			'blocked'  => 2,
+		),
+		500,
+		$rktsky_widget_quality
+	);
 	$rktsky_widget_xpath   = rktsky_widget_document( $rktsky_widget_filled );
 	rktsky_widget_expect( '2' === $rktsky_widget_xpath->evaluate( 'string(//*[@id="rktsky-widget-stopped"])' ) && '18' === $rktsky_widget_xpath->evaluate( 'string(//*[@id="rktsky-widget-passed"])' ), 'Populated counts must retain their distinct seven-day totals.' );
 	rktsky_widget_expect( '500' === $rktsky_widget_xpath->evaluate( 'string(//*[@id="rktsky-widget-comments"])' ), 'The lifetime total must never be replaced by the seven-day rejection count.' );
 	rktsky_widget_expect( 1 === $rktsky_widget_xpath->query( '//*[contains(@class,"__daily-rate")]' )->length && str_contains( $rktsky_widget_xpath->evaluate( 'string(//*[contains(@class,"__rate")])' ), number_format_i18n( 10, 1 ) . '%' ), 'Only the active day must expose its real operative rejection share.' );
 	rktsky_widget_expect( 3 === $rktsky_widget_xpath->query( '//dl[contains(@class,"__rates")]/div' )->length && str_contains( $rktsky_widget_filled, number_format_i18n( 75, 1 ) . '%' ) && str_contains( $rktsky_widget_filled, number_format_i18n( 60, 1 ) . '%' ) && str_contains( $rktsky_widget_filled, number_format_i18n( 70, 1 ) . '%' ), 'Reviewed rates must render their actual fractional values rather than the operational rejection share.' );
 	$rktsky_widget_quality['precision'] = null;
-	$rktsky_widget_xpath = rktsky_widget_document( rktsky_widget_case( array( 'accepted' => 18, 'blocked' => 2 ), 500, $rktsky_widget_quality ) );
+	$rktsky_widget_xpath                = rktsky_widget_document(
+		rktsky_widget_case(
+			array(
+				'accepted' => 18,
+				'blocked'  => 2,
+			),
+			500,
+			$rktsky_widget_quality
+		)
+	);
 	rktsky_widget_expect( 2 === $rktsky_widget_xpath->query( '//dl[contains(@class,"__rates")]/div' )->length, 'A metric without a reviewed denominator must be omitted rather than fabricated.' );
 
 	$rktsky_widget_actual = ( new Store() )->summary( 7 );

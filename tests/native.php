@@ -51,7 +51,7 @@ $store    = new Store();
 $token    = new Token();
 $original = get_option( Settings::OPTION );
 update_option( Settings::OPTION, $settings->defaults(), false );
-$store->install();
+rktsky_antispam_expect( $store->install(), 'Owned statistics installation must verify its calendar column and unique key.' );
 $store->clear();
 
 try {
@@ -126,7 +126,16 @@ try {
 	$columns = $wpdb->get_col( $wpdb->prepare( 'SHOW COLUMNS FROM %i', $wpdb->prefix . 'rktsky_antispam_tokens' ), 0 );
 	rktsky_antispam_expect( array( 'digest', 'expires' ) === $columns, 'Replay storage must have no visitor or content columns.' );
 	$columns = $wpdb->get_col( $wpdb->prepare( 'SHOW COLUMNS FROM %i', $wpdb->prefix . 'rktsky_antispam_stats' ), 0 );
-	rktsky_antispam_expect( array( 'day', 'provider', 'reason', 'total' ) === $columns, 'Statistics must contain only fixed aggregate dimensions.' );
+	rktsky_antispam_expect( array( 'day', 'provider', 'reason', 'total', 'calendar' ) === $columns, 'Statistics must contain only fixed aggregate dimensions and their timezone basis.' );
+	$indexes = $wpdb->get_results( $wpdb->prepare( 'SHOW INDEX FROM %i', $wpdb->prefix . 'rktsky_antispam_stats' ), ARRAY_A );
+	$primary = array();
+	foreach ( $indexes as $index ) {
+		if ( 'PRIMARY' === $index['Key_name'] && 0 === (int) $index['Non_unique'] ) {
+			$primary[ (int) $index['Seq_in_index'] ] = $index['Column_name'];
+		}
+	}
+	ksort( $primary );
+	rktsky_antispam_expect( array( 'day', 'provider', 'reason', 'calendar' ) === array_values( $primary ), 'Different site calendars must have separate atomic daily-counter keys.' );
 	$summary_before = $store->summary();
 	$store->record( 'malicious-provider', 'custom-content' );
 	rktsky_antispam_expect( $summary_before === $store->summary(), 'Unbounded provider/reason strings must never enter statistics.' );

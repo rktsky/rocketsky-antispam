@@ -240,19 +240,25 @@ final class Admin {
 			require dirname( RKTSKY_ANTISPAM_FILE ) . '/templates/integrations.php';
 			return;
 		}
-		$summary          = $this->store->summary( 7 );
-		$checked_count    = (int) $summary['accepted'] + (int) $summary['blocked'];
-		$rejection_rate   = $checked_count > 0 ? (int) $summary['blocked'] / $checked_count : null;
-		$blocked_comments = $this->store->blocked_comments();
-		$indexed          = array_column( $summary['daily'], null, 'day' );
-		$days             = array();
-		for ( $offset = 6; $offset >= 0; --$offset ) {
-			$day    = gmdate( 'Y-m-d', time() - $offset * DAY_IN_SECONDS );
-			$days[] = $indexed[ $day ] ?? array(
+		$timestamp            = time();
+		$summary              = $this->store->summary( 7, $timestamp );
+		$statistics_available = $this->store->statistics_available();
+		$checked_count        = (int) $summary['accepted'] + (int) $summary['blocked'];
+		$rejection_rate       = $checked_count > 0 ? (int) $summary['blocked'] / $checked_count : null;
+		$blocked_comments     = $this->store->blocked_comments();
+		$indexed              = array_column( $summary['daily'], null, 'day' );
+		$days                 = array();
+		$calendar             = Dates::calendar();
+		$history              = $this->store->history( $timestamp );
+		foreach ( Dates::days( 7, $timestamp ) as $date ) {
+			$day          = $date['day'];
+			$row          = $indexed[ $day ] ?? array(
 				'day'      => $day,
 				'accepted' => 0,
 				'blocked'  => 0,
 			);
+			$row['label'] = $date['label'];
+			$days[]       = $row;
 		}
 		$quality = $this->feedback ? $this->feedback->metrics() : array(
 			'tp'          => 0,

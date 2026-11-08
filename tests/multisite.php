@@ -117,7 +117,7 @@ wp_set_current_user( 1 );
 
 try {
 	rktsky_antispam_network_expect( Network::active(), 'The original native network activation is missing.' );
-	rktsky_antispam_network_expect( '4' === get_option( 'rktsky_antispam_schema' ) && 6 === count( rktsky_antispam_network_tables() ), 'Native network activation did not install all six own tables.' );
+	rktsky_antispam_network_expect( Plugin::SCHEMA === get_option( 'rktsky_antispam_schema' ) && 6 === count( rktsky_antispam_network_tables() ), 'Native network activation did not install the current schema in all six own tables.' );
 	deactivate_plugins( $plugin, false, true );
 	rktsky_antispam_network_expect( ! Network::active() && false === wp_next_scheduled( Network::HOURLY, array( $network ) ) && false === wp_next_scheduled( Network::BATCH, array( $network ) ), 'Network deactivation retained a central dispatcher or continuation.' );
 

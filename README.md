@@ -1,8 +1,10 @@
 # Rocketsky Antispam
 
-Local spam protection for WordPress comments, registration and contact forms, developed by **Rocketsky**. All features are free and run on your WordPress website. The plugin is licensed under GPL-2.0-or-later; the bundled Speo logo retains its BSD-3-Clause licence.
+Rocketsky Antispam protects comments and forms in the background, without adding a CAPTCHA. All features are free, and spam checks run on your own website without sending submissions to an external spam service.
 
-**Version 0.5.2 is a WordPress.org submission candidate.** It has not been approved by the plugin directory. The [final package and checks](docs/submission-0.5.2.md) and [tested versions and coverage](docs/verification.md) are documented separately.
+Developed by **Rocketsky**, licensed under GPL-2.0-or-later. The bundled Speo logo retains its BSD-3-Clause licence.
+
+**Version 0.5.3 is a WordPress.org submission candidate.** It has not been approved by the plugin directory. See [website time zones and updates](docs/timezones.md) and [tested versions and coverage](docs/verification.md).
 
 ## Installation
 
@@ -73,13 +75,13 @@ Rocketsky Antispam sets no cookies and uses no browser storage, fingerprints, te
 Stored data:
 
 - **Used token digests:** expire within two hours and are removed by scheduled cleanup. Their expiry remains enforced even if cleanup runs late.
-- **Daily counts:** contain the UTC date, integration, result reason and count. Retention is 30 days by default, configurable from one to 90 days. The total rejected-comment count stays until reset.
+- **Daily counts:** contain the date in the WordPress website time zone, that time zone, integration, result reason and count. Earlier time zones stay separately available until their normal retention expires; their dates are not shifted or merged into the current period. Retention is 30 days by default, configurable from one to 90 days. The total rejected-comment count stays until reset.
 - **Quarantine:** with explicit opt-in, keeps selected names, email addresses and message fields encrypted on this website. The limit is 500 records, for seven days by default and at most 30 days. Password, hidden, payment and file fields are excluded. WordPress privacy export and erasure support matching contact email addresses.
 - **Review data:** keeps the original decision, a later assessment and timestamps for up to 90 days, also in privacy-conscious mode. Site-keyed HMAC values replace raw case and entry IDs, without copying message contents. They remain locally linkable while the source exists. Supported source-deletion and privacy workflows remove or detach references; reviewed totals can remain until their original expiry.
 
 Scheduled cleanup depends on WordPress cron and can run late. Optional spam-comment cleanup permanently deletes WordPress comments older than the selected age that are already marked as spam. Set it to zero to turn this cleanup off. Form providers control their own spam cleanup.
 
-Daily email summaries contain the preceding UTC day's rejection counts and use WordPress mail delivery. No message contents are included. **Delete activity statistics** removes daily counts and the total rejected-comment count, while keeping replay protection and the separate review data.
+Daily email summaries contain the preceding calendar day's rejection counts in the website time zone and use WordPress mail delivery. No message contents are included. **Delete activity statistics** removes daily counts and the total rejected-comment count, while keeping replay protection and the separate review data.
 
 Deactivation stops cleanup without deleting data. Uninstall removes the plugin's own tables and options by default; you can choose to keep them. WordPress comments and form entries are kept.
 
@@ -98,7 +100,7 @@ Review quarantine, use supported WordPress or form-plugin spam moderation, or as
 WordPress.org submission packages are built from a clean committed checkout:
 
 ```sh
-python3 tools/build-release.py --channel wordpress-org --output ../outputs/rocketsky-antispam/submission-0.5.2
+python3 tools/build-release.py --channel wordpress-org --output ../outputs/rocketsky-antispam/submission-0.5.3
 ```
 
 The installable ZIP includes bundled languages and uses the directory update channel. Its manifest records the source commit and every file checksum. Development tools, tests and internal documentation are excluded. GitHub packages retain a separate Update URI and are updated manually. See [the release process](docs/releasing.md) and [submission details](docs/submission.md).

@@ -48,7 +48,7 @@ final class Guard {
 	 * Statistical receipts for native reclassification, never security permits.
 	 *
 	 * @since 0.2.0
-	 * @var array<string,array{reason:string,day:string}>
+	 * @var array<string,array{reason:string,day:string,calendar:string}>
 	 */
 	private array $receipts = array();
 
@@ -111,11 +111,13 @@ final class Guard {
 		if ( '' === $reason && ! $technical_only && $this->rules ) {
 			$reason = $this->rules->check( $provider, $fields );
 		}
-		$day = gmdate( 'Y-m-d' );
-		$this->store->record( $provider, $reason, $day );
+		$calendar = Dates::calendar();
+		$day      = Dates::day( 0, time(), new \DateTimeZone( $calendar ) );
+		$this->store->record( $provider, $reason, $day, $calendar );
 		$this->receipts[ hash( 'sha256', $provider . '|' . $form_id . '|' . $value ) ] = array(
-			'reason' => $reason,
-			'day'    => $day,
+			'reason'   => $reason,
+			'day'      => $day,
+			'calendar' => $calendar,
 		);
 		return $reason;
 	}
@@ -177,15 +179,18 @@ final class Guard {
 		$key   = hash( 'sha256', $provider . '|' . $form_id . '|' . $token );
 		if ( isset( $this->receipts[ $key ] ) ) {
 			if ( '' === $this->receipts[ $key ]['reason'] ) {
-				$this->store->reclassify( $provider, $this->receipts[ $key ]['day'] );
+				$this->store->reclassify( $provider, $this->receipts[ $key ]['day'], $this->receipts[ $key ]['calendar'] );
 				$this->receipts[ $key ]['reason'] = 'native_spam';
 			}
 			return;
 		}
-		$this->store->record( $provider, 'native_spam' );
+		$calendar = Dates::calendar();
+		$day      = Dates::day( 0, time(), new \DateTimeZone( $calendar ) );
+		$this->store->record( $provider, 'native_spam', $day, $calendar );
 		$this->receipts[ $key ] = array(
-			'reason' => 'native_spam',
-			'day'    => gmdate( 'Y-m-d' ),
+			'reason'   => 'native_spam',
+			'day'      => $day,
+			'calendar' => $calendar,
 		);
 	}
 

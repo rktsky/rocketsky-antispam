@@ -106,6 +106,7 @@ jobs:
           wp config set WP_HTTP_BLOCK_EXTERNAL true --raw --path="$RKTSKY_ANTISPAM_WP_ROOT"
           printf '%s\n' '<?php add_filter( "pre_wp_mail", "__return_false", PHP_INT_MAX ); add_filter( "pre_http_request", static function () { return new WP_Error( "test_http_blocked", "Disposable fixture." ); }, PHP_INT_MAX );' > "$RKTSKY_ANTISPAM_WP_ROOT/wp-content/mu-plugins/fixture-mail.php"
       - run: php tests/native.php
+      - run: php tests/timezones.php
       - run: php tests/native-admin.php
       - run: php tests/context-notices.php
       - run: php tests/translations.php

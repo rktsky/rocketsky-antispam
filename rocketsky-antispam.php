@@ -3,8 +3,8 @@
  * Plugin Name: Rocketsky Antispam
  * Plugin URI: https://github.com/rktsky/rocketsky-antispam
  * Update URI: https://github.com/rktsky/rocketsky-antispam
- * Description: Local spam protection for comments, registrations and forms. No external services.
- * Version: 0.5.2
+ * Description: Free local spam protection for comments and forms. No added CAPTCHA or external spam service.
+ * Version: 0.5.3
  * Requires at least: 6.6
  * Requires PHP: 8.2
  * Author: Rocketsky
@@ -30,11 +30,11 @@ if ( ! ( new Rktsky\Antispam\Installation( __FILE__ ) )->register() ) {
 	return;
 }
 
-define( 'RKTSKY_ANTISPAM_VERSION', '0.5.2' );
+define( 'RKTSKY_ANTISPAM_VERSION', '0.5.3' );
 define( 'RKTSKY_ANTISPAM_FILE', __FILE__ );
 
 // Explicit local includes avoid filesystem discovery and third-party autoloaders.
-foreach ( array( 'Providers', 'Settings', 'Country', 'Language', 'ContentRules', 'Token', 'Store', 'Quarantine', 'Feedback', 'NativeFeedback', 'WpFormsFeedback', 'Guard', 'Fields', 'Integrations', 'SpamHandling', 'ContextNotices', 'Admin', 'Dashboard', 'Maintenance', 'Network', 'Plugin' ) as $rktsky_antispam_class ) {
+foreach ( array( 'Providers', 'Settings', 'Dates', 'Country', 'Language', 'ContentRules', 'Token', 'Store', 'Quarantine', 'Feedback', 'NativeFeedback', 'WpFormsFeedback', 'Guard', 'Fields', 'Integrations', 'SpamHandling', 'ContextNotices', 'Admin', 'Dashboard', 'Maintenance', 'Network', 'Plugin' ) as $rktsky_antispam_class ) {
 	require_once __DIR__ . '/src/' . $rktsky_antispam_class . '.php';
 }
 unset( $rktsky_antispam_class );

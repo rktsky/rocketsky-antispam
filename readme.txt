@@ -5,15 +5,17 @@ Tags: antispam, spam, contact form 7, gravity forms, wpforms
 Requires at least: 6.6
 Requires PHP: 8.2
 Tested up to: 7.1
-Stable tag: 0.5.2
+Stable tag: 0.5.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Local spam protection for comments and forms. No external spam service, tracking or captcha.
+Free local spam protection for comments and forms. No added CAPTCHA or external spam service.
 
 == Description ==
 
-Rocketsky Antispam protects WordPress comments, registration and supported contact forms on your own website. Enable integrations under Settings → Rocketsky Antispam; no form edits or snippets are needed. Comment protection starts enabled. Other integrations start off, and updates keep your saved choices.
+Rocketsky Antispam protects comments and forms in the background, without adding a CAPTCHA. All features are free, and spam checks run on your own website without sending submissions to an external spam service.
+
+Enable integrations under Settings → Rocketsky Antispam; no form edits or snippets are needed. Comment protection starts enabled. Other integrations start off, and updates keep your saved choices.
 
 Integrations include Contact Form 7, Gravity Forms, WPForms, Formidable Forms, Fluent Forms, WS Form, Elementor Forms, Divi 4 and 5 contact forms, and WooCommerce checkout and registration. Install the provider you want to use; some providers require their own paid licence. All Rocketsky Antispam features are free, without an account, API key or external spam service.
 
@@ -27,7 +29,7 @@ Privacy-conscious mode starts enabled. It prevents new quarantine storage, count
 
 The plugin sets no cookies and uses no browser storage, fingerprints, telemetry, external spam service or external IP lookup. Its own tables store no IP addresses or user agents. The browser sends only the provider ID, form ID and a signed public form reference to the website's own verification endpoint. Country filters use local GeoIP data or a country header from explicitly trusted proxies; VPNs and proxies can affect the result.
 
-Used random-token digests expire within two hours. Daily UTC counters store the integration, result reason and count for 30 days by default, configurable from one to 90 days. The total rejected-comment count stays until statistics are reset. Counts include verification failures and are separate from reviewed detection results.
+Used random-token digests expire within two hours. Daily counters use the WordPress website time zone and store the date, time zone, integration, result reason and count for 30 days by default, configurable from one to 90 days. Earlier time zones remain separately available until their normal retention expires. The total rejected-comment count stays until statistics are reset. Counts include verification failures and are separate from reviewed detection results.
 
 Optional quarantine keeps selected names, email addresses and message fields encrypted on this website: up to 500 records, for seven days by default and at most 30 days. Password, hidden, payment and file fields are excluded. WordPress privacy export and erasure support matching contact email addresses. Existing records keep their expiry when quarantine is turned off.
 
@@ -43,7 +45,7 @@ Protected forms need JavaScript and access to the website's REST API. REST comme
 
 Pingbacks and trackbacks start off and can be allowed outside privacy-conscious mode. WordPress verifies pingbacks by requesting the source page and may send it the sender's IP address. Multisite supports individual and network activation with separate settings and data for each site.
 
-Version 0.5.2 is a submission candidate. Bots that run JavaScript or reproduce the public verification protocol can obtain valid tokens. Passing a check does not prove that a sender is human. See the integration contracts and test evidence for the provider versions and workflows covered.
+Version 0.5.3 is a submission candidate. Bots that run JavaScript or reproduce the public verification protocol can obtain valid tokens. Passing a check does not prove that a sender is human. See the integration contracts and test evidence for the provider versions and workflows covered.
 
 Source and verification: https://github.com/rktsky/rocketsky-antispam
 
@@ -125,6 +127,11 @@ You can help fund development and maintenance with a voluntary donation at https
 6. WordPress dashboard widget with a seven-day activity summary, the comment rejection total and links to review spam.
 
 == Changelog ==
+
+= 0.5.3 =
+* Use the website time zone for daily activity, daily email summaries and displayed record dates.
+* Preserve earlier daily counts in their original time zones and verify the additive storage upgrade.
+* Refresh versioned assets on update so the support area loads its matching design.
 
 = 0.5.2 =
 * Prepare an installable WordPress.org submission package with the native update channel.

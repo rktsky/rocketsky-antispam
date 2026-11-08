@@ -57,22 +57,24 @@ final class Dashboard {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
-		$store   = new Store();
-		$summary = $store->summary( 7 );
-		$total   = $store->blocked_comments();
-		$quality = ( new Feedback() )->metrics();
-		$indexed = array_column( $summary['daily'], null, 'day' );
-		$days    = array();
-		$utc     = new \DateTimeZone( 'UTC' );
-		$now     = time();
-		for ( $offset = 6; $offset >= 0; --$offset ) {
-			$day          = gmdate( 'Y-m-d', $now - $offset * DAY_IN_SECONDS );
+		$store                = new Store();
+		$timestamp            = time();
+		$statistics_available = $store->statistics_available();
+		$summary              = $store->summary( 7, $timestamp );
+		$total                = $store->blocked_comments();
+		$quality              = ( new Feedback() )->metrics();
+		$indexed              = array_column( $summary['daily'], null, 'day' );
+		$days                 = array();
+		$calendar             = Dates::calendar();
+		$history              = $store->history( $timestamp );
+		foreach ( Dates::days( 7, $timestamp ) as $date ) {
+			$day          = $date['day'];
 			$row          = $indexed[ $day ] ?? array(
 				'day'      => $day,
 				'accepted' => 0,
 				'blocked'  => 0,
 			);
-			$row['label'] = wp_date( 'j M', strtotime( $day . ' 00:00:00 UTC' ), $utc );
+			$row['label'] = $date['label'];
 			$days[]       = $row;
 		}
 		include dirname( __DIR__ ) . '/templates/dashboard.php';

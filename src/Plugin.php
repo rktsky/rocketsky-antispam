@@ -22,7 +22,7 @@ final class Plugin {
 	 * @since 0.3.0
 	 * @var string
 	 */
-	public const SCHEMA = '4';
+	public const SCHEMA = '5';
 
 	/**
 	 * Complete owned table inventory for installation and native site deletion.
@@ -94,16 +94,16 @@ final class Plugin {
 	 * Network mode uses the central dispatcher instead of recurring site events.
 	 *
 	 * @since 0.3.0
+	 * @since 0.5.3 Requires verified calendar-aware statistics before publishing the marker.
 	 * @param bool $network Whether central network scheduling owns this site.
-	 * @return bool Whether all owned tables are present after installation.
+	 * @return bool Whether all owned tables and the calendar-aware key are ready.
 	 */
 	public static function install_site( bool $network = false ): bool {
 		global $wpdb;
-		( new Store() )->install();
+		$complete = ( new Store() )->install();
 		( new Quarantine( new Settings() ) )->install();
 		( new Feedback() )->install();
 		add_option( Settings::OPTION, ( new Settings() )->defaults(), '', false );
-		$complete = true;
 		foreach ( self::TABLES as $suffix ) {
 			$name     = $wpdb->prefix . $suffix;
 			$found    = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $name ) ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- Confirms only the bounded owned schema before recording successful installation.
