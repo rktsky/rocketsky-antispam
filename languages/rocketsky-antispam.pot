@@ -982,7 +982,7 @@ msgid "Rocketsky Antispam quarantine"
 msgstr ""
 
 #: src/SpamHandling.php:196
-msgid "Rocketsky Antispam quarantine is off."
+msgid "Rocketsky Antispam quarantine is off. New rejected messages are not saved here."
 msgstr ""
 
 #: src/Feedback.php:611 src/Feedback.php:627 src/Feedback.php:691

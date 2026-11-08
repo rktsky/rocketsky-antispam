@@ -196,7 +196,7 @@ function rktsky_divi5_case( string $name, string $url, array $data, int $mail, i
 	rktsky_divi5_expect( $mail === $counts['mail_attempt'], $name . ': native mail-attempt count differs: ' . wp_json_encode( $counts ) );
 	rktsky_divi5_expect( $actions === $counts['native_submit'], $name . ': native submission action escaped/vanished: ' . wp_json_encode( $counts ) );
 	if ( $guard ) {
-		rktsky_divi5_expect( str_contains( $response['body'], 'spam protection could not verify' ), $name . ': the original transport did not expose the neutral local error.' ); }
+		rktsky_divi5_expect( str_contains( $response['body'], 'Your submission could not be verified.' ), $name . ': the original transport did not expose the neutral local error.' ); }
 	if ( $mail > 0 ) {
 		rktsky_divi5_expect( 200 === $response['status'] && str_contains( $response['body'], 'accepted.' ), $name . ': original native success was not rendered.' ); }
 	$GLOBALS['rktsky_divi5_results'][] = array(

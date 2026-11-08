@@ -156,7 +156,7 @@ async function state(test) {
  * @return {Promise<void>}
  */
 async function rejected(test, kind = 'plain') {
-	await test.page.getByText('The spam protection could not verify').waitFor({ state: 'visible' });
+	await test.page.getByText('Your submission could not be verified.').waitFor({ state: 'visible' });
 	const link = test.page.getByRole('link', { name: 'Reload the form' });
 	expect(await link.isVisible(), 'A rejected native submission needs a visible reload action.');
 	expect(
@@ -244,7 +244,7 @@ add('replay', async (test) => {
 		}
 	});
 	expect(
-		(await replay.text()).includes('spam protection could not verify'),
+		(await replay.text()).includes('Your submission could not be verified.'),
 		'A captured native POST must not be reusable.'
 	);
 	expect((await state(test)).mail === 1, 'A replay must not send a second message.');
@@ -418,7 +418,7 @@ add(
 			'JavaScript-disabled native POST must fail before native mail.'
 		);
 		expect((await state(test)).mail === 0, 'A no-JavaScript submission must not send mail.');
-		await test.page.getByText('The spam protection could not verify').waitFor({ state: 'visible' });
+		await test.page.getByText('Your submission could not be verified.').waitFor({ state: 'visible' });
 	},
 	{ javaScriptEnabled: false }
 );

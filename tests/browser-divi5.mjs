@@ -551,7 +551,7 @@ try {
 			if (native.status() !== 403 || counts(label).mail_attempt || counts(label).native_submit) {
 				throw new Error('The no-JavaScript full-page POST escaped protection.');
 			}
-			await page.getByText(/spam protection could not verify/).waitFor();
+			await page.getByText('Your submission could not be verified.').waitFor();
 			results.push({ kind: 'no_javascript', status: 403, mailAttempts: 0, nativeActions: 0 });
 			console.log('PASS: no-JavaScript full-page rejection');
 		} finally {

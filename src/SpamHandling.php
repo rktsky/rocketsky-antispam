@@ -193,7 +193,7 @@ final class SpamHandling {
 		return array(
 			'mode'        => 'discard',
 			'label'       => __( 'Retention settings', 'rocketsky-antispam' ),
-			'description' => __( 'Rocketsky Antispam quarantine is off.', 'rocketsky-antispam' ),
+			'description' => __( 'Rocketsky Antispam quarantine is off. New rejected messages are not saved here.', 'rocketsky-antispam' ),
 			'url'         => admin_url( 'options-general.php?page=rocketsky-antispam&tab=settings#retention' ),
 		);
 	}

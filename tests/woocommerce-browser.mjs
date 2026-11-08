@@ -183,7 +183,7 @@ try {
 					const rejection = await rejectedResponse.json();
 					if (
 						transport === 'classic'
-							? rejection.result !== 'failure' || !rejection.messages.includes('spam protection')
+							? rejection.result !== 'failure' || !rejection.messages.includes('Your submission could not be verified.')
 							: rejection.code !== 'rktsky_antispam_rejected' || rejectedResponse.status() !== 403
 					) {
 						throw new Error(

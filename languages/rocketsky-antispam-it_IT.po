@@ -984,8 +984,8 @@ msgid "Rocketsky Antispam quarantine"
 msgstr "Richieste rifiutate in Rocketsky Antispam"
 
 #: src/SpamHandling.php:196
-msgid "Rocketsky Antispam quarantine is off."
-msgstr "La quarantena di Rocketsky Antispam è disattivata."
+msgid "Rocketsky Antispam quarantine is off. New rejected messages are not saved here."
+msgstr "La quarantena di Rocketsky Antispam è disattivata. I nuovi messaggi rifiutati non vengono conservati qui."
 
 #: src/Feedback.php:611 src/Feedback.php:627 src/Feedback.php:691
 msgid "Rocketsky Antispam reviewed decisions"

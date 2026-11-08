@@ -101,7 +101,12 @@ try {
 	rktsky_notice_expect( 'native' === $rktsky_notice_native['mode'] && str_contains( $rktsky_notice_native['url'], 'comment_status=spam' ), 'Comments must retain their native spam destination.' );
 	foreach ( array( 'elementor' ) as $rktsky_notice_provider ) {
 		$rktsky_notice_route = $rktsky_notice_handling->describe( $rktsky_notice_provider );
-		rktsky_notice_expect( 'discard' === $rktsky_notice_route['mode'] && str_contains( $rktsky_notice_route['description'], 'does not retain' ), 'Disabled quarantine must explicitly disclose no Rocketsky Antispam content storage.' );
+		rktsky_notice_expect(
+			'discard' === $rktsky_notice_route['mode']
+			&& __( 'Rocketsky Antispam quarantine is off. New rejected messages are not saved here.', 'rocketsky-antispam' ) === $rktsky_notice_route['description']
+			&& admin_url( 'options-general.php?page=rocketsky-antispam&tab=settings#retention' ) === $rktsky_notice_route['url'],
+			'Disabled quarantine must explicitly disclose no new Rocketsky Antispam content storage and link to retention settings.'
+		);
 	}
 	foreach ( array( 'divi', 'registration', 'wc_checkout', 'wc_registration' ) as $rktsky_notice_provider ) {
 		rktsky_notice_expect( 'blocked' === $rktsky_notice_handling->describe( $rktsky_notice_provider )['mode'], 'Technical-only scopes must never promise a content quarantine.' );

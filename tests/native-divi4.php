@@ -210,7 +210,7 @@ try {
 	) as $case => $posted ) {
 		$result = rktsky_antispam_divi4_submit( $case, $page, $posted );
 		rktsky_antispam_divi4_expect( 0 === $result['mail'] && array() === $result['native'], 'Rejected proof must stop before the original mail and submit observer: ' . $case );
-		rktsky_antispam_divi4_expect( str_contains( $result['body'], 'et_pb_contact_error_text' ) && str_contains( $result['body'], 'spam protection could not verify' ), 'Rejected proof must carry the native visible error marker: ' . $case );
+		rktsky_antispam_divi4_expect( str_contains( $result['body'], 'et_pb_contact_error_text' ) && str_contains( $result['body'], 'Your submission could not be verified.' ), 'Rejected proof must carry the native visible error marker: ' . $case );
 	}
 	$result = rktsky_antispam_divi4_submit( 'fresh_retry', $page, rktsky_antispam_divi4_proof( $base ) );
 	rktsky_antispam_divi4_expect( 1 === $result['mail'], 'A fresh retry must reach the unchanged mail path.' );
@@ -220,29 +220,29 @@ try {
 		'nonce'    => array( '_wpnonce-et-pb-contact-form-submitted-0' => 'invalid-native-nonce' ),
 	) as $case => $change ) {
 		$result = rktsky_antispam_divi4_submit( 'native_' . $case, $page, rktsky_antispam_divi4_proof( array_merge( $base, $change ) ) );
-		rktsky_antispam_divi4_expect( 0 === $result['mail'] && str_contains( $result['body'], 'et_pb_contact_error_text' ) && ! str_contains( $result['body'], 'spam protection could not verify' ), 'Valid local proof must preserve native validation failure: ' . $case );
+		rktsky_antispam_divi4_expect( 0 === $result['mail'] && str_contains( $result['body'], 'et_pb_contact_error_text' ) && ! str_contains( $result['body'], 'Your submission could not be verified.' ), 'Valid local proof must preserve native validation failure: ' . $case );
 	}
 	$many                               = rktsky_antispam_divi4_proof( $base );
 	$many['et_pb_contactform_submit_1'] = 'et_contact_proccess';
 	$result                             = rktsky_antispam_divi4_submit( 'multiple_targets', $page, $many );
-	rktsky_antispam_divi4_expect( 0 === $result['mail'] && array() === $result['native'] && str_contains( $result['body'], 'spam protection could not verify' ), 'One proof must not fan out across multiple native targets.' );
+	rktsky_antispam_divi4_expect( 0 === $result['mail'] && array() === $result['native'] && str_contains( $result['body'], 'Your submission could not be verified.' ), 'One proof must not fan out across multiple native targets.' );
 	$result = rktsky_antispam_divi4_submit( 'plain_missing', $page, $base, false );
 	rktsky_antispam_divi4_expect( 403 === $result['code'] && 0 === $result['mail'], 'No-JavaScript/plain POST without proof must fail before native processing.' );
 	$result = rktsky_antispam_divi4_submit( 'plain_valid', $page, rktsky_antispam_divi4_proof( $base ), false );
 	rktsky_antispam_divi4_expect( 200 === $result['code'] && 1 === $result['mail'], 'A genuine plain POST proof must preserve native delivery.' );
 	$result = rktsky_antispam_divi4_submit( 'unknown', $page, array( 'unrelated_form_control' => 'synthetic' ) );
-	rktsky_antispam_divi4_expect( 200 === $result['code'] && 0 === $result['mail'] && ! str_contains( $result['body'], 'spam protection could not verify' ), 'An unrelated POST must not be reclassified as a Divi submission.' );
+	rktsky_antispam_divi4_expect( 200 === $result['code'] && 0 === $result['mail'] && ! str_contains( $result['body'], 'Your submission could not be verified.' ), 'An unrelated POST must not be reclassified as a Divi submission.' );
 	$second = rktsky_antispam_divi4_controls( (int) $forms['multiple'], 1 );
 	$result = rktsky_antispam_divi4_submit( 'second_form', (int) $forms['multiple'], rktsky_antispam_divi4_proof( $second ) );
 	rktsky_antispam_divi4_expect( 1 === $result['mail'] && 1 === ( $result['native'][0]['form'] ?? -1 ), 'The second genuine native form must be protected and delivered independently.' );
 	$result = rktsky_antispam_divi4_submit( 'rest_override', $page, $base, false, '/index.php?rest_route=/wp/v2/pages/' . $page . '&_method=GET' );
-	rktsky_antispam_divi4_expect( 0 === $result['mail'] && array() === $result['native'] && str_contains( $result['body'], 'spam protection could not verify' ), 'The public REST method-override render path must not bypass protection.' );
+	rktsky_antispam_divi4_expect( 0 === $result['mail'] && array() === $result['native'] && str_contains( $result['body'], 'Your submission could not be verified.' ), 'The public REST method-override render path must not bypass protection.' );
 	$custom = rktsky_antispam_divi4_controls( (int) $forms['custom'] );
 	$result = rktsky_antispam_divi4_submit( 'custom_missing', (int) $forms['custom'], $custom );
 	rktsky_antispam_divi4_expect( 0 === $result['mail'] && str_contains( $result['body'], 'id="rk-fixture-sales"' ) && str_contains( $result['body'], 'page_id=' . (int) $forms['custom'] ), 'Native custom CSS ID and public reload destination must survive a proof failure.' );
 	$long   = array( 'et_pb_contactform_submit_' . str_repeat( 'x', 65 ) => 'synthetic' );
 	$result = rktsky_antispam_divi4_submit( 'unsupported_suffix', $page, $long );
-	rktsky_antispam_divi4_expect( 0 === $result['mail'] && str_contains( $result['body'], 'spam protection could not verify' ), 'Reserved native envelopes with unsupported suffixes must fail closed.' );
+	rktsky_antispam_divi4_expect( 0 === $result['mail'] && str_contains( $result['body'], 'Your submission could not be verified.' ), 'Reserved native envelopes with unsupported suffixes must fail closed.' );
 	$options['privacy_mode']       = false;
 	$options['quarantine_enabled'] = true;
 	update_option( \Rktsky\Antispam\Settings::OPTION, $options, false );

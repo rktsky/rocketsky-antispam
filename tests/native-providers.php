@@ -221,7 +221,7 @@ if ( str_starts_with( $case, 'cf7_' ) ) {
 	} elseif ( 'wpforms_valid' === $case ) {
 		rktsky_antispam_provider_expect( empty( $errors ) && empty( wpforms()->process->spam_errors[ $id ] ), 'WPForms rejected valid native controls with a local challenge.' );
 	} else {
-		rktsky_antispam_provider_expect( str_contains( $errors['header'] ?? '', 'spam protection' ), 'WPForms did not expose the guard failure in its native header.' );
+		rktsky_antispam_provider_expect( __( 'Your submission could not be verified. Try again. If the error persists, reload the page and check that JavaScript is enabled.', 'rocketsky-antispam' ) === ( $errors['header'] ?? '' ), 'WPForms did not expose the guard failure in its native header.' );
 	}
 } else {
 	throw new RuntimeException( 'Unknown native provider case.' );
