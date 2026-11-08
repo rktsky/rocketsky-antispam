@@ -99,6 +99,7 @@ jobs:
       - run: php tests/native.php
       - run: php tests/native-admin.php
       - run: php tests/context-notices.php
+      - run: php tests/translations.php
       - run: php tests/native-spam-routing.php
       - run: php tests/registration.php
       - run: php tests/theme-registry.php
@@ -224,27 +225,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
-      - name: Prepare the distribution tree
+      - name: Build and extract the exact WordPress.org submission archive
         run: |
-          mkdir -p /tmp/rocketsky-antispam-distribution/rocketsky-antispam
-          rsync -a --exclude-from=.distignore ./ /tmp/rocketsky-antispam-distribution/rocketsky-antispam/
-          # Directory validation excludes the GitHub-only update identity header.
-          # The shipped GitHub source/archive retains collision protection.
-          python3 - <<'PY'
+          python3 tools/build-release.py --channel wordpress-org --output /tmp/rocketsky-antispam-distribution
+          python3 - <<'PYBUILD'
+          import hashlib, json, zipfile
           from pathlib import Path
-          plugin = Path('/tmp/rocketsky-antispam-distribution/rocketsky-antispam/rocketsky-antispam.php')
-          source = plugin.read_text()
-          header = ' * Update URI: https://github.com/rktsky/rocketsky-antispam\n'
-          if source.count(header) != 1:
-              raise SystemExit('The exact GitHub-only update identity is required.')
-          plugin.write_text(source.replace(header, '', 1))
-          PY
+          output = Path('/tmp/rocketsky-antispam-distribution')
+          manifests = list(output.glob('*-wordpress-org.manifest.json'))
+          if len(manifests) != 1:
+              raise SystemExit('One exact submission manifest is required.')
+          manifest = json.loads(manifests[0].read_text())
+          archive = output / manifest['archive']
+          if hashlib.sha256(archive.read_bytes()).hexdigest() != manifest['sha256']:
+              raise SystemExit('The archive digest differs from the submission manifest.')
+          with zipfile.ZipFile(archive) as package:
+              if set(package.namelist()) != set(manifest['files']):
+                  raise SystemExit('The archive inventory differs from its manifest.')
+              for name, digest in manifest['files'].items():
+                  if hashlib.sha256(package.read(name)).hexdigest() != digest:
+                      raise SystemExit('An archive member differs from its manifest.')
+              package.extractall(output)
+          PYBUILD
       - uses: WordPress/plugin-check-action@10857da14b6c2246d15402b3e69f777edcf8c12e # v1
         with:
           build-dir: /tmp/rocketsky-antispam-distribution/rocketsky-antispam
           slug: rocketsky-antispam
-          # Bundled-translation loading warnings remain visible annotations.
-          strict: false
+          # Every directory error and warning fails the submission gate.
+          strict: true
 
   browser-bridge:
     runs-on: ubuntu-latest

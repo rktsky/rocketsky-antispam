@@ -1,6 +1,8 @@
-# Veröffentlichung
+# Release and submission process
 
-Rocketsky Antispam ist ein Entwicklungskandidat. Eine Einreichung im WordPress-Pluginverzeichnis ist nicht Teil der bisherigen Veröffentlichung und benötigt den tatsächlichen WordPress.org-Account, einen bestätigten verfügbaren Slug und den Reviewprozess.
+Rocketsky Antispam 0.5.2 is a WordPress.org submission candidate. Preparing a
+package does not submit it, reserve its slug or establish directory approval.
+The proposed name is **Rocketsky Antispam**, with slug `rocketsky-antispam`.
 
 Die GitHub-Distribution setzt seit 0.5.0 eine eigene `Update URI`. Damit bietet
 WordPress keine fremde Verzeichnisaktualisierung unter einem gleichnamigen
@@ -9,10 +11,10 @@ erfolgen manuell. Name und Kandidaten-Slug sind seit 0.5.1 auf Rocketsky Antispa
 und `rocketsky-antispam` festgelegt. Vor einer Verzeichniseinreichung ist der
 Header für die tatsächliche WordPress.org-Distribution zu entfernen.
 Quelle: [offizielle Header-Anforderungen](https://developer.wordpress.org/plugins/plugin-basics/header-requirements/).
-Die CI-Prüfung für WordPress.org entfernt nur diesen Header in einer getrennten
-Prüfkopie. Der GitHub-Quellstand und das GitHub-Installationspaket behalten ihn.
-Der vollständige lokale GitHub-Report führt den erwarteten Verzeichnisbefund
-`plugin_updater_detected` sichtbar; es wird kein Verzeichnis-Upload freigegeben.
+Der versionierte Paketbauer entfernt diesen Header aus dem tatsächlichen
+WordPress.org-ZIP. Die CI prüft genau dessen entpackten Inhalt. GitHub-Quelle
+und GitHub-Paket behalten den Header. Es wird keine Datei nur für den Checker
+verändert und kein Befund ausgeblendet.
 
 Der Namenswechsel entfernt den bisherigen Begriff `wp` aus Name, Slug und
 Textdomain. Historische Plugin-Check-Befunde gelten für den damals geprüften
@@ -20,7 +22,56 @@ Stand und werden nicht als aktueller Report übernommen. Die tatsächliche
 Slugverfügbarkeit und der gewöhnliche Verzeichnisreview bleiben vor einer
 Einreichung zu prüfen.
 
-`load_plugin_textdomain` registriert derzeit die mitgelieferten Übersetzungen für die GitHub-Installation. Plugin Check weist auf die automatische Sprachversorgung für auf WordPress.org gehostete Plugins hin. Beim Übergang auf das Verzeichnis diesen Vertrag erneut prüfen; die gegenwärtige lokale Sprachversorgung nicht für einen kosmetisch leeren Report entfernen.
+Seit 0.5.2 nutzt die Sprachversorgung den dokumentierten Filter
+`lang_dir_for_domain` als lokalen Fallback, wenn Core keinen Sprachpaketpfad
+findet. Native WordPress-Sprachpakete behalten Vorrang. Der Hook ist ab der
+unterstützten Mindestversion WordPress 6.6 verfügbar. Manuelle Sprachladung
+und Änderungen am internen WordPress-Sprachregister entfallen.
+Quelle: [öffentlicher Sprachpfadfilter](https://developer.wordpress.org/reference/hooks/lang_dir_for_domain/).
+
+## Installierbares Paket bauen
+
+Den geprüften Stand zuerst committen. Der Paketbauer verweigert einen
+veränderten Checkout und liest nur versionierte Produktionsdateien aus dem
+exakten Git-Commit. Tests, Werkzeuge, Vendor-Pakete, Git-Metadaten und interne
+Dokumentation gelangen nicht ins ZIP.
+
+```sh
+python3 tools/build-release.py --channel wordpress-org --output ../outputs/rocketsky-antispam/submission-0.5.2
+```
+
+Das erzeugt `rocketsky-antispam-0.5.2-wordpress-org.zip`, eine SHA-256-Datei und
+ein Manifest mit Quellcommit und Prüfsummen jeder archivierten Datei. Das ZIP
+enthält genau einen obersten Ordner `rocketsky-antispam/`. Der Paketbauer prüft
+CRC, vollständigen Inhalts-Readback, Versionskonsistenz und reproduzierbare
+ZIP-Erzeugung. Abweichende vorhandene Artefakte werden nicht überschrieben.
+
+Eine separate manuelle GitHub-Distribution wird mit `--channel github` in einem
+anderen Ausgabeordner gebaut und behält die eigene Update URI. Nur das Paket
+mit Kanal `wordpress-org` ist für die Verzeichniseinreichung vorgesehen.
+
+## Das exakte ZIP prüfen
+
+Das Archiv in eine frische, ausdrücklich markierte Testinstallation einspielen.
+Mail und externe HTTP-Aufrufe blockieren. Aktivierung, Einstellungen, Kommentare,
+Sprachen, verschlüsselte Bestandsdaten, Deaktivierung und beide
+Deinstallationsentscheidungen prüfen. Den Netzwerklebenszyklus separat testen.
+Niemals über einen Source-Symlink oder in eine Kundeninstallation installieren.
+
+Plugin Check einschliesslich Laufzeitinitialisierung ausführen:
+
+```sh
+wp --require=/path/to/wordpress/wp-content/plugins/plugin-check/cli.php plugin check rocketsky-antispam --path=/path/to/wordpress --format=json
+```
+
+Den vollständigen Report mit der ZIP-Prüfsumme verknüpfen. Keine Checks oder
+Befunde ausschliessen und keine entpackte Datei für die Prüfung verändern.
+Die CI baut denselben Kanal, verifiziert Manifest und Archiv und prüft dessen
+Inhalt mit strikter Behandlung aller Fehler und Warnungen.
+
+Die vorbereiteten Angaben und der englische Einreichungstext stehen in
+[submission.md](submission.md). In `Contributors` gehört nur ein bestätigter
+WordPress.org-Benutzername; der GitHub-Handle belegt diese Identität nicht.
 
 Vor einem stabilen Release:
 

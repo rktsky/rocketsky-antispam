@@ -59,6 +59,7 @@ final class Installation {
 	 * @return bool Whether this copy may define and boot the shared services.
 	 */
 	public function register(): bool {
+		add_filter( 'lang_dir_for_domain', array( $this, 'translation_directory' ), 10, 3 );
 		register_activation_hook( $this->file, array( $this, 'activate' ) );
 		if ( $this->conflicts() ) {
 			add_action( 'admin_notices', array( $this, 'notice' ) );
@@ -69,6 +70,29 @@ final class Installation {
 		add_filter( 'map_meta_cap', array( $this, 'activation_capabilities' ), 10, 4 );
 		add_filter( 'validate_plugin_requirements', array( $this, 'validate_activation' ), 10, 2 );
 		return true;
+	}
+
+	/**
+	 * Offers bundled catalogues only when native just-in-time discovery has no path.
+	 *
+	 * The public WordPress 6.6 filter preserves language-pack and custom paths. No
+	 * catalogue is loaded here: Core chooses the current locale and loads it on
+	 * demand. Registration precedes conflict detection so activation safeguards
+	 * remain translated even when this copy may not boot its other services.
+	 *
+	 * @since 0.5.2
+	 * @link https://developer.wordpress.org/reference/hooks/lang_dir_for_domain/
+	 * @param string|false $path   Directory already found by Core or another filter.
+	 * @param string       $domain Text domain requested by native translation loading.
+	 * @param string       $locale Native locale, possibly supplied by a locale filter.
+	 * @return string|false Existing path, readable owned fallback, or the original miss.
+	 */
+	public function translation_directory( string|false $path, string $domain, string $locale ): string|false {
+		if ( $path || 'rocketsky-antispam' !== $domain || ! preg_match( '/\A[A-Za-z0-9_@-]{1,64}\z/', $locale ) ) {
+			return $path;
+		}
+		$directory = dirname( $this->file ) . '/languages/';
+		return is_readable( $directory . 'rocketsky-antispam-' . $locale . '.mo' ) ? $directory : $path;
 	}
 
 	/**
@@ -123,7 +147,6 @@ final class Installation {
 	 */
 	public function activate( bool $network_wide = false ): void {
 		if ( $this->conflicts() || ( $network_wide && is_multisite() && $this->network_conflicts( get_current_network_id() ) ) ) {
-			load_plugin_textdomain( 'rocketsky-antispam', false, dirname( plugin_basename( $this->file ) ) . '/languages' );
 			wp_die(
 				esc_html( $this->conflict_message() ),
 				'',
@@ -143,7 +166,6 @@ final class Installation {
 	 */
 	public function notice(): void {
 		if ( current_user_can( 'activate_plugins' ) || current_user_can( 'manage_network_plugins' ) ) {
-			load_plugin_textdomain( 'rocketsky-antispam', false, dirname( plugin_basename( $this->file ) ) . '/languages' );
 			wp_admin_notice( esc_html( $this->conflict_message() ), array( 'type' => 'error' ) );
 		}
 	}

@@ -1,6 +1,6 @@
 <?php
 /**
- * Verifies a real 0.5.0-to-0.5.1 basename change without uninstalling shared data.
+ * Verifies a real 0.5.0-to-current basename change without uninstalling shared data.
  *
  * Run only against a separate marked disposable WordPress installation. Supply
  * RKTSKY_ANTISPAM_RENAME_OLD_ROOT and RKTSKY_ANTISPAM_RENAME_NEW_ROOT with the
@@ -163,6 +163,8 @@ register_shutdown_function(
 require $root . '/wp-load.php';
 $booted = true;
 require_once ABSPATH . 'wp-admin/includes/admin.php';
+$target_header = get_file_data( WP_PLUGIN_DIR . '/' . $new, array( 'Version' => 'Version' ) );
+$target_version = $target_header['Version'];
 rktsky_rename_expect( defined( 'RKTSKY_ANTISPAM_TEST_FIXTURE' ) && true === RKTSKY_ANTISPAM_TEST_FIXTURE && 'local' === wp_get_environment_type(), 'The configured site must remain an explicitly marked local fixture.' );
 rktsky_rename_expect( false === apply_filters( 'pre_wp_mail', null, array() ) && is_wp_error( apply_filters( 'pre_http_request', false, array(), 'https://example.invalid/' ) ), 'Actual outgoing mail and every external WordPress HTTP request must be blocked.' );
 wp_set_current_user( 1 );
@@ -391,10 +393,10 @@ if ( 'activate-old' === $stage || 'activate-new' === $stage ) {
 	deactivate_plugins( $old, '1' === getenv( 'RKTSKY_ANTISPAM_RENAME_SILENT' ), $network_mode );
 	rktsky_rename_expect( ! is_plugin_active( $old ), 'Old code must be deactivated through Core without invoking uninstall.' );
 } elseif ( 'verify' === $stage ) {
-	rktsky_rename_expect( '0.5.1' === RKTSKY_ANTISPAM_VERSION && plugin_basename( RKTSKY_ANTISPAM_FILE ) === $new, 'A fresh request must boot the canonical renamed 0.5.1 entry point.' );
+	rktsky_rename_expect( $target_version === RKTSKY_ANTISPAM_VERSION && plugin_basename( RKTSKY_ANTISPAM_FILE ) === $new, 'A fresh request must boot the canonical renamed entry point at its declared release version.' );
 	rktsky_rename_expect( Settings::OPTION === 'rktsky_antispam_settings' && Plugin::TABLES === $state['table_inventory'], 'Existing settings and all six approved physical table names must remain stable.' );
 	$header = get_plugin_data( WP_PLUGIN_DIR . '/' . $new, false, false );
-	rktsky_rename_expect( 'Rocketsky Antispam' === $header['Name'] && 'rocketsky-antispam' === $header['TextDomain'] && '0.5.1' === $header['Version'], 'Native plugin metadata must expose the new name, version and text domain.' );
+	rktsky_rename_expect( 'Rocketsky Antispam' === $header['Name'] && 'rocketsky-antispam' === $header['TextDomain'] && $target_version === $header['Version'], 'Native plugin metadata must expose the new name, version and text domain.' );
 	foreach ( array( 'de_CH', 'de_DE', 'es_ES', 'fr_FR', 'it_IT' ) as $locale ) {
 		rktsky_rename_expect( is_file( WP_PLUGIN_DIR . '/rocketsky-antispam/languages/rocketsky-antispam-' . $locale . '.mo' ), 'Every shipped native translation catalogue must use the renamed text domain.' ); }
 	rktsky_rename_expect( array() === glob( WP_PLUGIN_DIR . '/rocketsky-antispam/languages/wp-antispam*' ), 'The renamed package must not ship old-domain catalogues.' );
@@ -440,7 +442,7 @@ if ( 'activate-old' === $stage || 'activate-new' === $stage ) {
 				);
 				( new Fields( $settings, $token ) )->attributes( 'comments', 'rename_upgrade' );
 				$script = wp_scripts()->registered['rktsky-antispam'];
-				rktsky_rename_expect( str_contains( $script->src, '/rocketsky-antispam/assets/protection.js' ) && '0.5.1' === $script->ver, 'The stable script handle must point to the new package and refresh its cache version.' );
+				rktsky_rename_expect( str_contains( $script->src, '/rocketsky-antispam/assets/protection.js' ) && RKTSKY_ANTISPAM_VERSION === $script->ver, 'The stable script handle must point to the new package and refresh its cache version.' );
 			}
 		);
 	}

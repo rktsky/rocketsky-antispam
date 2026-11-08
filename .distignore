@@ -9,6 +9,7 @@ composer.lock
 phpcs.xml.dist
 vendor
 tests
+tools
 docs
 node_modules
 .runtime

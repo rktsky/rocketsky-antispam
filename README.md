@@ -2,7 +2,7 @@
 
 An open-source WordPress plugin by **Rocketsky**, licensed under GPL-2.0-or-later. Local spam protection for WordPress comments and registration, Contact Form 7, Gravity Forms, WPForms, Formidable Forms, Fluent Forms, WS Form, Elementor Forms, Divi contact forms, and WooCommerce checkout and registration. All features are included, with no paid tier, external captcha, or spam service.
 
-**Version 0.5.1 is a development candidate.** Actual test coverage and remaining release requirements are recorded in [verification](docs/verification.md). The plugin has not been approved by the WordPress.org plugin directory.
+**Version 0.5.2 is a WordPress.org submission candidate.** Actual test coverage and remaining release requirements are recorded in [verification](docs/verification.md). The plugin has not been approved by the WordPress.org plugin directory.
 
 ## Installation
 
@@ -17,6 +17,15 @@ REST comment creation also requires valid protection fields. External comment ap
 Multisite supports individual and network activation, with separate settings and data for each website.
 
 GitHub builds are updated manually. Their Update URI prevents WordPress from offering an unrelated plugin-directory update under the same development slug.
+
+### WordPress.org submission package
+
+The reviewed submission archive is built separately from a clean committed
+checkout with `python3 tools/build-release.py --channel wordpress-org --output ../outputs/rocketsky-antispam/submission-0.5.2`.
+It contains the installable plugin and bundled languages, with the native
+WordPress.org update channel. Development tools and internal documentation are
+excluded. The adjacent manifest records the source commit and file checksums.
+See [the release process](docs/releasing.md) and [prepared submission details](docs/submission.md).
 
 ### Upgrading from the previous name
 

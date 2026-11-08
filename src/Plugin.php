@@ -64,7 +64,6 @@ final class Plugin {
 		add_action( 'admin_init', array( self::class, 'upgrade' ) );
 		add_action( 'admin_init', array( $settings, 'register' ) );
 		add_action( 'admin_init', array( self::class, 'privacy' ) );
-		add_action( 'init', array( self::class, 'translations' ) );
 		add_action( 'rest_api_init', array( $fields, 'register' ) );
 		add_action( 'rktsky_antispam_cleanup', array( $store, 'cleanup' ) );
 		add_action( 'rktsky_antispam_cleanup', array( Maintenance::class, 'run' ), 5 );
@@ -166,16 +165,6 @@ final class Plugin {
 		if ( ! wp_next_scheduled( 'rktsky_antispam_cleanup' ) ) {
 			wp_schedule_event( time() + HOUR_IN_SECONDS, 'hourly', 'rktsky_antispam_cleanup' );
 		}
-	}
-
-	/**
-	 * Registers the local translation directory after WordPress locale initialization.
-	 *
-	 * @since 0.1.0
-	 * @return void
-	 */
-	public static function translations(): void {
-		load_plugin_textdomain( 'rocketsky-antispam', false, dirname( plugin_basename( RKTSKY_ANTISPAM_FILE ) ) . '/languages' );
 	}
 
 	/**
