@@ -416,3 +416,13 @@ behält ihre Update URI und zeigt im vollständigen lokalen Verzeichnisreport
 zusätzlich den erwarteten `plugin_updater_detected`-Befund. Kein Befund wird
 ausgeblendet. Eine WordPress.org-Einreichung oder Veröffentlichung wurde nicht
 vorgenommen.
+
+## Einreichungskandidat 0.5.2
+
+Der [abschliessende Nachweis für 0.5.2](submission-0.5.2.md) bezieht sich auf den
+geprüften Produktionscommit `c1107d63ff7767460fcbd198ee1efc6957aea37f` vom
+8. November 2026. Alle 18 CI-Jobs bestehen. Plugin Check 2.2.0 meldet für das
+exakte installierbare ZIP einschliesslich Laufzeitprüfung keine Fehler und
+keine Warnungen. Die früheren Reports oben bleiben historische Nachweise.
+Die Einreichungsdateien, Sprachprüfung, 361 nativen Paketprüfungen und sechs
+Verzeichnisbilder sind im aktuellen Nachweis beschrieben.

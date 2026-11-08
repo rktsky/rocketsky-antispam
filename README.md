@@ -2,7 +2,7 @@
 
 Local spam protection for WordPress comments, registration and contact forms, developed by **Rocketsky**. All features are free and run on your WordPress website. The plugin is licensed under GPL-2.0-or-later; the bundled Speo logo retains its BSD-3-Clause licence.
 
-**Version 0.5.2 is a WordPress.org submission candidate.** It has not been approved by the plugin directory. Tested versions and outstanding coverage are recorded in [verification](docs/verification.md).
+**Version 0.5.2 is a WordPress.org submission candidate.** It has not been approved by the plugin directory. The [final package and checks](docs/submission-0.5.2.md) and [tested versions and coverage](docs/verification.md) are documented separately.
 
 ## Installation
 

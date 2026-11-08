@@ -19,6 +19,10 @@ record and external package manifest. The readme contributor names were
 explicitly confirmed by the publisher; the account used for the actual upload
 still determines the submission owner.
 
+The [final 0.5.2 verification](submission-0.5.2.md) records the exact package,
+successful CI run, Plugin Check result, native lifecycle tests and six prepared
+directory screenshots. The FAQ and screenshot captions are in `readme.txt`.
+
 ## Prepared submission description
 
 Rocketsky Antispam provides local spam protection for WordPress comments,
