@@ -2,7 +2,9 @@
 
 Verified on 8 November 2026. Production source:
 `59be913873c313bb847235acad6717ca4b887894`.
-No WordPress.org submission or publication has been made.
+At the time of this verification, no WordPress.org submission or publication
+had been made. The subsequent upload on 9 November 2026 is recorded in the
+[submission receipt](wordpress-org-submission.md); manual review is pending.
 
 ## Package
 

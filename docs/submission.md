@@ -1,5 +1,10 @@
 # WordPress.org submission handoff
 
+Submitted on 9 November 2026 using the `rocketsky` account. The automated scan
+passed; manual review is pending. See the [submission receipt](wordpress-org-submission.md)
+for the confirmed archive, slug and review status. The preparation notes below
+describe the handoff completed before that upload.
+
 | Field | Prepared value |
 | --- | --- |
 | Plugin name | Rocketsky Antispam |
