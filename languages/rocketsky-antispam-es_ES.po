@@ -3,16 +3,16 @@
 # This file is distributed under the GPL-2.0-or-later license.
 msgid ""
 msgstr ""
-"Project-Id-Version: Rocketsky Antispam 0.5.3\n"
-"POT-Creation-Date: 2026-11-08 11:50+0100\n"
-"PO-Revision-Date: 2026-11-08 11:50+0100\n"
+"Project-Id-Version: Rocketsky Antispam 0.5.4\n"
+"POT-Creation-Date: 2026-11-11 08:51+0100\n"
+"PO-Revision-Date: 2026-11-11 08:51+0100\n"
 "Last-Translator: Rocketsky\n"
 "Language-Team: Rocketsky\n"
+"Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Domain: rocketsky-antispam\n"
-"Language: es_ES\n"
 "Plural-Forms: nplurals=2; plural=(n !=1);\n"
 
 #. translators: 1: submissions passing local checks, 2: rejected submissions, within this historical timezone group.
@@ -320,6 +320,10 @@ msgstr "Resumen diario por correo"
 msgid "Daily statistics are unavailable while their storage upgrade is incomplete. Existing records have been kept."
 msgstr "Las estadísticas diarias no están disponibles porque la actualización de su almacenamiento no ha terminado. Los registros existentes se conservan."
 
+#: src/Digest.php:44
+msgid "Daily summary"
+msgstr "Resumen diario"
+
 #: src/Quarantine.php:379
 msgid "Date"
 msgstr "Fecha"
@@ -397,6 +401,10 @@ msgstr "Zonas horarias anteriores"
 #: src/Quarantine.php:383
 msgid "Email address"
 msgstr "Dirección de correo"
+
+#: src/Digest.php:52
+msgid "Email settings"
+msgstr "Ajustes del correo"
 
 #: templates/settings.php:85
 msgid "Emails the previous day's rejection counts through WordPress. No message contents are included."
@@ -680,12 +688,6 @@ msgstr "Desactivado"
 #: templates/overview.php:30
 msgid "On"
 msgstr "Activado"
-
-#. translators: 1: localized date, 2: website timezone, 3: rejected submission count, 4: local settings URL.
-#: src/Maintenance.php:107
-#, php-format
-msgid "On %1$s (%2$s), Rocketsky Antispam stopped %3$d submissions. This includes failed verification checks. View the activity on your website: %4$s"
-msgstr "El %1$s (%2$s), Rocketsky Antispam rechazó %3$d envíos. El total incluye las verificaciones fallidas. Consulta la actividad en tu sitio: %4$s"
 
 #: templates/privacy-mode.php:22
 msgid "On by default. Turns off new quarantine storage, country filters, summary emails and pingbacks/trackbacks. Content filters and statistics remain available."
@@ -1025,9 +1027,11 @@ msgstr "Secciones de Rocketsky Antispam"
 msgid "Rocketsky Antispam stores no IP addresses, user agents or fingerprints in its own tables. Quarantine can keep names, email addresses and messages. Country filters use connection metadata. Email summaries use your WordPress mail setup. No cookies or external spam service are used. Form plugins control their own storage."
 msgstr "Rocketsky Antispam no guarda direcciones IP, agentes de usuario ni huellas del navegador en sus propias tablas. La cuarentena puede guardar nombres, direcciones de correo y mensajes. Los filtros de países usan metadatos de conexión. Los resúmenes por correo usan la configuración de envío de WordPress. El plugin no usa cookies ni servicios antispam externos. Los plugins de formularios controlan su propio almacenamiento."
 
-#: src/Maintenance.php:106
-msgid "Rocketsky Antispam: daily rejection summary"
-msgstr "Rocketsky Antispam: resumen diario de rechazos"
+#. translators: %s: website title.
+#: src/Digest.php:64
+#, php-format
+msgid "Rocketsky Antispam: daily summary for %s"
+msgstr "Rocketsky Antispam: resumen diario de %s"
 
 #: templates/delivered-review.php:31
 msgid "Save assessment"
@@ -1129,6 +1133,12 @@ msgstr "Campos guardados"
 msgid "Stored fields could not be read. You can still delete this record."
 msgstr "No se pudieron leer los campos guardados. Aún puedes borrar este registro."
 
+#: src/Digest.php:48
+msgid "Submission stopped"
+msgid_plural "Submissions stopped"
+msgstr[0] "Envío rechazado"
+msgstr[1] "Envíos rechazados"
+
 #: src/Admin.php:410
 msgid "Submitted too quickly"
 msgstr "Envío demasiado rápido"
@@ -1148,6 +1158,10 @@ msgstr "Apoya en Ko-fi"
 #: templates/integrations.php:54
 msgid "Technical checks"
 msgstr "Comprobaciones técnicas"
+
+#: src/Digest.php:49
+msgid "The count includes failed form checks."
+msgstr "El total incluye las comprobaciones fallidas de los formularios."
 
 #: src/SpamHandling.php:91 src/SpamHandling.php:97
 msgid "The form's spam storage settings apply. Other rejections follow your quarantine settings."
@@ -1297,6 +1311,10 @@ msgstr "Almacenamiento de verificaciones no disponible"
 msgid "View"
 msgstr "Ver"
 
+#: src/Digest.php:50
+msgid "View activity"
+msgstr "Ver la actividad"
+
 #. translators: %d: local quarantine record ID.
 #: templates/quarantine.php:136
 #, php-format
@@ -1370,6 +1388,10 @@ msgstr "No tienes permisos para exportar estos datos personales."
 #: src/Admin.php:449 src/Admin.php:487 src/Admin.php:526 src/Admin.php:565
 msgid "You do not have permission to perform this action."
 msgstr "No tienes permisos para realizar esta acción."
+
+#: src/Digest.php:54
+msgid "You receive this summary because daily email notifications are enabled for this website."
+msgstr "Recibes este resumen porque las notificaciones diarias por correo están activadas para este sitio."
 
 #: templates/quarantine.php:121
 msgid "Your form plugin controls its own spam storage and retention, including in privacy-conscious mode."

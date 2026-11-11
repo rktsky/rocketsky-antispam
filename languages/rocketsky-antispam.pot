@@ -3,8 +3,8 @@
 # This file is distributed under the GPL-2.0-or-later license.
 msgid ""
 msgstr ""
-"Project-Id-Version: Rocketsky Antispam 0.5.3\n"
-"POT-Creation-Date: 2026-11-08 11:50+0100\n"
+"Project-Id-Version: Rocketsky Antispam 0.5.4\n"
+"POT-Creation-Date: 2026-11-11 08:51+0100\n"
 "PO-Revision-Date: 2026-11-08 11:50+0100\n"
 "Last-Translator: Rocketsky\n"
 "Language-Team: Rocketsky\n"
@@ -318,6 +318,10 @@ msgstr ""
 msgid "Daily statistics are unavailable while their storage upgrade is incomplete. Existing records have been kept."
 msgstr ""
 
+#: src/Digest.php:44
+msgid "Daily summary"
+msgstr ""
+
 #: src/Quarantine.php:379
 msgid "Date"
 msgstr ""
@@ -394,6 +398,10 @@ msgstr ""
 
 #: src/Quarantine.php:383
 msgid "Email address"
+msgstr ""
+
+#: src/Digest.php:52
+msgid "Email settings"
 msgstr ""
 
 #: templates/settings.php:85
@@ -677,12 +685,6 @@ msgstr ""
 
 #: templates/overview.php:30
 msgid "On"
-msgstr ""
-
-#. translators: 1: localized date, 2: website timezone, 3: rejected submission count, 4: local settings URL.
-#: src/Maintenance.php:107
-#, php-format
-msgid "On %1$s (%2$s), Rocketsky Antispam stopped %3$d submissions. This includes failed verification checks. View the activity on your website: %4$s"
 msgstr ""
 
 #: templates/privacy-mode.php:22
@@ -1023,8 +1025,10 @@ msgstr ""
 msgid "Rocketsky Antispam stores no IP addresses, user agents or fingerprints in its own tables. Quarantine can keep names, email addresses and messages. Country filters use connection metadata. Email summaries use your WordPress mail setup. No cookies or external spam service are used. Form plugins control their own storage."
 msgstr ""
 
-#: src/Maintenance.php:106
-msgid "Rocketsky Antispam: daily rejection summary"
+#. translators: %s: website title.
+#: src/Digest.php:64
+#, php-format
+msgid "Rocketsky Antispam: daily summary for %s"
 msgstr ""
 
 #: templates/delivered-review.php:31
@@ -1127,6 +1131,12 @@ msgstr ""
 msgid "Stored fields could not be read. You can still delete this record."
 msgstr ""
 
+#: src/Digest.php:48
+msgid "Submission stopped"
+msgid_plural "Submissions stopped"
+msgstr[0] ""
+msgstr[1] ""
+
 #: src/Admin.php:410
 msgid "Submitted too quickly"
 msgstr ""
@@ -1145,6 +1155,10 @@ msgstr ""
 
 #: templates/integrations.php:54
 msgid "Technical checks"
+msgstr ""
+
+#: src/Digest.php:49
+msgid "The count includes failed form checks."
 msgstr ""
 
 #: src/SpamHandling.php:91 src/SpamHandling.php:97
@@ -1295,6 +1309,10 @@ msgstr ""
 msgid "View"
 msgstr ""
 
+#: src/Digest.php:50
+msgid "View activity"
+msgstr ""
+
 #. translators: %d: local quarantine record ID.
 #: templates/quarantine.php:136
 #, php-format
@@ -1367,6 +1385,10 @@ msgstr ""
 
 #: src/Admin.php:449 src/Admin.php:487 src/Admin.php:526 src/Admin.php:565
 msgid "You do not have permission to perform this action."
+msgstr ""
+
+#: src/Digest.php:54
+msgid "You receive this summary because daily email notifications are enabled for this website."
 msgstr ""
 
 #: templates/quarantine.php:121

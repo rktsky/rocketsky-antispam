@@ -62,6 +62,7 @@ final class Maintenance {
 	 *
 	 * @since 0.2.0
 	 * @since 0.5.3 Uses the completed site-local calendar day and its own calendar claim.
+	 * @since 0.5.4 Sends a styled digest with an equivalent plain text alternative.
 	 * @param int|null $timestamp Absolute reference instant for calendar selection; null uses now.
 	 * @return void
 	 */
@@ -101,11 +102,7 @@ final class Maintenance {
 			),
 			false
 		);
-		$sent = wp_mail(
-			get_option( 'admin_email' ),
-			__( 'Rocketsky Antispam: daily rejection summary', 'rocketsky-antispam' ),
-			sprintf( /* translators: 1: localized date, 2: website timezone, 3: rejected submission count, 4: local settings URL. */ __( 'On %1$s (%2$s), Rocketsky Antispam stopped %3$d submissions. This includes failed verification checks. View the activity on your website: %4$s', 'rocketsky-antispam' ), wp_date( get_option( 'date_format' ), Dates::now( $timestamp )->setTime( 0, 0 )->modify( '-1 day' )->getTimestamp(), new \DateTimeZone( $calendar ) ), $calendar, $blocked, admin_url( 'options-general.php?page=rocketsky-antispam' ) )
-		);
+		$sent = Digest::send( $blocked, wp_date( get_option( 'date_format' ), Dates::now( $timestamp )->setTime( 0, 0 )->modify( '-1 day' )->getTimestamp(), new \DateTimeZone( $calendar ) ), $calendar );
 		update_option(
 			'rktsky_antispam_digest_status',
 			array(

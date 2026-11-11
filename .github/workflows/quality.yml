@@ -107,6 +107,8 @@ jobs:
           printf '%s\n' '<?php add_filter( "pre_wp_mail", "__return_false", PHP_INT_MAX ); add_filter( "pre_http_request", static function () { return new WP_Error( "test_http_blocked", "Disposable fixture." ); }, PHP_INT_MAX );' > "$RKTSKY_ANTISPAM_WP_ROOT/wp-content/mu-plugins/fixture-mail.php"
       - run: php tests/native.php
       - run: php tests/timezones.php
+      - if: matrix.wordpress == 'latest' && matrix.php == '8.5'
+        run: php tests/email.php
       - run: php tests/native-admin.php
       - run: php tests/context-notices.php
       - run: php tests/translations.php

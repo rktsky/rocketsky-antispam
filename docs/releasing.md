@@ -1,8 +1,9 @@
 # Release and submission process
 
-Rocketsky Antispam 0.5.3 is a WordPress.org submission candidate. Preparing a
-package does not submit it, reserve its slug or establish directory approval.
-The proposed name is **Rocketsky Antispam**, with slug `rocketsky-antispam`.
+Rocketsky Antispam 0.5.3 was submitted to WordPress.org on 9 November 2026,
+with initial slug `rocketsky-antispam`; see the [submission receipt](wordpress-org-submission.md).
+Version 0.5.4 updates the [daily email](email.md). Preparing an update package
+does not replace that submission or establish directory approval.
 
 Die GitHub-Distribution setzt seit 0.5.0 eine eigene `Update URI`. Damit bietet
 WordPress keine fremde Verzeichnisaktualisierung unter einem gleichnamigen
@@ -44,10 +45,10 @@ exakten Git-Commit. Tests, Werkzeuge, Vendor-Pakete, Git-Metadaten und interne
 Dokumentation gelangen nicht ins ZIP.
 
 ```sh
-python3 tools/build-release.py --channel wordpress-org --output ../outputs/rocketsky-antispam/submission-0.5.3
+python3 tools/build-release.py --channel wordpress-org --output ../outputs/rocketsky-antispam/release-0.5.4
 ```
 
-Das erzeugt `rocketsky-antispam-0.5.3-wordpress-org.zip`, eine SHA-256-Datei und
+Das erzeugt `rocketsky-antispam-0.5.4-wordpress-org.zip`, eine SHA-256-Datei und
 ein Manifest mit Quellcommit und Prüfsummen jeder archivierten Datei. Das ZIP
 enthält genau einen obersten Ordner `rocketsky-antispam/`. Der Paketbauer prüft
 CRC, vollständigen Inhalts-Readback, Versionskonsistenz und reproduzierbare

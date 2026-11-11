@@ -4,7 +4,7 @@ Rocketsky Antispam protects comments and forms in the background, without adding
 
 Developed by **Rocketsky**, licensed under GPL-2.0-or-later. The bundled Speo logo retains its BSD-3-Clause licence.
 
-**Version 0.5.3 is a WordPress.org submission candidate.** It has not been approved by the plugin directory. See the [final package and checks](docs/submission-0.5.3.md), [website time zones and updates](docs/timezones.md) and [tested versions and coverage](docs/verification.md).
+**Version 0.5.4 updates the daily email summary.** Version 0.5.3 was [submitted to WordPress.org](docs/wordpress-org-submission.md) on 9 November 2026. This update has not replaced that submission. See the [email format](docs/email.md), [website time zones and updates](docs/timezones.md) and [tested versions and coverage](docs/verification.md).
 
 ## Installation
 
@@ -100,7 +100,7 @@ Review quarantine, use supported WordPress or form-plugin spam moderation, or as
 WordPress.org submission packages are built from a clean committed checkout:
 
 ```sh
-python3 tools/build-release.py --channel wordpress-org --output ../outputs/rocketsky-antispam/submission-0.5.3
+python3 tools/build-release.py --channel wordpress-org --output ../outputs/rocketsky-antispam/release-0.5.4
 ```
 
 The installable ZIP includes bundled languages and uses the directory update channel. Its manifest records the source commit and every file checksum. Development tools, tests and internal documentation are excluded. GitHub packages retain a separate Update URI and are updated manually. See [the release process](docs/releasing.md) and [submission details](docs/submission.md).

@@ -5,7 +5,7 @@ Tags: antispam, spam, contact form 7, gravity forms, wpforms
 Requires at least: 6.6
 Requires PHP: 8.2
 Tested up to: 7.1
-Stable tag: 0.5.3
+Stable tag: 0.5.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,7 +45,7 @@ Protected forms need JavaScript and access to the website's REST API. REST comme
 
 Pingbacks and trackbacks start off and can be allowed outside privacy-conscious mode. WordPress verifies pingbacks by requesting the source page and may send it the sender's IP address. Multisite supports individual and network activation with separate settings and data for each site.
 
-Version 0.5.3 is a submission candidate. Bots that run JavaScript or reproduce the public verification protocol can obtain valid tokens. Passing a check does not prove that a sender is human. See the integration contracts and test evidence for the provider versions and workflows covered.
+Version 0.5.4 updates the daily email summary. Version 0.5.3 was submitted to WordPress.org on 9 November 2026. This update has not replaced that submission. Bots that run JavaScript or reproduce the public verification protocol can obtain valid tokens. Passing a check does not prove that a sender is human. See the integration contracts and test evidence for the provider versions and workflows covered.
 
 Source and verification: https://github.com/rktsky/rocketsky-antispam
 
@@ -127,6 +127,11 @@ You can help fund development and maintenance with a voluntary donation at https
 6. WordPress dashboard widget with a seven-day activity summary, the comment rejection total and links to review spam.
 
 == Changelog ==
+
+= 0.5.4 =
+* Format daily email summaries with a readable HTML layout, website identity and direct activity and notification links.
+* Include a plain text alternative without changing other WordPress emails or the existing daily sending limit.
+* Translate email text in every bundled language and retain the website's date format and time zone.
 
 = 0.5.3 =
 * Use the website time zone for daily activity, daily email summaries and displayed record dates.
