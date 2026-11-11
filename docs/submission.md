@@ -1,9 +1,14 @@
 # WordPress.org submission handoff
 
-Submitted on 9 November 2026 using the `rocketsky` account. The automated scan
-passed; manual review is pending. See the [submission receipt](wordpress-org-submission.md)
-for the confirmed archive, slug and review status. The preparation notes below
-describe the handoff completed before that upload.
+The existing WordPress.org submission was updated to 0.5.4 on 11 November 2026.
+Manual review is pending. See the [submission receipt](wordpress-org-submission.md)
+for the current archive, slug and review status. The original submission was
+made on 9 November using the `rocketsky` account.
+
+## Original 0.5.3 handoff
+
+The preparation notes below describe the handoff completed before the original
+9 November upload.
 
 | Field | Prepared value |
 | --- | --- |

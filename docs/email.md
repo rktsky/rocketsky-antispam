@@ -29,8 +29,11 @@ mail-plugin configuration or global content-type filters. WordPress's true
 return value records mailer acceptance, not confirmed inbox delivery. Failed
 attempts keep their existing daily claim and are not sent again automatically.
 
-Version 0.5.3 remains the package submitted on 9 November 2026. Preparing this
-update does not replace that submission or deploy it to a website.
+The package preparation initially left the 9 November submission unchanged.
+Version 0.5.4 was subsequently uploaded to that existing submission on
+11 November 2026; manual review is pending. See the
+[submission receipt](wordpress-org-submission.md). The directory upload does
+not deploy the update to installed websites.
 
 ## Verification on 11 November 2026
 
@@ -74,3 +77,8 @@ Unmodified Plugin Check 2.2.0 reports zero errors and warnings, with its origina
 early CLI runtime and temporary runtime drop-in explicitly observed. No checks
 or findings are excluded. All 76 installed hashes match the archive before and
 after the check; the drop-in and private observer are removed afterwards.
+
+The later WordPress.org upload used a metadata-only ZIP replacement to restore
+the product description in the submission note. Its 76 plugin files are
+identical; see the [submission receipt](wordpress-org-submission.md) for the
+latest archive hash and its separate exact-archive Plugin Check evidence.

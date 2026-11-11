@@ -4,7 +4,7 @@ Rocketsky Antispam protects comments and forms in the background, without adding
 
 Developed by **Rocketsky**, licensed under GPL-2.0-or-later. The bundled Speo logo retains its BSD-3-Clause licence.
 
-**Version 0.5.4 updates the daily email summary.** Version 0.5.3 was [submitted to WordPress.org](docs/wordpress-org-submission.md) on 9 November 2026. This update has not replaced that submission. See the [email format](docs/email.md), [website time zones and updates](docs/timezones.md) and [tested versions and coverage](docs/verification.md).
+**Version 0.5.4 updates the daily email summary.** It was uploaded to the existing [WordPress.org submission](docs/wordpress-org-submission.md) on 11 November 2026; manual review is pending. See the [email format](docs/email.md), [website time zones and updates](docs/timezones.md) and [tested versions and coverage](docs/verification.md).
 
 ## Installation
 
