@@ -53,3 +53,24 @@ viewport emulation of email HTML, not an Outlook, Gmail, Apple Mail, mobile
 device or accessibility certification. Separate browser layout checks cover
 long text, a seven-digit counter and RTL direction. Screenshots use synthetic
 website identity and counts; the date uses the fixture's WordPress date format.
+
+All 103 owned PHP files pass syntax checks. WordPress Coding Standards reports
+zero errors and warnings across all 55 production PHP files. All 337 translatable
+source messages are covered by each bundled catalogue, without stale keys.
+The official WordPress extractor and all 18 jobs in
+[CI run 42983631102](https://github.com/rktsky/rocketsky-antispam/actions/runs/42983631102)
+pass on production source `a0a6e5550b28b9a9182e348388dd6df8cfc5db20`.
+The native PHP 8.5 job runs the new email tests as part of that matrix.
+
+The installable WordPress.org-channel archive contains 76 production files,
+is 363,680 bytes and has SHA-256
+`625ca7e6171ee2eb7d83f30b1238b8806b29c2c4104edfdcb697f2b4b3b19b28`.
+The strict CI Plugin Check job passes for that channel. Package, manifest and
+reports are under `outputs/rocketsky-antispam/release-0.5.4/`; native HTML/text
+previews and browser evidence are under `outputs/rocketsky-antispam/update-0.5.4/`.
+
+The exact archive is also installed natively in a separate isolated fixture.
+Unmodified Plugin Check 2.2.0 reports zero errors and warnings, with its original
+early CLI runtime and temporary runtime drop-in explicitly observed. No checks
+or findings are excluded. All 76 installed hashes match the archive before and
+after the check; the drop-in and private observer are removed afterwards.

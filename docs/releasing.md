@@ -69,8 +69,15 @@ Niemals über einen Source-Symlink oder in eine Kundeninstallation installieren.
 Plugin Check einschliesslich Laufzeitinitialisierung ausführen:
 
 ```sh
-wp --require=/path/to/wordpress/wp-content/plugins/plugin-check/cli.php plugin check rocketsky-antispam --path=/path/to/wordpress --format=json
+wp plugin check rocketsky-antispam --path=/path/to/wordpress --require=/path/to/wordpress/wp-content/plugins/plugin-check/cli.php --format=json
 ```
+
+Bei Plugin Check 2.2.0 muss `plugin check` direkt nach dem WP-CLI-Programm stehen;
+globale Flags gehören dahinter. Der originale CLI-Runner erkennt diesen
+Aufruf anhand der ersten beiden Argumente. Bei vorangestellten Flags kann eine
+erfolgreiche statische Prüfung ohne den frühen Laufzeit-Runner entstehen.
+Den tatsächlich gestarteten Runtime-Runner und dessen temporären Drop-in
+im isolierten Nachweis prüfen.
 
 Den vollständigen Report mit der ZIP-Prüfsumme verknüpfen. Keine Checks oder
 Befunde ausschliessen und keine entpackte Datei für die Prüfung verändern.
