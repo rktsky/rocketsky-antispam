@@ -264,7 +264,7 @@ msgstr "Korrekte Entscheidungen unter allen bewerteten Fällen."
 msgid "Could not complete this action. Check the entry ID or reference and try again."
 msgstr "Die Aktion konnte nicht ausgeführt werden. Prüfe die Eintrags-ID oder Referenz und versuche es erneut."
 
-#: src/ContextNotices.php:291
+#: src/ContextNotices.php:299
 msgid "Could not save your notice preferences. Please try again."
 msgstr "Deine Einstellung zur Anzeige der Hinweise konnte nicht gespeichert werden. Bitte versuche es erneut."
 
@@ -581,7 +581,7 @@ msgstr "Integration nicht verfügbar"
 msgid "Integrations"
 msgstr "Integrationen"
 
-#: src/ContextNotices.php:199 src/ContextNotices.php:307
+#: src/ContextNotices.php:199 src/ContextNotices.php:315
 msgid "Invalid notice preference request."
 msgstr "Die Anfrage für die Anzeige der Hinweise ist ungültig."
 
@@ -1331,7 +1331,7 @@ msgstr "Prüft Kontaktformulare von Divi 4 und 5 mit Prüftoken und einem verste
 msgid "Uses your local GeoIP extension or a trusted proxy to determine the connection's country. VPNs and proxies can affect the result. No external lookup service is used."
 msgstr "Ermittelt das Verbindungsland über Deine lokale GeoIP-Erweiterung oder einen vertrauenswürdigen Proxy. VPNs und Proxys können das Ergebnis beeinflussen. Es wird kein externer Abfragedienst genutzt."
 
-#: src/ContextNotices.php:425
+#: src/ContextNotices.php:433
 msgid "Verification failures do not create an entry."
 msgstr "Bei fehlgeschlagenen Formularprüfungen wird kein Eintrag erstellt."
 

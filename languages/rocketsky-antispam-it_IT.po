@@ -264,7 +264,7 @@ msgstr "Decisioni corrette tra tutti i casi valutati."
 msgid "Could not complete this action. Check the entry ID or reference and try again."
 msgstr "Non è stato possibile completare l’operazione. Controlla l’ID della voce o il riferimento e riprova."
 
-#: src/ContextNotices.php:291
+#: src/ContextNotices.php:299
 msgid "Could not save your notice preferences. Please try again."
 msgstr "Non è stato possibile salvare le tue preferenze per gli avvisi. Riprova."
 
@@ -581,7 +581,7 @@ msgstr "Integrazione non disponibile"
 msgid "Integrations"
 msgstr "Integrazioni"
 
-#: src/ContextNotices.php:199 src/ContextNotices.php:307
+#: src/ContextNotices.php:199 src/ContextNotices.php:315
 msgid "Invalid notice preference request."
 msgstr "La richiesta di modifica delle preferenze degli avvisi non è valida."
 
@@ -1331,7 +1331,7 @@ msgstr "Verifica i moduli di contatto Divi 4 e 5 con token e un campo nascosto."
 msgid "Uses your local GeoIP extension or a trusted proxy to determine the connection's country. VPNs and proxies can affect the result. No external lookup service is used."
 msgstr "Usa la tua estensione GeoIP locale o un proxy attendibile per determinare il paese della connessione. VPN e proxy possono influire sul risultato. Non viene usato alcun servizio di ricerca esterno."
 
-#: src/ContextNotices.php:425
+#: src/ContextNotices.php:433
 msgid "Verification failures do not create an entry."
 msgstr "Una verifica non riuscita non crea alcuna voce."
 
