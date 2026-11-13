@@ -2,12 +2,32 @@
  * Keeps only our native contextual notice readable within provider screens.
  * The surrounding provider layout, fonts, colours and notices remain native.
  * @since 0.5.0
+ * @since 0.5.5 Adds a scoped preference row without changing provider controls.
  */
 .notice.rktsky-antispam-context-notice p {
 	font-size: 14px;
 	line-height: 1.6;
 }
-.notice.rktsky-antispam-context-notice a:focus-visible {
+.notice.rktsky-antispam-context-notice :is(a, button):focus-visible {
 	outline: 3px solid currentColor;
 	outline-offset: 3px;
+}
+.notice.rktsky-antispam-context-notice .rktsky-antispam-context-notice__preferences {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px 16px;
+	margin: 12px 0;
+}
+.notice.rktsky-antispam-context-notice .rktsky-antispam-context-notice__preferences .button {
+	min-height: 44px;
+	max-width: 100%;
+	padding: 8px 12px;
+	font-size: 14px;
+	line-height: 1.6;
+	white-space: normal;
+}
+.notice.rktsky-antispam-context-notice .rktsky-antispam-context-notice__preferences p {
+	flex: 1 1 280px;
+	margin: 0;
 }
