@@ -1,5 +1,29 @@
 # WordPress.org submission receipt
 
+## Update on 13 November 2026
+
+Version 0.5.5 was uploaded to the existing submission following the first review.
+WordPress.org confirmed: “New version of Rocketsky Antispam uploaded for review.”
+
+| Field | Confirmed value |
+| --- | --- |
+| Latest submitted version | 0.5.5 |
+| Latest uploaded archive | `rocketsky-antispam-0.5.5-wordpress-org.zip` |
+| Archive SHA-256 | `249a78383d272fdbf48a5225a97d606d66482cf75562594fb7393b793ea32bf7` |
+| Submission slug | `rocketsky-antispam` |
+| Portal status | Being Reviewed — waiting on action from the publisher |
+
+Additional Information retains the original product overview, with the version
+and verification reference updated. The earlier uploads remain in the history.
+The portal asks for a reply to the existing review email. That reply is prepared
+for the publisher to send; the upload alone does not send it or establish approval.
+
+The [review verification](review-2026-11-13.md) covers every reported category,
+the exact-package Plugin Check result, activation, native tests and CI. The
+archive has 77 files and is 374,458 bytes. Private package reports are under
+`outputs/rocketsky-antispam/release-0.5.5/`; the portal receipt is retained with
+the private 13 November review evidence.
+
 ## Update on 11 November 2026
 
 Version 0.5.4 was uploaded to the existing submission on 11 November 2026.

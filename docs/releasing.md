@@ -3,8 +3,8 @@
 Rocketsky Antispam 0.5.3 was submitted to WordPress.org on 9 November 2026,
 with initial slug `rocketsky-antispam`; see the [submission receipt](wordpress-org-submission.md).
 The existing submission was updated to version 0.5.4 on 11 November 2026.
-Version 0.5.5 addresses the [administration review](review-2026-11-13.md). Preparing an update package
-does not replace that submission or establish directory approval.
+Version 0.5.5 addresses the [administration review](review-2026-11-13.md) and was
+uploaded on 13 November 2026. Review is in progress; directory approval is pending.
 
 Die GitHub-Distribution setzt seit 0.5.0 eine eigene `Update URI`. Damit bietet
 WordPress keine fremde Verzeichnisaktualisierung unter einem gleichnamigen

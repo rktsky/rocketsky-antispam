@@ -4,7 +4,7 @@ Rocketsky Antispam protects comments and forms in the background, without adding
 
 Developed by **Rocketsky**, licensed under GPL-2.0-or-later. The bundled Speo logo retains its BSD-3-Clause licence.
 
-**Version 0.5.5 adds personal controls for integration notices and guidance for statistics storage errors.** Version 0.5.4 was [submitted to WordPress.org](docs/wordpress-org-submission.md) on 11 November 2026. See the [review verification](docs/review-2026-11-13.md), [email format](docs/email.md) and [tested versions and coverage](docs/verification.md).
+**Version 0.5.5 adds personal controls for integration notices and guidance for statistics storage errors.** It was [uploaded to the existing WordPress.org submission](docs/wordpress-org-submission.md) on 13 November 2026; review is in progress. See the [review verification](docs/review-2026-11-13.md), [email format](docs/email.md) and [tested versions and coverage](docs/verification.md).
 
 ## Installation
 
