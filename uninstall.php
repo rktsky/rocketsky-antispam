@@ -14,9 +14,10 @@ if ( ! class_exists( Rktsky\Antispam\Installation::class, false ) ) {
 ( new Rktsky\Antispam\Installation( __DIR__ . '/rocketsky-antispam.php' ) )->uninstall();
 
 /**
- * Drops owned tables and options, preserving sites that opted to retain their data.
+ * Drops owned tables, options and notice preferences unless the site opted to retain data.
  *
  * @since 0.1.0
+ * @since 0.5.5 Deletes this site's native user-option metadata when data removal is configured.
  * @return void
  */
 function rktsky_antispam_uninstall_site(): void {
@@ -29,6 +30,8 @@ function rktsky_antispam_uninstall_site(): void {
 	if ( is_array( $settings ) && isset( $settings['delete_on_uninstall'] ) && ! $settings['delete_on_uninstall'] ) {
 		return;
 	}
+	// Native user options carry a site prefix; never remove another site's choices.
+	delete_metadata( 'user', 0, $wpdb->get_blog_prefix() . 'rktsky_antispam_hidden_notices', '', true );
 	$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $wpdb->prefix . 'rktsky_antispam_tokens' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- Uninstall removes only an owned table after the administrator's configured deletion choice.
 	$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $wpdb->prefix . 'rktsky_antispam_stats' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- Uninstall removes only an owned table after the administrator's configured deletion choice.
 	$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $wpdb->prefix . 'rktsky_antispam_totals' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- Removes only the owned anonymous lifetime counter.

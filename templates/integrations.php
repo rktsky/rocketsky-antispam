@@ -10,6 +10,9 @@
  * @var string[] $missing_providers Unsupported or inactive provider IDs.
  * @var bool $privacy_mode Whether native pingbacks are locked off.
  * @var array<string,string> $view_urls Fixed local section links.
+ * @var bool $hidden_notices Whether the current account has notices to restore on this website.
+ * @var string $notice_restore_url Native authenticated POST endpoint.
+ * @var string $notice_restore_nonce Current-site user-bound restore nonce action.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -17,6 +20,16 @@ require __DIR__ . '/admin-header.php';
 ?>
 <header class="rktsky-antispam__page-heading"><h2><?php esc_html_e( 'Integrations', 'rocketsky-antispam' ); ?></h2><p><?php esc_html_e( 'Enable the integrations you use. Protection is added to supported forms automatically.', 'rocketsky-antispam' ); ?></p></header>
 <?php require __DIR__ . '/privacy-status.php'; ?>
+<?php if ( $hidden_notices ) : ?>
+	<div class="rktsky-antispam__page-tools">
+		<p><?php esc_html_e( 'Protection notices are hidden for your account on this website.', 'rocketsky-antispam' ); ?></p>
+		<form action="<?php echo esc_url( $notice_restore_url ); ?>" method="post">
+			<input type="hidden" name="action" value="rktsky_antispam_notice_restore" />
+			<?php wp_nonce_field( $notice_restore_nonce, 'rktsky_antispam_notices_nonce' ); ?>
+			<button type="submit" class="button"><?php esc_html_e( 'Show protection notices again', 'rocketsky-antispam' ); ?></button>
+		</form>
+	</div>
+<?php endif; ?>
 <form action="<?php echo esc_url( admin_url( 'options.php' ) ); ?>" method="post" class="rktsky-antispam__settings-stack" data-rk-settings-form>
 	<?php settings_fields( 'rktsky_antispam' ); ?>
 	<?php foreach ( $available_groups as $rktsky_antispam_group ) : ?>

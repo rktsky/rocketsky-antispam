@@ -36,7 +36,7 @@ require __DIR__ . '/admin-header.php';
 <section class="rktsky-antispam__card rktsky-antispam__overview" aria-labelledby="rktsky-activity-heading">
 	<div class="rktsky-antispam__section-title"><h2 id="rktsky-activity-heading"><?php esc_html_e( 'Activity', 'rocketsky-antispam' ); ?></h2><span><?php echo esc_html( sprintf( /* translators: %s: configured WordPress timezone name or fixed offset. */ __( 'Last 7 days · %s', 'rocketsky-antispam' ), $calendar ) ); ?></span></div>
 	<?php if ( ! $statistics_available ) : ?>
-		<p class="rktsky-antispam__help-note"><?php esc_html_e( 'Daily statistics are unavailable while their storage upgrade is incomplete. Existing records have been kept.', 'rocketsky-antispam' ); ?></p>
+		<p class="rktsky-antispam__help-note"><?php esc_html_e( 'Daily statistics are unavailable while their storage upgrade is incomplete. Existing records have been kept.', 'rocketsky-antispam' ); ?> <?php esc_html_e( 'Reload this page to retry. If the problem continues, ask your hosting provider to check database permissions and the WordPress error log.', 'rocketsky-antispam' ); ?></p>
 	<?php else : ?>
 	<div class="rktsky-antispam__metrics">
 		<div class="rktsky-antispam__metric"><span><?php esc_html_e( 'Passed checks', 'rocketsky-antispam' ); ?></span><strong><?php echo esc_html( number_format_i18n( (int) $summary['accepted'] ) ); ?></strong><p><?php esc_html_e( 'Other plugins may run additional checks.', 'rocketsky-antispam' ); ?></p></div>

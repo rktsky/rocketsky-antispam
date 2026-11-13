@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
 <div class="rktsky-antispam-widget">
 	<p class="rktsky-antispam-widget__period"><?php echo esc_html( sprintf( /* translators: %s: configured WordPress timezone name or fixed offset. */ __( 'Last 7 days · %s', 'rocketsky-antispam' ), $calendar ) ); ?></p>
 	<?php if ( ! $statistics_available ) : ?>
-		<p class="rktsky-antispam-widget__note"><?php esc_html_e( 'Daily statistics are unavailable while their storage upgrade is incomplete. Existing records have been kept.', 'rocketsky-antispam' ); ?></p>
+		<p class="rktsky-antispam-widget__note"><?php esc_html_e( 'Daily statistics are unavailable while their storage upgrade is incomplete. Existing records have been kept.', 'rocketsky-antispam' ); ?> <?php esc_html_e( 'Reload this page to retry. If the problem continues, ask your hosting provider to check database permissions and the WordPress error log.', 'rocketsky-antispam' ); ?></p>
 	<?php else : ?>
 		<?php if ( $summary['accepted'] + $summary['blocked'] > 0 ) : ?>
 		<dl class="rktsky-antispam-widget__counts">

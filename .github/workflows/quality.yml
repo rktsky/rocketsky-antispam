@@ -338,6 +338,7 @@ jobs:
           ln -s "$GITHUB_WORKSPACE" "$RKTSKY_ANTISPAM_WP_ROOT/wp-content/plugins/rocketsky-antispam"
           wp plugin activate rocketsky-antispam --network --path="$RKTSKY_ANTISPAM_WP_ROOT"
       - run: php tests/multisite.php
+      - run: php tests/context-notices.php
 
   native-rename:
     runs-on: ubuntu-latest

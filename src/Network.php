@@ -85,6 +85,7 @@ final class Network {
 		self::$registered = true;
 		add_action( 'wp_initialize_site', array( self::class, 'initialize_site' ), 200 );
 		add_filter( 'wpmu_drop_tables', array( self::class, 'drop_tables' ), 10, 2 );
+		add_action( 'wp_uninitialize_site', array( self::class, 'remove_notice_preferences' ), 200 );
 		add_action( self::HOURLY, array( self::class, 'hourly' ) );
 		add_action( self::BATCH, array( self::class, 'batch' ) );
 		$network_id = get_current_network_id();
@@ -213,6 +214,25 @@ final class Network {
 			$tables[] = $wpdb->get_blog_prefix( $site_id ) . $suffix;
 		}
 		return array_values( array_unique( $tables ) );
+	}
+
+	/**
+	 * Removes only the deleted site's notice preferences from native user metadata.
+	 *
+	 * Core's default uninitialization runs first. User records belong to the whole
+	 * network, so only this plugin's exact site-prefixed option is deleted. No
+	 * site switch, visitor record or direct metadata-table query is needed.
+	 *
+	 * @since 0.5.5
+	 * @param \WP_Site $site Site supplied by the native uninitialization lifecycle.
+	 * @return void
+	 */
+	public static function remove_notice_preferences( \WP_Site $site ): void {
+		if ( $site->id <= 0 ) {
+			return;
+		}
+		global $wpdb;
+		delete_metadata( 'user', 0, $wpdb->get_blog_prefix( (int) $site->id ) . ContextNotices::USER_OPTION, '', true );
 	}
 
 	/**

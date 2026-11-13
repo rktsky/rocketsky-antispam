@@ -3,8 +3,8 @@
 # This file is distributed under the GPL-2.0-or-later license.
 msgid ""
 msgstr ""
-"Project-Id-Version: Rocketsky Antispam 0.5.4\n"
-"POT-Creation-Date: 2026-11-11 08:51+0100\n"
+"Project-Id-Version: Rocketsky Antispam 0.5.5\n"
+"POT-Creation-Date: 2026-11-13 02:20+0100\n"
 "PO-Revision-Date: 2026-11-08 11:50+0100\n"
 "Last-Translator: Rocketsky\n"
 "Language-Team: Rocketsky\n"
@@ -43,7 +43,7 @@ msgstr ""
 msgid "%d stopped"
 msgstr ""
 
-#: templates/integrations.php:55
+#: templates/integrations.php:68
 msgid "0 turns this check off. A delay can reject fast submissions made with autofill."
 msgstr ""
 
@@ -87,11 +87,11 @@ msgstr ""
 msgid "Allow listed countries"
 msgstr ""
 
-#: templates/integrations.php:31
+#: templates/integrations.php:44
 msgid "Allow native pingbacks and trackbacks"
 msgstr ""
 
-#: templates/integrations.php:28
+#: templates/integrations.php:41
 msgid "Allowed"
 msgstr ""
 
@@ -131,7 +131,7 @@ msgstr ""
 msgid "Assessment: spam"
 msgstr ""
 
-#: src/Admin.php:417
+#: src/Admin.php:420
 msgid "BBCode link markup"
 msgstr ""
 
@@ -153,7 +153,7 @@ msgstr ""
 msgid "Block listed countries"
 msgstr ""
 
-#: src/Admin.php:416
+#: src/Admin.php:419
 msgid "Blocked keyword"
 msgstr ""
 
@@ -165,32 +165,32 @@ msgstr ""
 msgid "Can store names, email addresses and message text. Include this storage in your privacy notice before enabling."
 msgstr ""
 
-#: templates/integrations.php:58 templates/rules.php:132
+#: templates/integrations.php:71 templates/rules.php:132
 #: templates/settings.php:103
 msgid "Changes apply after saving."
 msgstr ""
 
-#: src/Admin.php:301
+#: src/Admin.php:304
 msgid "Checks Contact Form 7 submissions for spam."
 msgstr ""
 
-#: src/Admin.php:297
+#: src/Admin.php:300
 msgid "Checks WordPress registration before an account is created. Rocketsky Antispam does not store account fields."
 msgstr ""
 
-#: src/Admin.php:333
+#: src/Admin.php:336
 msgid "Checks classic and block checkout before payment. Order and payment fields are excluded from content filters and quarantine."
 msgstr ""
 
-#: src/Admin.php:325
+#: src/Admin.php:328
 msgid "Checks forms built with Elementor Pro."
 msgstr ""
 
-#: src/Admin.php:309 src/Admin.php:313 src/Admin.php:317 src/Admin.php:321
+#: src/Admin.php:312 src/Admin.php:316 src/Admin.php:320 src/Admin.php:324
 msgid "Checks submissions for spam and keeps the form plugin's own validation."
 msgstr ""
 
-#: src/Admin.php:305
+#: src/Admin.php:308
 msgid "Checks submissions while keeping Gravity Forms validation and spam handling."
 msgstr ""
 
@@ -244,7 +244,7 @@ msgstr ""
 msgid "Content filters"
 msgstr ""
 
-#: src/Admin.php:419
+#: src/Admin.php:422
 msgid "Content rule processing limit"
 msgstr ""
 
@@ -262,6 +262,10 @@ msgstr ""
 msgid "Could not complete this action. Check the entry ID or reference and try again."
 msgstr ""
 
+#: src/ContextNotices.php:291
+msgid "Could not save your notice preferences. Please try again."
+msgstr ""
+
 #: templates/rules.php:92
 msgid "Country check configuration"
 msgstr ""
@@ -270,7 +274,7 @@ msgstr ""
 msgid "Country codes"
 msgstr ""
 
-#: src/Admin.php:422
+#: src/Admin.php:425
 msgid "Country filter"
 msgstr ""
 
@@ -416,7 +420,7 @@ msgstr ""
 msgid "Enable JavaScript to submit this form."
 msgstr ""
 
-#: templates/integrations.php:18
+#: templates/integrations.php:21
 msgid "Enable the integrations you use. Protection is added to supported forms automatically."
 msgstr ""
 
@@ -448,7 +452,7 @@ msgstr ""
 msgid "Expire within 2 hours; removed by scheduled cleanup"
 msgstr ""
 
-#: src/Admin.php:408
+#: src/Admin.php:411
 msgid "Expired protection token"
 msgstr ""
 
@@ -489,7 +493,7 @@ msgstr ""
 msgid "Form ID"
 msgstr ""
 
-#: src/Admin.php:414
+#: src/Admin.php:417
 msgid "Form does not match token"
 msgstr ""
 
@@ -497,11 +501,11 @@ msgstr ""
 msgid "Form integration"
 msgstr ""
 
-#: src/Admin.php:420
+#: src/Admin.php:423
 msgid "Form plugin's spam check"
 msgstr ""
 
-#: src/Admin.php:351
+#: src/Admin.php:354
 msgid "Form plugins"
 msgstr ""
 
@@ -534,8 +538,12 @@ msgstr ""
 msgid "Gravity Forms spam"
 msgstr ""
 
-#: src/Admin.php:405
+#: src/Admin.php:408
 msgid "Hidden field filled"
+msgstr ""
+
+#: templates/context-notices.php:35
+msgid "Hide this notice"
 msgstr ""
 
 #: src/Feedback.php:699
@@ -550,7 +558,7 @@ msgstr ""
 msgid "Includes failed verification checks."
 msgstr ""
 
-#: templates/integrations.php:46
+#: templates/integrations.php:59
 msgid "Install or activate the required plugin or theme. Your saved choices are kept."
 msgstr ""
 
@@ -567,11 +575,15 @@ msgstr ""
 msgid "Integration unavailable"
 msgstr ""
 
-#: src/Admin.php:176 templates/integrations.php:18 templates/overview.php:29
+#: src/Admin.php:176 templates/integrations.php:21 templates/overview.php:29
 msgid "Integrations"
 msgstr ""
 
-#: src/Admin.php:407
+#: src/ContextNotices.php:199 src/ContextNotices.php:307
+msgid "Invalid notice preference request."
+msgstr ""
+
+#: src/Admin.php:410
 msgid "Invalid protection token"
 msgstr ""
 
@@ -583,7 +595,7 @@ msgstr ""
 msgid "Italian"
 msgstr ""
 
-#: templates/integrations.php:56
+#: templates/integrations.php:69
 msgid "JavaScript must be enabled. If verification fails, the visitor sees an error and can retry."
 msgstr ""
 
@@ -595,7 +607,7 @@ msgstr ""
 msgid "Language detection runs on your website. Short or ambiguous comments may remain unrecognised."
 msgstr ""
 
-#: src/Admin.php:421
+#: src/Admin.php:424
 msgid "Language filter"
 msgstr ""
 
@@ -617,7 +629,7 @@ msgstr ""
 msgid "Local, linkable references for up to 90 days, including in privacy-conscious mode"
 msgstr ""
 
-#: src/Admin.php:413
+#: src/Admin.php:416
 msgid "Malformed protection fields"
 msgstr ""
 
@@ -625,11 +637,11 @@ msgstr ""
 msgid "Manage integrations"
 msgstr ""
 
-#: src/Admin.php:418
+#: src/Admin.php:421
 msgid "Matched content pattern"
 msgstr ""
 
-#: templates/integrations.php:55
+#: templates/integrations.php:68
 msgid "Minimum completion time"
 msgstr ""
 
@@ -637,7 +649,7 @@ msgstr ""
 msgid "Missed spam"
 msgstr ""
 
-#: src/Admin.php:406
+#: src/Admin.php:409
 msgid "Missing protection token"
 msgstr ""
 
@@ -677,7 +689,11 @@ msgstr ""
 msgid "Not spam"
 msgstr ""
 
-#: templates/integrations.php:28 templates/overview.php:30
+#: templates/context-notices-profile.php:20 templates/context-notices.php:36
+msgid "Notice preferences apply only to your account on this website. They do not change protection."
+msgstr ""
+
+#: templates/integrations.php:41 templates/overview.php:30
 #: templates/provider.php:19 templates/rules.php:49 templates/rules.php:84
 #: templates/rules.php:96
 msgid "Off"
@@ -711,7 +727,7 @@ msgstr ""
 msgid "Other plugins may run additional checks."
 msgstr ""
 
-#: templates/integrations.php:45
+#: templates/integrations.php:58
 msgid "Other supported integrations"
 msgstr ""
 
@@ -725,7 +741,7 @@ msgstr ""
 msgid "Page %1$d of %2$d"
 msgstr ""
 
-#: src/Admin.php:355
+#: src/Admin.php:358
 msgid "Page builders"
 msgstr ""
 
@@ -753,7 +769,7 @@ msgstr ""
 msgid "Permanently delete spam comments after"
 msgstr ""
 
-#: templates/integrations.php:28 templates/integrations.php:30
+#: templates/integrations.php:41 templates/integrations.php:43
 msgid "Pingbacks and trackbacks"
 msgstr ""
 
@@ -773,7 +789,7 @@ msgstr ""
 msgid "Previous"
 msgstr ""
 
-#: templates/integrations.php:37 templates/overview.php:30
+#: templates/integrations.php:50 templates/overview.php:30
 #: templates/privacy-status.php:17 templates/rules.php:88
 #: templates/settings.php:34
 msgid "Privacy settings"
@@ -791,7 +807,7 @@ msgstr ""
 msgid "Privacy-conscious mode is on."
 msgstr ""
 
-#: templates/integrations.php:32
+#: templates/integrations.php:45
 msgid "Privacy: WordPress requests the source website to verify pingbacks and may send it the sender's IP address. WordPress moderation still applies."
 msgstr ""
 
@@ -800,15 +816,23 @@ msgstr ""
 msgid "Protection check"
 msgstr ""
 
+#: templates/context-notices-profile.php:14
+msgid "Protection notices"
+msgstr ""
+
+#: templates/integrations.php:25
+msgid "Protection notices are hidden for your account on this website."
+msgstr ""
+
 #: templates/overview.php:28
 msgid "Protection status"
 msgstr ""
 
-#: src/Admin.php:293
+#: src/Admin.php:296
 msgid "Protects WordPress comments. Configure pingbacks and trackbacks below."
 msgstr ""
 
-#: src/Admin.php:337
+#: src/Admin.php:340
 msgid "Protects registration on My Account. Registration during checkout is covered by checkout protection."
 msgstr ""
 
@@ -840,7 +864,7 @@ msgstr ""
 msgid "Quarantine storage configuration"
 msgstr ""
 
-#: src/Admin.php:222 src/Admin.php:460
+#: src/Admin.php:222 src/Admin.php:463
 msgid "Quarantine storage is unavailable."
 msgstr ""
 
@@ -898,6 +922,10 @@ msgstr ""
 
 #: src/Integrations/Divi.php:221
 msgid "Reload the form"
+msgstr ""
+
+#: templates/dashboard.php:20 templates/overview.php:39
+msgid "Reload this page to retry. If the problem continues, ask your hosting provider to check database permissions and the WordPress error log."
 msgstr ""
 
 #: templates/delivered-review.php:36
@@ -995,7 +1023,7 @@ msgid "Rocketsky Antispam does not store order, payment or file contents."
 msgstr ""
 
 #. translators: %s: the active integration name.
-#: templates/context-notices.php:16
+#: templates/context-notices.php:20
 #, php-format
 msgid "Rocketsky Antispam is enabled for %s."
 msgstr ""
@@ -1035,7 +1063,7 @@ msgstr ""
 msgid "Save assessment"
 msgstr ""
 
-#: templates/integrations.php:58
+#: templates/integrations.php:71
 msgid "Save integrations"
 msgstr ""
 
@@ -1079,7 +1107,11 @@ msgstr ""
 msgid "Share of checked submissions that were stopped."
 msgstr ""
 
-#: templates/integrations.php:54
+#: templates/context-notices-profile.php:19 templates/integrations.php:29
+msgid "Show protection notices again"
+msgstr ""
+
+#: templates/integrations.php:67
 msgid "Signed tokens and a hidden field check submissions without a captcha."
 msgstr ""
 
@@ -1137,7 +1169,7 @@ msgid_plural "Submissions stopped"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Admin.php:410
+#: src/Admin.php:413
 msgid "Submitted too quickly"
 msgstr ""
 
@@ -1153,7 +1185,7 @@ msgstr ""
 msgid "Support on Ko-fi"
 msgstr ""
 
-#: templates/integrations.php:54
+#: templates/integrations.php:67
 msgid "Technical checks"
 msgstr ""
 
@@ -1169,7 +1201,7 @@ msgstr ""
 msgid "The plugin sets no cookies and uses no browser storage, fingerprints, external spam service or external IP lookup. It stores digests of used random tokens for up to two hours; scheduled cleanup removes expired digests. Daily aggregate counts are kept for the configured period (30 days by default). The total rejected-comment count stays until the statistics are reset. Optional quarantine encrypts selected names, email addresses and message fields on this website, for seven days by default, up to 30 days and 500 records. Password, hidden, payment and file fields are excluded. Privacy-conscious mode prevents new quarantine capture, country filters, administrator summary emails and pingbacks/trackbacks; it does not delete existing records. If pingbacks are allowed, WordPress requests the source page and may send it the sender's IP address. Optional country filters use local GeoIP data or metadata from explicitly trusted infrastructure; Rocketsky Antispam does not store the IP address. Optional daily administrator emails contain counts only. Optional cleanup permanently deletes WordPress spam comments older than the configured age. Scheduled cleanup depends on WordPress cron and can run late. WordPress privacy tools export or erase quarantine records matching the contact email address. WordPress, form plugins, hosting, mail delivery and backups have their own data handling. Adapt this notice to your enabled settings, retention, infrastructure and legal basis."
 msgstr ""
 
-#: src/Admin.php:456 src/Admin.php:495
+#: src/Admin.php:459 src/Admin.php:498
 msgid "The quarantine record is unavailable."
 msgstr ""
 
@@ -1189,7 +1221,7 @@ msgstr ""
 msgid "These rates use reviewed cases only. They do not measure every submission to your website."
 msgstr ""
 
-#: src/Admin.php:452 src/Admin.php:490 src/Admin.php:529 src/Admin.php:568
+#: src/Admin.php:455 src/Admin.php:493 src/Admin.php:532 src/Admin.php:571
 msgid "This action requires a form submission."
 msgstr ""
 
@@ -1221,11 +1253,11 @@ msgstr ""
 msgid "This updates the reviewed results. The message stays in quarantine."
 msgstr ""
 
-#: src/Admin.php:409
+#: src/Admin.php:412
 msgid "Token already used"
 msgstr ""
 
-#: src/Admin.php:411
+#: src/Admin.php:414
 msgid "Trackback or pingback"
 msgstr ""
 
@@ -1241,7 +1273,7 @@ msgstr ""
 msgid "Trusted proxy networks"
 msgstr ""
 
-#: templates/integrations.php:37
+#: templates/integrations.php:50
 msgid "Turn off privacy-conscious mode to allow pingbacks and trackbacks."
 msgstr ""
 
@@ -1265,7 +1297,7 @@ msgstr ""
 msgid "Uninstalling"
 msgstr ""
 
-#: src/Admin.php:415
+#: src/Admin.php:418
 msgid "Unprotected comment request"
 msgstr ""
 
@@ -1289,7 +1321,7 @@ msgstr ""
 msgid "Uses this spam queue and its retention settings for content matches."
 msgstr ""
 
-#: src/Admin.php:329
+#: src/Admin.php:332
 msgid "Uses token and hidden field checks for Divi 4 and 5 contact forms."
 msgstr ""
 
@@ -1297,11 +1329,11 @@ msgstr ""
 msgid "Uses your local GeoIP extension or a trusted proxy to determine the connection's country. VPNs and proxies can affect the result. No external lookup service is used."
 msgstr ""
 
-#: src/ContextNotices.php:187
+#: src/ContextNotices.php:425
 msgid "Verification failures do not create an entry."
 msgstr ""
 
-#: src/Admin.php:412
+#: src/Admin.php:415
 msgid "Verification storage unavailable"
 msgstr ""
 
@@ -1375,6 +1407,11 @@ msgstr ""
 msgid "Write a review"
 msgstr ""
 
+#: src/ContextNotices.php:203 src/ContextNotices.php:209
+#: src/ContextNotices.php:228
+msgid "You cannot change these notice preferences."
+msgstr ""
+
 #: src/Feedback.php:778 src/Quarantine.php:420
 msgid "You cannot erase this personal data."
 msgstr ""
@@ -1383,7 +1420,7 @@ msgstr ""
 msgid "You cannot export this personal data."
 msgstr ""
 
-#: src/Admin.php:449 src/Admin.php:487 src/Admin.php:526 src/Admin.php:565
+#: src/Admin.php:452 src/Admin.php:490 src/Admin.php:529 src/Admin.php:568
 msgid "You do not have permission to perform this action."
 msgstr ""
 
@@ -1393,6 +1430,10 @@ msgstr ""
 
 #: templates/quarantine.php:121
 msgid "Your form plugin controls its own spam storage and retention, including in privacy-conscious mode."
+msgstr ""
+
+#: templates/context-notices.php:36
+msgid "Your profile"
 msgstr ""
 
 #: src/Guard.php:204
@@ -1418,6 +1459,6 @@ msgstr ""
 msgid "https://www.rocketsky.ch/"
 msgstr ""
 
-#: templates/integrations.php:55
+#: templates/integrations.php:68
 msgid "seconds"
 msgstr ""

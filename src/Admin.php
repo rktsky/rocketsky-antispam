@@ -237,6 +237,9 @@ final class Admin {
 		$missing_providers = $model['missing_providers'];
 		$active_count      = $model['active_count'];
 		if ( 'integrations' === $tab ) {
+			$hidden_notices       = ContextNotices::has_hidden();
+			$notice_restore_url   = admin_url( 'admin-post.php' );
+			$notice_restore_nonce = ContextNotices::restore_nonce_action();
 			require dirname( RKTSKY_ANTISPAM_FILE ) . '/templates/integrations.php';
 			return;
 		}
