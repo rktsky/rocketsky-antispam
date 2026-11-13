@@ -178,7 +178,7 @@ final class ContextNotices {
 	/**
 	 * Hides the displayed provider notice only for the authenticated current user.
 	 *
-	 * admin-post.php does not initialize provider menus. The form therefore binds
+	 * The admin-post.php endpoint does not initialize provider menus. The form binds
 	 * the exact server-resolved native capability and provider list into a Core
 	 * nonce before either value can be trusted. Current capabilities, configuration
 	 * and availability are checked again after nonce verification. Revocation still
@@ -189,8 +189,8 @@ final class ContextNotices {
 	 */
 	public function hide(): void {
 		$this->require_post();
-		$provider   = isset( $_POST['provider'] ) && is_string( $_POST['provider'] ) && strlen( $_POST['provider'] ) <= 256 ? wp_unslash( $_POST['provider'] ) : '';
-		$capability = isset( $_POST['capability'] ) && is_string( $_POST['capability'] ) && strlen( $_POST['capability'] ) <= 256 ? wp_unslash( $_POST['capability'] ) : '';
+		$provider   = isset( $_POST['provider'] ) && is_string( $_POST['provider'] ) && strlen( $_POST['provider'] ) <= 256 ? wp_unslash( $_POST['provider'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing -- Bounds raw bytes before unslashing; the fixed ID list and native nonce are verified below before any write.
+		$capability = isset( $_POST['capability'] ) && is_string( $_POST['capability'] ) && strlen( $_POST['capability'] ) <= 256 ? wp_unslash( $_POST['capability'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing -- Preserves the exact bounded server-resolved capability for its nonce; authorization is checked after verification, not inferred from request text.
 		$providers  = explode( ',', $provider );
 		$known      = Providers::ids();
 		$canonical  = array_values( array_unique( $providers ) );
@@ -243,7 +243,7 @@ final class ContextNotices {
 	 * @return void
 	 */
 	public function profile( \WP_User $user ): void {
-		if ( $user->ID !== get_current_user_id() || ! current_user_can( 'edit_user', $user->ID ) || ! self::has_hidden() ) {
+		if ( get_current_user_id() !== $user->ID || ! current_user_can( 'edit_user', $user->ID ) || ! self::has_hidden() ) {
 			return;
 		}
 		require dirname( RKTSKY_ANTISPAM_FILE ) . '/templates/context-notices-profile.php';
@@ -261,7 +261,7 @@ final class ContextNotices {
 	 * @return void Leaves unchecked or other-account profile saves untouched.
 	 */
 	public function save_profile( int $user_id ): void {
-		if ( $user_id !== get_current_user_id() || ! current_user_can( 'edit_user', $user_id ) || ! isset( $_POST['rktsky_antispam_restore_notices'] ) || '1' !== $_POST['rktsky_antispam_restore_notices'] ) {
+		if ( get_current_user_id() !== $user_id || ! current_user_can( 'edit_user', $user_id ) || ! isset( $_POST['rktsky_antispam_restore_notices'] ) || '1' !== $_POST['rktsky_antispam_restore_notices'] ) {
 			return;
 		}
 		$this->require_post( 'rktsky_antispam_notices_nonce' );
@@ -286,7 +286,15 @@ final class ContextNotices {
 				$hidden[ $provider ] = true;
 			}
 		}
-		update_user_option( get_current_user_id(), self::USER_OPTION, array( 'site' => get_current_blog_id(), 'providers' => $hidden ), false );
+		update_user_option(
+			get_current_user_id(),
+			self::USER_OPTION,
+			array(
+				'site'      => get_current_blog_id(),
+				'providers' => $hidden,
+			),
+			false
+		);
 		if ( self::hidden() !== array_keys( $hidden ) ) {
 			wp_die( esc_html__( 'Could not save your notice preferences. Please try again.', 'rocketsky-antispam' ), '', array( 'response' => 500 ) );
 		}
@@ -303,7 +311,7 @@ final class ContextNotices {
 	 * @return void Terminates malformed or unauthenticated requests without metadata writes or PHP warnings.
 	 */
 	private function require_post( string $nonce_key = 'rktsky_antispam_notices_nonce' ): void {
-		if ( ! is_user_logged_in() || get_current_user_id() < 1 || ! isset( $_SERVER['REQUEST_METHOD'] ) || 'POST' !== $_SERVER['REQUEST_METHOD'] || ! isset( $_POST[ $nonce_key ], $_REQUEST[ $nonce_key ] ) || ! is_string( $_POST[ $nonce_key ] ) || '' === $_POST[ $nonce_key ] || strlen( $_POST[ $nonce_key ] ) > 256 || ! is_string( $_REQUEST[ $nonce_key ] ) || $_POST[ $nonce_key ] !== $_REQUEST[ $nonce_key ] ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Bounds and type-checks the exact nonce before its caller performs native verification; no input is output or persisted here.
+		if ( ! is_user_logged_in() || get_current_user_id() < 1 || ! isset( $_SERVER['REQUEST_METHOD'] ) || 'POST' !== $_SERVER['REQUEST_METHOD'] || ! isset( $_POST[ $nonce_key ], $_REQUEST[ $nonce_key ] ) || ! is_string( $_POST[ $nonce_key ] ) || '' === $_POST[ $nonce_key ] || strlen( $_POST[ $nonce_key ] ) > 256 || ! is_string( $_REQUEST[ $nonce_key ] ) || $_POST[ $nonce_key ] !== $_REQUEST[ $nonce_key ] ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- Checks the raw nonce's scalar shape, byte bound and POST/REQUEST identity before native verification; transforming it would alter the verification input.
 			wp_die( esc_html__( 'Invalid notice preference request.', 'rocketsky-antispam' ), '', array( 'response' => 403 ) );
 		}
 	}
@@ -434,7 +442,7 @@ final class ContextNotices {
 		if ( empty( $notices ) ) {
 			return;
 		}
-		$dismiss_ids        = array_column( $notices, 'provider' );
+		$dismiss_ids = array_column( $notices, 'provider' );
 		sort( $dismiss_ids, SORT_STRING );
 		$dismiss_providers  = implode( ',', $dismiss_ids );
 		$dismiss_capability = $this->screen_capability( get_current_screen(), $dismiss_ids[0] );
@@ -461,14 +469,37 @@ final class ContextNotices {
 				)
 			),
 			array(
-				'div'    => array( 'class' => true, 'id' => true, 'role' => true ),
-				'p'      => array( 'class' => true, 'id' => true ),
+				'div'    => array(
+					'class' => true,
+					'id'    => true,
+					'role'  => true,
+				),
+				'p'      => array(
+					'class' => true,
+					'id'    => true,
+				),
 				'strong' => array(),
 				'a'      => array( 'href' => true ),
-				'span'   => array( 'class' => true, 'aria-hidden' => true ),
-				'form'   => array( 'action' => true, 'method' => true, 'class' => true ),
-				'input'  => array( 'type' => true, 'name' => true, 'id' => true, 'value' => true ),
-				'button' => array( 'type' => true, 'class' => true, 'aria-describedby' => true ),
+				'span'   => array(
+					'class'       => true,
+					'aria-hidden' => true,
+				),
+				'form'   => array(
+					'action' => true,
+					'method' => true,
+					'class'  => true,
+				),
+				'input'  => array(
+					'type'  => true,
+					'name'  => true,
+					'id'    => true,
+					'value' => true,
+				),
+				'button' => array(
+					'type'             => true,
+					'class'            => true,
+					'aria-describedby' => true,
+				),
 			)
 		);
 	}
@@ -480,7 +511,7 @@ final class ContextNotices {
 	 * @return bool Whether the prepared notice still belongs to this request context.
 	 */
 	private function eligible(): bool {
-		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		$screen  = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 		$visible = array_diff( $this->providers, self::hidden() );
 		if ( empty( $visible ) || ! $screen instanceof \WP_Screen || $this->screen_id !== $screen->id || ! $screen->in_admin( 'site' ) || ! is_user_logged_in() || wp_doing_ajax() ) {
 			return false;

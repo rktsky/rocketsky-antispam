@@ -91,7 +91,7 @@ function rktsky_notice_form( string $html, string $action ): array {
  * @param array    $fields Native form fields, before WordPress request slashing.
  * @param string   $method Actual synthetic request method.
  * @return array{status:int,location:string} Original rejection or safe redirect.
- * @throws RuntimeException|ErrorException For unexpected controller failures or PHP diagnostics.
+ * @throws RuntimeException For unexpected controller failures.
  */
 function rktsky_notice_response( callable $operation, array $fields, string $method = 'POST' ): array {
 	// phpcs:disable WordPress.Security.NonceVerification -- The fixture snapshots request globals; the actual controller below owns nonce verification.
