@@ -462,6 +462,7 @@ try {
 	$rktsky_notice_profile = rktsky_notice_profile( wp_get_current_user() );
 	rktsky_notice_expect( str_contains( $rktsky_notice_profile, 'rktsky_antispam_restore_notices' ) && ! str_contains( strtolower( $rktsky_notice_profile ), '<form' ) && '' === rktsky_notice_profile( get_user_by( 'id', $rktsky_notice_created['administrator'] ) ), 'Only the current profile must offer a restore checkbox inside Core\'s existing form.' );
 	$rktsky_notice_profile_fields = array(
+		'user_id'                       => (string) $rktsky_notice_created['editor'],
 		'email'                         => wp_get_current_user()->user_email,
 		'rktsky_antispam_notices_nonce' => wp_create_nonce( ContextNotices::restore_nonce_action() ),
 	);
