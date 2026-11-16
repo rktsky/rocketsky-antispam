@@ -111,7 +111,10 @@ final class GravityForms extends Adapter {
 	/**
 	 * Adds protection immediately after Gravity Forms' native opening form tag.
 	 *
+	 * The opening tag remains unchanged; the policy covers only the appended fields.
+	 *
 	 * @since 0.1.0
+	 * @since 0.5.6 Applies the shared HTML policy at the fragment handoff.
 	 * @param string $tag  Original opening form tag.
 	 * @param array  $form Native form definition.
 	 * @return string Opening tag with protection, or the original absent tag.
@@ -121,7 +124,7 @@ final class GravityForms extends Adapter {
 			return $tag;
 		}
 
-		return $tag . $this->fields->markup( 'gravityforms', (string) absint( $form['id'] ) );
+		return $tag . wp_kses( $this->fields->markup( 'gravityforms', (string) absint( $form['id'] ) ), Fields::allowed_html() );
 	}
 
 	/**

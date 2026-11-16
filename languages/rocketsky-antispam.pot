@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Rocketsky Antispam 0.5.6\n"
-"POT-Creation-Date: 2026-11-16 18:15+0100\n"
+"POT-Creation-Date: 2026-11-16 18:56+0100\n"
 "PO-Revision-Date: 2026-11-08 11:50+0100\n"
 "Last-Translator: Rocketsky\n"
 "Language-Team: Rocketsky\n"
@@ -259,7 +259,7 @@ msgid "Content rule processing limit"
 msgstr ""
 
 #. translators: %s: fixed internal content-policy reason code.
-#: src/Integrations/GravityForms.php:340
+#: src/Integrations/GravityForms.php:343
 #, php-format
 msgid "Content rule: %s."
 msgstr ""

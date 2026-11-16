@@ -132,7 +132,18 @@ namespace Rktsky\Antispam {
 		 * @return string Synthetic inside-form marker.
 		 */
 		public function markup( string $provider, string $form_id ): string {
-			return '<input data-provider="' . $provider . '" value="' . $form_id . '">';
+			return '<input type="hidden" name="rktsky_antispam_token" value="' . $form_id . '" autocomplete="off">';
+		}
+		/**
+		 * Allows only this stub's legitimate synthetic hidden input.
+		 *
+		 * The complete production Fields policy is checked in native Core tests.
+		 *
+		 * @since 0.5.6
+		 * @return array<string,array<string,bool>> Synthetic input control policy.
+		 */
+		public static function allowed_html(): array {
+			return array( 'input' => array( 'type' => true, 'name' => true, 'value' => true, 'autocomplete' => true ) );
 		}
 	}
 
@@ -466,6 +477,7 @@ namespace {
 		return array( $settings, $guard, $fields, new \Rktsky\Antispam\Integrations( $settings, $guard, $fields ) );
 	}
 
+	require __DIR__ . '/fixtures/core-kses.php';
 	require dirname( __DIR__ ) . '/src/Integrations.php';
 
 	integration_expect( array_intersect_key( \Rktsky\Antispam\Integrations::detected(), array_flip( array( 'comments', 'cf7', 'gravityforms', 'wpforms' ) ) ) === array( 'comments' => true, 'cf7' => false, 'gravityforms' => false, 'wpforms' => false ), 'Absent providers must not be detected.' );

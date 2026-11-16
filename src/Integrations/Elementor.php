@@ -8,6 +8,8 @@
 
 namespace Rktsky\Antispam\Integrations;
 
+use Rktsky\Antispam\Fields;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -102,6 +104,7 @@ final class Elementor extends Adapter {
 	 * notifications or webhooks. Dynamic widget rendering repeats this filter.
 	 *
 	 * @since 0.3.0
+	 * @since 0.5.6 Filters only the inserted protection fragment, retaining native HTML.
 	 * @param string $content Native widget HTML.
 	 * @param object $widget Elementor widget instance.
 	 * @return string Unmodified unrelated output or protected native form HTML.
@@ -115,7 +118,7 @@ final class Elementor extends Adapter {
 		if ( ! is_string( $id ) || ! preg_match( '/^[a-zA-Z0-9_-]{1,64}$/D', $id ) || false === $closing || str_contains( $content, 'data-rk-antispam-provider=' ) ) {
 			return $content;
 		}
-		return substr_replace( $content, $this->fields->markup( 'elementor', $id ), $closing, 0 );
+		return substr_replace( $content, wp_kses( $this->fields->markup( 'elementor', $id ), Fields::allowed_html() ), $closing, 0 );
 	}
 
 	/**

@@ -94,6 +94,7 @@ namespace {
 	if ( PHP_SAPI !== 'cli' ) {
 		exit( 1 ); }
 	define( 'ABSPATH', __DIR__ . '/' );
+	require __DIR__ . '/fixtures/core-kses.php';
 	$GLOBALS['rktsky_divi_hooks']      = array();
 	$GLOBALS['rktsky_divi_assertions'] = 0;
 	$GLOBALS['rktsky_divi_admin']      = false;
@@ -209,14 +210,6 @@ namespace {
 	 */
 	function wp_doing_ajax(): bool {
 		return $GLOBALS['rktsky_divi_ajax']; }
-	/**
-	 * Supplies HTML-API URI metadata without filtering provider output.
-	 *
-	 * @since 0.3.0
-	 * @return array<string> URI-bearing attributes used by the native parser.
-	 */
-	function wp_kses_uri_attributes(): array {
-		return array( 'href', 'src', 'action' ); }
 	/**
 	 * Escapes valid ASCII fixture text as an HTML attribute.
 	 *

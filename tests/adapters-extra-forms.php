@@ -63,7 +63,18 @@ namespace Rktsky\Antispam {
 		 * @return string Synthetic controls.
 		 */
 		public function markup( string $provider, string $id ): string {
-			return '<span data-proof="' . $provider . ':' . $id . '"></span>';}
+			return '<input type="hidden" name="rktsky_antispam_token" value="' . $provider . ':' . $id . '" autocomplete="off">';}
+		/**
+		 * Allows only this stub's legitimate synthetic hidden input.
+		 *
+		 * The complete production Fields policy is checked in native Core tests.
+		 *
+		 * @since 0.5.6
+		 * @return array<string,array<string,bool>> Synthetic input control policy.
+		 */
+		public static function allowed_html(): array {
+			return array( 'input' => array( 'type' => true, 'name' => true, 'value' => true, 'autocomplete' => true ) );
+		}
 		/**
 		 * Includes metacharacters to exercise the unchanged native HTML processor.
 		 *
@@ -116,6 +127,7 @@ namespace {
 	if ( PHP_SAPI !== 'cli' ) {
 		exit( 1 );
 	} define( 'ABSPATH', __DIR__ . '/' );
+	require __DIR__ . '/fixtures/core-kses.php';
 	$GLOBALS['extra_hooks']      = array();
 	$GLOBALS['extra_assertions'] = 0;
 	/**
@@ -206,14 +218,6 @@ namespace {
 	 */
 	function sanitize_email( $value ) {
 		return $value;}
-	/**
-	 * Supplies URI names to the unchanged optional HTML processor.
-	 *
-	 * @since 0.3.0
-	 * @return array Native data attributes are deliberately not URI attributes.
-	 */
-	function wp_kses_uri_attributes() {
-		return array( 'href', 'src', 'action' );}
 	/** Native declared-field lookup stub. @since 0.3.0 */
 	final class FrmField {
 		/** @var array Stored synthetic definitions. @since 0.3.0 */

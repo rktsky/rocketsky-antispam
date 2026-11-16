@@ -66,14 +66,17 @@ final class ContactForm7 extends Adapter {
 	/**
 	 * Appends protection through Contact Form 7's native form-content filter.
 	 *
+	 * Only the owned protection fragment is filtered; native field HTML is retained.
+	 *
 	 * @since 0.1.0
+	 * @since 0.5.6 Applies the shared HTML policy at the fragment handoff.
 	 * @param string $html Original rendered field markup.
 	 * @return string Original markup followed by local protection fields.
 	 */
 	public function cf7_fields( string $html ): string {
 		$form = \WPCF7_ContactForm::get_current();
 
-		return $form ? $html . $this->fields->markup( 'cf7', (string) $form->id() ) : $html;
+		return $form ? $html . wp_kses( $this->fields->markup( 'cf7', (string) $form->id() ), Fields::allowed_html() ) : $html;
 	}
 
 	/**

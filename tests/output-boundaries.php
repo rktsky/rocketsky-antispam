@@ -3,8 +3,10 @@
  * Verifies the actual registered control renderers against native WordPress KSES.
  *
  * Uses original WordPress DOM, nonce-independent signed intents and hook registries.
- * Provider callback arguments are explicitly synthetic; this is an owned output
- * contract check, not a claim of native commercial-provider submission acceptance.
+ * Provider engines are excluded from this process through native activation-list
+ * filters. Callback arguments and CF7 current-form lookup are explicit fixtures;
+ * this is an owned output contract check. It makes no claim of native commercial
+ * provider submission acceptance.
  * Native provider engines remain covered by their separate integration suites.
  * A source-derived inventory fails if a new terminal renderer lacks a probe.
  *
@@ -14,7 +16,50 @@
 
 use Rktsky\Antispam\{ContentRules, Country, Fields, Guard, Language, Providers, Settings, Store, Token};
 
+// Native plugin filters isolate these output contracts from provider boot effects.
+// Provider engines have their own suites; no active-plugin option is persisted.
+if ( PHP_SAPI !== 'cli' || '1' !== getenv( 'RKTSKY_ANTISPAM_ALLOW_TESTS' ) ) {
+	throw new RuntimeException( 'Explicit CLI test authorization is required.' );
+}
+$rktsky_output_root = realpath( (string) getenv( 'RKTSKY_ANTISPAM_WP_ROOT' ) );
+if ( ! $rktsky_output_root || ! is_file( $rktsky_output_root . '/.rktsky-antispam-fixture' ) || 'rktsky-antispam-disposable' !== trim( file_get_contents( $rktsky_output_root . '/.rktsky-antispam-fixture' ) ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reads only the explicit disposable test marker before Core boot.
+	throw new RuntimeException( 'A separately marked native WordPress fixture is required.' );
+}
+require_once $rktsky_output_root . '/wp-includes/plugin.php';
+add_filter( 'option_active_plugins', static fn( array $plugins ): array => array_values( array_filter( $plugins, static fn( string $file ): bool => str_ends_with( $file, '/rocketsky-antispam.php' ) ) ) );
+add_filter( 'site_option_active_sitewide_plugins', static fn( array $plugins ): array => array_filter( $plugins, static fn( string $file ): bool => str_ends_with( $file, '/rocketsky-antispam.php' ), ARRAY_FILTER_USE_KEY ) );
 require __DIR__ . '/bootstrap.php';
+
+/**
+ * Explicit provider-absent CF7 lookup fixture; no native CF7 engine is claimed.
+ *
+ * @since 0.5.6
+ */
+$rktsky_output_cf7_context = new class() {
+	/**
+	 * Supplies one server-selected synthetic form object.
+	 *
+	 * @since 0.5.6
+	 * @return object Fixture form with a fixed identifier.
+	 */
+	public static function get_current(): object {
+		return new class() {
+			/**
+			 * Supplies a fixed fixture scope.
+			 *
+			 * @since 0.5.6
+			 * @return int Synthetic form ID.
+			 */
+			public function id(): int {
+				return 41;
+			}
+		};
+	}
+};
+if ( class_exists( 'WPCF7_ContactForm', false ) ) {
+	throw new RuntimeException( 'The output-contract process must not load provider engines.' );
+}
+class_alias( get_class( $rktsky_output_cf7_context ), 'WPCF7_ContactForm' );
 $rktsky_output_assertions = 0;
 
 /**
@@ -34,15 +79,15 @@ function rktsky_output_expect( bool $condition, string $message ): void {
 }
 
 /**
- * Finds terminal echoes in the real provider registry rather than a copied count.
+ * Finds markup producers and every output handoff in the real provider registry.
  *
  * @since 0.5.6
- * @return string[] Class/method identities of direct control-output consumers.
+ * @return string[] Class/method identities of markup producers and their output boundaries.
  */
 function rktsky_output_inventory(): array {
 	$found = array();
 	foreach ( Providers::ADAPTERS as $class ) {
-		$tokens = token_get_all( file_get_contents( dirname( __DIR__ ) . '/src/Integrations/' . $class . '.php' ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reads owned source only to detect newly registered output consumers.
+		$tokens = token_get_all( file_get_contents( dirname( __DIR__ ) . '/src/Integrations/' . $class . '.php' ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reads owned source to cover markup producers, appenders and terminal output.
 		$method = '';
 		foreach ( $tokens as $index => $token ) {
 			if ( is_array( $token ) && T_FUNCTION === $token[0] ) {
@@ -57,23 +102,30 @@ function rktsky_output_inventory(): array {
 				}
 			}
 			if ( 'Divi' === $class && is_array( $token ) && T_STRING === $token[0] && 'wp_die' === strtolower( $token[1] ) ) {
-				$found[] = $class . '::' . $method;
+				$found[ $class . '::' . $method ] = true;
 			}
-			if ( ! is_array( $token ) || T_ECHO !== $token[0] ) {
+			if ( ! is_array( $token ) || T_VARIABLE !== $token[0] || '$this' !== $token[1] ) {
 				continue;
 			}
 			$expression = '';
-			for ( $next = $index + 1; isset( $tokens[ $next ] ) && ';' !== $tokens[ $next ]; ++$next ) {
-				$expression .= is_array( $tokens[ $next ] ) ? $tokens[ $next ][1] : $tokens[ $next ];
+			for ( $next = $index; isset( $tokens[ $next ] ); ++$next ) {
+				$part = $tokens[ $next ];
+				if ( is_array( $part ) && in_array( $part[0], array( T_WHITESPACE, T_COMMENT, T_DOC_COMMENT ), true ) ) {
+					continue;
+				}
+				$expression .= is_array( $part ) ? $part[1] : $part;
+				if ( '(' === $part || strlen( $expression ) > 40 ) {
+					break;
+				}
 			}
-			$compact = preg_replace( '/\s+/', '', $expression );
-			if ( str_contains( $compact, '$this->fields->markup(' ) || str_contains( $compact, '$this->controls(' ) ) {
-				$found[] = $class . '::' . $method;
+			if ( in_array( $expression, array( '$this->fields->markup(', '$this->controls(' ), true ) ) {
+				$found[ $class . '::' . $method ] = true;
 			}
 		}
 	}
-	sort( $found );
-	return $found;
+	$identities = array_keys( $found );
+	sort( $identities );
+	return $identities;
 }
 
 /**
@@ -175,9 +227,9 @@ try {
 		'WpForms::wpforms_fields'             => array( 'wpforms_frontend_output', array( array( 'id' => 41 ) ), 'wpforms', '41', '' ),
 		'Fluent::render'                      => array( 'fluentform/form_element_start', array( (object) array( 'id' => 41 ) ), 'fluentforms', '41', '' ),
 	);
-	$rktsky_output_expected = array_merge( array_keys( $rktsky_output_cases ), array( 'Divi::reject' ) );
+	$rktsky_output_expected = array_merge( array_keys( $rktsky_output_cases ), array( 'ContactForm7::cf7_fields', 'GravityForms::gravity_fields', 'Elementor::render', 'WooCommerceCheckout::render_block', 'WooCommerceCheckout::controls', 'Divi::reject' ) );
 	sort( $rktsky_output_expected );
-	rktsky_output_expect( rktsky_output_inventory() === $rktsky_output_expected, 'Every terminal control consumer in the real provider registry must have a rendered probe.' );
+	rktsky_output_expect( rktsky_output_inventory() === $rktsky_output_expected, 'Every markup producer, return/append handoff, output terminal and private Woo producer in the registry must have a rendered probe.' );
 	foreach ( $rktsky_output_cases as $rktsky_output_identity => $rktsky_output_case ) {
 		list( $rktsky_output_class, $rktsky_output_method ) = explode( '::', $rktsky_output_identity );
 		$rktsky_output_adapter                              = $rktsky_output_adapters[ $rktsky_output_class ];
@@ -210,6 +262,56 @@ try {
 	$rktsky_output_suffix = substr( $rktsky_output_block, strlen( $rktsky_output_foreign ) );
 	rktsky_output_expect( 'block' === rktsky_output_dom( $rktsky_output_suffix )['xpath']->evaluate( 'string(//div/@data-rk-woocommerce-checkout)' ), 'The appended block bridge transport marker must survive.' );
 	rktsky_output_controls( $rktsky_output_suffix, 'wc_checkout', 'checkout', $rktsky_output_token );
+	// CF7/GF/Elementor pass native-owned HTML around the shared fields fragment.
+	// These inputs deliberately contain tags/attributes excluded by our policy.
+	$rktsky_output_provider_html = '<section data-native="keep" class="provider"><input type="hidden" name="payment_nonce" value="native&amp;&quot;nonce"><script type="application/json">{"unchanged":true}</script></section>';
+	$rktsky_output_handoffs      = array(
+		'ContactForm7::cf7_fields'     => array( 'ContactForm7', 'cf7_fields', 'wpcf7_form_elements', array( $rktsky_output_provider_html ), 'cf7', '41', $rktsky_output_provider_html ),
+		'GravityForms::gravity_fields' => array( 'GravityForms', 'gravity_fields', 'gform_form_tag', array( '<form id="native-gf" data-native="a&amp;b" method="post">', array( 'id' => 41 ) ), 'gravityforms', '41', '<form id="native-gf" data-native="a&amp;b" method="post">' ),
+		'Elementor::render'            => array(
+			'Elementor',
+			'render',
+			'elementor/widget/render_content',
+			array(
+				'<div data-native="unchanged"><form class="elementor-form">' . $rktsky_output_provider_html . '</form></div>',
+				new class() {
+						/**
+						 * Supplies the declared fixture widget type.
+						 *
+						 * @since 0.5.6
+						 * @return string Fixed native widget name.
+						 */
+					public function get_name(): string {
+						return 'form'; }
+						/**
+						 * Supplies the synthetic provider-selected scope.
+						 *
+						 * @since 0.5.6
+						 * @return string Fixed widget ID.
+						 */
+					public function get_id(): string {
+						return 'output_widget'; }
+				},
+			),
+			'elementor',
+			'output_widget',
+			'<div data-native="unchanged"><form class="elementor-form">' . $rktsky_output_provider_html . '</form></div>',
+		),
+	);
+	foreach ( $rktsky_output_handoffs as $rktsky_output_identity => $rktsky_output_case ) {
+		list( $rktsky_output_class, $rktsky_output_method, $rktsky_output_hook, $rktsky_output_arguments, $rktsky_output_provider, $rktsky_output_form, $rktsky_output_foreign ) = $rktsky_output_case;
+		$rktsky_output_callback = array( $rktsky_output_adapters[ $rktsky_output_class ], $rktsky_output_method );
+		rktsky_output_expect( false !== has_filter( $rktsky_output_hook, $rktsky_output_callback ), 'Each return handoff must be registered at its documented provider hook.' );
+		$rktsky_output_html      = call_user_func_array( $rktsky_output_callback, $rktsky_output_arguments );
+		$rktsky_output_fragment  = wp_kses( $rktsky_output_fields->markup( $rktsky_output_provider, $rktsky_output_form ), Fields::allowed_html() );
+		$rktsky_output_unwrapped = str_replace( $rktsky_output_fragment, '', $rktsky_output_html );
+		rktsky_output_expect( 1 === substr_count( $rktsky_output_html, $rktsky_output_fragment ) && $rktsky_output_foreign === $rktsky_output_unwrapped, 'Only the owned fragment may be filtered; provider HTML must remain byte-identical: ' . $rktsky_output_identity );
+		rktsky_output_controls( $rktsky_output_fragment, $rktsky_output_provider, $rktsky_output_form, $rktsky_output_token );
+		$rktsky_output_options[ $rktsky_output_provider ] = false;
+		$rktsky_output_disabled                           = call_user_func_array( $rktsky_output_callback, $rktsky_output_arguments );
+		rktsky_output_expect( $rktsky_output_foreign === $rktsky_output_disabled, 'Disabled return adapters must retain native HTML byte-for-byte.' );
+		$rktsky_output_options[ $rktsky_output_provider ] = true;
+	}
 	$rktsky_output_policy = Fields::allowed_html();
 	$rktsky_output_unsafe = '<span hidden data-rk-antispam data-provider="comments" onclick="attack()" style="display:block" data-unrelated="no"><input type="hidden" name="rktsky_antispam_token" value="a&amp;&quot;b" autocomplete="off" disabled onfocus="attack()"><img src="https://example.invalid/pixel"><script>attack()</script><noscript><p onclick="attack()">Read &amp; retry</p></noscript></span>';
 	$rktsky_output_clean  = rktsky_output_dom( wp_kses( $rktsky_output_unsafe, $rktsky_output_policy ) );
