@@ -149,6 +149,10 @@ the minimum WordPress job excludes current original-provider suites. Dedicated
 email checks run on PHP 8.5, and the public browser bridge is a synthetic
 Firefox contract. Passing 18 jobs does not extend those actual scopes.
 
+The official CI Plugin Check action excludes its own generated `.wp-env.json`
+test-environment file. That file is not part of the 77-file plugin archive.
+The separate native Plugin Check result below uses no file exclusions.
+
 The installable candidate is `rocketsky-antispam-0.5.7-wordpress-org.zip`,
 77 files, 375,709 bytes; SHA-256:
 
