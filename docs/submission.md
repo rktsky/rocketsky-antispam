@@ -1,6 +1,6 @@
 # WordPress.org submission handoff
 
-The existing WordPress.org submission was updated to 0.5.4 on 11 November 2026.
+The existing WordPress.org submission was updated to 0.5.6 on 16.11.2026.
 Manual review is pending. See the [submission receipt](wordpress-org-submission.md)
 for the current archive, slug and review status. The original submission was
 made on 9 November using the `rocketsky` account.

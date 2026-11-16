@@ -5,8 +5,8 @@ with initial slug `rocketsky-antispam`; see the [submission receipt](wordpress-o
 The existing submission was updated to version 0.5.4 on 11 November 2026.
 Version 0.5.5 addresses the [administration review](review-2026-11-13.md) and was
 uploaded on 13 November 2026. Review is in progress; directory approval is pending.
-Version 0.5.6 has been prepared and checked against the [16 November review](review-2026-11-16.md).
-It has not been uploaded to WordPress.org; the submitted version remains 0.5.5.
+Version 0.5.6 was checked against the [review of 16.11.2026](review-2026-11-16.md)
+and uploaded to the existing submission on 16.11.2026. Directory approval is pending.
 Its [development acceptance](development-quality.md) includes a reviewed inventory
 of checker exceptions as well as the ordinary tool results.
 
