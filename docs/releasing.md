@@ -5,6 +5,9 @@ with initial slug `rocketsky-antispam`; see the [submission receipt](wordpress-o
 The existing submission was updated to version 0.5.4 on 11 November 2026.
 Version 0.5.5 addresses the [administration review](review-2026-11-13.md) and was
 uploaded on 13 November 2026. Review is in progress; directory approval is pending.
+Version 0.5.6 is being prepared against the [16 November review](review-2026-11-16.md).
+Its [development acceptance](development-quality.md) includes a reviewed inventory
+of checker exceptions as well as the ordinary tool results.
 
 Die GitHub-Distribution setzt seit 0.5.0 eine eigene `Update URI`. Damit bietet
 WordPress keine fremde Verzeichnisaktualisierung unter einem gleichnamigen
@@ -46,10 +49,10 @@ exakten Git-Commit. Tests, Werkzeuge, Vendor-Pakete, Git-Metadaten und interne
 Dokumentation gelangen nicht ins ZIP.
 
 ```sh
-python3 tools/build-release.py --channel wordpress-org --output ../outputs/rocketsky-antispam/release-0.5.5
+python3 tools/build-release.py --channel wordpress-org --output ../outputs/rocketsky-antispam/release-0.5.6
 ```
 
-Das erzeugt `rocketsky-antispam-0.5.5-wordpress-org.zip`, eine SHA-256-Datei und
+Das erzeugt `rocketsky-antispam-0.5.6-wordpress-org.zip`, eine SHA-256-Datei und
 ein Manifest mit Quellcommit und Prüfsummen jeder archivierten Datei. Das ZIP
 enthält genau einen obersten Ordner `rocketsky-antispam/`. Der Paketbauer prüft
 CRC, vollständigen Inhalts-Readback, Versionskonsistenz und reproduzierbare

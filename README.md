@@ -4,7 +4,7 @@ Rocketsky Antispam protects comments and forms in the background, without adding
 
 Developed by **Rocketsky**, licensed under GPL-2.0-or-later. The bundled Speo logo retains its BSD-3-Clause licence.
 
-**Version 0.5.5 adds personal controls for integration notices and guidance for statistics storage errors.** It was [uploaded to the existing WordPress.org submission](docs/wordpress-org-submission.md) on 13 November 2026; review is in progress. See the [review verification](docs/review-2026-11-13.md), [email format](docs/email.md) and [tested versions and coverage](docs/verification.md).
+**Version 0.5.6 filters owned form HTML at its output boundary and uses fixed account permissions for notice preferences.** Version 0.5.5 was [uploaded to WordPress.org](docs/wordpress-org-submission.md) on 13 November 2026 and remains under review. See the [current verification](docs/review-2026-11-16.md), [development acceptance](docs/development-quality.md) and [tested versions and coverage](docs/verification.md).
 
 ## Installation
 
@@ -100,10 +100,12 @@ Review quarantine, use supported WordPress or form-plugin spam moderation, or as
 WordPress.org submission packages are built from a clean committed checkout:
 
 ```sh
-python3 tools/build-release.py --channel wordpress-org --output ../outputs/rocketsky-antispam/release-0.5.5
+python3 tools/build-release.py --channel wordpress-org --output ../outputs/rocketsky-antispam/release-0.5.6
 ```
 
 The installable ZIP includes bundled languages and uses the directory update channel. Its manifest records the source commit and every file checksum. Development tools, tests and internal documentation are excluded. GitHub packages retain a separate Update URI and are updated manually. See [the release process](docs/releasing.md) and [submission details](docs/submission.md).
+
+The builder checks the reviewed production-exception inventory before writing the archive. Development tools need Python 3.10+ and PHP with Tokenizer; `--php` or `RKTSKY_ANTISPAM_PHP` selects a PHP executable/wrapper outside PATH. These are build requirements, not plugin runtime dependencies.
 
 PHP classes live in `src/`, escaped templates in `templates/` and readable assets in `assets/`. Enabled integrations load as separate adapters. The plugin has no runtime build dependencies. WordPress, providers and vendor packages remain unchanged.
 
