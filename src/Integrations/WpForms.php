@@ -79,12 +79,13 @@ final class WpForms extends Adapter {
 	 * Renders protection inside WPForms' native form in both Lite and Pro.
 	 *
 	 * @since 0.1.0
+	 * @since 0.5.6 Filters the owned fragment at the final HTML output boundary.
 	 * @param array $form Native form definition.
 	 * @return void
 	 */
 	public function wpforms_fields( array $form ): void {
 		if ( ! empty( $form['id'] ) ) {
-			echo $this->fields->markup( 'wpforms', (string) absint( $form['id'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by Fields::markup().
+			echo wp_kses( $this->fields->markup( 'wpforms', (string) absint( $form['id'] ) ), Fields::allowed_html() );
 		}
 	}
 

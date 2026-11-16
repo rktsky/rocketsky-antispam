@@ -8,6 +8,8 @@
 
 namespace Rktsky\Antispam\Integrations;
 
+use Rktsky\Antispam\Fields;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -92,22 +94,24 @@ final class WooCommerceCheckout extends Adapter {
 	 * Prints controls in the classic payment section, including AJAX replacements.
 	 *
 	 * @since 0.3.0
+	 * @since 0.5.6 Filters the owned fragment at the final HTML output boundary.
 	 * @return void
 	 */
 	public function render_classic(): void {
-		echo $this->controls( 'checkout', 'classic' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- controls() and Fields::markup() escape all attributes and markup.
+		echo wp_kses( $this->controls( 'checkout', 'classic' ), $this->controls_allowed_html() );
 	}
 
 	/**
 	 * Prints an order-specific scope for the native existing-order payment form.
 	 *
 	 * @since 0.3.0
+	 * @since 0.5.6 Filters the owned fragment at the final HTML output boundary.
 	 * @return void
 	 */
 	public function render_pay(): void {
 		$id = absint( get_query_var( 'order-pay' ) );
 		if ( $id > 0 ) {
-			echo $this->controls( 'pay_' . $id, 'pay' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- controls() and Fields::markup() escape all attributes and markup.
+			echo wp_kses( $this->controls( 'pay_' . $id, 'pay' ), $this->controls_allowed_html() );
 		}
 	}
 
@@ -118,6 +122,7 @@ final class WooCommerceCheckout extends Adapter {
 	 * No editor insertion, inline script or modification of a WooCommerce file is needed.
 	 *
 	 * @since 0.3.0
+	 * @since 0.5.6 Filters only the appended owned fragment, preserving the native block.
 	 * @param string $content Native rendered Checkout block.
 	 * @return string Original native markup followed by escaped local controls.
 	 */
@@ -125,7 +130,22 @@ final class WooCommerceCheckout extends Adapter {
 		if ( function_exists( 'is_wc_endpoint_url' ) && ( is_wc_endpoint_url( 'order-pay' ) || is_wc_endpoint_url( 'order-received' ) ) ) {
 			return $content;
 		}
-		return $content . $this->controls( 'checkout', 'block' );
+		return $content . wp_kses( $this->controls( 'checkout', 'block' ), $this->controls_allowed_html() );
+	}
+
+	/**
+	 * Extends the shared field policy with only the owned checkout transport wrapper.
+	 *
+	 * The policy applies to controls(), never to WooCommerce's returned block HTML.
+	 * Classic, order-pay and block transports retain the same technical attributes.
+	 *
+	 * @since 0.5.6
+	 * @return array<string,array<string,bool>> Protection controls and their transport div.
+	 */
+	private function controls_allowed_html(): array {
+		$allowed        = Fields::allowed_html();
+		$allowed['div'] = array( 'data-rk-woocommerce-checkout' => true );
+		return $allowed;
 	}
 
 	/**

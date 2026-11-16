@@ -5,7 +5,7 @@ Tags: antispam, spam, contact form 7, gravity forms, wpforms
 Requires at least: 6.6
 Requires PHP: 8.2
 Tested up to: 7.1
-Stable tag: 0.5.5
+Stable tag: 0.5.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -127,6 +127,10 @@ You can help fund development and maintenance with a voluntary donation at https
 6. WordPress dashboard widget with a seven-day activity summary, the comment rejection total and links to review spam.
 
 == Changelog ==
+
+= 0.5.6 =
+* Check personal notice preferences with a fixed native account permission instead of a submitted capability.
+* Filter owned form and error HTML at its final output boundary while preserving technical controls and provider markup.
 
 = 0.5.5 =
 * Let each user hide integration notices on this website and restore them from Integrations or their own profile.

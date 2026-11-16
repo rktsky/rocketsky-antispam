@@ -178,30 +178,32 @@ final class ContextNotices {
 	/**
 	 * Hides the displayed provider notice only for the authenticated current user.
 	 *
-	 * The admin-post.php endpoint does not initialize provider menus. The form binds
-	 * the exact server-resolved native capability and provider list into a Core
-	 * nonce before either value can be trusted. Current capabilities, configuration
-	 * and availability are checked again after nonce verification. Revocation still
-	 * denies the action; no submitted user ID, menu hook or custom signature is used.
+	 * This changes only the current user's display preference, using the same fixed
+	 * own-profile permission as restoration. Native provider permissions still guard
+	 * notice rendering and access to entries; no submitted value selects a capability.
+	 * The canonical provider list remains bound to the site and user/session nonce.
 	 *
 	 * @since 0.5.5
+	 * @since 0.5.6 Uses fixed own-profile authorization and rejects altered provider input.
 	 * @return void Redirects after native persistence, or terminates invalid requests.
 	 */
 	public function hide(): void {
 		$this->require_post();
-		$provider   = isset( $_POST['provider'] ) && is_string( $_POST['provider'] ) && strlen( $_POST['provider'] ) <= 256 ? wp_unslash( $_POST['provider'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing -- Bounds raw bytes before unslashing; the fixed ID list and native nonce are verified below before any write.
-		$capability = isset( $_POST['capability'] ) && is_string( $_POST['capability'] ) && strlen( $_POST['capability'] ) <= 256 ? wp_unslash( $_POST['capability'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing -- Preserves the exact bounded server-resolved capability for its nonce; authorization is checked after verification, not inferred from request text.
-		$providers  = explode( ',', $provider );
-		$known      = Providers::ids();
-		$canonical  = array_values( array_unique( $providers ) );
-		sort( $canonical, SORT_STRING );
-		if ( '' === $capability || count( $providers ) > count( $known ) || implode( ',', $canonical ) !== $provider || ! empty( array_diff( $providers, $known ) ) ) {
-			wp_die( esc_html__( 'Invalid notice preference request.', 'rocketsky-antispam' ), '', array( 'response' => 400 ) );
-		}
-		check_admin_referer( $this->hide_nonce_action( $provider, $capability ), 'rktsky_antispam_notices_nonce' );
-		if ( ! current_user_can( $capability ) ) {
+		if ( ! current_user_can( 'edit_user', get_current_user_id() ) ) {
 			wp_die( esc_html__( 'You cannot change these notice preferences.', 'rocketsky-antispam' ), '', array( 'response' => 403 ) );
 		}
+		if ( ! isset( $_POST['provider'] ) || ! is_string( $_POST['provider'] ) || strlen( $_POST['provider'] ) > 256 ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Raw type/byte bounds must precede sanitization and construction of the provider-scoped nonce; malformed-provider cases are covered by tests/context-notices.php.
+			wp_die( esc_html__( 'Invalid notice preference request.', 'rocketsky-antispam' ), '', array( 'response' => 400 ) );
+		}
+		$provider  = sanitize_text_field( wp_unslash( $_POST['provider'] ) );
+		$providers = explode( ',', $provider );
+		$known     = Providers::ids();
+		$canonical = array_values( array_unique( $providers ) );
+		sort( $canonical, SORT_STRING );
+		if ( wp_unslash( $_POST['provider'] ) !== $provider || count( $providers ) > count( $known ) || implode( ',', $canonical ) !== $provider || ! empty( array_diff( $providers, $known ) ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- The bounded raw value is compared only to reject sanitizer changes, never used as authority or persisted; tests/context-notices.php covers altered provider IDs.
+			wp_die( esc_html__( 'Invalid notice preference request.', 'rocketsky-antispam' ), '', array( 'response' => 400 ) );
+		}
+		check_admin_referer( $this->hide_nonce_action( $provider ), 'rktsky_antispam_notices_nonce' );
 		$options  = $this->settings->all();
 		$detected = Providers::detected();
 		foreach ( $providers as $id ) {
@@ -317,15 +319,15 @@ final class ContextNotices {
 	}
 
 	/**
-	 * Binds the rendered native capability and provider scope to the current site.
+	 * Binds the rendered provider scope to the current site and native user session.
 	 *
 	 * @since 0.5.5
+	 * @since 0.5.6 Removes client-selected capabilities from the preference nonce.
 	 * @param string $providers Canonical comma-separated provider IDs from a trusted screen.
-	 * @param string $capability Exact capability resolved from the server's native menu registry.
 	 * @return string Action for Core's user/session-bound nonce.
 	 */
-	private function hide_nonce_action( string $providers, string $capability ): string {
-		return 'rktsky_antispam_notice_hide|' . get_current_blog_id() . '|' . $providers . '|' . $capability;
+	private function hide_nonce_action( string $providers ): string {
+		return 'rktsky_antispam_notice_hide|' . get_current_blog_id() . '|' . $providers;
 	}
 
 	/**
@@ -410,6 +412,7 @@ final class ContextNotices {
 	 * counts, form definitions, credentials or retention payloads are queried.
 	 *
 	 * @since 0.5.0
+	 * @since 0.5.6 The personal preference form carries no capability selector.
 	 * @return void
 	 */
 	public function render(): void {
@@ -444,9 +447,8 @@ final class ContextNotices {
 		}
 		$dismiss_ids = array_column( $notices, 'provider' );
 		sort( $dismiss_ids, SORT_STRING );
-		$dismiss_providers  = implode( ',', $dismiss_ids );
-		$dismiss_capability = $this->screen_capability( get_current_screen(), $dismiss_ids[0] );
-		$dismiss_action     = $this->hide_nonce_action( $dismiss_providers, $dismiss_capability );
+		$dismiss_providers = implode( ',', $dismiss_ids );
+		$dismiss_action    = $this->hide_nonce_action( $dismiss_providers );
 		ob_start();
 		require dirname( RKTSKY_ANTISPAM_FILE ) . '/templates/context-notices.php';
 		$message = (string) ob_get_clean();
@@ -579,13 +581,13 @@ final class ContextNotices {
 	}
 
 	/**
-	 * Resolves the exact native screen capability before creating a dismissal form.
+	 * Resolves the exact native capability before showing a provider notice.
 	 *
-	 * Custom provider menu capabilities remain supported. The returned value is
-	 * bound into the nonce and checked again after verification in admin-post.php,
-	 * where these menu entries are not initialized by WordPress.
+	 * Custom provider menu capabilities remain supported. The server-side registry
+	 * controls visibility without allowing a submitted preference to select rights.
 	 *
 	 * @since 0.5.5
+	 * @since 0.5.6 Keeps provider permissions confined to the native display boundary.
 	 * @param \WP_Screen $screen Current initialized site screen.
 	 * @param string     $provider Fixed integration already matched to this screen.
 	 * @return string Registered native capability, or an empty string when unavailable.

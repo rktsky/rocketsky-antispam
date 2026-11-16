@@ -375,7 +375,7 @@ try {
 	rktsky_notice_expect( array() === ContextNotices::hidden() && ! ContextNotices::has_hidden(), 'A new account must start with visible notices and no hidden preference.' );
 	$rktsky_notice_html   = rktsky_notice_html( $rktsky_notice_service, 'edit-comments' );
 	$rktsky_notice_fields = rktsky_notice_form( $rktsky_notice_html, 'rktsky_antispam_notice_hide' );
-	rktsky_notice_expect( 'comments' === $rktsky_notice_fields['provider'] && 'moderate_comments' === $rktsky_notice_fields['capability'] && false !== wp_verify_nonce( $rktsky_notice_fields['rktsky_antispam_notices_nonce'], 'rktsky_antispam_notice_hide|' . get_current_blog_id() . '|comments|moderate_comments' ), 'The actual form must bind the native provider, menu capability, user and site into its nonce.' );
+	rktsky_notice_expect( 'comments' === $rktsky_notice_fields['provider'] && ! isset( $rktsky_notice_fields['capability'] ) && false !== wp_verify_nonce( $rktsky_notice_fields['rktsky_antispam_notices_nonce'], 'rktsky_antispam_notice_hide|' . get_current_blog_id() . '|comments' ), 'The actual form must bind provider, user/session and site into its nonce without a client-supplied capability.' );
 	$rktsky_notice_meta_key = $GLOBALS['wpdb']->get_blog_prefix() . ContextNotices::USER_OPTION;
 	rktsky_notice_expect( ! metadata_exists( 'user', get_current_user_id(), $rktsky_notice_meta_key ), 'Merely rendering the notice must not create a preference.' );
 	$rktsky_notice_fields['_wp_http_referer'] = admin_url( 'edit-comments.php' );
@@ -385,7 +385,7 @@ try {
 	$rktsky_notice_bad['rktsky_antispam_notices_nonce'] = 'invalid';
 	$rktsky_notice_response                             = rktsky_notice_response( $rktsky_notice_hide, $rktsky_notice_bad );
 	rktsky_notice_expect( 403 === $rktsky_notice_response['status'] && ! ContextNotices::has_hidden(), 'An invalid nonce must not create a hidden notice.' );
-	foreach ( array( array( 'comments' ), 'comments,untrusted', '../comments', str_repeat( 'x', 257 ), 'comments,comments' ) as $rktsky_notice_bad_id ) {
+	foreach ( array( array( 'comments' ), 'comments,untrusted', '../comments', str_repeat( 'x', 257 ), 'comments,comments', ' comments ', "comments\n", 'com<!-- removed -->ments', 'com%0aments', '<b>comments</b>' ) as $rktsky_notice_bad_id ) {
 		$rktsky_notice_bad             = $rktsky_notice_fields;
 		$rktsky_notice_bad['provider'] = $rktsky_notice_bad_id;
 		$rktsky_notice_response        = rktsky_notice_response( $rktsky_notice_hide, $rktsky_notice_bad );
@@ -397,26 +397,26 @@ try {
 		$rktsky_notice_response                             = rktsky_notice_response( $rktsky_notice_hide, $rktsky_notice_bad );
 		rktsky_notice_expect( in_array( $rktsky_notice_response['status'], array( 400, 403 ), true ) && ! ContextNotices::has_hidden(), 'Malformed nonce shapes must fail without PHP diagnostics or preference writes.' );
 	}
-	$rktsky_notice_bad               = $rktsky_notice_fields;
-	$rktsky_notice_bad['capability'] = array( 'moderate_comments' );
-	$rktsky_notice_response          = rktsky_notice_response( $rktsky_notice_hide, $rktsky_notice_bad );
-	rktsky_notice_expect( 400 === $rktsky_notice_response['status'] && ! ContextNotices::has_hidden(), 'An array capability must fail before native authorization.' );
-	$rktsky_notice_bad               = $rktsky_notice_fields;
-	$rktsky_notice_bad['capability'] = 'read';
-	$rktsky_notice_response          = rktsky_notice_response( $rktsky_notice_hide, $rktsky_notice_bad );
-	rktsky_notice_expect( 403 === $rktsky_notice_response['status'] && ! ContextNotices::has_hidden(), 'Changing the signed native capability must invalidate the rendered nonce.' );
+	foreach ( array( array( 'edit_user', $rktsky_notice_created['editor'] ), 'manage_options', 'do_not_allow' ) as $rktsky_notice_unused_capability ) {
+		$rktsky_notice_bad               = $rktsky_notice_fields;
+		$rktsky_notice_bad['capability'] = $rktsky_notice_unused_capability;
+		$rktsky_notice_bad['user_id']    = $rktsky_notice_created['editor'];
+		$rktsky_notice_bad['blog_id']    = 999999;
+		$rktsky_notice_response          = rktsky_notice_response( $rktsky_notice_hide, $rktsky_notice_bad );
+		rktsky_notice_expect( 302 === $rktsky_notice_response['status'] && array( 'comments' ) === ContextNotices::hidden() && false === get_user_option( ContextNotices::USER_OPTION, $rktsky_notice_created['editor'] ), 'Ignored capability/user/site fields must not select authorization or another preference owner.' );
+		rktsky_notice_response( $rktsky_notice_restore, array( 'rktsky_antispam_notices_nonce' => wp_create_nonce( ContextNotices::restore_nonce_action() ) ) );
+	}
 	$rktsky_notice_options['comments'] = false;
 	$rktsky_notice_response            = rktsky_notice_response( $rktsky_notice_hide, $rktsky_notice_fields );
 	rktsky_notice_expect( 403 === $rktsky_notice_response['status'] && ! ContextNotices::has_hidden(), 'Disabling protection after form rendering must invalidate a later hide request.' );
 	$rktsky_notice_options['comments'] = true;
 	foreach ( Providers::detected() as $rktsky_notice_provider => $rktsky_notice_available ) {
 		if ( ! $rktsky_notice_available ) {
-			$rktsky_notice_bad                                  = $rktsky_notice_fields;
-			$rktsky_notice_bad['provider']                      = $rktsky_notice_provider;
-			$rktsky_notice_bad['capability']                    = 'manage_options';
-			$rktsky_notice_bad['rktsky_antispam_notices_nonce'] = wp_create_nonce( 'rktsky_antispam_notice_hide|' . get_current_blog_id() . '|' . $rktsky_notice_provider . '|manage_options' );
-			$rktsky_notice_response                             = rktsky_notice_response( $rktsky_notice_hide, $rktsky_notice_bad );
-			rktsky_notice_expect( 403 === $rktsky_notice_response['status'] && ! ContextNotices::has_hidden(), 'An unavailable provider must be rejected even with an otherwise genuine signed capability.' );
+			$rktsky_notice_bad             = $rktsky_notice_fields;
+			$rktsky_notice_bad['provider'] = $rktsky_notice_provider;
+						$rktsky_notice_bad['rktsky_antispam_notices_nonce'] = wp_create_nonce( 'rktsky_antispam_notice_hide|' . get_current_blog_id() . '|' . $rktsky_notice_provider );
+			$rktsky_notice_response = rktsky_notice_response( $rktsky_notice_hide, $rktsky_notice_bad );
+			rktsky_notice_expect( 403 === $rktsky_notice_response['status'] && ! ContextNotices::has_hidden(), 'An unavailable provider must be rejected even with a genuine own-preference nonce.' );
 			break;
 		}
 	}
@@ -427,9 +427,12 @@ try {
 	rktsky_notice_expect( 403 === $rktsky_notice_response['status'], 'Restoring display preferences must also require an authenticated current account.' );
 	wp_set_current_user( $rktsky_notice_created['subscriber'] );
 	$rktsky_notice_bad                                  = $rktsky_notice_fields;
-	$rktsky_notice_bad['rktsky_antispam_notices_nonce'] = wp_create_nonce( 'rktsky_antispam_notice_hide|' . get_current_blog_id() . '|comments|moderate_comments' );
+	$rktsky_notice_bad['rktsky_antispam_notices_nonce'] = wp_create_nonce( 'rktsky_antispam_notice_hide|' . get_current_blog_id() . '|comments' );
 	$rktsky_notice_response                             = rktsky_notice_response( $rktsky_notice_hide, $rktsky_notice_bad );
-	rktsky_notice_expect( 403 === $rktsky_notice_response['status'] && ! ContextNotices::has_hidden(), 'A native subscriber cannot hide a moderator notice even with a current user-bound nonce.' );
+	rktsky_notice_expect( 302 === $rktsky_notice_response['status'] && array( 'comments' ) === ContextNotices::hidden(), 'A native subscriber may change only their own display preference with an authentic nonce.' );
+	rktsky_notice_expect( ! current_user_can( 'moderate_comments' ) && '' === rktsky_notice_html( $rktsky_notice_service, 'edit-comments' ), 'An own display preference must grant no native moderation or notice-view access.' );
+	rktsky_notice_response( $rktsky_notice_restore, array( 'rktsky_antispam_notices_nonce' => wp_create_nonce( ContextNotices::restore_nonce_action() ) ) );
+
 
 	wp_set_current_user( $rktsky_notice_created['administrator'] );
 	$rktsky_notice_fields['user_id'] = $rktsky_notice_created['editor'];
@@ -451,11 +454,26 @@ try {
 	wp_set_current_user( $rktsky_notice_created['editor'] );
 	rktsky_notice_expect( ! ContextNotices::has_hidden() && str_contains( rktsky_notice_html( $rktsky_notice_service, 'edit-comments' ), 'rktsky_antispam_notice_hide' ), 'Another real native account on the same site must retain the default visible notice.' );
 	$rktsky_notice_editor_fields = rktsky_notice_form( rktsky_notice_html( $rktsky_notice_service, 'edit-comments' ), 'rktsky_antispam_notice_hide' );
-	$rktsky_notice_editor        = wp_get_current_user();
-	$rktsky_notice_editor->set_role( 'subscriber' );
-	$rktsky_notice_response = rktsky_notice_response( $rktsky_notice_hide, $rktsky_notice_editor_fields );
-	rktsky_notice_expect( 403 === $rktsky_notice_response['status'] && ! ContextNotices::has_hidden(), 'A native role revocation after nonce creation must stop the same previously authorized user.' );
-	$rktsky_notice_editor->set_role( 'editor' );
+	/**
+	 * Revokes only the current actor's own-profile meta capability after nonce issuance.
+	 *
+	 * @since 0.5.6
+	 * @param string[] $required Original primitive capabilities.
+	 * @param string   $capability Requested native meta capability.
+	 * @param int      $user_id Current actor.
+	 * @param array    $arguments Original capability object identifiers.
+	 * @return string[] Native denial only for the selected own-preference case.
+	 */
+	$rktsky_notice_revoke = static function ( array $required, string $capability, int $user_id, array $arguments ) use ( $rktsky_notice_created ): array {
+		return 'edit_user' === $capability && $user_id === $rktsky_notice_created['editor'] && (int) ( $arguments[0] ?? 0 ) === $user_id ? array( 'do_not_allow' ) : $required;
+	};
+	add_filter( 'map_meta_cap', $rktsky_notice_revoke, PHP_INT_MAX, 4 );
+	try {
+		$rktsky_notice_response = rktsky_notice_response( $rktsky_notice_hide, $rktsky_notice_editor_fields );
+		rktsky_notice_expect( 403 === $rktsky_notice_response['status'] && ! ContextNotices::has_hidden(), 'Revoking own-profile permission after nonce issuance must prevent a preference change.' );
+	} finally {
+		remove_filter( 'map_meta_cap', $rktsky_notice_revoke, PHP_INT_MAX );
+	}
 	$rktsky_notice_editor_fields['_wp_http_referer'] = 'https://external.example/wp-admin/edit-comments.php';
 	$rktsky_notice_response                          = rktsky_notice_response( $rktsky_notice_hide, $rktsky_notice_editor_fields );
 	rktsky_notice_expect( current_user_can( 'moderate_comments' ) && ! current_user_can( 'manage_options' ) && 302 === $rktsky_notice_response['status'] && admin_url( 'profile.php' ) === $rktsky_notice_response['location'], 'A native editor must hide an authorized notice and receive an accessible own-profile fallback.' );

@@ -8,10 +8,10 @@
  * @package RktskyAntispam
  * @since 0.5.0
  * @since 0.5.5 Adds a nonce-bound, script-free preference for the current account.
+ * @since 0.5.6 Sends only provider scope; authorization stays on the server.
  * @var array<int,array{provider:string,name:string,handling:array}> $notices Visible active provider descriptions.
  * @var string $dismiss_providers Canonical fixed provider IDs shown by this notice.
- * @var string $dismiss_capability Server-resolved native capability, bound into the nonce.
- * @var string $dismiss_action Current-site native nonce action for this exact provider/capability pair.
+ * @var string $dismiss_action Current-site native nonce action for this provider scope.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -30,7 +30,6 @@ defined( 'ABSPATH' ) || exit;
 <form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post" class="rktsky-antispam-context-notice__preferences">
 	<input type="hidden" name="action" value="rktsky_antispam_notice_hide" />
 	<input type="hidden" name="provider" value="<?php echo esc_attr( $dismiss_providers ); ?>" />
-	<input type="hidden" name="capability" value="<?php echo esc_attr( $dismiss_capability ); ?>" />
 	<?php wp_nonce_field( $dismiss_action, 'rktsky_antispam_notices_nonce' ); ?>
 	<button type="submit" class="button" aria-describedby="rktsky-antispam-notice-preferences"><?php esc_html_e( 'Hide this notice', 'rocketsky-antispam' ); ?></button>
 	<p id="rktsky-antispam-notice-preferences"><?php esc_html_e( 'Notice preferences apply only to your account on this website. They do not change protection.', 'rocketsky-antispam' ); ?> <a href="<?php echo esc_url( admin_url( 'profile.php' ) ); ?>"><?php esc_html_e( 'Your profile', 'rocketsky-antispam' ); ?></a></p>

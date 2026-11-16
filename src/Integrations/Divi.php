@@ -202,6 +202,7 @@ final class Divi extends Adapter {
 	 * its permalink; private slugs are never disclosed by this early response.
 	 *
 	 * @since 0.3.0
+	 * @since 0.5.6 Filters only the owned error fragment at the terminating HTML boundary.
 	 * @param string $target Bounded native numeric/UUID container suffix.
 	 * @return void Terminates the current native page request through wp_die.
 	 */
@@ -221,7 +222,20 @@ final class Divi extends Adapter {
 		$html = '<div id="' . esc_attr( $container ) . '"><div class="et-pb-contact-message"><p class="et_pb_contact_error_text" role="alert">' . esc_html( $this->guard->message() ) . '</p><p><a href="' . esc_url( $reload ) . '">' . esc_html__( 'Reload the form', 'rocketsky-antispam' ) . '</a></p></div></div>';
 		nocache_headers();
 		wp_die(
-			$html, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Every dynamic fragment is escaped for its HTML context above.
+			wp_kses(
+				$html,
+				array(
+					'div' => array(
+						'id'    => true,
+						'class' => true,
+					),
+					'p'   => array(
+						'class' => true,
+						'role'  => true,
+					),
+					'a'   => array( 'href' => true ),
+				)
+			),
 			'Rocketsky Antispam',
 			array(
 				'response'  => $ajax ? 200 : 403,

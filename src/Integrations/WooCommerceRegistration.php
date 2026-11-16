@@ -8,6 +8,8 @@
 
 namespace Rktsky\Antispam\Integrations;
 
+use Rktsky\Antispam\Fields;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -35,10 +37,11 @@ final class WooCommerceRegistration extends Adapter {
 	 * Prints escaped local controls inside the native registration form.
 	 *
 	 * @since 0.3.0
+	 * @since 0.5.6 Filters the owned fragment at the final HTML output boundary.
 	 * @return void
 	 */
 	public function render(): void {
-		echo $this->fields->markup( 'wc_registration', 'register' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Fields::markup() escapes its own complete output.
+		echo wp_kses( $this->fields->markup( 'wc_registration', 'register' ), Fields::allowed_html() );
 	}
 
 	/**

@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/rktsky/rocketsky-antispam
  * Update URI: https://github.com/rktsky/rocketsky-antispam
  * Description: Free local spam protection for comments and forms. No added CAPTCHA or external spam service.
- * Version: 0.5.5
+ * Version: 0.5.6
  * Requires at least: 6.6
  * Requires PHP: 8.2
  * Author: Rocketsky
@@ -30,7 +30,7 @@ if ( ! ( new Rktsky\Antispam\Installation( __FILE__ ) )->register() ) {
 	return;
 }
 
-define( 'RKTSKY_ANTISPAM_VERSION', '0.5.5' );
+define( 'RKTSKY_ANTISPAM_VERSION', '0.5.6' );
 define( 'RKTSKY_ANTISPAM_FILE', __FILE__ );
 
 // Explicit local includes avoid filesystem discovery and third-party autoloaders.

@@ -8,7 +8,7 @@
 
 namespace Rktsky\Antispam\Integrations;
 
-use Rktsky\Antispam\Guard;
+use Rktsky\Antispam\{Fields, Guard};
 
 defined( 'ABSPATH' ) || exit;
 
@@ -60,12 +60,13 @@ final class Fluent extends Adapter {
 	 * Adds controls after the actual native opening form tag.
 	 *
 	 * @since 0.3.0
+	 * @since 0.5.6 Filters the owned fragment at the final HTML output boundary.
 	 * @param object $form Native form definition.
 	 * @return void
 	 */
 	public function render( $form ): void {
 		if ( is_object( $form ) && isset( $form->id ) && is_numeric( $form->id ) && (int) $form->id > 0 ) {
-			echo $this->fields->markup( 'fluentforms', (string) (int) $form->id ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- The shared renderer escapes its complete inside-form controls.
+			echo wp_kses( $this->fields->markup( 'fluentforms', (string) (int) $form->id ), Fields::allowed_html() );
 		}
 	}
 

@@ -125,6 +125,37 @@ final class Fields {
 	}
 
 	/**
+	 * Defines only the server-rendered protection fragment for late HTML filtering.
+	 *
+	 * Callers apply native wp_kses() at their final output boundary. This contract
+	 * follows templates/fields.php; it must never filter a provider's complete form.
+	 * The browser creates its honeypot after rendering, outside this server fragment.
+	 *
+	 * @since 0.5.6
+	 * @return array<string,array<string,bool>> Exact owned element and attribute names.
+	 */
+	public static function allowed_html(): array {
+		return array(
+			'span'     => array(
+				'hidden'           => true,
+				'data-rk-antispam' => true,
+				'data-provider'    => true,
+				'data-form'        => true,
+				'data-intent'      => true,
+				'data-endpoint'    => true,
+			),
+			'input'    => array(
+				'type'         => true,
+				'name'         => true,
+				'value'        => true,
+				'autocomplete' => true,
+			),
+			'noscript' => array(),
+			'p'        => array(),
+		);
+	}
+
+	/**
 	 * Supplies a signed descriptor for forms whose native renderer replaces children.
 	 *
 	 * Values remain unescaped until their adapter writes HTML attributes. The

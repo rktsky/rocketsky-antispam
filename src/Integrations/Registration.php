@@ -8,6 +8,8 @@
 
 namespace Rktsky\Antispam\Integrations;
 
+use Rktsky\Antispam\Fields;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -66,10 +68,11 @@ final class Registration extends Adapter {
 	 * Core prints enqueued footer scripts through its login_footer action.
 	 *
 	 * @since 0.3.0
+	 * @since 0.5.6 Filters the owned fragment at the final HTML output boundary.
 	 * @return void
 	 */
 	public function fields(): void {
-		echo $this->fields->markup( 'registration', 'register' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Fields renders escaped fixed markup.
+		echo wp_kses( $this->fields->markup( 'registration', 'register' ), Fields::allowed_html() );
 	}
 
 	/**
@@ -105,12 +108,13 @@ final class Registration extends Adapter {
 	 * Adds a fresh proof to both anonymous account and account-with-site stages.
 	 *
 	 * @since 0.3.0
+	 * @since 0.5.6 Filters the owned fragment at the final HTML output boundary.
 	 * @param string $stage Native rendering stage, not a posted authorization value.
 	 * @return void
 	 */
 	public function signup_fields( string $stage ): void {
 		if ( in_array( $stage, array( 'validate-user', 'validate-site' ), true ) && ! is_user_logged_in() ) {
-			echo $this->fields->markup( 'registration', 'signup' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Fields renders escaped fixed markup.
+			echo wp_kses( $this->fields->markup( 'registration', 'signup' ), Fields::allowed_html() );
 		}
 	}
 

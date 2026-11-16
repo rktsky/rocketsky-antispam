@@ -84,12 +84,12 @@ final class Comments extends Adapter {
 	 * Renders protection inside the native comment form for its actual post ID.
 	 *
 	 * @since 0.1.0
+	 * @since 0.5.6 Filters the owned fragment at the final HTML output boundary.
 	 * @param int $post_id Post receiving comments.
 	 * @return void
 	 */
 	public function comment_fields( $post_id ): void {
-		// Fields escapes its own fixed markup and does not include user content.
-		echo $this->fields->markup( 'comments', (string) absint( $post_id ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by Fields::markup().
+		echo wp_kses( $this->fields->markup( 'comments', (string) absint( $post_id ) ), Fields::allowed_html() );
 	}
 
 	/**
