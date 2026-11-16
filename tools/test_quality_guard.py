@@ -66,7 +66,8 @@ class QualityGuardTest(unittest.TestCase):
         self.assertEqual("pass", result["status"])
         self.assertEqual(0, result["escape_output_suppressions"])
         self.assertGreater(result["reviewed_annotations"], 0)
-        self.assertIn("structurally", result["scope"])
+        self.assertIn("not executed here", result["scope"])
+        self.assertEqual(len(self.inventory["evidence_hashes"]), result["content_bound_evidence_files"])
 
     def test_discovery_does_not_approve_or_write(self) -> None:
         """Discovery identifies itself as unreviewed and leaves its input bytes untouched. Since 0.5.6."""
@@ -158,6 +159,22 @@ class QualityGuardTest(unittest.TestCase):
         next(iter(self.inventory["groups"].values()))["evidence"][0]["path"] = "tests/nonexistent.php"
         self.write_inventory()
         self.rejects("Missing or underspecified")
+
+    def test_empty_php_replacement_cannot_preserve_evidence(self) -> None:
+        """Replacing the real notice suite with valid assertion-free PHP invalidates its review. Since 0.5.6."""
+        (self.root / "tests/context-notices.php").write_text("<?php\n// No assertions remain in this synthetic mutation.\n")
+        self.rejects("Referenced check contents changed.*tests/context-notices.php")
+
+    def test_benign_evidence_comments_preserve_code_contract(self) -> None:
+        """Normal test comments and PHP indentation do not require a new behavioral review. Since 0.5.6."""
+        self.replace("tests/context-notices.php", "<?php\n", "<?php\n// A new explanatory comment without a code change.\n\n")
+        self.assertEqual("pass", check_quality(self.root, PHP)["status"])
+
+    def test_unfilled_evidence_hash_blocks(self) -> None:
+        """A candidate evidence hash remains a blocking open review rather than a provisional pass. Since 0.5.6."""
+        self.inventory["evidence_hashes"]["tests/context-notices.php"]["sha256"] = "pending"
+        self.write_inventory()
+        self.rejects("unreviewed or unfilled content hash")
 
     def test_builder_rejects_clean_but_unreviewed_candidate(self) -> None:
         """The immutable builder blocks exception drift before it writes any archive. Since 0.5.6."""

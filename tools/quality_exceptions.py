@@ -265,6 +265,37 @@ def nonempty(value: object) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
 
+def evidence_paths(inventory: dict) -> set[str]:
+    """Collect the exact referenced checks without treating their presence as proof. Since 0.5.6."""
+    paths = set()
+    for group in inventory.get("groups", {}).values():
+        for proof in group.get("evidence", []):
+            if not nonempty(proof.get("path")):
+                raise QualityError("A referenced check needs its explicit project path.")
+            paths.add(proof["path"])
+    return paths
+
+
+def evidence_contracts(root: Path, paths: set[str], php: str) -> dict:
+    """Fingerprint real check contents, lexing PHP as data without running tests. Since 0.5.6."""
+    root = root.resolve()
+    contracts = {}
+    php_sources = {}
+    for relative in sorted(paths):
+        candidate = root / relative
+        if root not in candidate.resolve().parents or candidate.is_symlink() or not candidate.is_file():
+            raise QualityError("Missing or nonlocal referenced check: " + relative)
+        if candidate.suffix == ".php":
+            php_sources[relative] = candidate.read_text(encoding="utf-8")
+        else:
+            contracts[relative] = {"method": "file-sha256", "sha256": hashlib.sha256(candidate.read_bytes()).hexdigest()}
+    if php_sources:
+        native = native_tokens(php_sources, php)
+        for relative, tokens in native["files"].items():
+            contracts[relative] = {"method": "php-code-sha256-v1", "sha256": code_hash(tokens)}
+    return dict(sorted(contracts.items()))
+
+
 def check_quality(root: Path, php: str | None = None) -> dict:
     """Reject unreviewed, stale, changed and prohibited exceptions; do not mutate. Since 0.5.6."""
     root = root.resolve()
@@ -307,12 +338,24 @@ def check_quality(root: Path, php: str | None = None) -> dict:
     actual_xml = Counter(json.dumps(entry, sort_keys=True) for entry in observed["ruleset"]["exclusions"])
     if actual_xml != Counter(expected_xml):
         raise QualityError("Ruleset exclusions differ from their exact reviewed inventory.")
+    paths = evidence_paths(inventory)
+    bound = inventory.get("evidence_hashes")
+    if not isinstance(bound, dict) or set(bound) != paths:
+        raise QualityError("Referenced checks need an exact content-bound inventory; missing or stale evidence hashes require review.")
+    for relative, expected_contract in bound.items():
+        if not isinstance(expected_contract, dict) or set(expected_contract) != {"method", "sha256"} or not isinstance(expected_contract.get("sha256"), str) or not re.fullmatch(r"[0-9a-f]{64}", expected_contract["sha256"]):
+            raise QualityError("Referenced check has an unreviewed or unfilled content hash: " + relative)
+    current_contracts = evidence_contracts(root, paths, php_command(php))
+    changed = [path for path in sorted(paths) if bound[path] != current_contracts[path]]
+    if changed:
+        raise QualityError("Referenced check contents changed and need review: " + ", ".join(changed))
     return {"status": "pass", "production_php_files": observed["production_php_files"],
             "php_version": observed["php_version"], "inventory_sha256": hashlib.sha256(inventory_path.read_bytes()).hexdigest(),
             "ruleset_sha256": observed["ruleset"]["sha256"],
             "reviewed_annotations": len(observed["annotations"]), "reviewed_ruleset_exclusions": sum(actual_xml.values()),
+            "content_bound_evidence_files": len(paths),
             "escape_output_suppressions": 0,
-            "scope": "Configured PHPCS exceptions and their lexical boundaries; test coverage references are checked structurally, not executed here."}
+            "scope": "Configured PHPCS exception boundaries and content hashes of referenced checks; their behavior is not executed here."}
 
 
 def main() -> int:
@@ -323,7 +366,14 @@ def main() -> int:
     parser.add_argument("--report", action="store_true", help="Print current unreviewed observations without modifying the inventory.")
     arguments = parser.parse_args()
     try:
-        result = observe(arguments.root.resolve(), php_command(arguments.php)) if arguments.report else check_quality(arguments.root, arguments.php)
+        if arguments.report:
+            result = observe(arguments.root.resolve(), php_command(arguments.php))
+            inventory_path = arguments.root / INVENTORY
+            if inventory_path.is_file() and not inventory_path.is_symlink():
+                inventory = json.loads(inventory_path.read_text(encoding="utf-8"))
+                result["evidence_hashes"] = evidence_contracts(arguments.root, evidence_paths(inventory), php_command(arguments.php))
+        else:
+            result = check_quality(arguments.root, arguments.php)
         print(json.dumps(result, indent=2))
         return 0
     except (QualityError, OSError, ET.ParseError, json.JSONDecodeError) as error:

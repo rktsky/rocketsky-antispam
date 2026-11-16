@@ -854,6 +854,14 @@
         {
           "path": "tests/native.php",
           "covers": "Real signed proofs are bounded, expire and cannot be consumed twice."
+        },
+        {
+          "path": "tests/fixtures/core-kses.php",
+          "covers": "Isolated adapter suites load unchanged original Core KSES and its parser dependencies. Fixture hooks require empty recognized registries; native output tests separately exercise complete Core hooks and protocol configuration."
+        },
+        {
+          "path": "tests/output-boundaries.php",
+          "covers": "Source-discovered field consumers use native KSES at owned-fragment outputs and return hooks. Real DOM assertions preserve signed controls, noscript content and independent provider HTML while rejecting hostile attributes."
         }
       ],
       "annotations": [
@@ -1501,6 +1509,96 @@
           "name": "WordPress.Files.FileName.NotHyphenatedLowercase"
         }
       ]
+    }
+  },
+  "evidence_hashes": {
+    "tests/content-rules.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "b8f7aa9cd4691b214967650c86499e4544d51c9945e3d92adc62807c3495d59d"
+    },
+    "tests/context-notices.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "dc8575d7c81c24de4895a9dda7e0266a597e1997b828a6ef2a0de4add17d46fd"
+    },
+    "tests/email.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "3f7b42a3964de03886fbf06e08b746be09b467d92b3d9bcf768581ae389da67c"
+    },
+    "tests/feedback.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "895e37547fbd0b05ada386255172dd711490c03d5ce0dd50ce069ebf150d05d3"
+    },
+    "tests/fixtures/core-kses.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "0b6a475937118524f13e5402f146aaa88dcee94941fe4bce203e62e87de62d78"
+    },
+    "tests/gravity-feedback.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "1eada6d7cf02d84f83566d17d2a020088a9dde3d41e50c6f185fbc6ca4f8853d"
+    },
+    "tests/integrations.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "51f20562caa561fe87361c3e8b443f391cddabadddffec39488a8cc59440ef9e"
+    },
+    "tests/multisite.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "e63b722aff84b7e3bb5421201687b87d5854bca35412d588127078c3366a4004"
+    },
+    "tests/native-admin.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "d4292cc19f29519daa47c8304b80b424b243f0567977b151f7b618e2e537bb04"
+    },
+    "tests/native-cf7-spam.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "333b0bbc75e90b50f63feb5ba1b64a28abffcca1353e820582ea92042bcc7146"
+    },
+    "tests/native-provider-feedback.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "434467b8c3947b53cdc0905d8c04651f6e924b8551e9f61f880d7cb4621f43bd"
+    },
+    "tests/native-rename.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "a5841050e5344581e89a3e0466786577f2b7010d95015295b053e743faa436ab"
+    },
+    "tests/native-woocommerce.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "bf7185ca4b307be984a26c77aa982e992a8b90a5741fd44c86b2837465a59a64"
+    },
+    "tests/native-wpforms-pro.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "75861f6a1c1283a1ee0797d8f52688bb34f5e66c61fde03d667776189820e3e2"
+    },
+    "tests/native.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "b927c8fd660264d7df758b520c96e7c604527f042e2f6594eeaace702064f786"
+    },
+    "tests/output-boundaries.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "0f0bce5bdc2505c5bee68766d1ccf77727183346fd28deb86c8de8b0e7cef930"
+    },
+    "tests/pattern-limits.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "619a60a1ee51850e59c7a77e061900209eca0a0050d8e247e4ed6ff8f2d95829"
+    },
+    "tests/policies.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "0191914de0743f0e87cea86c81ebbe4a1333741dffe49bb69b3a5e7f0b48039b"
+    },
+    "tests/provider-divi.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "ff4b41257e0db7d5df88309fed59f76475b7b4ef8ab9456902803968b46a5ad1"
+    },
+    "tests/quarantine.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "54587e6d308d500ac6fa2a2143427965e02ac3f5ae391a6586074f915168450b"
+    },
+    "tests/timezones.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "a6763a0cda0ec9e3268ff012a182d09e352a7835170ebe1167de3bd14d82be2a"
+    },
+    "tests/uninstall.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "951f6995096e7eb50be86e54b486fafc5dc04ab7bf5123e6e943413e1566e23b"
     }
   }
 }
