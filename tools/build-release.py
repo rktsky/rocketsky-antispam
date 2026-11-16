@@ -13,6 +13,8 @@ import subprocess
 import time
 import zipfile
 
+from quality_exceptions import check_quality
+
 
 class ReleaseBuilder:
 	"""Keep directory and GitHub packages auditable without editing source. Since 0.5.2."""
@@ -22,7 +24,7 @@ class ReleaseBuilder:
 	DIRECTORIES = frozenset({"src", "templates", "assets", "languages"})
 	UPDATE_HEADER = b" * Update URI: https://github.com/rktsky/rocketsky-antispam\n"
 
-	def __init__(self, root: Path, channel: str, output: Path) -> None:
+	def __init__(self, root: Path, channel: str, output: Path, php: str | None = None) -> None:
 		"""Bind one clean checkout and an external artifact directory. Since 0.5.2."""
 		self.root = root.resolve()
 		self.channel = channel
@@ -31,6 +33,8 @@ class ReleaseBuilder:
 			raise ValueError("Artifacts must be outside the source checkout.")
 		if self.git("status", "--porcelain").strip():
 			raise ValueError("Commit the reviewed source before building a release.")
+		# Verify local exception scope before producing any artifact; no vendor or remote CI dependency.
+		self.quality = check_quality(self.root, php)
 		self.commit = self.git("rev-parse", "HEAD").decode().strip()
 		self.production_commit = self.git("log", "-1", "--format=%H", self.commit, "--", *sorted(self.ROOT_FILES), *sorted(self.DIRECTORIES)).decode().strip()
 
@@ -107,6 +111,7 @@ class ReleaseBuilder:
 			"channel": self.channel, "source_commit": self.commit, "production_commit": self.production_commit,
 			"archive": name + ".zip", "bytes": len(payload), "sha256": digest,
 			"transformations": ["Remove GitHub-specific Update URI header"] if self.channel == "wordpress-org" else [],
+			"quality_exceptions": self.quality,
 			"files": {self.SLUG + "/" + path: hashlib.sha256(content).hexdigest() for path, content in files.items()},
 		}
 		outputs = {
@@ -132,8 +137,9 @@ def main() -> None:
 	parser = argparse.ArgumentParser(description=__doc__)
 	parser.add_argument("--channel", required=True, choices=("wordpress-org", "github"))
 	parser.add_argument("--output", required=True, type=Path)
+	parser.add_argument("--php", help="Native PHP executable/wrapper for the exception guard; RKTSKY_ANTISPAM_PHP or PATH is the fallback.")
 	arguments = parser.parse_args()
-	builder = ReleaseBuilder(Path(__file__).resolve().parents[1], arguments.channel, arguments.output)
+	builder = ReleaseBuilder(Path(__file__).resolve().parents[1], arguments.channel, arguments.output, arguments.php)
 	print(json.dumps(builder.build(), indent=2))
 
 

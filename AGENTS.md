@@ -1,6 +1,6 @@
 # Rocketsky Antispam development
 
-- Apply the user's wordpress-plugin-development skill and global original-package/editorial rules.
+- Apply the user's development-quality and wordpress-plugin-development skills and global original-package/editorial rules.
 - This is independently authored plugin source; WordPress and form providers stay unchanged.
 - Namespace `Rktsky\Antispam`; prefix persistent names, handles and public routes with `rktsky_antispam`.
 - Public name, distribution slug and text domain are Rocketsky Antispam / `rocketsky-antispam` since 0.5.1. Keep the existing `rktsky` storage, cryptographic purpose strings, native provider source IDs and protocol stable; the name change must not reset retained data. Legacy identifiers in the installation guard, upgrade tests and historical evidence are intentional compatibility inputs.
@@ -20,3 +20,5 @@
 - Additional narrow permission granted on 2026-11-07: after consuming one authentic local proof, the documented Fluent Forms Submission model may insert at most one spam record into its existing fluentform_submissions table, using only form ID, native serial number, bounded declared text/choice fields, status and timestamps. No IP, browser/device, source URL, user ID, password, hidden, file or payment data; no schema changes or updates to existing provider records. This is the specific exception for the missing safe native spam-insertion workflow, not permission for other provider SQL/ORM operations.
 
 - Keep the product overview in WordPress.org's Additional Information field. Do not replace it with a release summary; update the version and verification references as needed. Release changes belong in the changelog and verification documentation.
+
+- Review effective check configuration, inline suppressions and excluded rules before release. Prefer native sanitization/domain validation at request boundaries and contextual escaping at every terminal output, including shared HTML helpers and error responses. A helper comment or configured zero-warning result is not evidence for an omitted check. Maintain the project exception inventory with its code scope, official contract and actual compensating tests; new/widened or stale exceptions must fail early checks. Preserve signed protocol bytes through strict validation rather than lossy text cleaning.

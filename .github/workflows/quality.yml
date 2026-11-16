@@ -29,6 +29,10 @@ jobs:
           extensions: dom, xml, xmlreader, tokenizer, mbstring
           tools: composer:v2
           coverage: none
+      - name: Verify reviewed checker exceptions before installing development packages
+        run: composer quality:exceptions
+      - name: Exercise exception inventory mutations in disposable source copies
+        run: python3 tools/test_quality_guard.py
       - run: composer install --no-interaction --no-progress
       - run: composer lint
       - run: composer standards
@@ -111,6 +115,7 @@ jobs:
         run: php tests/email.php
       - run: php tests/native-admin.php
       - run: php tests/context-notices.php
+      - run: php tests/output-boundaries.php
       - run: php tests/translations.php
       - run: php tests/native-spam-routing.php
       - run: php tests/registration.php
@@ -182,6 +187,7 @@ jobs:
           wp config set WP_HTTP_BLOCK_EXTERNAL true --raw --path="$RKTSKY_ANTISPAM_WP_ROOT"
       - run: php tests/prepare-woocommerce.php
       - run: php tests/native-woocommerce.php
+      - run: php tests/output-boundaries.php
 
   extra-forms:
     runs-on: ubuntu-latest
@@ -242,6 +248,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: shivammathur/setup-php@d52fc211a0436f8839a587b3b5b8efddab4744ea # v2
+        with:
+          php-version: '8.3'
+          extensions: tokenizer
+          tools: none
+          coverage: none
       - name: Build and extract the exact WordPress.org submission archive
         run: |
           python3 tools/build-release.py --channel wordpress-org --output /tmp/rocketsky-antispam-distribution

@@ -18,7 +18,11 @@
 	},
 	"scripts": {
 		"lint": "@php tests/lint.php",
-		"standards": "phpcs --standard=phpcs.xml.dist",
+		"quality:exceptions": "python3 tools/quality_exceptions.py",
+		"standards": [
+			"@quality:exceptions",
+			"phpcs --standard=phpcs.xml.dist"
+		],
 		"test:native": "@php tests/native.php"
 	}
 }

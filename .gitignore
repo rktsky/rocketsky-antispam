@@ -3,4 +3,6 @@
 /build/
 /.phpunit.cache/
 /node_modules/
+/tools/__pycache__/
+/tests/__pycache__/
 .DS_Store
