@@ -513,7 +513,7 @@ final class GravityForms extends Adapter {
 	 * @param string $context Provider-supplied validation context.
 	 * @return array Original result or a visible technical protection failure.
 	 */
-	public function check_resume_email( array $result, $value, array $form, $field, string $context = '' ): array { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Recipient content never enters technical verification.
+	public function check_resume_email( array $result, $value, array $form, $field, string $context = '' ): array {
 		if ( 'send-link-submit' !== $context || ! is_object( $field ) || 'gform_resume_email' !== ( $field->id ?? null ) || empty( $form['id'] ) ) {
 			return $result;
 		}
@@ -543,7 +543,7 @@ final class GravityForms extends Adapter {
 	 * @param array|false $entry Native draft context or a direct-mail sentinel.
 	 * @return array Original arguments or the native abort-email flag.
 	 */
-	public function guard_resume_mail( array $email, string $format, $notification, $entry ): array { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Mail format and contents are never processed by protection.
+	public function guard_resume_mail( array $email, string $format, $notification, $entry ): array {
 		if ( ! is_array( $notification ) || 'form_save_email_requested' !== ( $notification['event'] ?? '' ) || ! empty( $email['abort_email'] ) ) {
 			return $email;
 		}

@@ -6,7 +6,7 @@
  * @since 0.3.0
  */
 require __DIR__ . '/bootstrap.php';
-require_once dirname( __DIR__ ) . '/src/Integrations/Registration.php';
+require_once dirname( __DIR__ ) . '/src/Integrations/class-registration.php';
 
 /**
  * Requires an observable pre-creation boundary without dumping account content.

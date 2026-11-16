@@ -9,7 +9,7 @@
 defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 
 if ( ! class_exists( Rktsky\Antispam\Installation::class, false ) ) {
-	require_once __DIR__ . '/src/Installation.php';
+	require_once __DIR__ . '/src/class-installation.php';
 }
 ( new Rktsky\Antispam\Installation( __DIR__ . '/rocketsky-antispam.php' ) )->uninstall();
 

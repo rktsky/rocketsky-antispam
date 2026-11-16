@@ -7,6 +7,6 @@
  */
 require __DIR__ . '/bootstrap.php';
 if ( ! class_exists( '\Rktsky\Antispam\Quarantine' ) ) {
-	require dirname( __DIR__ ) . '/src/Quarantine.php';
+	require dirname( __DIR__ ) . '/src/class-quarantine.php';
 }
 ( new \Rktsky\Antispam\Quarantine( new \Rktsky\Antispam\Settings() ) )->capture( 'comments', '42', 'honeypot', array( 'Message' => 'Synthetic concurrent quarantine test.' ), 'fixture@example.invalid' );

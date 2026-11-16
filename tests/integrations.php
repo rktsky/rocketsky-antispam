@@ -478,7 +478,7 @@ namespace {
 	}
 
 	require __DIR__ . '/fixtures/core-kses.php';
-	require dirname( __DIR__ ) . '/src/Integrations.php';
+	require dirname( __DIR__ ) . '/src/class-integrations.php';
 
 	integration_expect( array_intersect_key( \Rktsky\Antispam\Integrations::detected(), array_flip( array( 'comments', 'cf7', 'gravityforms', 'wpforms' ) ) ) === array( 'comments' => true, 'cf7' => false, 'gravityforms' => false, 'wpforms' => false ), 'Absent providers must not be detected.' );
 	list( $settings, $guard, $fields, $adapter ) = integration_fixture();
@@ -608,7 +608,7 @@ namespace {
 	$settings->disabled = array();
 	$adapter->register();
 	integration_expect( 2 === $GLOBALS['integration_hooks']['gform_entry_is_spam'][2] && 1 === $GLOBALS['integration_hooks']['wpforms_process_before_form_data'][2], 'GF spam observation and WPForms lifecycle reset must not request unused native entry payloads.' );
-	require_once dirname( __DIR__ ) . '/src/Integrations/WooCommerceCheckout.php';
+	require_once dirname( __DIR__ ) . '/src/Integrations/class-woocommercecheckout.php';
 	$checkout = new \Rktsky\Antispam\Integrations\WooCommerceCheckout( $settings, $guard, $fields );
 	$checkout->register();
 	integration_expect( 2 === $GLOBALS['integration_hooks']['rest_dispatch_request'][2], 'Store API dispatch protection must request only the prior result and parsed request.' );

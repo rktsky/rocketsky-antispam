@@ -260,9 +260,9 @@ namespace {
 		++$GLOBALS['extra_assertions'];
 		if ( ! $condition ) {
 			throw new RuntimeException( $message );}}
-	require dirname( __DIR__ ) . '/src/Integrations/Adapter.php';
+	require dirname( __DIR__ ) . '/src/Integrations/class-adapter.php';
 	foreach ( array( 'Formidable', 'Fluent', 'WsForm', 'Elementor' ) as $class ) {
-		require dirname( __DIR__ ) . '/src/Integrations/' . $class . '.php';}
+		require dirname( __DIR__ ) . '/src/Integrations/class-' . strtolower( $class ) . '.php';}
 	$settings   = new \Rktsky\Antispam\Settings();
 	$guard      = new \Rktsky\Antispam\Guard();
 	$fields     = new \Rktsky\Antispam\Fields();

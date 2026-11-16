@@ -25,9 +25,4 @@
 			</property>
 		</properties>
 	</rule>
-	<!-- Explicit class loader uses PSR-style class filenames. -->
-	<rule ref="WordPress.Files.FileName">
-		<exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
-		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
-	</rule>
 </ruleset>

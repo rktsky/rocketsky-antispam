@@ -18,8 +18,8 @@ require __DIR__ . '/bootstrap.php';
 if ( ! defined( 'ELEMENTOR_PRO_VERSION' ) || ! class_exists( Form_Record::class ) || ! class_exists( Ajax_Handler::class ) ) {
 	throw new RuntimeException( 'Original Elementor and Elementor Pro plugins are required.' );
 }
-require_once dirname( __DIR__ ) . '/src/Integrations/Adapter.php';
-require_once dirname( __DIR__ ) . '/src/Integrations/Elementor.php';
+require_once dirname( __DIR__ ) . '/src/Integrations/class-adapter.php';
+require_once dirname( __DIR__ ) . '/src/Integrations/class-elementor.php';
 
 $rktsky_elementor_assertions = 0;
 

@@ -454,7 +454,7 @@ final class Feedback {
 	 * @param string    $key Native metadata key, inspected only for content fields.
 	 * @return void
 	 */
-	public function flamingo_meta_update( $meta_id, $id, string $key ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundBeforeLastUsed -- The native metadata hook supplies this unused identifier first.
+	public function flamingo_meta_update( $meta_id, $id, string $key ): void {
 		if ( ! ( str_starts_with( $key, '_field_' ) || in_array( $key, array( '_from', '_from_name', '_from_email', '_subject', '_fields', '_consent' ), true ) ) || 'flamingo_inbound' !== get_post_type( $id ) ) {
 			return;
 		}

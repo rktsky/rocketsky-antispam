@@ -96,7 +96,7 @@ function rktsky_rules_fixture( array $options ): Rktsky\Antispam\ContentRules {
 }
 
 foreach ( array( 'Providers', 'Settings', 'Language', 'Country', 'ContentRules' ) as $class ) {
-	require dirname( __DIR__ ) . '/src/' . $class . '.php';
+	require dirname( __DIR__ ) . '/src/class-' . strtolower( $class ) . '.php';
 }
 
 $rules = rktsky_rules_fixture( array() );

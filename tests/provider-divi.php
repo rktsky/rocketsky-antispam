@@ -314,8 +314,8 @@ namespace {
 		require_once $wp_root . '/wp-includes/utf8.php'; }
 	foreach ( array( 'span', 'attribute-token', 'text-replacement', 'decoder', 'tag-processor' ) as $name ) {
 		require_once $wp_root . '/wp-includes/html-api/class-wp-html-' . $name . '.php'; }
-	require dirname( __DIR__ ) . '/src/Integrations/Adapter.php';
-	require dirname( __DIR__ ) . '/src/Integrations/Divi.php';
+	require dirname( __DIR__ ) . '/src/Integrations/class-adapter.php';
+	require dirname( __DIR__ ) . '/src/Integrations/class-divi.php';
 	$settings = new \Rktsky\Antispam\Settings();
 	$guard    = new \Rktsky\Antispam\Guard();
 	$adapter  = new \Rktsky\Antispam\Integrations\Divi( $settings, $guard, new \Rktsky\Antispam\Fields(), new \Rktsky\Antispam\Quarantine() );

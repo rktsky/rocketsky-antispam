@@ -11,7 +11,7 @@ use Rktsky\Antispam\Settings;
 
 require __DIR__ . '/bootstrap.php';
 if ( ! class_exists( Quarantine::class ) ) {
-	require dirname( __DIR__ ) . '/src/Quarantine.php';
+	require dirname( __DIR__ ) . '/src/class-quarantine.php';
 }
 $rktsky_quarantine_assertions = 0;
 

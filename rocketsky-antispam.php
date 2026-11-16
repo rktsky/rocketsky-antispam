@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) || exit;
 
 // The renamed copy must not redefine services while a legacy copy is still active.
 if ( ! class_exists( Rktsky\Antispam\Installation::class, false ) ) {
-	require_once __DIR__ . '/src/Installation.php';
+	require_once __DIR__ . '/src/class-installation.php';
 }
 if ( ! ( new Rktsky\Antispam\Installation( __FILE__ ) )->register() ) {
 	return;
@@ -35,7 +35,7 @@ define( 'RKTSKY_ANTISPAM_FILE', __FILE__ );
 
 // Explicit local includes avoid filesystem discovery and third-party autoloaders.
 foreach ( array( 'Providers', 'Settings', 'Dates', 'Country', 'Language', 'ContentRules', 'Token', 'Store', 'Quarantine', 'Feedback', 'NativeFeedback', 'WpFormsFeedback', 'Guard', 'Fields', 'Integrations', 'SpamHandling', 'ContextNotices', 'Admin', 'Dashboard', 'Digest', 'Maintenance', 'Network', 'Plugin' ) as $rktsky_antispam_class ) {
-	require_once __DIR__ . '/src/' . $rktsky_antispam_class . '.php';
+	require_once __DIR__ . '/src/class-' . strtolower( $rktsky_antispam_class ) . '.php';
 }
 unset( $rktsky_antispam_class );
 

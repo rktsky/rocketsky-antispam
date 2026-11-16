@@ -87,7 +87,7 @@ function rktsky_output_expect( bool $condition, string $message ): void {
 function rktsky_output_inventory(): array {
 	$found = array();
 	foreach ( Providers::ADAPTERS as $class ) {
-		$tokens = token_get_all( file_get_contents( dirname( __DIR__ ) . '/src/Integrations/' . $class . '.php' ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reads owned source to cover markup producers, appenders and terminal output.
+		$tokens = token_get_all( file_get_contents( dirname( __DIR__ ) . '/src/Integrations/class-' . strtolower( $class ) . '.php' ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reads owned source to cover markup producers, appenders and terminal output.
 		$method = '';
 		foreach ( $tokens as $index => $token ) {
 			if ( is_array( $token ) && T_FUNCTION === $token[0] ) {
@@ -211,7 +211,7 @@ try {
 	$rktsky_output_guard    = new Guard( $rktsky_output_settings, $rktsky_output_token, new Store(), new ContentRules( $rktsky_output_settings, new Language(), new Country( $rktsky_output_settings ) ) );
 	$rktsky_output_adapters = array();
 	foreach ( Providers::ADAPTERS as $rktsky_output_class ) {
-		require_once dirname( __DIR__ ) . '/src/Integrations/' . $rktsky_output_class . '.php';
+		require_once dirname( __DIR__ ) . '/src/Integrations/class-' . strtolower( $rktsky_output_class ) . '.php';
 		$rktsky_output_fqcn                             = 'Rktsky\\Antispam\\Integrations\\' . $rktsky_output_class;
 		$rktsky_output_adapters[ $rktsky_output_class ] = new $rktsky_output_fqcn( $rktsky_output_settings, $rktsky_output_guard, $rktsky_output_fields );
 		$rktsky_output_adapters[ $rktsky_output_class ]->register();

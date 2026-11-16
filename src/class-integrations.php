@@ -10,8 +10,8 @@ namespace Rktsky\Antispam;
 
 defined( 'ABSPATH' ) || exit;
 
-require_once __DIR__ . '/Providers.php';
-require_once __DIR__ . '/Integrations/Adapter.php';
+require_once __DIR__ . '/class-providers.php';
+require_once __DIR__ . '/Integrations/class-adapter.php';
 
 /**
  * Registers supported adapters and preserves existing public callback names.
@@ -138,7 +138,7 @@ final class Integrations extends Integrations\Adapter {
 	private function adapter( string $provider ): Integrations\Adapter {
 		if ( ! isset( $this->adapters[ $provider ] ) ) {
 			$name = Providers::ADAPTERS[ $provider ];
-			require_once __DIR__ . '/Integrations/' . $name . '.php';
+			require_once __DIR__ . '/Integrations/class-' . strtolower( $name ) . '.php';
 			$class                       = __NAMESPACE__ . '\\Integrations\\' . $name;
 			$this->adapters[ $provider ] = new $class( $this->settings, $this->guard, $this->fields, $this->quarantine, $this->feedback );
 		}

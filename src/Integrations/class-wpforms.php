@@ -309,7 +309,7 @@ final class WpForms extends Adapter {
 	 * @param int   $entry_id Native entry ID after the original saver returned.
 	 * @return void
 	 */
-	public function observe_wpforms_entry( array $fields, array $entry, array $form, $entry_id ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundBeforeLastUsed -- Native callback parameters are deliberately not inspected.
+	public function observe_wpforms_entry( array $fields, array $entry, array $form, $entry_id ): void {
 		$form_id = isset( $form['id'] ) ? absint( $form['id'] ) : 0;
 		$proof   = $this->wpforms_fingerprint();
 		if ( absint( $entry_id ) < 1 || '' === $proof || ! isset( $this->wpforms_evidence[ $form_id ] ) || ! hash_equals( $this->wpforms_evidence[ $form_id ], $proof ) ) {
