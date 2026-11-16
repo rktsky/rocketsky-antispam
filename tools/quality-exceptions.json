@@ -2,7 +2,7 @@
   "version": 1,
   "ruleset": {
     "path": "phpcs.xml.dist",
-    "sha256": "a8d386cdd7c9b98c1194a1968244d1bd74b46b314b06e515a386f04379fdc7d4"
+    "sha256": "c0ed2c2c3d3c9e23fd6b01127693666ad3d7fcdf7d07850e189364170f1a0011"
   },
   "groups": {
     "owned-storage": {
@@ -28,7 +28,7 @@
       ],
       "annotations": [
         {
-          "path": "src/Plugin.php",
+          "path": "src/class-plugin.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -39,7 +39,7 @@
           "reason": "Confirms only the bounded owned schema before recording successful installation."
         },
         {
-          "path": "src/Store.php",
+          "path": "src/class-store.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -50,7 +50,7 @@
           "reason": "Reads only the approved owned table before a trusted schema migration."
         },
         {
-          "path": "src/Store.php",
+          "path": "src/class-store.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -61,7 +61,7 @@
           "reason": "The approved owned-table migration preserves every row and replaces only the known legacy key in one DDL operation."
         },
         {
-          "path": "src/Store.php",
+          "path": "src/class-store.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -72,7 +72,7 @@
           "reason": "Repairs an incomplete owned schema without deleting or rewriting aggregates."
         },
         {
-          "path": "src/Store.php",
+          "path": "src/class-store.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -83,7 +83,7 @@
           "reason": "Readback prevents a failed column migration from receiving the new schema marker."
         },
         {
-          "path": "src/Store.php",
+          "path": "src/class-store.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -94,7 +94,7 @@
           "reason": "Trusted installation verifies only its owned atomic aggregate key."
         },
         {
-          "path": "src/Store.php",
+          "path": "src/class-store.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -105,7 +105,7 @@
           "reason": "Only the owned task ledger is changed; a unique key arbitrates parallel workers through the official WordPress database API."
         },
         {
-          "path": "src/Store.php",
+          "path": "src/class-store.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery.DirectQuery",
@@ -117,7 +117,7 @@
           "reason": "Dedicated security ledger needs an atomic unique-key write; object cache cannot replace it."
         },
         {
-          "path": "src/Store.php",
+          "path": "src/class-store.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -128,7 +128,7 @@
           "reason": "Atomic approved owned aggregate; the calendar prevents legacy and differently zoned dates from being merged."
         },
         {
-          "path": "src/Store.php",
+          "path": "src/class-store.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -139,7 +139,7 @@
           "reason": "Permanent anonymous counter, not subject to daily-row retention."
         },
         {
-          "path": "src/Store.php",
+          "path": "src/class-store.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -150,7 +150,7 @@
           "reason": "Reclassifies only the original calendar bucket in an approved owned table."
         },
         {
-          "path": "src/Store.php",
+          "path": "src/class-store.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -161,7 +161,7 @@
           "reason": "One administrator-only live read of a bounded owned counter."
         },
         {
-          "path": "src/Store.php",
+          "path": "src/class-store.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery.DirectQuery",
@@ -173,7 +173,7 @@
           "reason": "Bounded live aggregate excludes incompatible historical calendar bases."
         },
         {
-          "path": "src/Store.php",
+          "path": "src/class-store.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -184,7 +184,7 @@
           "reason": "One bounded aggregate per validated stored calendar; no submission or visitor data is queried."
         },
         {
-          "path": "src/Store.php",
+          "path": "src/class-store.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -195,7 +195,7 @@
           "reason": "Only fixed aggregate dimensions are read; the bound exceeds all allowed named zones and minute offsets combined."
         },
         {
-          "path": "src/Store.php",
+          "path": "src/class-store.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery.DirectQuery",
@@ -207,7 +207,7 @@
           "reason": "Explicit authenticated deletion of an owned aggregate table."
         },
         {
-          "path": "src/Store.php",
+          "path": "src/class-store.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -218,7 +218,7 @@
           "reason": "Explicit reset also clears the anonymous lifetime counter."
         },
         {
-          "path": "src/Store.php",
+          "path": "src/class-store.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -229,7 +229,7 @@
           "reason": "Expiry affects only fixed internal task metadata, never visitor data."
         },
         {
-          "path": "src/Store.php",
+          "path": "src/class-store.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery.DirectQuery",
@@ -241,7 +241,7 @@
           "reason": "Bounded expiry deletion over an owned indexed ledger."
         },
         {
-          "path": "src/Store.php",
+          "path": "src/class-store.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -339,7 +339,7 @@
       ],
       "annotations": [
         {
-          "path": "src/Feedback.php",
+          "path": "src/class-feedback.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -350,7 +350,7 @@
           "reason": "One immutable owned metadata observation; no matching Core API exists."
         },
         {
-          "path": "src/Feedback.php",
+          "path": "src/class-feedback.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -361,7 +361,7 @@
           "reason": "Atomic label replacement prevents duplicate classification counts without touching provider transactions."
         },
         {
-          "path": "src/Feedback.php",
+          "path": "src/class-feedback.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -372,7 +372,7 @@
           "reason": "Readback distinguishes an idempotent update from an untracked or concurrently deleted object."
         },
         {
-          "path": "src/Feedback.php",
+          "path": "src/class-feedback.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -383,7 +383,7 @@
           "reason": "A single grouped snapshot avoids inconsistent independently adjusted bucket counters."
         },
         {
-          "path": "src/Feedback.php",
+          "path": "src/class-feedback.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -394,7 +394,7 @@
           "reason": "Removes a source link rather than storing personal erasure identifiers."
         },
         {
-          "path": "src/Feedback.php",
+          "path": "src/class-feedback.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -405,7 +405,7 @@
           "reason": "Privacy takes precedence over retaining a metric when random detachment is unavailable."
         },
         {
-          "path": "src/Feedback.php",
+          "path": "src/class-feedback.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -416,7 +416,7 @@
           "reason": "Atomic detachment removes the old lookup and second-level timing without extending retention."
         },
         {
-          "path": "src/Feedback.php",
+          "path": "src/class-feedback.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -427,7 +427,7 @@
           "reason": "A failed detachment must not leave the source reference behind."
         },
         {
-          "path": "src/Feedback.php",
+          "path": "src/class-feedback.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -438,7 +438,7 @@
           "reason": "Bounded expiry over an owned indexed metadata table."
         },
         {
-          "path": "src/Feedback.php",
+          "path": "src/class-feedback.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -465,7 +465,7 @@
       ],
       "annotations": [
         {
-          "path": "src/Quarantine.php",
+          "path": "src/class-quarantine.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -476,7 +476,7 @@
           "reason": "Read of bounded security storage must reflect concurrent inserts; an object cache would weaken the limit."
         },
         {
-          "path": "src/Quarantine.php",
+          "path": "src/class-quarantine.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -487,7 +487,7 @@
           "reason": "The unique fixed slot atomically bounds concurrent captures; no equivalent Core storage API exists."
         },
         {
-          "path": "src/Quarantine.php",
+          "path": "src/class-quarantine.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -498,7 +498,7 @@
           "reason": "Privileged bounded metadata must reflect deletion and expiry immediately."
         },
         {
-          "path": "src/Quarantine.php",
+          "path": "src/class-quarantine.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -509,7 +509,7 @@
           "reason": "Privileged single-row read requires current expiry and deletion state."
         },
         {
-          "path": "src/Quarantine.php",
+          "path": "src/class-quarantine.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -520,7 +520,7 @@
           "reason": "Explicit deletion of one owned record must take effect immediately."
         },
         {
-          "path": "src/Quarantine.php",
+          "path": "src/class-quarantine.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -531,7 +531,7 @@
           "reason": "Bounded inventory must reflect current expiry and deletions."
         },
         {
-          "path": "src/Quarantine.php",
+          "path": "src/class-quarantine.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -542,7 +542,7 @@
           "reason": "Shorter local retention must affect existing records without a stale cache."
         },
         {
-          "path": "src/Quarantine.php",
+          "path": "src/class-quarantine.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -553,7 +553,7 @@
           "reason": "Bounded IDs let dependent metadata expire with the actual content record."
         },
         {
-          "path": "src/Quarantine.php",
+          "path": "src/class-quarantine.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -564,7 +564,7 @@
           "reason": "Removes expired ciphertext from a table with at most five hundred rows."
         },
         {
-          "path": "src/Quarantine.php",
+          "path": "src/class-quarantine.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -575,7 +575,7 @@
           "reason": "Core-authorized privacy erasure deletes only a matching owned entry."
         },
         {
-          "path": "src/Quarantine.php",
+          "path": "src/class-quarantine.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.DirectDatabaseQuery"
@@ -589,7 +589,7 @@
     },
     "bounded-native-metadata": {
       "review_status": "reviewed",
-      "reason": "The slow-query annotations describe bounded infrequent native metadata queries, not handwritten SQL. Privacy uses exact sender matches; network maintenance requests at most twenty owned-state sites per batch.",
+      "reason": "These annotations cover two native metadata queries with limited returned batches: matching sender privacy records and up to twenty network-maintenance sites. They use documented WordPress APIs rather than handwritten Core/provider SQL. Result limits do not establish bounded database scanning cost; a representative large-dataset performance assessment remains open.",
       "contracts": [
         "https://developer.wordpress.org/reference/classes/wp_query/",
         "https://developer.wordpress.org/reference/classes/wp_site_query/"
@@ -606,7 +606,7 @@
       ],
       "annotations": [
         {
-          "path": "src/Feedback.php",
+          "path": "src/class-feedback.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.SlowDBQuery.slow_db_query_meta_key"
@@ -617,7 +617,7 @@
           "reason": "Confirmed, infrequent privacy workflow; uses the original sender index with bounded pages."
         },
         {
-          "path": "src/Feedback.php",
+          "path": "src/class-feedback.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.SlowDBQuery.slow_db_query_meta_value"
@@ -628,7 +628,7 @@
           "reason": "Exact native subject match; no alternate provider SQL or persistent copy."
         },
         {
-          "path": "src/Network.php",
+          "path": "src/class-network.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.DB.SlowDBQuery.slow_db_query_meta_query"
@@ -655,7 +655,7 @@
       ],
       "annotations": [
         {
-          "path": "src/Admin.php",
+          "path": "src/class-admin.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.Security.NonceVerification.Recommended"
@@ -666,7 +666,7 @@
           "reason": "Read-only allowlisted navigation."
         },
         {
-          "path": "src/Admin.php",
+          "path": "src/class-admin.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.Security.NonceVerification.Recommended"
@@ -781,7 +781,7 @@
       ],
       "annotations": [
         {
-          "path": "src/ContextNotices.php",
+          "path": "src/class-contextnotices.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.Security.NonceVerification.Missing",
@@ -794,7 +794,7 @@
           "reason": "Raw type/byte bounds must precede sanitization and construction of the provider-scoped nonce; malformed-provider cases are covered by tests/context-notices.php."
         },
         {
-          "path": "src/ContextNotices.php",
+          "path": "src/class-contextnotices.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.Security.ValidatedSanitizedInput.InputNotSanitized"
@@ -805,7 +805,7 @@
           "reason": "The bounded raw value is compared only to reject sanitizer changes, never used as authority or persisted; tests/context-notices.php covers altered provider IDs."
         },
         {
-          "path": "src/ContextNotices.php",
+          "path": "src/class-contextnotices.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.Security.NonceVerification.Missing",
@@ -819,7 +819,7 @@
           "reason": "Checks the raw nonce's scalar shape, byte bound and POST/REQUEST identity before native verification; transforming it would alter the verification input."
         },
         {
-          "path": "src/ContextNotices.php",
+          "path": "src/class-contextnotices.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.Security.NonceVerification.Recommended",
@@ -866,7 +866,7 @@
       ],
       "annotations": [
         {
-          "path": "src/Integrations/Adapter.php",
+          "path": "src/Integrations/class-adapter.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.Security.NonceVerification.Missing"
@@ -877,7 +877,7 @@
           "reason": "Guard validates a site-local protection token."
         },
         {
-          "path": "src/Integrations/Adapter.php",
+          "path": "src/Integrations/class-adapter.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.Security.NonceVerification.Missing"
@@ -888,7 +888,7 @@
           "reason": "Guard verifies the local protection proof; native action nonces remain provider-owned."
         },
         {
-          "path": "src/Integrations/Divi.php",
+          "path": "src/Integrations/class-divi.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.Security.NonceVerification.Missing"
@@ -899,7 +899,7 @@
           "reason": "Reserved names select protection, never authorization; Guard verifies the proof."
         },
         {
-          "path": "src/Integrations/Divi.php",
+          "path": "src/Integrations/class-divi.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.Security.NonceVerification.Missing",
@@ -929,7 +929,7 @@
       ],
       "annotations": [
         {
-          "path": "src/Integrations/Comments.php",
+          "path": "src/Integrations/class-comments.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.Security.NonceVerification.Missing"
@@ -960,7 +960,7 @@
       ],
       "annotations": [
         {
-          "path": "src/Integrations/GravityForms.php",
+          "path": "src/Integrations/class-gravityforms.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.Security.NonceVerification.Missing"
@@ -971,7 +971,7 @@
           "reason": "Native save intent only narrows persistence; Guard has already consumed authentic proof."
         },
         {
-          "path": "src/Integrations/GravityForms.php",
+          "path": "src/Integrations/class-gravityforms.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.Security.NonceVerification.Missing",
@@ -984,7 +984,7 @@
           "reason": "Only the exact canonical native decimal ID is accepted below; this context grants no authorization."
         },
         {
-          "path": "src/Integrations/GravityForms.php",
+          "path": "src/Integrations/class-gravityforms.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.Security.NonceVerification.Missing",
@@ -1017,7 +1017,7 @@
       ],
       "annotations": [
         {
-          "path": "src/Integrations/WpForms.php",
+          "path": "src/Integrations/class-wpforms.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.Security.NonceVerification.Missing",
@@ -1028,108 +1028,6 @@
           "code_sha256": "cd0efdc45aaa4ab0d1b10f3d519bfb384f00554dcf74e29805343fa6dabf83bc",
           "context_sha256": "0ab08e1f73f0134754385bdc78401f95926f0b5dee87728ca867bb6ab04b62e5",
           "reason": "Observes a native rejection; selected scalar fields are explicitly unslashed and sanitized below."
-        }
-      ]
-    },
-    "native-callback-signatures": {
-      "review_status": "reviewed",
-      "reason": "Unused callback parameters retain the exact positional API required by native WordPress and provider hooks. They are deliberately not inspected or copied; removing them would change the registered contract.",
-      "contracts": [
-        "https://developer.wordpress.org/reference/functions/add_filter/",
-        "https://docs.gravityforms.com/gform_entry_is_spam/",
-        "https://wpforms.com/developers/wpforms_process/"
-      ],
-      "evidence": [
-        {
-          "path": "tests/integrations.php",
-          "covers": "Registered callback argument counts and provider transitions retain exact native contracts."
-        },
-        {
-          "path": "tests/gravity-feedback.php",
-          "covers": "When the original provider is available: original entry and moderation callbacks update only owned observations."
-        },
-        {
-          "path": "tests/native-woocommerce.php",
-          "covers": "Native Store API and classic checkout paths reject before processing or payment."
-        }
-      ],
-      "annotations": [
-        {
-          "path": "src/Feedback.php",
-          "action": "ignore",
-          "sniffs": [
-            "Generic.CodeAnalysis.UnusedFunctionParameter.FoundBeforeLastUsed"
-          ],
-          "scope": "function:flamingo_meta_update",
-          "code_sha256": "f6d5cb929cc198f641f9e043884cc7d0244b4163ed248fd2e6de17cc5325f6b8",
-          "context_sha256": "d04a518a28c2bd9212e62df2d48f20327a5e7e06266ad048041d5d88fea67d69",
-          "reason": "The native metadata hook supplies this unused identifier first."
-        },
-        {
-          "path": "src/Integrations/GravityForms.php",
-          "action": "ignore",
-          "sniffs": [
-            "Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed"
-          ],
-          "scope": "function:observe_gravity_spam",
-          "code_sha256": "a462f838955a9192953303a147335788a9f97fdaafef98faa9c5cf178dd0008d",
-          "context_sha256": "0412b685724f8ff9879bf4ffee9fdd32682be1bbd7bf1391aed373d9c645d4c1",
-          "reason": "Native filter supplies an entry payload; this observer deliberately records no copied content."
-        },
-        {
-          "path": "src/Integrations/GravityForms.php",
-          "action": "ignore",
-          "sniffs": [
-            "Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed"
-          ],
-          "scope": "function:check_resume_email",
-          "code_sha256": "6155d33b6f66ea19bbbd54e158a193d275d1494f97136a5905cf41ceccc5fbf3",
-          "context_sha256": "8e98b22cf8a492703ebcf8de3e6b004112c95e92371db0fbd295fd731637fb54",
-          "reason": "Recipient content never enters technical verification."
-        },
-        {
-          "path": "src/Integrations/GravityForms.php",
-          "action": "ignore",
-          "sniffs": [
-            "Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed"
-          ],
-          "scope": "function:guard_resume_mail",
-          "code_sha256": "4a1b99a4b7a46844a75dc103ef75d4046d3164942d91ba04955bd329f1e68790",
-          "context_sha256": "de474b1060434c9e4498682b2b41028aad887d92d754fe42b30c723ffc07efa5",
-          "reason": "Mail format and contents are never processed by protection."
-        },
-        {
-          "path": "src/Integrations/WooCommerceCheckout.php",
-          "action": "ignore",
-          "sniffs": [
-            "Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed"
-          ],
-          "scope": "function:validate_store_api",
-          "code_sha256": "1a21418c1ab364531fd6216e3308225ea75d85f892db275c4d3c1ad34ec1812f",
-          "context_sha256": "1fb3e27c501831bad2e1433f5cfe0b803f074bc689603de73d9cd3634354b91f",
-          "reason": "The public WordPress filter supplies route/handler metadata; only the resolved request route is needed."
-        },
-        {
-          "path": "src/Integrations/WpForms.php",
-          "action": "ignore",
-          "sniffs": [
-            "Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed"
-          ],
-          "scope": "function:begin_wpforms",
-          "code_sha256": "f9fa86f7a3c92102aae316d2fa87de551ca504bf22a3ad450b04ca4a3b1e7e95",
-          "context_sha256": "b6f92e0b504499021e67a938ff83ce2a3cb07fc025d6c52160c1f012b758719f",
-          "reason": "Raw entry is part of the native filter contract and is intentionally not inspected."
-        },
-        {
-          "path": "src/Integrations/WpForms.php",
-          "action": "ignore",
-          "sniffs": [
-            "Generic.CodeAnalysis.UnusedFunctionParameter.FoundBeforeLastUsed"
-          ],
-          "scope": "function:observe_wpforms_entry",
-          "code_sha256": "f938fe4968922024a2c41ed24b03d4780de6695b4a58793c4cd7acfa99e3a4f9",
-          "context_sha256": "d0199f6a60a384dfd4faa4f831421acb29626ad9e5e2be09dce12a519d7fff3d",
-          "reason": "Native callback parameters are deliberately not inspected."
         }
       ]
     },
@@ -1157,7 +1055,7 @@
       ],
       "annotations": [
         {
-          "path": "src/Integrations/ContactForm7.php",
+          "path": "src/Integrations/class-contactform7.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound"
@@ -1168,7 +1066,7 @@
           "reason": "Reads the original provider's documented saver policy without changing it."
         },
         {
-          "path": "src/Integrations/WpForms.php",
+          "path": "src/Integrations/class-wpforms.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound"
@@ -1179,7 +1077,7 @@
           "reason": "Evaluates WPForms' documented native storage policy without changing its result."
         },
         {
-          "path": "src/NativeFeedback.php",
+          "path": "src/class-nativefeedback.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound"
@@ -1210,7 +1108,7 @@
       ],
       "annotations": [
         {
-          "path": "src/Feedback.php",
+          "path": "src/class-feedback.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.WP.Capabilities.Unknown"
@@ -1221,7 +1119,7 @@
           "reason": "Gravity Forms registers this native capability for editing and moderating stored entries."
         },
         {
-          "path": "src/Feedback.php",
+          "path": "src/class-feedback.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.WP.Capabilities.Unknown"
@@ -1248,7 +1146,7 @@
       ],
       "annotations": [
         {
-          "path": "src/Digest.php",
+          "path": "src/class-digest.php",
           "action": "disable-region",
           "sniffs": [
             "WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase"
@@ -1259,7 +1157,7 @@
           "reason": "Native PHPMailer properties retain their documented names."
         },
         {
-          "path": "src/Digest.php",
+          "path": "src/class-digest.php",
           "action": "disable-region",
           "sniffs": [
             "WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase"
@@ -1287,7 +1185,7 @@
       ],
       "annotations": [
         {
-          "path": "src/Token.php",
+          "path": "src/class-token.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode"
@@ -1298,7 +1196,7 @@
           "reason": "Readable signed protocol data, never executable code."
         },
         {
-          "path": "src/Token.php",
+          "path": "src/class-token.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode"
@@ -1309,7 +1207,7 @@
           "reason": "Strict decoding of bounded signed data, never evaluated."
         },
         {
-          "path": "src/Token.php",
+          "path": "src/class-token.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode"
@@ -1336,7 +1234,7 @@
       ],
       "annotations": [
         {
-          "path": "src/Quarantine.php",
+          "path": "src/class-quarantine.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode"
@@ -1347,7 +1245,7 @@
           "reason": "Encodes authenticated ciphertext for a bounded text database column."
         },
         {
-          "path": "src/Quarantine.php",
+          "path": "src/class-quarantine.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode"
@@ -1358,7 +1256,7 @@
           "reason": "Decodes authenticated ciphertext, not executable code."
         },
         {
-          "path": "src/Quarantine.php",
+          "path": "src/class-quarantine.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode"
@@ -1393,7 +1291,7 @@
       ],
       "annotations": [
         {
-          "path": "src/ContentRules.php",
+          "path": "src/class-contentrules.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.PHP.NoSilencedErrors.Discouraged"
@@ -1404,7 +1302,7 @@
           "reason": "Invalid or resource-limited rules must not emit public PHP warnings."
         },
         {
-          "path": "src/Settings.php",
+          "path": "src/class-settings.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.PHP.NoSilencedErrors.Discouraged"
@@ -1418,7 +1316,7 @@
     },
     "expected-local-geoip-failures": {
       "review_status": "reviewed",
-      "reason": "Missing local GeoIP entries and malformed administrator CIDR addresses are expected unknown/invalid results. Only the native lookup/decoder call is silenced; no network lookup or personal data logging is introduced.",
+      "reason": "The optional original local GeoIP extension can report an unknown numeric address as a warning/false result. Only that lookup is silenced; shape checks map absent or invalid results to unknown without retaining or transmitting the address. The actual extension missing-record path has not been executed in the current fixtures; its native dependency coverage remains explicitly open.",
       "contracts": [
         "https://www.php.net/manual/en/function.geoip-country-code-by-name.php",
         "https://www.php.net/manual/en/function.inet-pton.php"
@@ -1426,12 +1324,12 @@
       "evidence": [
         {
           "path": "tests/policies.php",
-          "covers": "Malformed CIDRs and country data remain unknown; untrusted forwarded headers cannot establish country trust and privacy mode prevents processing."
+          "covers": "Native trusted-header/CIDR processing and privacy-mode exclusion are covered. These adjacent cases do not execute the optional GeoIP extension or establish its missing-record behavior; that native coverage remains open."
         }
       ],
       "annotations": [
         {
-          "path": "src/Country.php",
+          "path": "src/class-country.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.PHP.NoSilencedErrors.Discouraged"
@@ -1440,17 +1338,6 @@
           "code_sha256": "c6bec611db73df8900a1566b67d431afc5c0d5459d13ced81c6211a2fe96315c",
           "context_sha256": "dc7f003770a32904454e897b26e57a928d05c6f3dbfdc0844760830995d52b80",
           "reason": "Missing local GeoIP records are represented as unknown, not a public warning."
-        },
-        {
-          "path": "src/Country.php",
-          "action": "ignore",
-          "sniffs": [
-            "WordPress.PHP.NoSilencedErrors.Discouraged"
-          ],
-          "scope": "function:valid_cidr",
-          "code_sha256": "66ab05ee4b9cb1e13dafd9afb2fc1b39945bf4b2f4daf68961dd13992ee1e653",
-          "context_sha256": "028fc2134f370ff607a184fb255f20a51d60ac962607c0b7e39cb36373291f68",
-          "reason": "Invalid administrator input is a normal validation failure."
         }
       ]
     },
@@ -1469,7 +1356,7 @@
       ],
       "annotations": [
         {
-          "path": "src/Network.php",
+          "path": "src/class-network.php",
           "action": "ignore",
           "sniffs": [
             "WordPress.PHP.DevelopmentFunctions.error_log_error_log"
@@ -1480,41 +1367,20 @@
           "reason": "Operational diagnostics contain only native IDs; swallowing a failure would hide missed retention work."
         }
       ]
-    },
-    "owned-class-filenames": {
-      "review_status": "reviewed",
-      "reason": "Owned class files intentionally use the existing PSR-style class map names rather than hyphenated WordPress class filenames. The explicit loader and packaged native activation prove the declared classes resolve; no security rule is excluded.",
-      "contracts": [
-        "https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/#naming-conventions",
-        "https://github.com/WordPress/WordPress-Coding-Standards/blob/develop/WordPress/Sniffs/Files/FileNameSniff.php"
-      ],
-      "evidence": [
-        {
-          "path": "tests/native.php",
-          "covers": "The original explicit entrypoint activates and constructs its services without an autoloader dependency."
-        },
-        {
-          "path": "tests/native-rename.php",
-          "covers": "Previous-name upgrades activate the actual packaged class layout while preserving stored data."
-        }
-      ],
-      "annotations": [],
-      "ruleset_exclusions": [
-        {
-          "rule": "WordPress.Files.FileName",
-          "name": "WordPress.Files.FileName.InvalidClassFileName"
-        },
-        {
-          "rule": "WordPress.Files.FileName",
-          "name": "WordPress.Files.FileName.NotHyphenatedLowercase"
-        }
-      ]
     }
   },
   "evidence_hashes": {
+    ".github/workflows/quality.yml": {
+      "method": "file-sha256",
+      "sha256": "b020c0990d9e556f40882f106919980766ade80fc322069706d788e38098d19d"
+    },
+    "tests/adapters-extra-forms.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "23162e0453b5a721282b11634492e27eb93e2aa8cb5e97a8367bed230e5ee655"
+    },
     "tests/content-rules.php": {
       "method": "php-code-sha256-v1",
-      "sha256": "b8f7aa9cd4691b214967650c86499e4544d51c9945e3d92adc62807c3495d59d"
+      "sha256": "0881c755f6c2ae73753ce326c7d5be8265dbb63a88ff33df7d9043b1d1e676b2"
     },
     "tests/context-notices.php": {
       "method": "php-code-sha256-v1",
@@ -1538,7 +1404,7 @@
     },
     "tests/integrations.php": {
       "method": "php-code-sha256-v1",
-      "sha256": "51f20562caa561fe87361c3e8b443f391cddabadddffec39488a8cc59440ef9e"
+      "sha256": "d1524f8416223092b36659b61eb61646dc0792dd3832d73bf4dea56a96fd554f"
     },
     "tests/multisite.php": {
       "method": "php-code-sha256-v1",
@@ -1574,7 +1440,7 @@
     },
     "tests/output-boundaries.php": {
       "method": "php-code-sha256-v1",
-      "sha256": "0f0bce5bdc2505c5bee68766d1ccf77727183346fd28deb86c8de8b0e7cef930"
+      "sha256": "aefa73178ec4d99d1563793ebec4f87fd5457dc1e9cba0506348a1b0761c884a"
     },
     "tests/pattern-limits.php": {
       "method": "php-code-sha256-v1",
@@ -1582,23 +1448,57 @@
     },
     "tests/policies.php": {
       "method": "php-code-sha256-v1",
-      "sha256": "0191914de0743f0e87cea86c81ebbe4a1333741dffe49bb69b3a5e7f0b48039b"
+      "sha256": "44946b822c6d6e49070a9d2e6bdcfed1752c973a863a434200da35c4f5faac6f"
     },
     "tests/provider-divi.php": {
       "method": "php-code-sha256-v1",
-      "sha256": "ff4b41257e0db7d5df88309fed59f76475b7b4ef8ab9456902803968b46a5ad1"
+      "sha256": "64fd02e978103aa2c794cc2625e714ba98cd3cd9ce929b29c3843bd4d66c8107"
+    },
+    "tests/provider-elementor.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "8a17ece6f06e7b2c6b76512d7ee35a11ae4a19de76246640b7d8b0338c4ffbe9"
     },
     "tests/quarantine.php": {
       "method": "php-code-sha256-v1",
-      "sha256": "54587e6d308d500ac6fa2a2143427965e02ac3f5ae391a6586074f915168450b"
+      "sha256": "1769ca626f41bbc10462ec71a623370ddaa08de307ed446e988d2c671fb51670"
     },
     "tests/timezones.php": {
       "method": "php-code-sha256-v1",
       "sha256": "a6763a0cda0ec9e3268ff012a182d09e352a7835170ebe1167de3bd14d82be2a"
     },
+    "tests/translations.php": {
+      "method": "php-code-sha256-v1",
+      "sha256": "12df5a23e639a25cbc54e7287dcbc2584a08c05eac0b5bcd97fb41884ae0e97b"
+    },
     "tests/uninstall.php": {
       "method": "php-code-sha256-v1",
       "sha256": "951f6995096e7eb50be86e54b486fafc5dc04ab7bf5123e6e943413e1566e23b"
     }
-  }
+  },
+  "acceptance_checks": [
+    {
+      "path": "tests/native-rename.php",
+      "covers": "Actual previous-name lifecycle and retained settings, encrypted data, replay claims and site boundaries continue to load through the current class layout."
+    },
+    {
+      "path": "tests/translations.php",
+      "covers": "Bundled and language-pack priority, early startup, real single-site/network administrator permissions, anonymous denial and translated conflict activation are exercised in original Core."
+    },
+    {
+      "path": "tests/adapters-extra-forms.php",
+      "covers": "License-free rejection contracts include the Elementor Guard-import regression, visible errors, before-actions fallback and selected-field boundaries. This is not a commercial provider-engine test."
+    },
+    {
+      "path": "tests/provider-elementor.php",
+      "covers": "When the original provider is present: real Form_Record validation and processing preserve one-use proofs, native errors, rejection messages and bounded quarantine. Actual Pro4.3.3 runs are recorded separately from public CI."
+    },
+    {
+      "path": ".github/workflows/quality.yml",
+      "covers": "Actual CI registration retains native single-site and Multisite translations, provider, browser, security and package gates. Reviewed workflow content is bound separately from execution outcomes."
+    },
+    {
+      "path": "tests/native-woocommerce.php",
+      "covers": "Original WooCommerce classic, order-pay and Store API boundaries continue to reject before account/order/payment actions and preserve native callback dispatch."
+    }
+  ]
 }

@@ -266,13 +266,20 @@ def nonempty(value: object) -> bool:
 
 
 def evidence_paths(inventory: dict) -> set[str]:
-    """Collect the exact referenced checks without treating their presence as proof. Since 0.5.6."""
+    """Collect referenced checks, including independent acceptance since 0.5.7. Since 0.5.6."""
     paths = set()
     for group in inventory.get("groups", {}).values():
         for proof in group.get("evidence", []):
             if not nonempty(proof.get("path")):
                 raise QualityError("A referenced check needs its explicit project path.")
             paths.add(proof["path"])
+    acceptance = inventory.get("acceptance_checks", [])
+    if not isinstance(acceptance, list):
+        raise QualityError("Acceptance checks must be an optional list of explicit project paths and coverage.")
+    for proof in acceptance:
+        if not isinstance(proof, dict) or not nonempty(proof.get("path")) or not nonempty(proof.get("covers")):
+            raise QualityError("An acceptance check needs its explicit project path and nonempty coverage.")
+        paths.add(proof["path"])
     return paths
 
 

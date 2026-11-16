@@ -12,7 +12,7 @@ import subprocess
 import tempfile
 import unittest
 
-from quality_exceptions import check_quality, observe, php_command, QualityError
+from quality_exceptions import check_quality, evidence_paths, observe, php_command, QualityError
 
 
 SOURCE = Path(__file__).resolve().parents[1]
@@ -38,10 +38,10 @@ class QualityGuardTest(unittest.TestCase):
         # Review flags here are synthetic fixture state, never an approval of the real inventory.
         for group in self.inventory["groups"].values():
             group["review_status"] = "reviewed"
-            for evidence in group["evidence"]:
-                destination = self.root / evidence["path"]
-                destination.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(SOURCE / evidence["path"], destination)
+        for relative in evidence_paths(self.inventory):
+            destination = self.root / relative
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(SOURCE / relative, destination)
         self.write_inventory()
 
     def write_inventory(self) -> None:
@@ -88,29 +88,29 @@ class QualityGuardTest(unittest.TestCase):
 
     def test_removed_annotation_leaves_stale_review(self) -> None:
         """Deleting an obsolete exception requires removing its now-stale inventory entry too. Since 0.5.6."""
-        self.replace("src/Admin.php", "// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only allowlisted navigation.", "// Ordinary explanation.")
+        self.replace("src/class-admin.php", "// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only allowlisted navigation.", "// Ordinary explanation.")
         self.rejects("removed/stale scope")
 
     def test_changed_code_contract(self) -> None:
         """Changing a bounded native query invalidates its exact reviewed contract. Since 0.5.6."""
-        self.replace("src/Store.php", "LIMIT 4096", "LIMIT 4095")
+        self.replace("src/class-store.php", "LIMIT 4096", "LIMIT 4095")
         self.rejects("new/changed scope")
 
     def test_widened_disabled_region(self) -> None:
         """Moving an enable past another real statement invalidates the region hash. Since 0.5.6."""
         enable = "\t\t// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase"
         statement = "\t\tadd_action( 'phpmailer_init', $configure, PHP_INT_MAX );"
-        self.replace("src/Digest.php", enable + "\n" + statement, statement + "\n" + enable)
+        self.replace("src/class-digest.php", enable + "\n" + statement, statement + "\n" + enable)
         self.rejects("new/changed scope")
 
     def test_changed_exception_reason(self) -> None:
         """Changing a directive's justification also requires review, unlike ordinary comments. Since 0.5.6."""
-        self.replace("src/Admin.php", "-- Read-only allowlisted navigation.", "-- A changed claimed exception contract.")
+        self.replace("src/class-admin.php", "-- Read-only allowlisted navigation.", "-- A changed claimed exception contract.")
         self.rejects("new/changed scope")
 
     def test_benign_comments_and_formatting(self) -> None:
         """Ordinary comments and PHP spacing neither change code hashes nor depend on line numbers. Since 0.5.6."""
-        self.replace("src/Admin.php", "namespace Rktsky\\Antispam;", "// Extra explanation before the same code.\nnamespace   Rktsky\\Antispam;")
+        self.replace("src/class-admin.php", "namespace Rktsky\\Antispam;", "// Extra explanation before the same code.\nnamespace   Rktsky\\Antispam;")
         self.replace("phpcs.xml.dist", "<ruleset name=", "<!-- Additional non-operative explanation. -->\n<ruleset name=")
         self.assertEqual("pass", check_quality(self.root, PHP)["status"])
 
@@ -133,7 +133,7 @@ class QualityGuardTest(unittest.TestCase):
 
     def test_unclosed_disabled_region(self) -> None:
         """An open-ended suppression cannot expand through the rest of a file. Since 0.5.6."""
-        self.replace("src/Digest.php", "// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase", "// Closing annotation was removed.")
+        self.replace("src/class-digest.php", "// phpcs:enable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase", "// Closing annotation was removed.")
         self.rejects("already-disabled|matching enable")
 
     def test_new_ruleset_exception(self) -> None:
@@ -165,6 +165,40 @@ class QualityGuardTest(unittest.TestCase):
         (self.root / "tests/context-notices.php").write_text("<?php\n// No assertions remain in this synthetic mutation.\n")
         self.rejects("Referenced check contents changed.*tests/context-notices.php")
 
+    def test_empty_php_replacement_cannot_preserve_acceptance(self) -> None:
+        """Assertion-free translations cannot retain an independently reviewed acceptance hash. Since 0.5.7."""
+        self.assertIn("tests/translations.php", {proof["path"] for proof in self.inventory.get("acceptance_checks", [])})
+        (self.root / "tests/translations.php").write_text("<?php\n// No translation assertions remain in this synthetic mutation.\n")
+        self.rejects("Referenced check contents changed.*tests/translations.php")
+
+    def test_acceptance_checks_need_explicit_coverage(self) -> None:
+        """Malformed independent references fail without creating synthetic exception groups. Since 0.5.7."""
+        for invalid in (None, {}, "tests/translations.php", [None], [{}], [{"path": "", "covers": "Native translations."}], [{"path": "tests/translations.php", "covers": " "}]):
+            with self.subTest(acceptance=invalid):
+                self.inventory["acceptance_checks"] = invalid
+                self.write_inventory()
+                self.rejects("Acceptance checks must|acceptance check needs")
+
+    def test_acceptance_hashes_match_exact_references(self) -> None:
+        """Independent evidence cannot have a missing hash or leave an unreferenced hash behind. Since 0.5.7."""
+        self.assertNotIn("tests/translations.php", {proof["path"] for group in self.inventory["groups"].values() for proof in group["evidence"]})
+        original = json.dumps(self.inventory)
+        del self.inventory["evidence_hashes"]["tests/translations.php"]
+        self.write_inventory()
+        self.rejects("exact content-bound inventory")
+        self.inventory = json.loads(original)
+        self.inventory["acceptance_checks"] = [proof for proof in self.inventory["acceptance_checks"] if proof["path"] != "tests/translations.php"]
+        self.write_inventory()
+        self.rejects("exact content-bound inventory")
+
+    def test_acceptance_checks_are_optional(self) -> None:
+        """An exception-only fixture remains valid without a separate acceptance list. Since 0.5.7."""
+        self.inventory.pop("acceptance_checks", None)
+        remaining = evidence_paths(self.inventory)
+        self.inventory["evidence_hashes"] = {path: contract for path, contract in self.inventory["evidence_hashes"].items() if path in remaining}
+        self.write_inventory()
+        self.assertEqual("pass", check_quality(self.root, PHP)["status"])
+
     def test_benign_evidence_comments_preserve_code_contract(self) -> None:
         """Normal test comments and PHP indentation do not require a new behavioral review. Since 0.5.6."""
         self.replace("tests/context-notices.php", "<?php\n", "<?php\n// A new explanatory comment without a code change.\n\n")
@@ -175,6 +209,16 @@ class QualityGuardTest(unittest.TestCase):
         self.inventory["evidence_hashes"]["tests/context-notices.php"]["sha256"] = "pending"
         self.write_inventory()
         self.rejects("unreviewed or unfilled content hash")
+
+    def test_removed_multisite_translation_registration_blocks(self) -> None:
+        """Removing a real CI entrypoint invalidates workflow evidence. Since 0.5.7."""
+        before = ("      - run: php tests/multisite.php\n"
+                  "      - run: php tests/context-notices.php\n"
+                  "      - run: php tests/translations.php")
+        after = ("      - run: php tests/multisite.php\n"
+                 "      - run: php tests/context-notices.php")
+        self.replace(".github/workflows/quality.yml", before, after)
+        self.rejects(r"Referenced check contents changed.*\.github/workflows/quality\.yml")
 
     def test_builder_rejects_clean_but_unreviewed_candidate(self) -> None:
         """The immutable builder blocks exception drift before it writes any archive. Since 0.5.6."""
