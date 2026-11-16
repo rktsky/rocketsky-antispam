@@ -261,7 +261,7 @@ namespace {
 		if ( ! $condition ) {
 			throw new RuntimeException( $message );}}
 	require dirname( __DIR__ ) . '/src/Integrations/Adapter.php';
-	foreach ( array( 'Formidable', 'Fluent', 'WsForm' ) as $class ) {
+	foreach ( array( 'Formidable', 'Fluent', 'WsForm', 'Elementor' ) as $class ) {
 		require dirname( __DIR__ ) . '/src/Integrations/' . $class . '.php';}
 	$settings   = new \Rktsky\Antispam\Settings();
 	$guard      = new \Rktsky\Antispam\Guard();
@@ -497,6 +497,81 @@ namespace {
 		$html = $ws->render( '<div><form class="wsf-form" data-id="9"></form><form class="other" data-id="10"></form><form class="wsf-form" data-id="bad"></form></div>' );
 		rktsky_extra_expect( 1 === substr_count( $html, 'data-rk-antispam-provider=' ), 'Native HTML processing must decorate only actual WS forms with valid native IDs.' );
 		rktsky_extra_expect( str_contains( $html, 'proof&quot;&lt;&amp;' ) && str_contains( $html, '/local?a=1&amp;b=2' ), 'The original WordPress HTML API must escape host descriptor values.' );
+	}
+	// The original-engine regression exposed an unresolved Guard class only on
+	// rejection. Keep this adapter path in the public, licence-free CI as well.
+	$elementor_record = new class() {
+		/**
+		 * Supplies a server-selected scope without a commercial provider engine.
+		 *
+		 * @since 0.5.7
+		 * @param string $key Requested native form setting.
+		 * @return string|array Fixed identifier or empty declared fields.
+		 */
+		public function get_form_settings( string $key ) {
+			return 'id' === $key ? 'fixture_elementor' : array();
+		}
+		/**
+		 * Supplies no visitor data in this rejection-message contract.
+		 *
+		 * @since 0.5.7
+		 * @param string $key Native record collection name.
+		 * @return array Empty declared fixture collection.
+		 */
+		public function get( string $key ): array {
+			if ( 'fields' !== $key ) {
+				throw new RuntimeException( 'This fixture exposes only declared field data.' );
+			}
+			return array();
+		}
+	};
+	foreach ( array( 'missing', 'replayed', 'keyword' ) as $reason ) {
+		$elementor_handler = new class() {
+			/**
+			 * Visible field errors recorded by the synthetic native-handler contract.
+			 *
+			 * @since 0.5.7
+			 * @var array<string,string>
+			 */
+			public array $errors = array();
+			/**
+			 * Visible form messages recorded separately from field errors.
+			 *
+			 * @since 0.5.7
+			 * @var string[]
+			 */
+			public array $messages = array();
+			/**
+			 * Records an explicit native field-error callback.
+			 *
+			 * @since 0.5.7
+			 * @param string $key Fixed protection field key.
+			 * @param string $message Expected public rejection message.
+			 * @return void
+			 */
+			public function add_error( string $key, string $message ): void {
+				$this->errors[ $key ] = $message;
+			}
+			/**
+			 * Records the visible form-level rejection.
+			 *
+			 * @since 0.5.7
+			 * @param string $message Expected public rejection message.
+			 * @return void
+			 */
+			public function add_error_message( string $message ): void {
+				$this->messages[] = $message;
+			}
+		};
+		$elementor     = new \Rktsky\Antispam\Integrations\Elementor( $settings, $guard, $fields, $quarantine );
+		$guard->reason = $reason;
+		$expected      = 'keyword' === $reason ? $guard->spam_message() : $guard->message();
+		$elementor->validate( $elementor_record, $elementor_handler );
+		rktsky_extra_expect( $expected === ( $elementor_handler->errors['rktsky_antispam'] ?? '' ) && array( $expected ) === $elementor_handler->messages, 'Elementor rejection must resolve the actual owned Guard class and populate visible native errors: ' . $reason );
+		$elementor_handler->errors   = array();
+		$elementor_handler->messages = array();
+		$elementor->process( $elementor_record, $elementor_handler );
+		rktsky_extra_expect( $expected === ( $elementor_handler->errors['rktsky_antispam'] ?? '' ) && array( $expected ) === $elementor_handler->messages, 'The Elementor before-actions fallback must reject without a namespace fatal: ' . $reason );
 	}
 	echo 'Extra-form adapter contracts: ' . $GLOBALS['extra_assertions'] . " assertions passed.\n";
 }

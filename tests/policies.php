@@ -174,12 +174,32 @@ try {
 		$_SERVER['HTTP_CF_IPCOUNTRY'] = $unknown_country;
 		rktsky_antispam_policy_expect( '' === $country->detect(), 'Unknown or malformed infrastructure country data must remain unknown.' );
 	}
-	foreach ( array( '203.0.113.9', '203.0.113.0/24', '2001:db8::/33', '2001:db8::1/128' ) as $network ) {
-		rktsky_antispam_policy_expect( Country::valid_cidr( $network ), 'Valid numeric proxy networks must be accepted.' );
+	$cidr_warnings = array();
+	set_error_handler(
+		/**
+		 * Records every validation diagnostic so warnings fail the native contract.
+		 *
+		 * @since 0.5.7
+		 * @param int    $severity Native PHP diagnostic level.
+		 * @param string $message Native diagnostic, retained only in this CLI process.
+		 * @return bool True; the assertion below rejects any captured diagnostic.
+		 */
+		static function ( int $severity, string $message ) use ( &$cidr_warnings ): bool {
+			$cidr_warnings[] = array( $severity, $message );
+			return true;
+		}
+	);
+	try {
+		foreach ( array( '203.0.113.9', '0.0.0.0/0', '203.0.113.0/24', '203.0.113.9/32', '::/0', '2001:db8::/33', '2001:db8::1/128', '::ffff:192.0.2.1/128' ) as $network ) {
+			rktsky_antispam_policy_expect( Country::valid_cidr( $network ), 'Numeric IPv4/IPv6 proxy networks must accept zero, partial-byte and maximum masks.' );
+		}
+		foreach ( array( '', '/24', 'example.invalid', '256.0.0.1', '203.0.113.999/24', '2001:db8::g/64', 'fe80::1%eth0/64', '203.0.113.0/', '203.0.113.0/33', '2001:db8::/129', '203.0.113.0/-1', '203.0.113.0/+24', '203.0.113.0/24.0', '203.0.113.0/ 24', '203.0.113.0/24/2', '2001:db8::/64/2', "203.0.113.9\0", ' 203.0.113.9', '203.0.113.9 ' ) as $network ) {
+			rktsky_antispam_policy_expect( ! Country::valid_cidr( $network ), 'Empty, malformed and nonnumeric proxy addresses or masks must be rejected.' );
+		}
+	} finally {
+		restore_error_handler();
 	}
-	foreach ( array( 'example.invalid', '203.0.113.0/33', '2001:db8::/129', '203.0.113.0/-1', '203.0.113.0/24/2' ) as $network ) {
-		rktsky_antispam_policy_expect( ! Country::valid_cidr( $network ), 'Hostnames and malformed proxy masks must be rejected.' );
-	}
+	rktsky_antispam_policy_expect( array() === $cidr_warnings, 'Rejected proxy input must not emit PHP warnings or depend on error suppression.' );
 	$_SERVER['HTTP_CF_IPCOUNTRY'] = 'US';
 	rktsky_antispam_policy_expect( 'country' === $rules->check( 'comments', array( 'content' => $en ) ) && '' === $rules->check( 'wpforms', array( 'Message' => $en ) ), 'Country policy must apply to comments without leaking into contact forms.' );
 	$_SERVER['HTTP_CF_IPCOUNTRY'] = 'XX';

@@ -25,6 +25,7 @@ final class WooCommerceCheckout extends Adapter {
 	 * Connects early validation boundaries and native frontend renderers.
 	 *
 	 * @since 0.3.0
+	 * @since 0.5.7 Requests only the dispatch result and parsed request.
 	 * @return void
 	 */
 	public function register(): void {
@@ -33,7 +34,7 @@ final class WooCommerceCheckout extends Adapter {
 		add_filter( 'render_block_woocommerce/checkout', array( $this, 'render_block' ) );
 		add_action( 'woocommerce_after_checkout_validation', array( $this, 'validate_classic' ), 10, 2 );
 		add_action( 'woocommerce_before_pay_action', array( $this, 'validate_pay' ) );
-		add_filter( 'rest_dispatch_request', array( $this, 'validate_store_api' ), 10, 4 );
+		add_filter( 'rest_dispatch_request', array( $this, 'validate_store_api' ), 10, 2 );
 		add_action( 'rest_api_init', array( $this, 'register_schema' ), 5 );
 	}
 
@@ -202,13 +203,12 @@ final class WooCommerceCheckout extends Adapter {
 	 * nonce/cart-token and order-key checks remain WooCommerce's responsibility.
 	 *
 	 * @since 0.3.0
+	 * @since 0.5.7 Accepts only the dispatch result and parsed request.
 	 * @param mixed            $result Earlier short-circuit result, normally null.
 	 * @param \WP_REST_Request $request Native parsed and validated REST request.
-	 * @param string           $route Matched native route expression.
-	 * @param array            $handler Native route handler, intentionally not changed.
 	 * @return mixed Existing result, null to proceed, or a neutral WP_Error rejection.
 	 */
-	public function validate_store_api( $result, \WP_REST_Request $request, string $route, array $handler ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- The public WordPress filter supplies route/handler metadata; only the resolved request route is needed.
+	public function validate_store_api( $result, \WP_REST_Request $request ) {
 		if ( null !== $result || 'POST' !== $request->get_method() || 1 !== preg_match( '#^/wc/store(?:/v[1-9][0-9]*)?/checkout(?:/([0-9]+))?/?$#Di', $request->get_route(), $match ) ) {
 			return $result;
 		}

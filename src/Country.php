@@ -81,13 +81,17 @@ final class Country {
 	 * Validates one exact IP or CIDR without accepting hostnames or wide malformed masks.
 	 *
 	 * @since 0.2.0
+	 * @since 0.5.7 Rejects malformed addresses before native binary conversion.
 	 * @param string $cidr Administrator supplied proxy address or CIDR.
 	 * @return bool Whether the address and optional mask are syntactically valid.
 	 */
 	public static function valid_cidr( string $cidr ): bool {
 		$parts = explode( '/', $cidr );
-		$ip    = @inet_pton( $parts[0] ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Invalid administrator input is a normal validation failure.
-		if ( false === $ip || count( $parts ) > 2 ) {
+		if ( count( $parts ) > 2 || false === filter_var( $parts[0], FILTER_VALIDATE_IP ) ) {
+			return false;
+		}
+		$ip = inet_pton( $parts[0] );
+		if ( false === $ip ) {
 			return false;
 		}
 		return ! isset( $parts[1] ) || ( ctype_digit( $parts[1] ) && (int) $parts[1] <= strlen( $ip ) * 8 );

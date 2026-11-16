@@ -63,12 +63,13 @@ final class WpForms extends Adapter {
 	 * Registers native hooks after provider detection and explicit enablement.
 	 *
 	 * @since 0.3.0
+	 * @since 0.5.7 Requests only the form for the lifecycle reset callback.
 	 * @return void
 	 */
 	public function register(): void {
 		add_action( 'wpforms_frontend_output', array( $this, 'wpforms_fields' ), 30 );
 		add_action( 'wpforms_process', array( $this, 'check_wpforms' ), 5, 3 );
-		add_filter( 'wpforms_process_before_form_data', array( $this, 'begin_wpforms' ), 1, 2 );
+		add_filter( 'wpforms_process_before_form_data', array( $this, 'begin_wpforms' ), 1 );
 		add_filter( 'wpforms_process_honeypot', array( $this, 'observe_wpforms_honeypot' ), PHP_INT_MAX, 4 );
 		add_filter( 'wpforms_process_antispam', array( $this, 'observe_wpforms_antispam' ), PHP_INT_MAX, 4 );
 		add_action( 'wpforms_process_after', array( $this, 'observe_wpforms_spam' ), PHP_INT_MAX, 3 );
@@ -234,11 +235,11 @@ final class WpForms extends Adapter {
 	 * Starts a WPForms lifecycle before its modern early spam check can return.
 	 *
 	 * @since 0.2.0
-	 * @param array $form  Native form definition.
-	 * @param array $entry Unvalidated provider entry, deliberately not inspected.
+	 * @since 0.5.7 Accepts only the form; unvalidated entry data is not requested.
+	 * @param array $form Native form definition.
 	 * @return array Unmodified native form definition.
 	 */
-	public function begin_wpforms( array $form, array $entry ): array { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Raw entry is part of the native filter contract and is intentionally not inspected.
+	public function begin_wpforms( array $form ): array {
 		$form_id = isset( $form['id'] ) ? absint( $form['id'] ) : 0;
 		unset( $this->wpforms_captured[ $form_id ], $this->wpforms_evidence[ $form_id ], $this->wpforms_native_stored[ $form_id ], $this->wpforms_storage_denied[ $form_id ] );
 

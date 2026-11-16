@@ -9,6 +9,7 @@
 namespace Rktsky\Antispam\Integrations;
 
 use Rktsky\Antispam\Fields;
+use Rktsky\Antispam\Guard;
 
 defined( 'ABSPATH' ) || exit;
 

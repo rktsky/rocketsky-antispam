@@ -129,16 +129,27 @@ $guard      = new Guard( $settings, $tokens, $store, new ContentRules( $settings
 $fields     = new Fields( $settings, $tokens );
 $adapter    = new Elementor( $settings, $guard, $fields, $quarantine );
 $adapter->register();
-$digests      = array();
-$server       = $_SERVER;
-$posted       = $_POST;
-$current_user = get_current_user_id();
+$digests                       = array();
+$server                        = $_SERVER;
+$posted                        = $_POST;
+$rktsky_elementor_files         = $_FILES;
+$rktsky_elementor_user_snapshot = get_current_user_id();
 global $wpdb;
 $table                     = $wpdb->prefix . 'rktsky_antispam_stats';
 $before                    = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE provider=%s', $table, 'elementor' ), ARRAY_A );
 $before_quarantine         = $wpdb->get_col( $wpdb->prepare( 'SELECT id FROM %i WHERE provider=%s AND form_id=%s', $wpdb->prefix . 'rktsky_antispam_quarantine', 'elementor', 'rk-native-elementor' ) );
 $_SERVER['REQUEST_METHOD'] = 'POST';
 wp_set_current_user( 0 );
+// Native optional upload fields receive the same no-file envelope as PHP multipart POSTs.
+$_FILES = array(
+	'form_fields' => array(
+		'name'     => array( 'upload' => array( '' ) ),
+		'type'     => array( 'upload' => array( '' ) ),
+		'tmp_name' => array( 'upload' => array( '' ) ),
+		'error'    => array( 'upload' => array( UPLOAD_ERR_NO_FILE ) ),
+		'size'     => array( 'upload' => array( 0 ) ),
+	),
+);
 
 try {
 	$accepted = $store->summary()['accepted'];
@@ -259,6 +270,7 @@ try {
 	}
 	$_SERVER = $server;
 	$_POST   = $posted;
-	wp_set_current_user( $current_user );
+	$_FILES  = $rktsky_elementor_files;
+	wp_set_current_user( $rktsky_elementor_user_snapshot );
 }
 echo 'PASS: ' . $rktsky_elementor_assertions . ' native Elementor Pro ' . ELEMENTOR_PRO_VERSION . " record/adapter assertions.\n";

@@ -605,6 +605,15 @@ namespace {
 	$settings->disabled = array( 'cf7', 'wpforms' );
 	$adapter->register();
 	integration_expect( ! isset( $GLOBALS['integration_hooks']['wpcf7_spam'] ) && ! isset( $GLOBALS['integration_hooks']['wpforms_process'] ) && isset( $GLOBALS['integration_hooks']['gform_abort_submission_with_confirmation'] ), 'Disabled providers must not register; supported GF must guard draft persistence.' );
+	$settings->disabled = array();
+	$adapter->register();
+	integration_expect( 2 === $GLOBALS['integration_hooks']['gform_entry_is_spam'][2] && 1 === $GLOBALS['integration_hooks']['wpforms_process_before_form_data'][2], 'GF spam observation and WPForms lifecycle reset must not request unused native entry payloads.' );
+	require_once dirname( __DIR__ ) . '/src/Integrations/WooCommerceCheckout.php';
+	$checkout = new \Rktsky\Antispam\Integrations\WooCommerceCheckout( $settings, $guard, $fields );
+	$checkout->register();
+	integration_expect( 2 === $GLOBALS['integration_hooks']['rest_dispatch_request'][2], 'Store API dispatch protection must request only the prior result and parsed request.' );
+	$dispatch_error = new WP_Error( 'prior_dispatch', 'Existing dispatcher rejection.' );
+	integration_expect( $checkout->validate_store_api( $dispatch_error, new WP_REST_Request() ) === $dispatch_error, 'The shortened Store API callback must preserve an earlier dispatcher rejection.' );
 
 	$_POST = array( 'rktsky_antispam_token' => 'synthetic\\"proof' );
 	$comment = array( 'comment_type' => 'comment', 'comment_post_ID' => 91, 'comment_content' => 'Fixture text' );
@@ -784,9 +793,9 @@ namespace {
 	integration_expect( count( $selected ) === 4 && in_array( 'First', $selected, true ) && ! in_array( 'hidden-secret', $selected, true ) && ! in_array( 'payment-secret', $selected, true ) && ! in_array( 'admin-secret', $selected, true ), 'GF must use declared scalar/compound input IDs and exclude hidden/payment/admin/unknown fields.' );
 	$adapter->check_gravity( array( 'is_valid' => false, 'form' => $gf_form ), 'form-submit' );
 	$count = count( $quarantine->captured );
-	integration_expect( true === $adapter->observe_gravity_spam( true, $gf_form, array( '1' => 'Native GF message', '2' => 'fixture@example.invalid', '4' => 'hidden-secret' ) ), 'Native GF spam must remain true.' );
+	integration_expect( true === $adapter->observe_gravity_spam( true, $gf_form ), 'Native GF spam must remain true without requesting entry contents.' );
 	integration_expect( count( $quarantine->captured ) === $count, 'Persisted native GF spam must not create a duplicate quarantine payload.' );
-	$adapter->observe_gravity_spam( true, $gf_form, array() );
+	$adapter->observe_gravity_spam( true, $gf_form );
 	$adapter->abort_gravity( true, $gf_form );
 	integration_expect( count( $quarantine->captured ) === $count + 1, 'A native abort before persistence may retain one optional selected-data quarantine object.' );
 	$guard->reason = '';
@@ -807,12 +816,12 @@ namespace {
 	$wp_fields = array( 1 => array( 'type' => 'textarea', 'value' => 'Formatted message', 'raw' => 'raw-secret' ), 2 => array( 'type' => 'email', 'value' => 'fixture@example.invalid' ), 3 => array( 'type' => 'hidden', 'value' => 'hidden-secret' ), 4 => array( 'type' => 'password', 'value' => 'password-secret' ) );
 	$adapter->check_wpforms( $wp_fields, array( 'raw' => 'secret' ), $wp_form );
 	integration_expect( end( $quarantine->captured )[3] === array( '1: Message' => 'Formatted message', '2: Email' => 'fixture@example.invalid' ), 'WPForms capture must use safe matching native types and the formatted value property only.' );
-	$adapter->begin_wpforms( $wp_form, array() );
+	$adapter->begin_wpforms( $wp_form );
 	integration_expect( 'native rejection' === $adapter->observe_wpforms_honeypot( 'native rejection', $wp_fields, array(), $wp_form ), 'WPForms original honeypot verdict must remain unchanged.' );
 	$count = count( $quarantine->captured );
 	$adapter->observe_wpforms_antispam( false, $wp_fields, array(), $wp_form );
 	integration_expect( count( $quarantine->captured ) === $count, 'WPForms native observers must deduplicate the same lifecycle.' );
-	$adapter->begin_wpforms( $wp_form, array() );
+	$adapter->begin_wpforms( $wp_form );
 	$_POST['wpforms']['fields'] = array( 1 => '<b>Early</b> message', 2 => 'fixture@example.invalid', 3 => 'hidden-secret', 4 => 'password-secret', 5 => array( 'first' => 'Synthetic', 'last' => 'Author', 'private' => 'nested-secret', 'middle' => array( 'must' => 'skip' ) ), 999 => 'unknown-secret' );
 	wpforms()->process->spam_errors[21] = array( 'header' => 'Native V3 early rejection' );
 	$adapter->observe_wpforms_spam( array(), 0, $wp_form );

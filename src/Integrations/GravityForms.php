@@ -92,6 +92,7 @@ final class GravityForms extends Adapter {
 	 * Registers native hooks after provider detection and explicit enablement.
 	 *
 	 * @since 0.3.0
+	 * @since 0.5.7 Requests only the leading arguments used by the spam observer.
 	 * @return void
 	 */
 	public function register(): void {
@@ -104,7 +105,7 @@ final class GravityForms extends Adapter {
 		add_filter( 'gform_validation_message', array( $this, 'gravity_message' ), 10, 2 );
 		add_filter( 'gform_abort_submission_with_confirmation', array( $this, 'abort_gravity' ), 20, 2 );
 		add_filter( 'gform_confirmation', array( $this, 'gravity_confirmation' ), 20, 2 );
-		add_filter( 'gform_entry_is_spam', array( $this, 'observe_gravity_spam' ), PHP_INT_MAX, 3 );
+		add_filter( 'gform_entry_is_spam', array( $this, 'observe_gravity_spam' ), PHP_INT_MAX, 2 );
 		add_action( 'gform_entry_created', array( $this, 'track_gravity_entry' ), PHP_INT_MAX, 2 );
 	}
 
@@ -326,13 +327,13 @@ final class GravityForms extends Adapter {
 	 * Routes one verified content verdict through GF's native spam filter.
 	 *
 	 * @since 0.2.0
+	 * @since 0.5.0 Adds a consumed-proof content decision without overriding earlier spam.
+	 * @since 0.5.7 Accepts only the verdict and form; entry contents are not requested.
 	 * @param bool  $spam  Existing provider spam verdict.
 	 * @param array $form  Native form definition.
-	 * @param array $entry Provider-created current entry values.
-	 * @since 0.5.0 Adds a consumed-proof content decision without overriding earlier spam.
 	 * @return bool Earlier native spam or the verified final local content verdict.
 	 */
-	public function observe_gravity_spam( $spam, array $form, array $entry ): bool { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Native filter supplies an entry payload; this observer deliberately records no copied content.
+	public function observe_gravity_spam( $spam, array $form ): bool {
 		$form_id = isset( $form['id'] ) ? (string) absint( $form['id'] ) : '0';
 		$current = $this->gravity_fingerprint( $form_id, $this->protection_controls() );
 		$pending = $this->gravity_content_spam[ $form_id ] ?? null;

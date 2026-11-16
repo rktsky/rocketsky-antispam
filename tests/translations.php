@@ -211,22 +211,54 @@ if ( 'conflict' === $rktsky_i18n_stage ) {
 	rktsky_i18n_expect( $rktsky_i18n_catalogue->import_from_file( $rktsky_i18n_directory . 'rocketsky-antispam-de_CH.mo' ), 'The conflict scenario must read the shipped Swiss German catalogue.' );
 	$rktsky_i18n_conflict = $rktsky_i18n_catalogue->translate( $rktsky_i18n_conflict_source );
 	rktsky_i18n_expect( $rktsky_i18n_conflict !== $rktsky_i18n_conflict_source, 'The conflict explanation must have a bundled translation.' );
-	add_filter( 'user_has_cap', static fn( array $caps ): array => array_merge( $caps, array( 'activate_plugins' => true ) ) );
-	ob_start();
-	$rktsky_i18n_instance->notice();
-	$rktsky_i18n_notice = (string) ob_get_clean();
-	rktsky_i18n_expect( str_contains( $rktsky_i18n_notice, esc_html( $rktsky_i18n_conflict ) ), 'A skipped boot must still produce the translated native conflict notice.' );
+	$rktsky_i18n_current_user = get_current_user_id();
+	$rktsky_i18n_admin        = false;
+	if ( is_multisite() ) {
+		foreach ( get_super_admins() as $rktsky_i18n_login ) {
+			$rktsky_i18n_admin = get_user_by( 'login', $rktsky_i18n_login );
+			if ( $rktsky_i18n_admin instanceof WP_User ) {
+				break;
+			}
+		}
+	} else {
+		$rktsky_i18n_admins = get_users( array( 'role' => 'administrator', 'number' => 1 ) );
+		$rktsky_i18n_admin  = $rktsky_i18n_admins[0] ?? false;
+	}
+	rktsky_i18n_expect( $rktsky_i18n_admin instanceof WP_User, 'The disposable fixture must contain a native activation administrator.' );
 	$rktsky_i18n_die = static fn(): Closure => static function ( $message, $title, $args ): void {
 		throw new RuntimeException( wp_strip_all_tags( (string) $message ), (int) $args['response'] );
 	};
-	add_filter( 'wp_die_handler', $rktsky_i18n_die );
 	try {
-		$rktsky_i18n_instance->activate();
-		throw new RuntimeException( 'A conflicting activation must stop before returning.' );
-	} catch ( RuntimeException $rktsky_i18n_error ) {
-		rktsky_i18n_expect( 409 === $rktsky_i18n_error->getCode() && $rktsky_i18n_conflict === $rktsky_i18n_error->getMessage(), 'The native activation failure must be translated without an explicit textdomain load.' );
+		// Core adds network activation requirements to activate_plugins on Multisite.
+		// Use the fixture's real account and mapping, without manufacturing any cap.
+		wp_set_current_user( 0 );
+		rktsky_i18n_expect( ! current_user_can( 'activate_plugins' ) && ! current_user_can( 'manage_network_plugins' ), 'An anonymous visitor must have no native activation authority.' );
+		$rktsky_i18n_notice_hook = is_multisite() ? 'network_admin_notices' : 'admin_notices';
+		ob_start();
+		do_action( $rktsky_i18n_notice_hook );
+		$rktsky_i18n_notice = (string) ob_get_clean();
+		rktsky_i18n_expect( ! str_contains( $rktsky_i18n_notice, esc_html( $rktsky_i18n_conflict ) ), 'The registered conflict notice must not disclose activation instructions to an anonymous visitor.' );
+		wp_set_current_user( $rktsky_i18n_admin->ID );
+		rktsky_i18n_expect( current_user_can( 'activate_plugins' ), 'The fixture administrator must satisfy native activation capability mapping.' );
+		if ( is_multisite() ) {
+			rktsky_i18n_expect( is_super_admin() && current_user_can( 'manage_network_plugins' ), 'The fixture network administrator must have real native network activation authority.' );
+		}
+		ob_start();
+		do_action( $rktsky_i18n_notice_hook );
+		$rktsky_i18n_notice = (string) ob_get_clean();
+		rktsky_i18n_expect( str_contains( $rktsky_i18n_notice, esc_html( $rktsky_i18n_conflict ) ), 'A skipped boot must still produce the translated registered native conflict notice for an authorized administrator.' );
+		add_filter( 'wp_die_handler', $rktsky_i18n_die );
+		try {
+			$rktsky_i18n_instance->activate( is_multisite() );
+			throw new RuntimeException( 'A conflicting activation must stop before returning.' );
+		} catch ( RuntimeException $rktsky_i18n_error ) {
+			rktsky_i18n_expect( 409 === $rktsky_i18n_error->getCode() && $rktsky_i18n_conflict === $rktsky_i18n_error->getMessage(), 'The native activation failure must be translated without an explicit textdomain load.' );
+		}
+	} finally {
+		remove_filter( 'wp_die_handler', $rktsky_i18n_die );
+		wp_set_current_user( $rktsky_i18n_current_user );
 	}
-	remove_filter( 'wp_die_handler', $rktsky_i18n_die );
+	rktsky_i18n_expect( get_current_user_id() === $rktsky_i18n_current_user, 'The conflict fixture must restore the original current user.' );
 }
 restore_previous_locale();
 rktsky_i18n_expect( array() === $rktsky_i18n_early, 'This plugin must emit no early-loading diagnostics: ' . wp_json_encode( $rktsky_i18n_early ) );
