@@ -1,4 +1,8 @@
-# Prüfnachweis
+# Verification history
+
+Current coverage, remaining checker exceptions and the assessment of 16.11.2026
+are in [Coverage and checker exceptions](coverage-and-exceptions.md). The records
+below describe their stated historical versions, rather than today's open gaps.
 
 Prüfdatum: 7. November 2026. Dieses Dokument enthält getrennte Nachweise für die ursprüngliche Abschlussrunde 0.2.0, die Erweiterung 0.3.0 und die lokalen Divi-Originaltests für 0.3.1. Die Baseline 0.2.0 wurde im Commit `2fe1955` geprüft; ihr sequentieller Gesamtlauf startete auf `114ec9a`, dessen einziger Unterschied die CI-Konfiguration ist. Die weiter unten verlinkten GitHub-Läufe belegen jeweils ihren angegebenen Commit. Die anschliessende lokale Divi-Abnahme wird als eigener Nachweis ausgewiesen.
 
@@ -70,7 +74,7 @@ Die verfügbaren nativen Programme für Token, Quarantäne, Maintenance, Feedbac
 
 Der frühere Lauf auf dem Baseline-Commit scheiterte nur beim Versuch, das aktuelle CF7 unter PHP 8.2 zu installieren. Der getrennte aktuelle Lauf bestätigt die korrigierte Provider-Matrix und sämtliche Erweiterungen. Nachfolgende reine Dokumentationsänderungen wiederholen die Prüfungen nicht; Produkt- und Laufzeitdateien bleiben identisch zum bestandenen Commit.
 
-## Offene Abnahmen
+## Offene Abnahmen des ursprünglichen Stands 0.2.0
 
 - WPForms Pro, weitere Provider-Versionen und Add-ons sind nicht geprüft. Die Integrationen müssen nach relevanten Anbieterupdates erneut ausgeführt werden.
 - Safari/iOS, Chrome/Android, Windows/Edge, echte Touchgeräte und assistive Technologien wurden nicht praktisch geprüft. Eine Desktop-Emulation ist kein entsprechender Gerätenachweis.

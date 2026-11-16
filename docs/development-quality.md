@@ -37,6 +37,11 @@ token hashes: removing assertions or replacing a test with an empty PHP file
 invalidates the evidence even when its filename remains. Comment and whitespace
 changes do not alter that lexical code contract.
 
+The inventory also lists independent acceptance checks, including the real CI
+workflow registration. Their content hashes use the same review mechanism without
+inventing a checker exception for code that needs no suppression. Removing the
+registered Multisite translation step is a tested failing mutation.
+
 The guard inspects production PHP and the configured PHPCS ruleset. It rejects
 production `EscapeOutput` suppressions and broad checker bypasses. Legitimate
 exceptions include native provider names, the separately authorized owned-table

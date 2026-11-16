@@ -10,6 +10,11 @@ and uploaded to the existing submission on 16.11.2026. Directory approval is pen
 Its [development acceptance](development-quality.md) includes a reviewed inventory
 of checker exceptions as well as the ordinary tool results.
 
+The checked 0.5.7 candidate addresses a newly reproduced Elementor rejection
+error and removes avoidable checker exceptions. Its [coverage assessment](coverage-and-exceptions.md)
+records the current original-provider tests, remaining limitations and exact ZIP.
+Version 0.5.7 has not been uploaded; the submitted archive remains 0.5.6.
+
 Die GitHub-Distribution setzt seit 0.5.0 eine eigene `Update URI`. Damit bietet
 WordPress keine fremde Verzeichnisaktualisierung unter einem gleichnamigen
 Entwicklungsslug an. Ein GitHub-Updater wird dadurch nicht eingerichtet; Updates
@@ -50,10 +55,10 @@ exakten Git-Commit. Tests, Werkzeuge, Vendor-Pakete, Git-Metadaten und interne
 Dokumentation gelangen nicht ins ZIP.
 
 ```sh
-python3 tools/build-release.py --channel wordpress-org --output ../outputs/rocketsky-antispam/release-0.5.6
+python3 tools/build-release.py --channel wordpress-org --output ../outputs/rocketsky-antispam/release-0.5.7
 ```
 
-Das erzeugt `rocketsky-antispam-0.5.6-wordpress-org.zip`, eine SHA-256-Datei und
+Das erzeugt `rocketsky-antispam-0.5.7-wordpress-org.zip`, eine SHA-256-Datei und
 ein Manifest mit Quellcommit und Prüfsummen jeder archivierten Datei. Das ZIP
 enthält genau einen obersten Ordner `rocketsky-antispam/`. Der Paketbauer prüft
 CRC, vollständigen Inhalts-Readback, Versionskonsistenz und reproduzierbare
