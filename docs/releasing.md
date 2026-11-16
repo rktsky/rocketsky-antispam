@@ -10,10 +10,11 @@ and uploaded to the existing submission on 16.11.2026. Directory approval is pen
 Its [development acceptance](development-quality.md) includes a reviewed inventory
 of checker exceptions as well as the ordinary tool results.
 
-The checked 0.5.7 candidate addresses a newly reproduced Elementor rejection
+Version 0.5.7 addresses a newly reproduced Elementor rejection
 error and removes avoidable checker exceptions. Its [coverage assessment](coverage-and-exceptions.md)
 records the current original-provider tests, remaining limitations and exact ZIP.
-Version 0.5.7 has not been uploaded; the submitted archive remains 0.5.6.
+The checked ZIP was uploaded to the existing submission on 16.11.2026, with the
+description retained unchanged. Directory approval is pending.
 
 Die GitHub-Distribution setzt seit 0.5.0 eine eigene `Update URI`. Damit bietet
 WordPress keine fremde Verzeichnisaktualisierung unter einem gleichnamigen

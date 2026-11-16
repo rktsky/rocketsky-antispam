@@ -4,7 +4,7 @@ Rocketsky Antispam protects comments and forms in the background, without adding
 
 Developed by **Rocketsky**, licensed under GPL-2.0-or-later. The bundled Speo logo retains its BSD-3-Clause licence.
 
-**Development version 0.5.7 fixes Elementor rejection handling and removes avoidable checker exceptions.** Version 0.5.6 was [uploaded to WordPress.org](docs/wordpress-org-submission.md) on 16.11.2026 and remains under review. See the [current coverage and exceptions](docs/coverage-and-exceptions.md), [development acceptance](docs/development-quality.md) and [verification history](docs/verification.md).
+**Version 0.5.7 fixes Elementor rejection handling and removes avoidable checker exceptions.** It was [uploaded to WordPress.org](docs/wordpress-org-submission.md) on 16.11.2026 and remains under review. See the [current coverage and exceptions](docs/coverage-and-exceptions.md), [development acceptance](docs/development-quality.md) and [verification history](docs/verification.md).
 
 ## Installation
 

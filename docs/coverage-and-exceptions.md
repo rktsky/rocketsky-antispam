@@ -1,8 +1,9 @@
 # Coverage and checker exceptions
 
-Assessment: 16.11.2026. Submitted version: **0.5.6**. Checked development
-candidate: **0.5.7**, source `9c998776a28f88862e418a15d7b9a9dd211f97ff`.
-Version 0.5.7 has not been uploaded to WordPress.org.
+Assessment: 16.11.2026. Checked and submitted version: **0.5.7**, source
+`9c998776a28f88862e418a15d7b9a9dd211f97ff`.
+Version 0.5.7 was uploaded to the existing WordPress.org submission on 16.11.2026;
+directory approval is pending. The submission description was retained unchanged.
 
 The original-provider checks already recorded for earlier versions remain valid
 historical evidence. They are distinct from a fresh run on the current candidate,
