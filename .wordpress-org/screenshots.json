@@ -2,7 +2,6 @@
   "captured_on": "18.11.2026",
   "site": "Rocketsky Antispam Demo",
   "plugin": "0.5.7",
-  "package_sha256": "adea8087ebd90ca86b0af596186fc4368965f8b4d11579bc62d43cdc9647a72f",
   "wordpress": "7.1.4",
   "php": "8.3.36",
   "timezone": "Europe/Zurich",
@@ -98,5 +97,8 @@
       "bytes": 43879,
       "sha256": "0880d4f7e665d0fdd40bad059e83919a798b984fc6bb2b72502da0d9fac9bb63"
     }
-  ]
+  ],
+  "capture_package_sha256": "adea8087ebd90ca86b0af596186fc4368965f8b4d11579bc62d43cdc9647a72f",
+  "publication_package_sha256": "e39dbe7527a2700db5f79fc389efed746b8550d63860427f2db2b8d0cd3a33ed",
+  "package_difference": "Only readme.txt differs from the capture installation; all 76 runtime and licence files are identical."
 }

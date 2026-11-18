@@ -12,13 +12,15 @@ confirm the plugin slug and SVN repository.
 | WordPress.org account | `rocketsky` |
 | Confirmed slug | `rocketsky-antispam` |
 | SVN repository | `https://plugins.svn.wordpress.org/rocketsky-antispam/` |
-| First public release | In preparation; no publication revision recorded yet |
+| First public release | 18.11.2026, SVN revision 3808388 |
+| Directory image/caption follow-up | SVN revision 3808398; runtime unchanged |
 
 A public read-only checkout at revision 3808376 contained empty `assets`,
-`tags` and `trunk` directories. The first publication is pending. The
+`tags` and `trunk` directories before the first publication. The
 [release process](releasing.md#erste-veröffentlichung-über-svn) covers the
 native SVN release and the directory images maintained in `.wordpress-org/assets/`.
-Record the release revision and public download checks here after publication.
+The [publication record](wordpress-org-publication.md) records the release,
+public download and directory checks.
 
 ## Update to 0.5.7 on 16.11.2026
 

@@ -2,8 +2,11 @@
 
 Assessment: 16.11.2026. Checked and submitted version: **0.5.7**, source
 `9c998776a28f88862e418a15d7b9a9dd211f97ff`.
-Version 0.5.7 was uploaded to the existing WordPress.org submission on 16.11.2026;
-directory approval is pending. The submission description was retained unchanged.
+Version 0.5.7 was uploaded to the existing WordPress.org submission on 16.11.2026,
+with its description retained unchanged. WordPress.org approved it on 18.11.2026;
+the [publication record](wordpress-org-publication.md) covers the public release.
+The runtime files remain identical to this assessment; the directory description
+and directory images were updated separately.
 
 The original-provider checks already recorded for earlier versions remain valid
 historical evidence. They are distinct from a fresh run on the current candidate,

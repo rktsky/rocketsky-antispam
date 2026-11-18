@@ -2,8 +2,11 @@
 
 WordPress.org approved Rocketsky Antispam 0.5.7 on 18.11.2026 for the
 `rocketsky` account and confirmed the slug `rocketsky-antispam`.
-The first public SVN release is in preparation; no publication revision has
-been recorded yet. See the [submission receipt](wordpress-org-submission.md).
+The first public release was published on 18.11.2026 at SVN revision 3808388;
+revision 3808398 improves the overview images and their caption.
+The [publication record](wordpress-org-publication.md) records the directory
+images, exact-package checks and public download verification. See also the
+[submission receipt](wordpress-org-submission.md).
 
 Rocketsky Antispam 0.5.3 was submitted on 09.11.2026. The existing submission
 was updated to version 0.5.4 on 11.11.2026.

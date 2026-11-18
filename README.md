@@ -6,13 +6,13 @@ Rocketsky Antispam protects comments and forms in the background, without adding
 
 Developed by **Rocketsky**, licensed under GPL-2.0-or-later. The bundled Speo logo retains its BSD-3-Clause licence.
 
-**Version 0.5.7 was approved by the WordPress.org Plugin Review Team on 18.11.2026.** The first public release is being prepared. See the [submission record](docs/wordpress-org-submission.md), [current coverage and exceptions](docs/coverage-and-exceptions.md), [development acceptance](docs/development-quality.md) and [verification history](docs/verification.md).
+**[Available on WordPress.org](https://wordpress.org/plugins/rocketsky-antispam/), version 0.5.7.** The Plugin Review Team approved the plugin on 18.11.2026. See the [publication record](docs/wordpress-org-publication.md), [current coverage and exceptions](docs/coverage-and-exceptions.md), [development acceptance](docs/development-quality.md) and [verification history](docs/verification.md).
 
 ## Installation
 
 Requires WordPress 6.6 or later and PHP 8.2 or later. Form plugins have their own requirements.
 
-1. Install the directory as `rocketsky-antispam` inside `wp-content/plugins/` and activate it.
+1. Install Rocketsky Antispam from **Plugins → Add New**, or upload the [directory ZIP](https://downloads.wordpress.org/plugin/rocketsky-antispam.0.5.7.zip), and activate it. For a manual file upload, use `wp-content/plugins/rocketsky-antispam/`.
 2. Open **Settings → Rocketsky Antispam → Integrations** and enable the integrations you use. Protection is added to supported forms automatically.
 3. Submit a normal message and test a rejection followed by a retry. Protected forms need JavaScript and access to the website's REST API.
 
