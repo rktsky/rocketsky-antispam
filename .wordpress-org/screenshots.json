@@ -10,23 +10,23 @@
     "en_US",
     "de_CH"
   ],
-  "capture": "Native browser page captures. Dashboard widget uses a native screenshot clip; no image retouching.",
+  "capture": "Native browser captures. Overview and dashboard widget use native screenshot clips; no image retouching.",
   "demo_activity": "Nine genuine local Guard checks: three pass, three replay rejections, three honeypot rejections. These demonstrate UI, not detection efficacy or provider browser delivery. No invented review/accuracy records.",
   "privacy": "Local isolated fixture only; no production messages, personal data or credentials shown. Quarantine remains off; no stored messages fabricated.",
   "files": [
     {
       "file": "screenshot-1-de.jpg",
       "width": 1446,
-      "height": 1570,
-      "bytes": 164219,
-      "sha256": "35c1b6f6038ec5ae4046f05de7cd346a976a640d1ab31d759d4fc85780db38db"
+      "height": 825,
+      "bytes": 100432,
+      "sha256": "87cd805807d7bc9c162ec76e70a172abe037bff5f5bfa37271a76b3d9b2efcad"
     },
     {
       "file": "screenshot-1.jpg",
       "width": 1446,
-      "height": 1570,
-      "bytes": 150447,
-      "sha256": "1557bd1ca78ae51e48ecd91871b301a8c404a1b81bd63a21463e73bf2d04ba97"
+      "height": 825,
+      "bytes": 92614,
+      "sha256": "fd36d7b4ec7a4444e27447f08227b0791ad88ab7c275d0d47ef348a6102df46e"
     },
     {
       "file": "screenshot-2-de.jpg",

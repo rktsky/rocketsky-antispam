@@ -10,8 +10,9 @@ Integrations, Filter rules, Review spam, Settings and the WordPress dashboard
 widget. English is the default; the `-de` variants use the bundled German
 (Switzerland) translation. Other directory locales use the English screenshots.
 
-These are native browser captures, without image retouching. The dashboard
-image uses the browser's screenshot clipping function to focus on the widget
+These are native browser captures, without image retouching. The overview
+uses a landscape clip so protection status and activity remain readable in
+the directory viewer. The dashboard image uses a clip to focus on the widget
 and its WordPress context. Standard dashboard controls were used to arrange
 the demo user's panels. No plugin, Core or provider markup was changed.
 
