@@ -1,0 +1,147 @@
+{
+  "sources": [
+    {
+      "file": "assets/icon.svg",
+      "bytes": 2063,
+      "sha256": "8dda6bafefc7b0ccaa0f739b92ab59c671628c328ddb9dcd85f233c998551315"
+    },
+    {
+      "file": "branding/banner-de.svg",
+      "bytes": 57682,
+      "sha256": "2cc813a751de8a60ab243a91d21343aa7315f3286346e8d3f4c998bb89b96f59"
+    },
+    {
+      "file": "branding/banner-es.svg",
+      "bytes": 60433,
+      "sha256": "970d136aa27af65bfc8ffb919b490c97dfea1dae8cc0b09e9ef594df1c0d6766"
+    },
+    {
+      "file": "branding/banner-fr.svg",
+      "bytes": 66410,
+      "sha256": "cbf903fc619ed8696a83b33c74ce790ab0ce4b1be236a00ca0e47c2364e3d823"
+    },
+    {
+      "file": "branding/banner-it.svg",
+      "bytes": 61421,
+      "sha256": "c0fe7fc79ea58517f7741c3cd5bcaaabf31faa7de3945a9caec592f2292c4021"
+    },
+    {
+      "file": "branding/banner.svg",
+      "bytes": 55965,
+      "sha256": "f7f003dfa0e8b775beb90f918c2a9148bf0b70af624b77a137d69d0ac2a0df04"
+    },
+    {
+      "file": "branding/build.swift",
+      "bytes": 7835,
+      "sha256": "3c9fa770cd63ed608d0b77daf866fc4584e5b63ebda82ad3f209b7915f11b952"
+    },
+    {
+      "file": "branding/render.sh",
+      "bytes": 772,
+      "sha256": "43542cec98555925829cdabe3ed1210d444790e699ea0fa0b3092a0ab9b0f67a"
+    },
+    {
+      "file": "branding/verify.py",
+      "bytes": 3229,
+      "sha256": "c246686aad9c79c830d5675e1c28eb7dcc9176136a8e660bf6d491851217f8ca"
+    },
+    {
+      "file": "branding/fonts/Roboto-variable.ttf",
+      "bytes": 488584,
+      "sha256": "d7598e12c5dbef095ff8272cfc55da0250bd07fbdecbac8a530b9b277872a134"
+    },
+    {
+      "file": "branding/fonts/OFL.txt",
+      "bytes": 4395,
+      "sha256": "b006f8e7c758f9c14bbbe7cec3256ebedfc44ae43e3b0018c33eebf7ee3f0402"
+    }
+  ],
+  "contract": "https://developer.wordpress.org/plugins/wordpress-org/plugin-assets/",
+  "checks": "Native filenames, dimensions, file limits, SVG portability, distinct localized content",
+  "files": [
+    {
+      "file": "icon-128x128.png",
+      "width": 128,
+      "height": 128,
+      "bytes": 4122,
+      "sha256": "d44e11222e25b41e20741d93881293db59170952cfa27129ed42266e505e4e1d"
+    },
+    {
+      "file": "icon-256x256.png",
+      "width": 256,
+      "height": 256,
+      "bytes": 8261,
+      "sha256": "145c0c6ecfadecd7b6de7df780f734e1c84e027c5df833c6391bf84e03539a43"
+    },
+    {
+      "file": "banner-772x250.png",
+      "width": 772,
+      "height": 250,
+      "bytes": 27735,
+      "sha256": "739c80cebc5800e467c767de4c3090574d360effcda3291569239af2dfbb549a"
+    },
+    {
+      "file": "banner-1544x500.png",
+      "width": 1544,
+      "height": 500,
+      "bytes": 58475,
+      "sha256": "4912325b4f85efebedc95b5dc1e61f25950163b52199ddea125b060b1e1fca96"
+    },
+    {
+      "file": "banner-772x250-de.png",
+      "width": 772,
+      "height": 250,
+      "bytes": 28729,
+      "sha256": "636db84b24acb5dd0c119fea06c2ff9d2190a2ab00e8390f2a1aafc60ee8b2ff"
+    },
+    {
+      "file": "banner-1544x500-de.png",
+      "width": 1544,
+      "height": 500,
+      "bytes": 59811,
+      "sha256": "11b6e10e3250e9f5daf6f08a10f5ff8c4447ae0298a233912cbbe6b40302ae25"
+    },
+    {
+      "file": "banner-772x250-fr.png",
+      "width": 772,
+      "height": 250,
+      "bytes": 29905,
+      "sha256": "8c1d9241e2ebd8f8a8baf796433aaaab698398f3468b10b01966312cbf49bf09"
+    },
+    {
+      "file": "banner-1544x500-fr.png",
+      "width": 1544,
+      "height": 500,
+      "bytes": 62468,
+      "sha256": "429faf290588407a6812e435848d97b393b3ed0c8ff4c337ca3ab099e785abe8"
+    },
+    {
+      "file": "banner-772x250-it.png",
+      "width": 772,
+      "height": 250,
+      "bytes": 29202,
+      "sha256": "c422a5b8ad493d3240d883fe84cecf4df9e97f5d983fd9fcd0836a4472c78545"
+    },
+    {
+      "file": "banner-1544x500-it.png",
+      "width": 1544,
+      "height": 500,
+      "bytes": 60411,
+      "sha256": "d409e88832b84b927eb769782f1964ad367f77ed7e21672b544fc23ba6974a6f"
+    },
+    {
+      "file": "banner-772x250-es.png",
+      "width": 772,
+      "height": 250,
+      "bytes": 28937,
+      "sha256": "f6dcde701087e8e270014af778237d6b4bc825c0476443e278a77ed8769dea58"
+    },
+    {
+      "file": "banner-1544x500-es.png",
+      "width": 1544,
+      "height": 500,
+      "bytes": 60086,
+      "sha256": "484693c4f432e416e3553f4a86fc9105166d8ad258bd8f87213e4ac3070976f4"
+    }
+  ]
+}
