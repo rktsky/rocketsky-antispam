@@ -1,0 +1,102 @@
+{
+  "captured_on": "18.11.2026",
+  "site": "Rocketsky Antispam Demo",
+  "plugin": "0.5.7",
+  "package_sha256": "adea8087ebd90ca86b0af596186fc4368965f8b4d11579bc62d43cdc9647a72f",
+  "wordpress": "7.1.4",
+  "php": "8.3.36",
+  "timezone": "Europe/Zurich",
+  "languages": [
+    "en_US",
+    "de_CH"
+  ],
+  "capture": "Native browser page captures. Dashboard widget uses a native screenshot clip; no image retouching.",
+  "demo_activity": "Nine genuine local Guard checks: three pass, three replay rejections, three honeypot rejections. These demonstrate UI, not detection efficacy or provider browser delivery. No invented review/accuracy records.",
+  "privacy": "Local isolated fixture only; no production messages, personal data or credentials shown. Quarantine remains off; no stored messages fabricated.",
+  "files": [
+    {
+      "file": "screenshot-1-de.jpg",
+      "width": 1446,
+      "height": 1570,
+      "bytes": 164219,
+      "sha256": "35c1b6f6038ec5ae4046f05de7cd346a976a640d1ab31d759d4fc85780db38db"
+    },
+    {
+      "file": "screenshot-1.jpg",
+      "width": 1446,
+      "height": 1570,
+      "bytes": 150447,
+      "sha256": "1557bd1ca78ae51e48ecd91871b301a8c404a1b81bd63a21463e73bf2d04ba97"
+    },
+    {
+      "file": "screenshot-2-de.jpg",
+      "width": 1431,
+      "height": 2081,
+      "bytes": 214616,
+      "sha256": "16a5075546f80b4d4ff2a27b14c835732a09eb4bbd60b1a02822b0ace840285e"
+    },
+    {
+      "file": "screenshot-2.jpg",
+      "width": 1431,
+      "height": 2081,
+      "bytes": 188903,
+      "sha256": "660060a79b48bd839a648f367dc02670a733e31406ad732d4d82efe30b232ef1"
+    },
+    {
+      "file": "screenshot-3-de.jpg",
+      "width": 1446,
+      "height": 1570,
+      "bytes": 143490,
+      "sha256": "9562d7bcf95ef4860c54dc5bc48e296c00dfc0d94a69cf110cc691990c9e56fd"
+    },
+    {
+      "file": "screenshot-3.jpg",
+      "width": 1446,
+      "height": 1570,
+      "bytes": 129545,
+      "sha256": "d6c18872b62e41cfd61907bd4e50b976010ea050fbbda7a22df4b96b0fc34464"
+    },
+    {
+      "file": "screenshot-4-de.jpg",
+      "width": 1431,
+      "height": 1644,
+      "bytes": 185983,
+      "sha256": "dd4c8a7262bdce1747ba0dc260c4761db8cf8d247d3afe826dabbf63aad67f42"
+    },
+    {
+      "file": "screenshot-4.jpg",
+      "width": 1446,
+      "height": 1570,
+      "bytes": 168937,
+      "sha256": "25ccd80be5d71608edb93dd323acf93d1025aaa11274b614a5f513dd0e8e575b"
+    },
+    {
+      "file": "screenshot-5-de.jpg",
+      "width": 1431,
+      "height": 2165,
+      "bytes": 234579,
+      "sha256": "e346f2d06030f889e1a01d33a1b1d5acda6f032e47729be41a41166d5297fa14"
+    },
+    {
+      "file": "screenshot-5.jpg",
+      "width": 1431,
+      "height": 2068,
+      "bytes": 204031,
+      "sha256": "626ce5dfdec4887747054a4fdacee0f9371f3d4147ff85cc4895f2be3b4cd932"
+    },
+    {
+      "file": "screenshot-6-de.jpg",
+      "width": 806,
+      "height": 585,
+      "bytes": 47569,
+      "sha256": "9d5b0f8b37eb6b45bbf36eb93175f54b557952a45cc94c3f38abe28128f90686"
+    },
+    {
+      "file": "screenshot-6.jpg",
+      "width": 806,
+      "height": 585,
+      "bytes": 43879,
+      "sha256": "0880d4f7e665d0fdd40bad059e83919a798b984fc6bb2b72502da0d9fac9bb63"
+    }
+  ]
+}
