@@ -87,7 +87,7 @@ Ask in this plugin's WordPress.org support forum with versions and reproduction 
 
 == Screenshots ==
 
-1. Overview with protection status, activity and reviewed results.
+1. Overview with protection status and recent activity.
 2. Integration controls showing availability and where rejected messages go.
 3. Content filters, comment languages and country rules.
 4. Spam folders, encrypted quarantine and assessments of delivered submissions.
