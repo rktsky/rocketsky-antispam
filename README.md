@@ -1,10 +1,12 @@
 # Rocketsky Antispam
 
+![Rocketsky Antispam — free local spam protection](.wordpress-org/assets/banner-1544x500.png)
+
 Rocketsky Antispam protects comments and forms in the background, without adding a CAPTCHA. All features are free, and spam checks run on your own website without sending submissions to an external spam service.
 
 Developed by **Rocketsky**, licensed under GPL-2.0-or-later. The bundled Speo logo retains its BSD-3-Clause licence.
 
-**Version 0.5.7 fixes Elementor rejection handling and removes avoidable checker exceptions.** It was [uploaded to WordPress.org](docs/wordpress-org-submission.md) on 16.11.2026 and remains under review. See the [current coverage and exceptions](docs/coverage-and-exceptions.md), [development acceptance](docs/development-quality.md) and [verification history](docs/verification.md).
+**Version 0.5.7 was approved by the WordPress.org Plugin Review Team on 18.11.2026.** The first public release is being prepared. See the [submission record](docs/wordpress-org-submission.md), [current coverage and exceptions](docs/coverage-and-exceptions.md), [development acceptance](docs/development-quality.md) and [verification history](docs/verification.md).
 
 ## Installation
 

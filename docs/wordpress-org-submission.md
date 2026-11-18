@@ -1,5 +1,25 @@
 # WordPress.org submission receipt
 
+## Approval on 18.11.2026
+
+The WordPress.org Plugins Team approved Rocketsky Antispam 0.5.7 on 18.11.2026
+under the `rocketsky` account. The approval emails supplied by the publisher
+confirm the plugin slug and SVN repository.
+
+| Field | Confirmed value |
+| --- | --- |
+| Approved version | 0.5.7 |
+| WordPress.org account | `rocketsky` |
+| Confirmed slug | `rocketsky-antispam` |
+| SVN repository | `https://plugins.svn.wordpress.org/rocketsky-antispam/` |
+| First public release | In preparation; no publication revision recorded yet |
+
+A public read-only checkout at revision 3808376 contained empty `assets`,
+`tags` and `trunk` directories. The first publication is pending. The
+[release process](releasing.md#erste-veröffentlichung-über-svn) covers the
+native SVN release and the directory images maintained in `.wordpress-org/assets/`.
+Record the release revision and public download checks here after publication.
+
 ## Update to 0.5.7 on 16.11.2026
 
 Version 0.5.7 was uploaded to the existing submission. WordPress.org confirmed:
@@ -17,7 +37,8 @@ the portal lists version 0.5.7 and the archive below.
 Additional Information was retained verbatim from the previous upload, as
 requested. Its text was compared with the saved description before uploading;
 the version reference and verification link within that text were also unchanged.
-No email was sent. Directory approval remains pending.
+No email was sent as part of this upload. Directory approval was pending on
+16.11.2026; the later approval is recorded above.
 
 The [coverage assessment](coverage-and-exceptions.md) records the checks and
 remaining limitations for this archive. It has 77 files and is 375,709 bytes.
@@ -40,7 +61,7 @@ review. WordPress.org confirmed: “New version of Rocketsky Antispam uploaded f
 
 Additional Information retains the original product overview, with only the
 version and verification reference updated. Previous uploads remain in history.
-The portal requests a reply to the existing review email. A short reply is
+The portal requested a reply to the existing review email. A short reply was
 prepared for the publisher to send; no email was sent by this upload.
 
 The [review verification](review-2026-11-16.md) records the corrected input/output
@@ -51,7 +72,7 @@ evidence remains under `outputs/rocketsky-antispam/release-0.5.6/final/`; the po
 confirmation and submitted description are retained under
 `outputs/rocketsky-antispam/review-2026-11-16/submission-0.5.6/`.
 
-## Update on 13 November 2026
+## Update on 13.11.2026
 
 Version 0.5.5 was uploaded to the existing submission following the first review.
 WordPress.org confirmed: “New version of Rocketsky Antispam uploaded for review.”
@@ -66,18 +87,18 @@ WordPress.org confirmed: “New version of Rocketsky Antispam uploaded for revie
 
 Additional Information retains the original product overview, with the version
 and verification reference updated. The earlier uploads remain in the history.
-The portal asks for a reply to the existing review email. That reply is prepared
-for the publisher to send; the upload alone does not send it or establish approval.
+The portal asked for a reply to the existing review email. That reply was prepared
+for the publisher to send; approval was pending on 13.11.2026.
 
 The [review verification](review-2026-11-13.md) covers every reported category,
 the exact-package Plugin Check result, activation, native tests and CI. The
 archive has 77 files and is 374,458 bytes. Private package reports are under
 `outputs/rocketsky-antispam/release-0.5.5/`; the portal receipt is retained with
-the private 13 November review evidence.
+the private 13.11.2026 review evidence.
 
-## Update on 11 November 2026
+## Update on 11.11.2026
 
-Version 0.5.4 was uploaded to the existing submission on 11 November 2026.
+Version 0.5.4 was uploaded to the existing submission on 11.11.2026.
 WordPress.org confirmed: “New version of Rocketsky Antispam uploaded for review.”
 
 | Field | Confirmed value |
@@ -88,13 +109,13 @@ WordPress.org confirmed: “New version of Rocketsky Antispam uploaded for revie
 | Submission slug | `rocketsky-antispam` |
 | Review status | Awaiting Review |
 
-The submission page lists 11 November as the latest upload date and retains
-the original 9 November submission in its history. Manual review remains
-pending; the update does not establish directory approval or publication.
+The submission page listed 11.11.2026 as the latest upload date and retained
+the original 09.11.2026 submission in its history. Manual review was pending
+on 11.11.2026; this update did not establish directory approval or publication.
 The [email verification record](email.md#verification-on-11-november-2026)
 documents the 0.5.4 package and its checks.
 
-The latest upload restores the original product description in Additional
+This upload restored the original product description in Additional
 Information, with the current version and verification reference. The earlier
 update note remains in the portal's upload history.
 
@@ -112,10 +133,10 @@ installed hashes matching before and after. Archive identity proof, full report
 and final portal receipt are retained under
 `outputs/rocketsky-antispam/release-0.5.4/comment-correction/`.
 
-## Original submission on 9 November 2026
+## Original submission on 09.11.2026
 
 Rocketsky Antispam was submitted to the WordPress.org Plugin Directory on
-9 November 2026 using the `rocketsky` account.
+09.11.2026 using the `rocketsky` account.
 
 | Field | Confirmed value |
 | --- | --- |
@@ -130,9 +151,9 @@ Rocketsky Antispam was submitted to the WordPress.org Plugin Directory on
 The submission page confirmed the upload and stated: “This plugin has not yet
 been reviewed.” It also reported that a notification email had been sent.
 
-The automated scan passed; manual review is pending. This receipt does not
-record directory approval, publication or an SVN release. The review team
-makes the final directory and naming decision.
+The automated scan passed; manual review was pending on 09.11.2026. This
+initial receipt did not record directory approval, publication or an SVN
+release. The later approval is recorded above.
 
 The [0.5.3 verification record](submission-0.5.3.md) documents the submitted
 package, Plugin Check result, CI and native tests completed before the upload.

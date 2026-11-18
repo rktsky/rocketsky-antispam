@@ -1,12 +1,16 @@
 # Release and submission process
 
-Rocketsky Antispam 0.5.3 was submitted to WordPress.org on 9 November 2026,
-with initial slug `rocketsky-antispam`; see the [submission receipt](wordpress-org-submission.md).
-The existing submission was updated to version 0.5.4 on 11 November 2026.
+WordPress.org approved Rocketsky Antispam 0.5.7 on 18.11.2026 for the
+`rocketsky` account and confirmed the slug `rocketsky-antispam`.
+The first public SVN release is in preparation; no publication revision has
+been recorded yet. See the [submission receipt](wordpress-org-submission.md).
+
+Rocketsky Antispam 0.5.3 was submitted on 09.11.2026. The existing submission
+was updated to version 0.5.4 on 11.11.2026.
 Version 0.5.5 addresses the [administration review](review-2026-11-13.md) and was
-uploaded on 13 November 2026. Review is in progress; directory approval is pending.
+uploaded on 13.11.2026. Directory approval was pending at that point.
 Version 0.5.6 was checked against the [review of 16.11.2026](review-2026-11-16.md)
-and uploaded to the existing submission on 16.11.2026. Directory approval is pending.
+and uploaded to the existing submission on 16.11.2026, while approval was pending.
 Its [development acceptance](development-quality.md) includes a reviewed inventory
 of checker exceptions as well as the ordinary tool results.
 
@@ -14,14 +18,14 @@ Version 0.5.7 addresses a newly reproduced Elementor rejection
 error and removes avoidable checker exceptions. Its [coverage assessment](coverage-and-exceptions.md)
 records the current original-provider tests, remaining limitations and exact ZIP.
 The checked ZIP was uploaded to the existing submission on 16.11.2026, with the
-description retained unchanged. Directory approval is pending.
+description retained unchanged. Approval was pending on that upload date.
 
 Die GitHub-Distribution setzt seit 0.5.0 eine eigene `Update URI`. Damit bietet
 WordPress keine fremde Verzeichnisaktualisierung unter einem gleichnamigen
 Entwicklungsslug an. Ein GitHub-Updater wird dadurch nicht eingerichtet; Updates
-erfolgen manuell. Name und Kandidaten-Slug sind seit 0.5.1 auf Rocketsky Antispam
-und `rocketsky-antispam` festgelegt. Vor einer Verzeichniseinreichung ist der
-Header für die tatsächliche WordPress.org-Distribution zu entfernen.
+erfolgen manuell. Name und Slug sind seit 0.5.1 auf Rocketsky Antispam
+und `rocketsky-antispam` festgelegt. Für die tatsächliche WordPress.org-Distribution
+ist der Header zu entfernen.
 Quelle: [offizielle Header-Anforderungen](https://developer.wordpress.org/plugins/plugin-basics/header-requirements/).
 Der versionierte Paketbauer entfernt diesen Header aus dem tatsächlichen
 WordPress.org-ZIP. Die CI prüft genau dessen entpackten Inhalt. GitHub-Quelle
@@ -30,9 +34,8 @@ verändert und kein Befund ausgeblendet.
 
 Der Namenswechsel entfernt den bisherigen Begriff `wp` aus Name, Slug und
 Textdomain. Historische Plugin-Check-Befunde gelten für den damals geprüften
-Stand und werden nicht als aktueller Report übernommen. Die tatsächliche
-Slugverfügbarkeit und der gewöhnliche Verzeichnisreview bleiben vor einer
-Einreichung zu prüfen.
+Stand und werden nicht als aktueller Report übernommen. Das Pluginteam
+bestätigte den Slug mit der Freigabe vom 18.11.2026.
 
 Seit 0.5.2 nutzt die Sprachversorgung den dokumentierten Filter
 `lang_dir_for_domain` als lokalen Fallback, wenn Core keinen Sprachpaketpfad
@@ -99,6 +102,39 @@ Die vorbereiteten Angaben und der englische Einreichungstext stehen in
 [submission.md](submission.md). In `Contributors` gehört nur ein bestätigter
 WordPress.org-Benutzername; der GitHub-Handle belegt diese Identität nicht.
 
+## Erste Veröffentlichung über SVN
+
+Das bestätigte Repository ist
+`https://plugins.svn.wordpress.org/rocketsky-antispam/`; der WordPress.org-Account
+heisst `rocketsky`. GitHub bleibt die Entwicklungsquelle. SVN enthält die
+fertigen Verzeichnis-Releases.
+
+1. Das Repository mit dem nativen SVN-Client auschecken und auf unerwartete Änderungen prüfen.
+2. Den Inhalt des geprüften WordPress.org-Pakets direkt nach `trunk/` kopieren, ohne zusätzlichen Slug-Unterordner. Versionsangaben und Dateiprüfsummen mit dem finalen Paketmanifest abgleichen.
+3. Die fertigen Verzeichnisbilder aus `.wordpress-org/assets/` nach SVN-`assets/` kopieren. Branding-Quellen und Vorschauen bleiben im Git-Repository. Verzeichnisbilder gehören nicht ins installierbare Paket.
+4. Neue Dateien und Bildtypen registrieren, den Versionstag aus `trunk/` anlegen und Status sowie Diff prüfen:
+
+```sh
+svn add trunk/* assets/*
+svn propset svn:mime-type image/png assets/*.png
+svn propset svn:mime-type image/svg+xml assets/icon.svg
+svn copy trunk tags/0.5.7
+svn status
+svn diff
+```
+
+5. Nach der Releaseprüfung den gemeinsamen Stand committen. Das SVN-Passwort über die Standardeingabe übergeben, ohne es in Argumenten, Umgebungsvariablen oder Dateien zu speichern:
+
+```sh
+svn commit --username rocketsky --no-auth-cache --password-from-stdin \
+  -m "Publish Rocketsky Antispam 0.5.7"
+```
+
+6. Die bestätigte SVN-Revision festhalten. Danach Remote-Tag, Stable tag, öffentlichen Download und Verzeichnisbilder prüfen; die Verzeichnisverarbeitung kann noch ausstehen. Den Veröffentlichungsstatus erst anhand dieser Ergebnisse aktualisieren.
+
+Quellen: [WordPress.org-SVN-Ablauf](https://developer.wordpress.org/plugins/wordpress-org/how-to-use-subversion/),
+[Verzeichnisbilder](https://developer.wordpress.org/plugins/wordpress-org/plugin-assets/).
+
 Vor einem stabilen Release:
 
 - Offene Punkte in `verification.md` auflösen; insbesondere reale Browserabläufe, Anbieter-/Versionsmatrix, Mehrseitenformulare, Save & Continue, Wiederholung nach Validierungsfehlern und API-/Add-on-Wege.
@@ -107,7 +143,7 @@ Vor einem stabilen Release:
 - Alle mitgelieferten Sprachkataloge und die POT prüfen. Keine Geheimnisse, Runtimes, Entwicklungsprogramme oder Testdaten ausliefern.
 - Mindestversionen durch reale Matrixläufe belegen. Eine Mindestangabe im Header allein ist kein Kompatibilitätsnachweis. Stable tag, Header, Versionskonstante und Änderungsprotokoll gemeinsam erhöhen.
 - GitHub-Repository unter dem autorisierten rktsky-Konto führen. Logik-/Regressionen und Optik-/Assetänderungen getrennt committen. Einen Release erst nach den Prüfungen taggen.
-- Verzeichnisnamen/Textdomain/Slug gegen die Vorgaben des Pluginteams prüfen. Der gewünschte sichtbare Name ist Rocketsky Antispam; ein Slug ist bis zur Bestätigung reservierungslos.
+- Verzeichnisnamen, Textdomain und den bestätigten Slug `rocketsky-antispam` beibehalten. Der sichtbare Name ist Rocketsky Antispam.
 - Den Releaseinhalt mit dem Paketbauer aus der festen Liste von Produktionsdateien packen, installieren, aktivieren, deaktivieren und deinstallieren. `.distignore` beschreibt die Entwicklungsausschlüsse zusätzlich. Einzel- und Netzwerkaktivierung, neue Websites, gebatchte Wartung und die getrennten Löschentscheidungen erneut prüfen. Öffentlich ausgelieferter Code bleibt lesbar.
 - Beim Wechsel aus der früheren Installation den [Übergangsvertrag](renaming.md) prüfen: alte Kopie deaktivieren, keine Deinstallation ausführen, neue Kopie aktivieren und bestehende Daten nachweisen. Kryptografische Zwecke und Speicherkennungen bleiben stabil.
 - Erst mit der passenden Freigabe einreichen. Der neutrale Bewertungslink und die freiwillige Ko-fi-Bitte stehen nur auf den eigenen Pluginseiten, zusammen mit Rocketsky und Speo. Keine Sterne verlangen, Funktionen an Bewertungen koppeln oder globale Erinnerungsmeldungen hinzufügen.
